@@ -5,6 +5,7 @@ import pandas as pd
 import gspread
 from io import StringIO
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from google.oauth2.service_account import Credentials
 
 URL = "https://br.tradingview.com/symbols/BMFBOVESPA-CCM1!/contracts/"
@@ -15,20 +16,20 @@ headers = {
     "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
 }
 
-# 1. Buscar dados no TradingView
+# Data no horário do Brasil
+data_hoje = datetime.now(ZoneInfo("America/Sao_Paulo")).strftime("%d/%m/%y")
+
 resposta = requests.get(URL, headers=headers, timeout=20)
 resposta.raise_for_status()
 
 tabelas = pd.read_html(StringIO(resposta.text))
 df = tabelas[0].copy()
 
-# 2. Montar linha
-linha = {"Data": datetime.today().strftime("%d/%m/%y")}
+linha = {"Data": data_hoje}
 
 for _, row in df.iterrows():
     simbolo = str(row["Símbolo"])
 
-    # Exemplo: CCMN2026 -> CCMN26
     codigo = simbolo[:4]
     ano = simbolo[4:8]
     coluna = f"{codigo}{ano[-2:]}"
@@ -39,7 +40,6 @@ for _, row in df.iterrows():
 print("Linha capturada:")
 print(linha)
 
-# 3. Conectar ao Google Sheets
 scope = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
@@ -47,37 +47,32 @@ scope = [
 
 if "GOOGLE_CREDENTIALS" in os.environ:
     credenciais = json.loads(os.environ["GOOGLE_CREDENTIALS"])
-    creds = Credentials.from_service_account_info(
-        credenciais,
-        scopes=scope
-    )
+    creds = Credentials.from_service_account_info(credenciais, scopes=scope)
 else:
-    creds = Credentials.from_service_account_file(
-        "credenciais.json",
-        scopes=scope
-    )
+    creds = Credentials.from_service_account_file("credenciais.json", scopes=scope)
 
 client = gspread.authorize(creds)
 planilha = client.open(NOME_PLANILHA)
 aba = planilha.sheet1
 
-# 4. Respeitar o cabeçalho da planilha
 cabecalho = aba.row_values(1)
 nova_linha = [linha.get(coluna, "") for coluna in cabecalho]
 
-# 5. Se a data já existe, atualiza. Se não existe, cria.
 datas_existentes = aba.col_values(1)
-data_hoje = linha["Data"]
 
-if data_hoje in datas_existentes:
-    numero_linha = datas_existentes.index(data_hoje) + 1
-    ultima_coluna = len(cabecalho)
+# Procura a data de hoje na coluna A
+numero_linha = None
 
+for i, data in enumerate(datas_existentes, start=1):
+    if str(data).strip() == data_hoje:
+        numero_linha = i
+        break
+
+if numero_linha:
     aba.update(
         range_name=f"A{numero_linha}",
         values=[nova_linha]
     )
-
     print(f"Data {data_hoje} já existia. Linha atualizada.")
 else:
     aba.append_row(nova_linha)
