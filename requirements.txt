@@ -8,3 +8,12 @@ beautifulsoup4
 streamlit
 pandas
 plotly
+streamlit
+pandas
+plotly
+requests
+gspread
+google-auth
+lxml
+html5lib
+beautifulsoup4
