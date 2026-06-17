@@ -2,7 +2,7 @@ name: Atualiza Spread Milho
 
 on:
   schedule:
-    - cron: '30 21 * * 1-5'
+    - cron: '37 21 * * 1-5'
   workflow_dispatch:
 
 jobs:
