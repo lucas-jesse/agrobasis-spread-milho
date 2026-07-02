@@ -43,74 +43,88 @@ st.markdown("""
 <meta name="google" content="notranslate">
 <style>
 .block-container {
-    padding-top: 3rem;
+    padding-top: 0.8rem;
     padding-bottom: 2rem;
     max-width: 1450px;
 }
 [data-testid="stSidebar"] {
     background-color: #f3f4f6;
 }
-.hero {
-    background: linear-gradient(135deg, #0f172a 0%, #14532d 100%);
-    padding: 34px 38px;
-    border-radius: 24px;
-    color: white;
-    margin-bottom: 26px;
+
+/* ---------- CABEÇALHO (discreto, sem cor de fundo) ---------- */
+.page-header {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e2e8f0;
 }
-.hero-title {
-    font-size: 46px;
+.page-header-title {
+    font-size: 26px;
     font-weight: 800;
-    margin-bottom: 6px;
+    color: #0f172a;
+    margin-bottom: 4px;
 }
-.hero-subtitle {
-    font-size: 18px;
-    color: #d1d5db;
+.page-header-subtitle {
+    font-size: 14.5px;
+    color: #64748b;
 }
-.hero-meta {
-    margin-top: 18px;
-    font-size: 18px;
-    color: #f9fafb;
+.page-header-meta {
+    margin-top: 8px;
+    font-size: 13.5px;
+    color: #475569;
 }
-.card {
-    background: white;
-    padding: 22px 24px;
-    border-radius: 18px;
+.page-header-meta b { color: #0f172a; }
+
+/* ---------- KPIs discretos (grid CSS responsivo, não compete com o gráfico) ---------- */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.kpi-card {
+    background: #f8fafc;
+    padding: 12px 14px;
+    border-radius: 10px;
     border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-    min-height: 118px;
+    border-left: 3px solid #cbd5e1;
 }
-.card-label {
-    font-size: 14px;
+.kpi-card.is-positive { border-left-color: #15803d; }
+.kpi-card.is-negative { border-left-color: #dc2626; }
+.kpi-label {
+    font-size: 11.5px;
     color: #6b7280;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    line-height: 1.3;
 }
-.card-value {
-    font-size: 32px;
-    font-weight: 800;
+.kpi-value {
+    font-size: 19px;
+    font-weight: 700;
     color: #111827;
 }
-.card-positive { color: #15803d; }
-.card-negative { color: #dc2626; }
+.kpi-value.is-positive { color: #15803d; }
+.kpi-value.is-negative { color: #dc2626; }
+
 .section-title {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 800;
-    margin-top: 18px;
-    margin-bottom: 8px;
+    margin-top: 12px;
+    margin-bottom: 6px;
     color: #111827;
 }
 .section-subtitle {
     color: #6b7280;
-    font-size: 16px;
-    margin-bottom: 16px;
+    font-size: 14.5px;
+    margin-bottom: 14px;
 }
 .reading-box {
     background: #f8fafc;
-    border-left: 6px solid #14532d;
-    padding: 20px 24px;
-    border-radius: 14px;
-    font-size: 17px;
+    border-left: 4px solid #14532d;
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 15.5px;
     color: #1f2937;
-    margin-top: 18px;
+    margin-top: 16px;
+    line-height: 1.6;
 }
 .small-note {
     color: #6b7280;
@@ -119,13 +133,33 @@ st.markdown("""
 .notranslate {
     unicode-bidi: isolate;
 }
+
+/* ---------- RESPONSIVO / MOBILE ---------- */
+@media (max-width: 768px) {
+    .block-container { padding-top: 0.5rem; padding-left: 0.9rem; padding-right: 0.9rem; }
+    .page-header-title { font-size: 21px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .kpi-value { font-size: 17px; }
+    .section-title { font-size: 19px; }
+    div[data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+    }
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+        min-width: 45% !important;
+        flex: 1 1 45% !important;
+    }
+}
 </style>
 """, unsafe_allow_html=True)
 
 
 @st.cache_data(ttl=600)
 def carregar_dados():
-    df = pd.read_csv(URL)
+    try:
+        df = pd.read_csv(URL)
+    except Exception:
+        return None
+
     df["Data"] = pd.to_datetime(df["Data"], dayfirst=True, errors="coerce")
     df = df.dropna(subset=["Data"])
     df = df.sort_values("Data")
@@ -146,12 +180,6 @@ def br_num(valor):
     if valor is None or pd.isna(valor):
         return "-"
     return f"{valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-
-
-def delta_class(valor):
-    if valor is None or pd.isna(valor):
-        return ""
-    return "card-positive" if valor >= 0 else "card-negative"
 
 
 def calcular_variacao(serie, dias):
@@ -502,10 +530,17 @@ def criar_grafico_comparativo_anual(hist, dados_atual):
 
 
 # ==============================
-# Sidebar
+# Carregamento de dados + filtros (corpo principal)
 # ==============================
 
 df = carregar_dados()
+
+if df is None or df.empty:
+    st.error(
+        "Não foi possível carregar os dados agora. Tente novamente em instantes. "
+        "Se o problema persistir, contate o suporte AgroBasis."
+    )
+    st.stop()
 
 anos_disponiveis = sorted(
     list(
@@ -517,82 +552,98 @@ anos_disponiveis = sorted(
     )
 )
 
-st.sidebar.markdown("## Configuração do Spread")
-
-mes_1 = st.sidebar.selectbox(
-    "Mês do primeiro contrato",
-    ORDEM_MESES,
-    index=3,
-    format_func=lambda x: NOMES_MESES[x]
+st.markdown('<div class="section-title" style="margin-top:0;">Spread Milho B3</div>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="section-subtitle">Monitoramento da estrutura a termo dos contratos futuros de milho na B3. '
+    'Regra de cálculo: <b>contrato mais curto − contrato mais longo</b>.</div>',
+    unsafe_allow_html=True
 )
 
-ano_1 = st.sidebar.selectbox(
-    "Ano do primeiro contrato",
-    anos_disponiveis,
-    index=max(0, len(anos_disponiveis) - 2)
-)
+col_f1, col_f2, col_f3, col_f4 = st.columns(4)
 
-mes_2 = st.sidebar.selectbox(
-    "Mês do segundo contrato",
-    ORDEM_MESES,
-    index=0,
-    format_func=lambda x: NOMES_MESES[x]
-)
+with col_f1:
+    mes_1 = st.selectbox(
+        "Mês do 1º contrato",
+        ORDEM_MESES,
+        index=3,
+        format_func=lambda x: NOMES_MESES[x]
+    )
 
-ano_2 = st.sidebar.selectbox(
-    "Ano do segundo contrato",
-    anos_disponiveis,
-    index=max(0, len(anos_disponiveis) - 1)
-)
+with col_f2:
+    ano_1 = st.selectbox(
+        "Ano do 1º contrato",
+        anos_disponiveis,
+        index=max(0, len(anos_disponiveis) - 2)
+    )
 
-st.sidebar.caption("Regra de cálculo: contrato mais curto - contrato mais longo.")
-st.sidebar.markdown("---")
+with col_f3:
+    mes_2 = st.selectbox(
+        "Mês do 2º contrato",
+        ORDEM_MESES,
+        index=0,
+        format_func=lambda x: NOMES_MESES[x]
+    )
 
-mostrar_media_movel = st.sidebar.checkbox("Mostrar média móvel", value=False)
-media_movel = st.sidebar.slider(
-    "Média móvel",
-    min_value=5,
-    max_value=120,
-    value=20,
-    step=5,
-    disabled=not mostrar_media_movel
-)
+with col_f4:
+    ano_2 = st.selectbox(
+        "Ano do 2º contrato",
+        anos_disponiveis,
+        index=max(0, len(anos_disponiveis) - 1)
+    )
 
-anos_ref = st.sidebar.slider(
-    "Histórico da média",
-    min_value=1,
-    max_value=10,
-    value=5,
-    step=1,
-    help="Quantidade de anos históricos equivalentes usados para média, desvio e Z-Score."
-)
+with st.expander("⚙️ Configurações avançadas do gráfico"):
+    col_a1, col_a2 = st.columns(2)
 
-suavizar_media_historica = st.sidebar.checkbox(
-    "Suavizar média histórica",
-    value=True,
-    help="Aplica média móvel sobre a linha da média histórica para reduzir ruídos visuais."
-)
+    with col_a1:
+        mostrar_media_movel = st.checkbox("Mostrar média móvel", value=False)
+        media_movel = st.slider(
+            "Janela da média móvel (dias)",
+            min_value=5,
+            max_value=120,
+            value=20,
+            step=5,
+            disabled=not mostrar_media_movel
+        )
+        anos_ref = st.slider(
+            "Histórico da média (anos)",
+            min_value=1,
+            max_value=10,
+            value=5,
+            step=1,
+            help="Quantidade de anos históricos equivalentes usados para média, desvio e Z-Score."
+        )
 
-janela_suavizacao_media = st.sidebar.slider(
-    "Suavização da média histórica",
-    min_value=3,
-    max_value=60,
-    value=15,
-    step=3,
-    disabled=not suavizar_media_historica
-)
+    with col_a2:
+        suavizar_media_historica = st.checkbox(
+            "Suavizar média histórica",
+            value=True,
+            help="Aplica média móvel sobre a linha da média histórica para reduzir ruídos visuais."
+        )
+        janela_suavizacao_media = st.slider(
+            "Suavização da média histórica (dias)",
+            min_value=3,
+            max_value=60,
+            value=15,
+            step=3,
+            disabled=not suavizar_media_historica
+        )
 
-st.sidebar.markdown("---")
-st.sidebar.markdown("### Itens do gráfico")
-mostrar_media = st.sidebar.checkbox("Média histórica", value=True)
-mostrar_ano_anterior = st.sidebar.checkbox("Ano anterior", value=True)
-mostrar_futuro = st.sidebar.checkbox(
-    "Projetar média e ano anterior até o vencimento",
-    value=True,
-    help="Mostra a média histórica e o ano anterior para datas futuras, enquanto o contrato atual ainda não venceu."
-)
-mostrar_1dp = st.sidebar.checkbox("Bandas ±1 desvio", value=False)
-mostrar_2dp = st.sidebar.checkbox("Bandas ±2 desvios", value=False)
+    st.markdown("**Itens do gráfico**")
+    col_i1, col_i2, col_i3 = st.columns(3)
+    with col_i1:
+        mostrar_media = st.checkbox("Média histórica", value=True)
+        mostrar_1dp = st.checkbox("Bandas ±1 desvio", value=False)
+    with col_i2:
+        mostrar_ano_anterior = st.checkbox("Ano anterior", value=True)
+        mostrar_2dp = st.checkbox("Bandas ±2 desvios", value=False)
+    with col_i3:
+        mostrar_futuro = st.checkbox(
+            "Projetar até o vencimento",
+            value=True,
+            help="Mostra a média histórica e o ano anterior para datas futuras, enquanto o contrato atual ainda não venceu."
+        )
+
+st.divider()
 
 
 # ==============================
@@ -661,112 +712,109 @@ spread_nome_visual = f"{nome_visual(curto['mes'], curto['ano'])} x {nome_visual(
 titulo_grafico = f"Spread entre os contratos de milho {nome_visual(curto['mes'], curto['ano']).lower()} e {nome_visual(longo['mes'], longo['ano']).lower()} na B3"
 
 # ==============================
-# Header
+# Header (discreto, sem bloco colorido)
 # ==============================
 
 st.markdown(f"""
-<div class="hero">
-    <div class="hero-title">🌽 AgroBasis | <span class="notranslate" translate="no">Spread</span> Milho B3</div>
-    <div class="hero-subtitle">
-        Monitoramento da estrutura a termo dos contratos futuros de milho na B3
-    </div>
-    <div class="hero-meta">
-        <b>{spread_nome_visual}</b> &nbsp; | &nbsp; <b>{nome_spread}</b> &nbsp; | &nbsp;
+<div class="page-header">
+    <div class="page-header-title">Spread Milho B3</div>
+    <div class="page-header-subtitle">Monitoramento da estrutura a termo dos contratos futuros de milho na B3</div>
+    <div class="page-header-meta">
+        <b>{spread_nome_visual}</b> &nbsp;·&nbsp; <b>{nome_spread}</b> &nbsp;·&nbsp;
         Última atualização: <b>{ultima_data}</b>
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-c1, c2, c3 = st.columns(3)
-
-with c1:
-    st.markdown(f"""
-    <div class="card">
-        <div class="card-label">Valor atual do spread</div>
-        <div class="card-value">{br_num(spread_atual)} R$/saca</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with c2:
-    st.markdown(f"""
-    <div class="card">
-        <div class="card-label">Diferença vs média histórica ({anos_ref} anos)</div>
-        <div class="card-value {delta_class(diff_media)}">{br_num(diff_media)} R$/saca</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with c3:
-    z_txt = "-" if z_score is None or pd.isna(z_score) else f"{z_score:.2f}"
-    st.markdown(f"""
-    <div class="card">
-        <div class="card-label">Z-Score</div>
-        <div class="card-value">{z_txt}</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-c4, c5 = st.columns(2)
-
-with c4:
-    st.markdown(f"""
-    <div class="card">
-        <div class="card-label">Variação últimos 7 dias</div>
-        <div class="card-value {delta_class(var_7d)}">{br_num(var_7d)} R$/saca</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-with c5:
-    st.markdown(f"""
-    <div class="card">
-        <div class="card-label">Variação últimos 30 dias</div>
-        <div class="card-value {delta_class(var_30d)}">{br_num(var_30d)} R$/saca</div>
-    </div>
-    """, unsafe_allow_html=True)
-
 # ==============================
-# Gráfico
+# KPIs — grid único, discreto, não compete com o gráfico
 # ==============================
 
-st.markdown(
-    f'<div class="section-subtitle">Spread calculado como <b>contrato mais curto - contrato mais longo</b>. Média histórica, desvios e Z-Score usam spreads equivalentes dos últimos {anos_ref} anos.</div>',
-    unsafe_allow_html=True
-)
-fig = criar_grafico_principal(
-    dados=dados,
-    linhas_hist=linhas_hist,
-    media_movel=media_movel,
-    mostrar_media_movel=mostrar_media_movel,
-    mostrar_media=mostrar_media,
-    mostrar_ano_anterior=mostrar_ano_anterior,
-    mostrar_1dp=mostrar_1dp,
-    mostrar_2dp=mostrar_2dp,
-    anos_ref=anos_ref,
-    titulo_grafico=titulo_grafico
-)
-st.plotly_chart(fig, use_container_width=True)
-
-# ==============================
-# Leitura automática
-# ==============================
-
-if z_score is None or pd.isna(z_score):
-    leitura = "Ainda não há histórico suficiente para classificar estatisticamente este spread."
-elif z_score >= 1.5:
-    leitura = "O spread está em região historicamente elevada frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica maior prêmio relativo no contrato curto frente ao contrato longo."
-elif z_score <= -1.5:
-    leitura = "O spread está em região historicamente baixa frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica menor prêmio relativo no contrato curto frente ao contrato longo."
-else:
-    leitura = "O spread está próximo da faixa normal histórica dos spreads equivalentes, sem distorção estatística extrema no momento."
-
-media_txt = br_num(media_hist_atual)
 z_txt = "-" if z_score is None or pd.isna(z_score) else f"{z_score:.2f}"
 
-st.markdown(f"""
-<div class="reading-box">
-    <b>Leitura AgroBasis:</b><br><br>
-    O <span class="notranslate" translate="no">spread</span> <b>{spread_nome_visual}</b> ({nome_spread}) está em <b>{br_num(spread_atual)} R$/saca</b>.
-    A média histórica de <b>{anos_ref} anos</b> para o mesmo momento do ano está em
-    <b>{media_txt} R$/saca</b>.
-    O Z-Score atual é <b>{z_txt}</b>.<br><br>
-    {leitura}
-</div>
-""", unsafe_allow_html=True)
+
+def _classe(valor):
+    if valor is None or pd.isna(valor):
+        return ""
+    return "is-positive" if valor >= 0 else "is-negative"
+
+
+kpis = [
+    ("Spread atual", f"{br_num(spread_atual)} R$/saca", ""),
+    (f"Vs. média histórica ({anos_ref}a)", f"{br_num(diff_media)} R$/saca", _classe(diff_media)),
+    ("Z-Score", z_txt, _classe(z_score)),
+    ("Variação 7 dias", f"{br_num(var_7d)} R$/saca", _classe(var_7d)),
+    ("Variação 30 dias", f"{br_num(var_30d)} R$/saca", _classe(var_30d)),
+]
+
+kpi_html = "".join(
+    f"""<div class="kpi-card {classe}">
+        <div class="kpi-label">{label}</div>
+        <div class="kpi-value {classe}">{valor}</div>
+    </div>"""
+    for label, valor, classe in kpis
+)
+
+st.markdown(f'<div class="kpi-grid">{kpi_html}</div>', unsafe_allow_html=True)
+
+# ==============================
+# Abas: Spread ao vivo | Sazonalidade
+# ==============================
+
+tab_live, tab_sazonal = st.tabs(["📈 Spread ao vivo", "📊 Sazonalidade"])
+
+with tab_live:
+    st.markdown(
+        f'<div class="section-subtitle">Spread calculado como <b>contrato mais curto - contrato mais longo</b>. '
+        f'Média histórica, desvios e Z-Score usam spreads equivalentes dos últimos {anos_ref} anos.</div>',
+        unsafe_allow_html=True
+    )
+    fig = criar_grafico_principal(
+        dados=dados,
+        linhas_hist=linhas_hist,
+        media_movel=media_movel,
+        mostrar_media_movel=mostrar_media_movel,
+        mostrar_media=mostrar_media,
+        mostrar_ano_anterior=mostrar_ano_anterior,
+        mostrar_1dp=mostrar_1dp,
+        mostrar_2dp=mostrar_2dp,
+        anos_ref=anos_ref,
+        titulo_grafico=titulo_grafico
+    )
+    st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
+
+    # ---------- Leitura automática ----------
+    if z_score is None or pd.isna(z_score):
+        leitura = "Ainda não há histórico suficiente para classificar estatisticamente este spread."
+    elif z_score >= 1.5:
+        leitura = "O spread está em região historicamente elevada frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica maior prêmio relativo no contrato curto frente ao contrato longo."
+    elif z_score <= -1.5:
+        leitura = "O spread está em região historicamente baixa frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica menor prêmio relativo no contrato curto frente ao contrato longo."
+    else:
+        leitura = "O spread está próximo da faixa normal histórica dos spreads equivalentes, sem distorção estatística extrema no momento."
+
+    media_txt = br_num(media_hist_atual)
+
+    st.markdown(f"""
+    <div class="reading-box">
+        <b>Leitura AgroBasis:</b><br><br>
+        O <span class="notranslate" translate="no">spread</span> <b>{spread_nome_visual}</b> ({nome_spread}) está em <b>{br_num(spread_atual)} R$/saca</b>.
+        A média histórica de <b>{anos_ref} anos</b> para o mesmo momento do ano está em
+        <b>{media_txt} R$/saca</b>.
+        O Z-Score atual é <b>{z_txt}</b>.<br><br>
+        {leitura}
+    </div>
+    """, unsafe_allow_html=True)
+
+with tab_sazonal:
+    st.markdown(
+        '<div class="section-subtitle">Comparação do spread atual contra os mesmos spreads equivalentes '
+        'dos anos anteriores, alinhados pelo dia do ano — evidencia se o comportamento atual está dentro '
+        'ou fora do padrão sazonal histórico.</div>',
+        unsafe_allow_html=True
+    )
+    if hist.empty:
+        st.info("Não há histórico equivalente suficiente para montar a comparação sazonal deste spread.")
+    else:
+        fig_sazonal = criar_grafico_comparativo_anual(hist, dados)
+        st.plotly_chart(fig_sazonal, use_container_width=True, config={"displaylogo": False})
