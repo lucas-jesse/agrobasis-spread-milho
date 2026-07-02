@@ -39,7 +39,7 @@ MESES_NUM = {
 
 ORDEM_MESES = list(MESES.keys())
 
-st.markdown("""
+st.html("""
 <meta name="google" content="notranslate">
 <style>
 .block-container {
@@ -150,7 +150,7 @@ st.markdown("""
     }
 }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 
 @st.cache_data(ttl=600)
@@ -552,20 +552,28 @@ anos_disponiveis = sorted(
     )
 )
 
-st.markdown('<div class="section-title" style="margin-top:0;">Spread Milho B3</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-title" style="margin-top:0;">Configuração do Spread</div>', unsafe_allow_html=True)
 st.markdown(
-    '<div class="section-subtitle">Monitoramento da estrutura a termo dos contratos futuros de milho na B3. '
+    '<div class="section-subtitle">Selecione os dois contratos futuros de milho na B3. '
     'Regra de cálculo: <b>contrato mais curto − contrato mais longo</b>.</div>',
     unsafe_allow_html=True
 )
 
 col_f1, col_f2, col_f3, col_f4 = st.columns(4)
 
+# Padrão solicitado: novembro/2026 (1º contrato) x janeiro/2027 (2º contrato).
+# Usamos .index() sobre o valor real em vez de um índice fixo, com fallback
+# seguro, para não quebrar caso 2026/2027 ainda não existam na base de dados.
+idx_mes_1_padrao = ORDEM_MESES.index("nov")
+idx_mes_2_padrao = ORDEM_MESES.index("jan")
+idx_ano_1_padrao = anos_disponiveis.index(2026) if 2026 in anos_disponiveis else max(0, len(anos_disponiveis) - 2)
+idx_ano_2_padrao = anos_disponiveis.index(2027) if 2027 in anos_disponiveis else max(0, len(anos_disponiveis) - 1)
+
 with col_f1:
     mes_1 = st.selectbox(
         "Mês do 1º contrato",
         ORDEM_MESES,
-        index=3,
+        index=idx_mes_1_padrao,
         format_func=lambda x: NOMES_MESES[x]
     )
 
@@ -573,14 +581,14 @@ with col_f2:
     ano_1 = st.selectbox(
         "Ano do 1º contrato",
         anos_disponiveis,
-        index=max(0, len(anos_disponiveis) - 2)
+        index=idx_ano_1_padrao
     )
 
 with col_f3:
     mes_2 = st.selectbox(
         "Mês do 2º contrato",
         ORDEM_MESES,
-        index=0,
+        index=idx_mes_2_padrao,
         format_func=lambda x: NOMES_MESES[x]
     )
 
@@ -588,7 +596,7 @@ with col_f4:
     ano_2 = st.selectbox(
         "Ano do 2º contrato",
         anos_disponiveis,
-        index=max(0, len(anos_disponiveis) - 1)
+        index=idx_ano_2_padrao
     )
 
 with st.expander("⚙️ Configurações avançadas do gráfico"):
