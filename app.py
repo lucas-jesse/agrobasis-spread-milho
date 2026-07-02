@@ -359,7 +359,7 @@ def criar_grafico_principal(
         y=dados["Spread"],
         mode="lines",
         name="Valor atual do spread",
-        line=dict(width=3.2, color="#1d4ed8", shape="spline", smoothing=0.35)
+        line=dict(width=3.2, color="#15803d", shape="spline", smoothing=0.35)
     ))
 
     if mostrar_media_movel and "Média móvel" in dados.columns:
@@ -382,7 +382,7 @@ def criar_grafico_principal(
             y=media_passado["Média histórica"],
             mode="lines",
             name=f"Média histórica ({anos_ref} anos)",
-            line=dict(width=4, color="#14532d", shape="spline", smoothing=0.7)
+            line=dict(width=2.2, color="#c2730f", shape="spline", smoothing=0.7)
         ))
 
         if not media_futuro.empty:
@@ -391,7 +391,7 @@ def criar_grafico_principal(
                 y=media_futuro["Média histórica"],
                 mode="lines",
                 name=f"Projeção média histórica ({anos_ref} anos)",
-                line=dict(width=4, color="#14532d", dash="dash", shape="spline", smoothing=0.7)
+                line=dict(width=2.2, color="#c2730f", dash="dash", shape="spline", smoothing=0.7)
             ))
 
     if mostrar_ano_anterior and not linhas_hist.empty and "Ano anterior" in linhas_hist.columns:
@@ -477,6 +477,13 @@ def criar_grafico_principal(
 
 
 def criar_grafico_comparativo_anual(hist, dados_atual):
+    """
+    Gráfico de sazonalidade (spread do ano atual x anos anteriores, alinhados
+    por dia do ano). MANTIDA NO CÓDIGO DE PROPÓSITO, mas atualmente não é
+    chamada em nenhuma aba — removida a pedido do time AgroBasis em [ajuste
+    solicitado após a v2]. Fácil de reativar depois: basta chamar esta função
+    e plotar o resultado com st.plotly_chart().
+    """
     fig = go.Figure()
 
     cores = ["#ef4444", "#16a34a", "#2563eb", "#9333ea", "#f59e0b", "#64748b"]
@@ -766,63 +773,47 @@ kpi_html = "".join(
 st.markdown(f'<div class="kpi-grid">{kpi_html}</div>', unsafe_allow_html=True)
 
 # ==============================
-# Abas: Spread ao vivo | Sazonalidade
+# Gráfico principal + leitura automática
 # ==============================
 
-tab_live, tab_sazonal = st.tabs(["📈 Spread ao vivo", "📊 Sazonalidade"])
+st.markdown(
+    f'<div class="section-subtitle">Spread calculado como <b>contrato mais curto - contrato mais longo</b>. '
+    f'Média histórica, desvios e Z-Score usam spreads equivalentes dos últimos {anos_ref} anos.</div>',
+    unsafe_allow_html=True
+)
+fig = criar_grafico_principal(
+    dados=dados,
+    linhas_hist=linhas_hist,
+    media_movel=media_movel,
+    mostrar_media_movel=mostrar_media_movel,
+    mostrar_media=mostrar_media,
+    mostrar_ano_anterior=mostrar_ano_anterior,
+    mostrar_1dp=mostrar_1dp,
+    mostrar_2dp=mostrar_2dp,
+    anos_ref=anos_ref,
+    titulo_grafico=titulo_grafico
+)
+st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
 
-with tab_live:
-    st.markdown(
-        f'<div class="section-subtitle">Spread calculado como <b>contrato mais curto - contrato mais longo</b>. '
-        f'Média histórica, desvios e Z-Score usam spreads equivalentes dos últimos {anos_ref} anos.</div>',
-        unsafe_allow_html=True
-    )
-    fig = criar_grafico_principal(
-        dados=dados,
-        linhas_hist=linhas_hist,
-        media_movel=media_movel,
-        mostrar_media_movel=mostrar_media_movel,
-        mostrar_media=mostrar_media,
-        mostrar_ano_anterior=mostrar_ano_anterior,
-        mostrar_1dp=mostrar_1dp,
-        mostrar_2dp=mostrar_2dp,
-        anos_ref=anos_ref,
-        titulo_grafico=titulo_grafico
-    )
-    st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
+# ---------- Leitura automática ----------
+if z_score is None or pd.isna(z_score):
+    leitura = "Ainda não há histórico suficiente para classificar estatisticamente este spread."
+elif z_score >= 1.5:
+    leitura = "O spread está em região historicamente elevada frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica maior prêmio relativo no contrato curto frente ao contrato longo."
+elif z_score <= -1.5:
+    leitura = "O spread está em região historicamente baixa frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica menor prêmio relativo no contrato curto frente ao contrato longo."
+else:
+    leitura = "O spread está próximo da faixa normal histórica dos spreads equivalentes, sem distorção estatística extrema no momento."
 
-    # ---------- Leitura automática ----------
-    if z_score is None or pd.isna(z_score):
-        leitura = "Ainda não há histórico suficiente para classificar estatisticamente este spread."
-    elif z_score >= 1.5:
-        leitura = "O spread está em região historicamente elevada frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica maior prêmio relativo no contrato curto frente ao contrato longo."
-    elif z_score <= -1.5:
-        leitura = "O spread está em região historicamente baixa frente aos spreads históricos equivalentes. Pela regra curto - longo, isso indica menor prêmio relativo no contrato curto frente ao contrato longo."
-    else:
-        leitura = "O spread está próximo da faixa normal histórica dos spreads equivalentes, sem distorção estatística extrema no momento."
+media_txt = br_num(media_hist_atual)
 
-    media_txt = br_num(media_hist_atual)
-
-    st.markdown(f"""
-    <div class="reading-box">
-        <b>Leitura AgroBasis:</b><br><br>
-        O <span class="notranslate" translate="no">spread</span> <b>{spread_nome_visual}</b> ({nome_spread}) está em <b>{br_num(spread_atual)} R$/saca</b>.
-        A média histórica de <b>{anos_ref} anos</b> para o mesmo momento do ano está em
-        <b>{media_txt} R$/saca</b>.
-        O Z-Score atual é <b>{z_txt}</b>.<br><br>
-        {leitura}
-    </div>
-    """, unsafe_allow_html=True)
-
-with tab_sazonal:
-    st.markdown(
-        '<div class="section-subtitle">Comparação do spread atual contra os mesmos spreads equivalentes '
-        'dos anos anteriores, alinhados pelo dia do ano — evidencia se o comportamento atual está dentro '
-        'ou fora do padrão sazonal histórico.</div>',
-        unsafe_allow_html=True
-    )
-    if hist.empty:
-        st.info("Não há histórico equivalente suficiente para montar a comparação sazonal deste spread.")
-    else:
-        fig_sazonal = criar_grafico_comparativo_anual(hist, dados)
-        st.plotly_chart(fig_sazonal, use_container_width=True, config={"displaylogo": False})
+st.markdown(f"""
+<div class="reading-box">
+    <b>Leitura AgroBasis:</b><br><br>
+    O <span class="notranslate" translate="no">spread</span> <b>{spread_nome_visual}</b> ({nome_spread}) está em <b>{br_num(spread_atual)} R$/saca</b>.
+    A média histórica de <b>{anos_ref} anos</b> para o mesmo momento do ano está em
+    <b>{media_txt} R$/saca</b>.
+    O Z-Score atual é <b>{z_txt}</b>.<br><br>
+    {leitura}
+</div>
+""", unsafe_allow_html=True)
