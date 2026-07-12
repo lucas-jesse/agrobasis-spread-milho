@@ -39,116 +39,228 @@ MESES_NUM = {
 
 ORDEM_MESES = list(MESES.keys())
 
-st.html("""
+# ============================================================
+# CORES OFICIAIS AGROBASIS
+# ============================================================
+# Constantes centralizadas — mesmo Design System dos dashboards USDA
+# Complexo Soja, Milho e Trigo.
+VERDE_PRINCIPAL = "#1E4812"
+VERDE_SECUNDARIO = "#54931B"
+TEXTO = "#222222"
+DOURADO = "#A17149"
+PRETO = "#000000"
+FUNDO = "#F8FAF8"
+BORDA = "#E7ECE8"
+OLIVA = "#6B7F3A"          # verde-oliva da paleta estendida — acento terciário
+MARROM_ESCURO = "#8A6A4F"  # marrom escuro da paleta estendida — escalas divergentes
+
+# Paleta oficial AgroBasis — mesma usada em todos os dashboards do ecossistema
+PALETA = [VERDE_PRINCIPAL, VERDE_SECUNDARIO, DOURADO, TEXTO, PRETO, OLIVA, MARROM_ESCURO]
+
+st.html(f"""
 <meta name="google" content="notranslate">
 <style>
-.block-container {
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap');
+
+html, body, [class*="css"] {{
+    font-family: 'Geist', Arial, sans-serif;
+}}
+
+.stApp {{
+    background: {FUNDO};
+}}
+
+.block-container {{
     padding-top: 0.8rem;
     padding-bottom: 2rem;
     max-width: 1450px;
-}
-[data-testid="stSidebar"] {
-    background-color: #f3f4f6;
-}
+}}
+[data-testid="stSidebar"] {{
+    background-color: {FUNDO};
+}}
+
+/* ---------- BADGE ---------- */
+.page-badge {{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Sora', Arial, sans-serif;
+    background: #EEF4E7;
+    color: {VERDE_PRINCIPAL};
+    border: 1px solid #d7e6c9;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    margin-bottom: 12px;
+}}
 
 /* ---------- CABEÇALHO (discreto, sem cor de fundo) ---------- */
-.page-header {
+.page-header {{
     margin-bottom: 18px;
     padding-bottom: 14px;
-    border-bottom: 1px solid #e2e8f0;
-}
-.page-header-title {
+    border-bottom: 1px solid {BORDA};
+}}
+.page-header-title {{
     font-size: 26px;
     font-weight: 800;
-    color: #0f172a;
+    color: {TEXTO};
+    font-family: 'Geist', Arial, sans-serif;
     margin-bottom: 4px;
-}
-.page-header-subtitle {
+}}
+.page-header-subtitle {{
     font-size: 14.5px;
-    color: #64748b;
-}
-.page-header-meta {
+    color: #6b6b6b;
+    font-family: 'Sora', Arial, sans-serif;
+}}
+.page-header-meta {{
     margin-top: 8px;
     font-size: 13.5px;
-    color: #475569;
-}
-.page-header-meta b { color: #0f172a; }
+    color: #5b5b5b;
+    font-family: 'Sora', Arial, sans-serif;
+}}
+.page-header-meta b {{ color: {TEXTO}; }}
+
+/* ---------- FILTROS ---------- */
+.stSelectbox label, .stSlider label, .stMultiSelect label {{
+    color: {TEXTO} !important;
+    font-family: 'Sora', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}}
+[data-baseweb="select"] {{
+    background: #ffffff !important;
+    border-radius: 10px;
+    border: 1px solid {BORDA} !important;
+}}
+[data-baseweb="select"] div, [data-baseweb="select"] span {{
+    color: {TEXTO} !important;
+}}
+[role="listbox"] div, [role="option"], [role="option"] div, [role="option"] span {{
+    color: {TEXTO} !important;
+    background: #ffffff !important;
+}}
+
+/* ---------- BOTÕES ---------- */
+.stButton > button, .stDownloadButton > button {{
+    background: #ffffff;
+    color: {VERDE_PRINCIPAL};
+    font-family: 'Geist', Arial, sans-serif;
+    border: 1px solid {VERDE_PRINCIPAL};
+    border-radius: 10px;
+    font-weight: 700;
+    transition: background .15s ease, color .15s ease;
+}}
+.stButton > button:hover, .stDownloadButton > button:hover {{
+    background: {VERDE_SECUNDARIO};
+    color: #ffffff;
+    border-color: {VERDE_SECUNDARIO};
+}}
+
+/* ---------- EXPANDER ---------- */
+div[data-testid="stExpander"] {{
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid {BORDA};
+}}
 
 /* ---------- KPIs discretos (grid CSS responsivo, não compete com o gráfico) ---------- */
-.kpi-grid {
+.kpi-grid {{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
     gap: 10px;
     margin-bottom: 20px;
-}
-.kpi-card {
-    background: #f8fafc;
+}}
+.kpi-card {{
+    background: #ffffff;
     padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    border-left: 3px solid #cbd5e1;
-}
-.kpi-card.is-positive { border-left-color: #15803d; }
-.kpi-card.is-negative { border-left-color: #dc2626; }
-.kpi-label {
-    font-size: 11.5px;
-    color: #6b7280;
+    border-radius: 16px;
+    border: 1px solid {BORDA};
+    border-left: 3px solid #d0d5d0;
+}}
+.kpi-card.is-positive {{ border-left-color: {VERDE_PRINCIPAL}; }}
+.kpi-card.is-negative {{ border-left-color: {MARROM_ESCURO}; }}
+.kpi-label {{
+    font-family: 'Sora', Arial, sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: #7a7a7a;
     margin-bottom: 4px;
     line-height: 1.3;
-}
-.kpi-value {
+}}
+.kpi-value {{
+    font-family: 'Geist', Arial, sans-serif;
     font-size: 19px;
-    font-weight: 700;
-    color: #111827;
-}
-.kpi-value.is-positive { color: #15803d; }
-.kpi-value.is-negative { color: #dc2626; }
+    font-weight: 800;
+    color: {TEXTO};
+}}
+.kpi-value.is-positive {{ color: {VERDE_PRINCIPAL}; }}
+.kpi-value.is-negative {{ color: {MARROM_ESCURO}; }}
 
-.section-title {
+.section-title {{
+    font-family: 'Geist', Arial, sans-serif;
     font-size: 22px;
     font-weight: 800;
     margin-top: 12px;
     margin-bottom: 6px;
-    color: #111827;
-}
-.section-subtitle {
-    color: #6b7280;
+    color: {TEXTO};
+}}
+.section-subtitle {{
+    font-family: 'Sora', Arial, sans-serif;
+    color: #6b6b6b;
     font-size: 14.5px;
     margin-bottom: 14px;
-}
-.reading-box {
-    background: #f8fafc;
-    border-left: 4px solid #14532d;
-    padding: 16px 20px;
-    border-radius: 10px;
-    font-size: 15.5px;
-    color: #1f2937;
+}}
+.reading-box {{
+    background: #ffffff;
+    border: 1px solid {BORDA};
+    border-left: 3px solid {DOURADO};
+    padding: 20px 22px;
+    border-radius: 16px;
+    font-family: 'Geist', Arial, sans-serif;
+    font-size: 15px;
+    color: {TEXTO};
     margin-top: 16px;
-    line-height: 1.6;
-}
-.small-note {
-    color: #6b7280;
+    line-height: 1.7;
+    box-shadow: 0px 6px 18px rgba(30,72,18,0.05);
+}}
+.reading-box-title {{
+    font-family: 'Sora', Arial, sans-serif;
+    font-weight: 700;
+    color: {VERDE_PRINCIPAL};
     font-size: 13px;
-}
-.notranslate {
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    display: block;
+    margin-bottom: 10px;
+}}
+.small-note {{
+    color: #7a7a7a;
+    font-size: 13px;
+}}
+.notranslate {{
     unicode-bidi: isolate;
-}
+}}
 
 /* ---------- RESPONSIVO / MOBILE ---------- */
-@media (max-width: 768px) {
-    .block-container { padding-top: 0.5rem; padding-left: 0.9rem; padding-right: 0.9rem; }
-    .page-header-title { font-size: 21px; }
-    .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .kpi-value { font-size: 17px; }
-    .section-title { font-size: 19px; }
-    div[data-testid="stHorizontalBlock"] {
+@media (max-width: 768px) {{
+    .block-container {{ padding-top: 0.5rem; padding-left: 0.9rem; padding-right: 0.9rem; }}
+    .page-header-title {{ font-size: 21px; }}
+    .kpi-grid {{ grid-template-columns: repeat(2, 1fr); gap: 8px; }}
+    .kpi-value {{ font-size: 17px; }}
+    .section-title {{ font-size: 19px; }}
+    div[data-testid="stHorizontalBlock"] {{
         flex-wrap: wrap !important;
-    }
-    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {
+    }}
+    div[data-testid="stHorizontalBlock"] > div[data-testid="column"] {{
         min-width: 45% !important;
         flex: 1 1 45% !important;
-    }
-}
+    }}
+}}
 </style>
 """)
 
@@ -359,7 +471,7 @@ def criar_grafico_principal(
         y=dados["Spread"],
         mode="lines",
         name="Valor atual do spread",
-        line=dict(width=3.2, color="#15803d", shape="spline", smoothing=0.35)
+        line=dict(width=3.2, color=VERDE_PRINCIPAL, shape="spline", smoothing=0.35)
     ))
 
     if mostrar_media_movel and "Média móvel" in dados.columns:
@@ -368,7 +480,7 @@ def criar_grafico_principal(
             y=dados["Média móvel"],
             mode="lines",
             name=f"Média móvel {media_movel} dias",
-            line=dict(width=2.3, color="#f97316", shape="spline", smoothing=0.6)
+            line=dict(width=2.3, color=OLIVA, shape="spline", smoothing=0.6)
         ))
 
     data_ultima_atual = dados["Data"].max()
@@ -382,7 +494,7 @@ def criar_grafico_principal(
             y=media_passado["Média histórica"],
             mode="lines",
             name=f"Média histórica ({anos_ref} anos)",
-            line=dict(width=2.2, color="#c2730f", shape="spline", smoothing=0.7)
+            line=dict(width=2.2, color=DOURADO, shape="spline", smoothing=0.7)
         ))
 
         if not media_futuro.empty:
@@ -391,7 +503,7 @@ def criar_grafico_principal(
                 y=media_futuro["Média histórica"],
                 mode="lines",
                 name=f"Projeção média histórica ({anos_ref} anos)",
-                line=dict(width=2.2, color="#c2730f", dash="dash", shape="spline", smoothing=0.7)
+                line=dict(width=2.2, color=DOURADO, dash="dash", shape="spline", smoothing=0.7)
             ))
 
     if mostrar_ano_anterior and not linhas_hist.empty and "Ano anterior" in linhas_hist.columns:
@@ -418,21 +530,21 @@ def criar_grafico_principal(
     if mostrar_1dp and not linhas_hist.empty:
         fig.add_trace(go.Scatter(
             x=linhas_hist["Data"], y=linhas_hist["+1 desvio"], mode="lines", name="+1 desvio",
-            line=dict(dash="dot", width=1, color="#a855f7")
+            line=dict(dash="dot", width=1, color=VERDE_SECUNDARIO)
         ))
         fig.add_trace(go.Scatter(
             x=linhas_hist["Data"], y=linhas_hist["-1 desvio"], mode="lines", name="-1 desvio",
-            line=dict(dash="dot", width=1, color="#fb923c")
+            line=dict(dash="dot", width=1, color=MARROM_ESCURO)
         ))
 
     if mostrar_2dp and not linhas_hist.empty:
         fig.add_trace(go.Scatter(
             x=linhas_hist["Data"], y=linhas_hist["+2 desvios"], mode="lines", name="+2 desvios",
-            line=dict(dash="dot", width=1, color="#06b6d4")
+            line=dict(dash="dot", width=1, color=OLIVA)
         ))
         fig.add_trace(go.Scatter(
             x=linhas_hist["Data"], y=linhas_hist["-2 desvios"], mode="lines", name="-2 desvios",
-            line=dict(dash="dot", width=1, color="#ec4899")
+            line=dict(dash="dot", width=1, color=PRETO)
         ))
 
     fig.add_annotation(
@@ -442,23 +554,33 @@ def criar_grafico_principal(
         x=0.5,
         y=0.50,
         showarrow=False,
-        font=dict(size=76, color="rgba(20, 83, 45, 0.055)"),
+        font=dict(size=76, color="rgba(30, 72, 18, 0.055)", family="Geist, Arial, sans-serif"),
         textangle=-25,
         xanchor="center",
         yanchor="middle"
+    )
+
+    fig.add_annotation(
+        text="Fonte: B3 · Elaboração: AgroBasis",
+        xref="paper", yref="paper",
+        x=1, y=-0.1,
+        showarrow=False,
+        font=dict(size=11, color="#8a8a8a", family="Geist, Arial, sans-serif"),
+        xanchor="right"
     )
 
     fig.update_layout(
         height=620,
         template="plotly_white",
         hovermode="x unified",
+        font=dict(family="Geist, Arial, sans-serif", color=TEXTO),
         title=dict(
             text=titulo_grafico,
             x=0.01,
             y=0.98,
             xanchor="left",
             yanchor="top",
-            font=dict(size=24, color="#111827")
+            font=dict(size=24, color=TEXTO, family="Geist, Arial, sans-serif")
         ),
         legend=dict(
             orientation="h",
@@ -466,9 +588,12 @@ def criar_grafico_principal(
             y=1.02,
             xanchor="left",
             x=0.01,
-            font=dict(size=13),
+            font=dict(size=13, color=TEXTO),
             title_text=""
         ),
+        xaxis=dict(gridcolor="rgba(34,34,34,0.06)", linecolor=BORDA, color="#6b6b6b"),
+        yaxis=dict(gridcolor="rgba(34,34,34,0.06)", linecolor=BORDA, color="#6b6b6b"),
+        hoverlabel=dict(bgcolor=VERDE_PRINCIPAL, font_color="#ffffff"),
         yaxis_title="Spread R$/saca",
         xaxis_title="Data",
         margin=dict(l=20, r=20, t=105, b=20)
@@ -486,7 +611,7 @@ def criar_grafico_comparativo_anual(hist, dados_atual):
     """
     fig = go.Figure()
 
-    cores = ["#ef4444", "#16a34a", "#2563eb", "#9333ea", "#f59e0b", "#64748b"]
+    cores = PALETA
     anos = sorted(hist["AnoBase"].unique()) if not hist.empty else []
 
     for idx, ano in enumerate(anos):
@@ -505,20 +630,21 @@ def criar_grafico_comparativo_anual(hist, dados_atual):
         y=atual["Spread"],
         mode="lines",
         name="Ano atual",
-        line=dict(width=4, color="#020617")
+        line=dict(width=4, color=PRETO)
     ))
 
     fig.update_layout(
         height=620,
         template="plotly_white",
         hovermode="x unified",
+        font=dict(family="Geist, Arial, sans-serif", color=TEXTO),
         title=dict(
             text="Comparativo anual do spread",
             x=0.01,
             y=0.98,
             xanchor="left",
             yanchor="top",
-            font=dict(size=24, color="#111827")
+            font=dict(size=24, color=TEXTO, family="Geist, Arial, sans-serif")
         ),
         legend=dict(
             orientation="h",
@@ -606,7 +732,7 @@ with col_f4:
         index=idx_ano_2_padrao
     )
 
-with st.expander("⚙️ Configurações avançadas do gráfico"):
+with st.expander("Configurações Avançadas"):
     col_a1, col_a2 = st.columns(2)
 
     with col_a1:
@@ -731,9 +857,10 @@ titulo_grafico = f"Spread entre os contratos de milho {nome_visual(curto['mes'],
 # ==============================
 
 st.markdown(f"""
+<div class="page-badge">Derivativos B3 · Atualização contínua</div>
 <div class="page-header">
     <div class="page-header-title">Spread Milho B3</div>
-    <div class="page-header-subtitle">Monitoramento da estrutura a termo dos contratos futuros de milho na B3</div>
+    <div class="page-header-subtitle">Estrutura a termo dos contratos futuros de milho da B3 com médias históricas, bandas estatísticas e Z-Score.</div>
     <div class="page-header-meta">
         <b>{spread_nome_visual}</b> &nbsp;·&nbsp; <b>{nome_spread}</b> &nbsp;·&nbsp;
         Última atualização: <b>{ultima_data}</b>
@@ -809,7 +936,7 @@ media_txt = br_num(media_hist_atual)
 
 st.markdown(f"""
 <div class="reading-box">
-    <b>Leitura AgroBasis:</b><br><br>
+    <span class="reading-box-title">Leitura AgroBasis</span>
     O <span class="notranslate" translate="no">spread</span> <b>{spread_nome_visual}</b> ({nome_spread}) está em <b>{br_num(spread_atual)} R$/saca</b>.
     A média histórica de <b>{anos_ref} anos</b> para o mesmo momento do ano está em
     <b>{media_txt} R$/saca</b>.
