@@ -77,3 +77,36 @@ if numero_linha:
 else:
     aba.append_row(nova_linha)
     print(f"Data {data_hoje} não existia. Nova linha gravada.")
+
+# ──────────────────────────────────────────────────────────────────
+# A partir daqui, o Sheets (que o dashboard depende) já está
+# atualizado com sucesso. Só agora, depois disso, exporta também um
+# JSON público e enxuto (só a curva do dia, sem histórico) pra ser
+# consumido pelo Simulador de Spread de Milho via fetch() direto no
+# navegador do visitante do site. O Google Sheets exige autenticação
+# e não é servível publicamente como está; este arquivo é commitado
+# no repositório pelo próprio workflow do GitHub Actions e servido
+# via raw.githubusercontent.com (preferido a um CDN com cache
+# agressivo, já que o dado muda todo dia).
+# Fica dentro de um try/except de propósito: se essa parte falhar
+# por qualquer motivo, o script termina com sucesso do mesmo jeito,
+# porque a parte que o dashboard depende (Sheets) já rodou antes e
+# está isolada desta.
+# ──────────────────────────────────────────────────────────────────
+try:
+    data_atualizacao = datetime.now(ZoneInfo("America/Sao_Paulo")).strftime("%d/%m/%Y %H:%M")
+
+    curva_publica = {
+        "atualizado_em": data_atualizacao,
+        "fonte": "TradingView (BMFBOVESPA-CCM1!)",
+        "curva": {k: v for k, v in linha.items() if k != "Data"}
+    }
+
+    CAMINHO_JSON = "dados/curva_ccm.json"
+    os.makedirs(os.path.dirname(CAMINHO_JSON), exist_ok=True)
+    with open(CAMINHO_JSON, "w", encoding="utf-8") as f:
+        json.dump(curva_publica, f, ensure_ascii=False, indent=2)
+
+    print(f"JSON público gravado em {CAMINHO_JSON}: {curva_publica}")
+except Exception as e:
+    print(f"Aviso: não consegui gravar o JSON público da curva (não afeta o Sheets/dashboard). Erro: {e}")a gravada.")
