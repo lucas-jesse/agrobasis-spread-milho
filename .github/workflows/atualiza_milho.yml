@@ -5,6 +5,9 @@ on:
     - cron: '37 21 * * 1-5'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   atualizar:
     runs-on: ubuntu-latest
@@ -25,3 +28,15 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: python atualiza_spread_milho.py
+
+      - name: Commit da curva pública
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          if [ -f dados/curva_ccm.json ]; then
+            git add dados/curva_ccm.json
+            git diff --staged --quiet || git commit -m "Atualiza curva CCM"
+            git push
+          else
+            echo "curva_ccm.json não foi gerado nesta execução, pulando commit."
+          fi
