@@ -109,4 +109,4 @@ try:
 
     print(f"JSON público gravado em {CAMINHO_JSON}: {curva_publica}")
 except Exception as e:
-    print(f"Aviso: não consegui gravar o JSON público da curva (não afeta o Sheets/dashboard). Erro: {e}")a gravada.")
+    print(f"Aviso: não consegui gravar o JSON público da curva (não afeta o Sheets/dashboard). Erro: {e}")
