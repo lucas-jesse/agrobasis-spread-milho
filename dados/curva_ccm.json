@@ -1,13 +1,13 @@
 {
-  "atualizado_em": "16/10/2026 20:49",
+  "atualizado_em": "19/10/2026 21:34",
   "fonte": "TradingView (BMFBOVESPA-CCM1!)",
   "curva": {
-    "CCMX26": 66.77,
-    "CCMF27": 71.03,
-    "CCMH27": 76.03,
-    "CCMK27": 74.8,
-    "CCMN27": 74.75,
-    "CCMU27": 75.56,
-    "CCMX27": 78.27
+    "CCMX26": 65.8,
+    "CCMF27": 69.76,
+    "CCMH27": 75.0,
+    "CCMK27": 74.16,
+    "CCMN27": 74.21,
+    "CCMU27": 75.31,
+    "CCMX27": 77.98
   }
 }
