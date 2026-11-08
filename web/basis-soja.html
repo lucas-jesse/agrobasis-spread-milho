@@ -1,0 +1,367 @@
+<!-- AgroBasis · Basis Soja Brasil · dashboard em HTML (sem Streamlit)
+     Dados: dados/basis/soja.json (planilha do Drive, exportada pelo GitHub Actions de hora em hora)
+     e a curva futura do repositório (dados/curva_soja.json) para a projeção de preço. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abb{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abb *{box-sizing:border-box}
+.abb-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abb-bc a{color:var(--mt);text-decoration:none}.abb-bc a:hover{color:var(--vd)}
+.abb-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:16px}
+.abb-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abb-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abb-meta{font-size:13px;color:var(--mt);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.abb-old{display:none;font-size:12px;font-weight:600;color:#8A6A4F;background:#f6efe7;border-radius:6px;padding:2px 8px}
+.abb-ctl label{display:flex;flex-direction:column;gap:4px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mt);font-weight:600}
+.abb-ctl select{appearance:none;-webkit-appearance:none;font:600 15px Geist,sans-serif;color:var(--tx);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b756d' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border:1px solid #d5ddd7;border-radius:10px;padding:10px 32px 10px 12px;min-width:200px;cursor:pointer}
+.abb-ctl select:focus{outline:2px solid var(--vc);outline-offset:1px}
+.abb-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abb-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abb-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abb-k b{display:block;font-family:Sora,sans-serif;font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+.abb-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abb-k em{display:block;font-style:normal;font-size:12.5px;color:var(--mt);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abb-pc{position:relative;height:6px;border-radius:3px;margin-top:12px;background:linear-gradient(90deg,#e9d3bd,#eef1ef 50%,#c9dcb3)}
+.abb-pc i{position:absolute;top:-4px;width:4px;height:14px;border-radius:2px;background:var(--vd);transform:translateX(-50%)}
+.abb-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abb-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.abb-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:0}
+.abb-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abb-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abb-anos{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-bottom:4px}
+.abb-anos::-webkit-scrollbar{display:none}
+.abb-tg{flex:none;font:500 12.5px Geist,sans-serif;border:1px solid var(--ln);background:#fff;color:var(--mt);padding:6px 10px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.abb-tg i{width:12px;height:3px;border-radius:2px;display:inline-block}
+.abb-tg[aria-pressed=false]{opacity:.45}
+.abb-chart{width:100%;height:440px}
+.abb-chart.sm{height:360px}
+.abb-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abb-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abb-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abb-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abb-faq details{border-bottom:1px solid var(--ln)}
+.abb-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abb-faq summary::-webkit-details-marker{display:none}
+.abb-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abb-faq details[open] summary:after{content:"−"}
+.abb-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abb-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abb-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abb-mais a:hover{border-color:var(--vc)}
+.abb-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:820px){.abb-row{grid-template-columns:1fr}.abb-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .abb-tit{font-size:24px}
+  .abb-ctl,.abb-ctl label{width:100%}.abb-ctl select{width:100%;min-width:0}
+  .abb-k{padding:12px}.abb-k b{font-size:21px}
+  .abb-card{padding:12px 10px 4px;border-radius:14px}
+  .abb-chart{height:340px}.abb-chart.sm{height:330px}
+}
+</style>
+
+<div class="abb" id="abb">
+  <nav class="abb-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abb-top">
+    <div>
+      <h1 class="abb-kick">Basis Soja Brasil</h1>
+      <div class="abb-tit" id="abbTit">Carregando</div>
+      <div class="abb-meta"><span id="abbMeta">&nbsp;</span><span class="abb-old" id="abbOld"></span></div>
+    </div>
+    <div class="abb-ctl"><label>Praça<select id="abbPraca" aria-label="Praça"></select></label></div>
+  </div>
+
+  <div class="abb-kpis">
+    <div class="abb-k"><span>Basis atual</span><b id="kB">-</b><em id="kBs">&nbsp;</em></div>
+    <div class="abb-k"><span>Vs. média 5 anos</span><b id="kM">-</b><em id="kMs">&nbsp;</em></div>
+    <div class="abb-k"><span>Percentil 5 anos</span><b id="kP">-</b><div class="abb-pc" title="0 = basis mais fraco, 100 = mais forte dos últimos 5 anos"><i id="kPi" style="left:50%"></i></div></div>
+    <div class="abb-k"><span>Preço físico</span><b id="kF">-</b><em id="kFs">&nbsp;</em></div>
+  </div>
+
+  <div class="abb-card">
+    <div class="abb-ch"><h3>Basis ao longo do ano</h3><button class="abb-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="abb-anos" id="abbAnos"></div>
+    <div class="abb-chart" id="abbG0"></div>
+  </div>
+
+  <div class="abb-row">
+    <div class="abb-card">
+      <div class="abb-ch"><h3>Basis nas praças hoje</h3><button class="abb-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abb-chart sm" id="abbG1"></div>
+    </div>
+    <div class="abb-card">
+      <div class="abb-ch"><h3 id="abbH2">Preço projetado</h3><button class="abb-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abb-chart sm" id="abbG2"></div>
+    </div>
+  </div>
+
+  <div class="abb-foot"><span>Fonte: preços físicos AgroBasis · CBOT · PTAX/BCB · Elaboração: AgroBasis</span><span id="abbAtu"></span></div>
+
+  <section class="abb-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>O que é o basis da soja?</summary><p>É a diferença entre o preço físico da soja numa praça, convertido para dólares por bushel pela PTAX, e o contrato de referência da CBOT. Basis positivo indica físico valorizado frente a Chicago; negativo, descontado.</p></details><details><summary>Qual contrato da CBOT é usado como referência?</summary><p>O primeiro vencimento seguinte ao mês corrente, sem usar o contrato que vence no próprio mês. Em outubro, por exemplo, a referência é novembro; em dezembro, janeiro do ano seguinte.</p></details><details><summary>Como ler o percentil de 5 anos?</summary><p>Mostra em que posição o basis de hoje está entre todas as observações dos últimos cinco anos daquela praça. Perto de 100 é um basis historicamente forte; perto de 0, fraco.</p></details><details><summary>Com que frequência os dados são atualizados?</summary><p>O painel lê a planilha de preços físicos do AgroBasis de hora em hora, das 8h às 20h nos dias úteis. A data do último preço aparece no topo.</p></details><details><summary>O preço projetado é um preço negociável?</summary><p>Não. É uma referência teórica que combina a curva futura de hoje com o basis médio dos últimos cinco anos para o mesmo período. Serve para comparar cenários, não como cotação de compra ou venda.</p></details>
+  </section>
+  <nav class="abb-mais" aria-label="Continue explorando"><a href="/simulador-de-soja/">Simulador de Soja</a><a href="/dashboards/basis-milho-brasil/">Basis Milho</a><a href="/dashboards/usda-complexo-soja/">USDA Soja</a><a href="/dashboards/curva-do-dolar/">Curva do Dólar</a><a href="/dashboards/">Todos os dashboards</a></nav>
+</div>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "O que é o basis da soja?", "acceptedAnswer": {"@type": "Answer", "text": "É a diferença entre o preço físico da soja numa praça, convertido para dólares por bushel pela PTAX, e o contrato de referência da CBOT. Basis positivo indica físico valorizado frente a Chicago; negativo, descontado."}}, {"@type": "Question", "name": "Qual contrato da CBOT é usado como referência?", "acceptedAnswer": {"@type": "Answer", "text": "O primeiro vencimento seguinte ao mês corrente, sem usar o contrato que vence no próprio mês. Em outubro, por exemplo, a referência é novembro; em dezembro, janeiro do ano seguinte."}}, {"@type": "Question", "name": "Como ler o percentil de 5 anos?", "acceptedAnswer": {"@type": "Answer", "text": "Mostra em que posição o basis de hoje está entre todas as observações dos últimos cinco anos daquela praça. Perto de 100 é um basis historicamente forte; perto de 0, fraco."}}, {"@type": "Question", "name": "Com que frequência os dados são atualizados?", "acceptedAnswer": {"@type": "Answer", "text": "O painel lê a planilha de preços físicos do AgroBasis de hora em hora, das 8h às 20h nos dias úteis. A data do último preço aparece no topo."}}, {"@type": "Question", "name": "O preço projetado é um preço negociável?", "acceptedAnswer": {"@type": "Answer", "text": "Não. É uma referência teórica que combina a curva futura de hoje com o basis médio dos últimos cinco anos para o mesmo período. Serve para comparar cenários, não como cotação de compra ou venda."}}]}, {"@type": "WebApplication", "name": "Basis Soja Brasil · AgroBasis", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/dashboards/basis-soja-brasil/", "description": "Basis da soja por praça no Brasil: preço físico convertido contra a CBOT, comparação com a média de 5 anos, percentil histórico e preço projetado.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+
+<script>
+(function () {
+  "use strict";
+  var CFG = {"pagina": "soja", "produto": "Soja", "curva": "dados/curva_soja.json", "un": "c/bu", "unLongo": "cents de dólar por bushel", "dec": 1, "padrao": "Santa Rosa", "fonteCurta": "Fonte: físico AgroBasis · CBOT · PTAX"};
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)" };
+  var CINZAS = ["#6E7B8F", "#8a95a4", "#a3adb9", "#bcc4cd", "#d0d6dd"];
+  var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var MES_LETRA = { F: 1, G: 2, H: 3, J: 4, K: 5, M: 6, N: 7, Q: 8, U: 9, V: 10, X: 11, Z: 12 };
+  var DIA = 864e5;
+  var $ = function (id) { return document.getElementById(id); };
+  var D, CURVA, st = { praca: null, anos: [] }, charts = [], P = {};
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c == null ? CFG.dec : c, maximumFractionDigits: c == null ? CFG.dec : c }); }
+  function sinal(v, c) { return v == null || isNaN(v) ? "-" : (v > 0 ? "+" : "") + br(v, c); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { var m = mobile(); return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (m ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function dataBR(t) { var d = new Date(t); return ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth() + 1)).slice(-2) + "/" + d.getUTCFullYear(); }
+  function doy(t) { var d = new Date(t); return Math.round((t - Date.UTC(d.getUTCFullYear(), 0, 1)) / DIA) + 1; }
+  function media(a) { var s = 0, n = 0; a.forEach(function (x) { if (x != null) { s += x; n++; } }); return n ? s / n : null; }
+  function desvio(a) { var v = a.filter(function (x) { return x != null; }); if (v.length < 2) return null; var m = media(v), s = 0; v.forEach(function (x) { s += (x - m) * (x - m); }); return Math.sqrt(s / (v.length - 1)); }
+  function centrada(arr, j) { var h = Math.floor(j / 2); return arr.map(function (_, i) { return media(arr.slice(Math.max(0, i - h), i + h + 1)); }); }
+
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(caminho, i) {
+    i = i || 0;
+    return fetch(REPO[i] + caminho + "?v=" + Math.floor(Date.now() / 6e5), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(caminho, i + 1); throw new Error("sem dados"); });
+  }
+
+  // ---------- preparo: por praça, série diária {t, ano, doy, v} ----------
+  function preparar() {
+    D.t = D.datas.map(function (s) { return Date.parse(s + "T00:00:00Z"); });
+    Object.keys(D.pracas).forEach(function (p) {
+      var b = D.pracas[p].basis, f = D.pracas[p].fisico, pts = [];
+      for (var i = 0; i < D.t.length; i++) if (b[i] != null) pts.push({ i: i, t: D.t[i], ano: new Date(D.t[i]).getUTCFullYear(), d: doy(D.t[i]), v: b[i], f: f[i] });
+      P[p] = pts;
+    });
+  }
+  function ultimo(p) { var a = P[p]; return a && a.length ? a[a.length - 1] : null; }
+
+  // média e desvio por dia do ano nos 5 anos anteriores, suavizados (média móvel centrada de 11 dias, como no app original)
+  function referencia(p, anoBase) {
+    var porDia = {};
+    P[p].forEach(function (x) { if (x.ano >= anoBase - 5 && x.ano < anoBase) (porDia[x.d] = porDia[x.d] || []).push(x.v); });
+    var dias = Object.keys(porDia).map(Number).sort(function (a, b) { return a - b; });
+    var m = centrada(dias.map(function (d) { return media(porDia[d]); }), 11);
+    var s = centrada(dias.map(function (d) { return desvio(porDia[d]); }), 11);
+    var out = {}; dias.forEach(function (d, k) { out[d] = { m: m[k], s: s[k] }; });
+    return { dias: dias, mapa: out };
+  }
+  function refNoDia(R, d) { if (R.mapa[d]) return R.mapa[d]; var best = null, dist = 99; R.dias.forEach(function (x) { var k = Math.abs(x - d); if (k < dist) { dist = k; best = x; } }); return dist <= 5 ? R.mapa[best] : null; }
+
+  // ---------- estilo ----------
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function eixoY(extra) { return Object.assign({ type: "value", scale: true, splitNumber: 5, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: function (v) { return br(v, CFG.dec > 1 ? 0 : 0); } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function tipLinha(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+
+  // 0) basis por ano, sobreposto por dia do ano, com média e faixa de ±1 desvio dos 5 anos anteriores
+  function g0() {
+    var p = st.praca, u = ultimo(p), anoBase = u.ano, R = referencia(p, anoBase), s = [];
+    var sup = [], inf = [];
+    R.dias.forEach(function (d) { var r = R.mapa[d]; if (r.m != null && r.s != null) { sup.push([d, r.m + r.s]); inf.push([d, r.m - r.s]); } });
+    s.push({ name: "±1 desvio", type: "custom", silent: true, z: 1, tooltip: { show: false }, data: [0], itemStyle: { color: "rgba(84,147,27,.13)" },
+      renderItem: function (params, api) {
+        var pts = sup.map(function (q) { return api.coord(q); }).concat(inf.slice().reverse().map(function (q) { return api.coord(q); }));
+        return { type: "polygon", shape: { points: pts }, style: { fill: "rgba(84,147,27,.13)" }, clipPath: { type: "rect", shape: { x: params.coordSys.x, y: params.coordSys.y, width: params.coordSys.width, height: params.coordSys.height } } };
+      } });
+    s.push({ name: "Média " + (anoBase - 5) + "-" + (anoBase - 1), type: "line", data: R.dias.map(function (d) { return [d, R.mapa[d].m]; }), symbol: "none", lineStyle: { width: 2, color: COR.mr, type: [6, 4] }, itemStyle: { color: COR.mr }, z: 3 });
+    var outros = st.anos.filter(function (a) { return a !== anoBase; }).sort(function (a, b) { return b - a; });
+    outros.forEach(function (a, k) {
+      var cor = CINZAS[Math.min(k, CINZAS.length - 1)];
+      s.push({ name: String(a), type: "line", data: P[p].filter(function (x) { return x.ano === a; }).map(function (x) { return [x.d, x.v]; }), symbol: "none", lineStyle: { width: k ? 1.3 : 1.8, color: cor }, itemStyle: { color: cor }, z: 2 });
+    });
+    if (st.anos.indexOf(anoBase) >= 0) s.push({ name: String(anoBase), type: "line", data: P[p].filter(function (x) { return x.ano === anoBase; }).map(function (x) { return [x.d, x.v]; }), symbol: "none", lineStyle: { width: 2.8, color: COR.vd }, itemStyle: { color: COR.vd }, z: 6,
+      markPoint: { symbol: "circle", symbolSize: 9, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, label: { show: true, position: "top", distance: 8, formatter: br(u.v), color: COR.vd, fontWeight: 700, fontSize: 12.5 }, data: [{ coord: [u.d, u.v] }] } });
+    var ini = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: [{ name: "Média " + (anoBase - 5) + "-" + (anoBase - 1), icon: "path://M0,3h6v2H0z M9,3h6v2H9z" }, { name: "±1 desvio", icon: "rect", itemStyle: { color: "rgba(84,147,27,.25)" } }] },
+      grid: { left: 6, right: mobile() ? 10 : 18, top: 34, bottom: 6, containLabel: true },
+      xAxis: { type: "value", min: 1, max: 366, interval: mobile() ? 61 : 30.5, axisLabel: { showMaxLabel: false, color: COR.mt, fontSize: 11.5, formatter: function (v) { var k = 0; while (k < 11 && ini[k + 1] <= v + 1) k++; return MESES[k]; } }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY(),
+      dataZoom: [{ type: "inside", filterMode: "none" }],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "line", lineStyle: { color: "#b8c2bb", type: "dashed" } },
+        formatter: function (ps) {
+          var d = Math.round(ps[0].value[0]), dt = new Date(Date.UTC(2021, 0, d));
+          var h = '<div style="font-weight:600;margin-bottom:4px">' + ("0" + dt.getUTCDate()).slice(-2) + " " + MESES[dt.getUTCMonth()] + "</div>";
+          ps.forEach(function (q) { if (!q.value || q.value[1] == null || q.seriesName === "±1 desvio") return; h += tipLinha(q.marker, q.seriesName, br(q.value[1]) + " " + CFG.un); });
+          return h;
+        } }),
+      series: s
+    });
+  }
+
+  // 1) basis atual em cada praça (barras) contra a média dos 5 anos no mesmo período (losango)
+  function g1() {
+    var lista = Object.keys(P).map(function (p) {
+      var u = ultimo(p); if (!u) return null;
+      var r = refNoDia(referencia(p, u.ano), u.d);
+      return { p: p, v: u.v, m: r ? r.m : null };
+    }).filter(Boolean).sort(function (a, b) { return b.v - a.v; });
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: [{ name: "Basis atual", icon: "rect" }, { name: "Média 5 anos", icon: "path://M0,0h3v16H0z" }] },
+      grid: { left: 6, right: 52, top: 30, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: lista.map(function (x) { return x.p; }), axisLabel: { color: COR.tx, fontSize: 12, width: mobile() ? 100 : 130, overflow: "truncate" }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoY({ scale: false, splitNumber: 3, min: function (v) { return v.min < 0 ? v.min * 1.25 : 0; }, max: function (v) { return v.max > 0 ? v.max * 1.18 : 0; }, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: function (v) { return br(v, 0); } } }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) { var x = lista[ps[0].dataIndex]; return "<b>" + x.p + "</b>" + tipLinha("", "Basis atual", br(x.v) + " " + CFG.un) + (x.m != null ? tipLinha("", "Média 5 anos", br(x.m) + " " + CFG.un) : ""); } }),
+      series: [
+        { name: "Basis atual", type: "bar", barWidth: "56%", itemStyle: { color: "#9DB58F" }, data: lista.map(function (x) { return { value: x.v, itemStyle: { color: x.p === st.praca ? COR.vd : "#9DB58F", borderRadius: x.v >= 0 ? [0, 4, 4, 0] : [4, 0, 0, 4] } }; }), emphasis: { disabled: true }, cursor: "pointer" },
+        { name: "Média 5 anos", type: "scatter", symbol: "rect", symbolSize: [3, 16], itemStyle: { color: COR.mr }, data: lista.map(function (x) { return x.m; }), z: 5 },
+        { name: "rotulo", type: "scatter", symbolSize: 0, silent: true, tooltip: { show: false }, data: lista.map(function (x) { var m = x.m == null ? x.v : x.m; return x.v >= 0 ? { value: Math.max(x.v, m), label: { position: "right" } } : { value: Math.min(x.v, m), label: { position: "left" } }; }),
+          label: { show: true, distance: 6, color: COR.tx, fontSize: 11.5, fontWeight: 600, formatter: function (q) { return br(lista[q.dataIndex].v); } } }
+      ],
+      _lista: lista
+    });
+  }
+
+  // 2) preço projetado: futuro (CBOT × dólar ou B3) + basis sazonal dos 5 anos anteriores
+  function venc(cod) { var l = cod.charAt(cod.length - 3), a = 2000 + +cod.slice(-2); return Date.UTC(a, MES_LETRA[l] - 1, 15); }
+  function interp(pontos, t) { // pontos ordenados [t, v]
+    if (!pontos.length) return null;
+    if (t <= pontos[0][0]) return pontos[0][1];
+    for (var i = 1; i < pontos.length; i++) if (t <= pontos[i][0]) { var a = pontos[i - 1], b = pontos[i]; return a[1] + (b[1] - a[1]) * (t - a[0]) / (b[0] - a[0]); }
+    return pontos[pontos.length - 1][1];
+  }
+  function basisSazonal(p, t, anoRef) {
+    var d0 = new Date(t), vals = [];
+    for (var a = anoRef - 5; a < anoRef; a++) {
+      var c = Date.UTC(a, d0.getUTCMonth(), Math.min(d0.getUTCDate(), 28));
+      P[p].forEach(function (x) { if (Math.abs(x.t - c) <= 5 * DIA) vals.push(x.v); });
+    }
+    return media(vals);
+  }
+  function projecao() {
+    var p = st.praca, u = ultimo(p), anoRef = u.ano, hoje = Date.now(), meses = [];
+    var fut, dol = null;
+    if (CFG.pagina === "soja") {
+      fut = Object.keys(CURVA.cbot).map(function (k) { return [Date.parse(CURVA.cbot[k].vencimento + "T00:00:00Z"), CURVA.cbot[k].cents_bu]; }).sort(function (a, b) { return a[0] - b[0]; });
+      dol = Object.keys(CURVA.dolar).map(function (k) { return [Date.parse(CURVA.dolar[k].vencimento + "T00:00:00Z"), CURVA.dolar[k].brl]; }).sort(function (a, b) { return a[0] - b[0]; });
+    } else {
+      fut = Object.keys(CURVA.curva).map(function (k) { return [venc(k), CURVA.curva[k]]; }).sort(function (a, b) { return a[0] - b[0]; });
+    }
+    var d = new Date(hoje);
+    for (var k = 0; k < 12; k++) {
+      var t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + k, 15);
+      var bs = basisSazonal(p, t, anoRef), f = interp(fut, t), preco = null;
+      if (bs != null && f != null) preco = CFG.pagina === "soja" ? (f + bs) / 100 * 2.2046 * interp(dol, t) : f + bs;
+      var dt = new Date(t);
+      meses.push({ rot: MESES[dt.getUTCMonth()] + "/" + String(dt.getUTCFullYear()).slice(-2), preco: preco, bs: bs, f: f, dol: dol ? interp(dol, t) : null });
+    }
+    return meses;
+  }
+  function g2() {
+    var m = projecao(), u = ultimo(st.praca);
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: mobile() ? 8 : 14, top: 26, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: m.map(function (x) { return x.rot; }), axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY({ min: function (v) { return Math.floor(Math.min(v.min, (ultimo(st.praca) || {}).f || v.min) / 5) * 5 - 5; }, max: function (v) { return Math.ceil(v.max / 5) * 5 + 5; } }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (qs) { var q = qs[0], x = m[q.dataIndex];
+        return "<b>" + x.rot + "</b>" + tipLinha("", "Preço projetado", "R$ " + br(x.preco, 2) + "/sc") +
+          (CFG.pagina === "soja" ? tipLinha("", "CBOT", "US$ " + br(x.f / 100, 2) + "/bu") + tipLinha("", "Basis sazonal", br(x.bs, 1) + " c/bu") + tipLinha("", "Dólar futuro", "R$ " + br(x.dol, 3))
+            : tipLinha("", "B3", "R$ " + br(x.f, 2) + "/sc") + tipLinha("", "Basis sazonal", "R$ " + br(x.bs, 2) + "/sc")); } }),
+      series: [{ type: "line", data: m.map(function (x) { return x.preco; }), symbol: "circle", symbolSize: 8, showSymbol: true,
+        lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 },
+        areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(84,147,27,.16)" }, { offset: 1, color: "rgba(84,147,27,0)" }] } },
+        label: { show: !mobile(), position: "top", distance: 7, color: COR.tx, fontSize: 11, formatter: function (q) { return br(q.value, 0); } }, emphasis: { disabled: true },
+        markLine: u && u.f ? { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.4 }, label: { formatter: "físico hoje R$ " + br(u.f, 2), color: COR.mr, fontSize: 11, position: "insideEndBottom" }, data: [{ yAxis: u.f }] } : undefined }]
+    });
+  }
+
+  // ---------- indicadores ----------
+  function kpis() {
+    var p = st.praca, u = ultimo(p), R = referencia(p, u.ano), r = refNoDia(R, u.d);
+    var hist = P[p].filter(function (x) { return x.ano >= u.ano - 5 && x.ano < u.ano; }).map(function (x) { return x.v; });
+    var pct = hist.length ? hist.filter(function (v) { return v < u.v; }).length / hist.length * 100 : null;
+    $("kB").innerHTML = br(u.v) + "<small>" + CFG.un + "</small>";
+    $("kBs").textContent = "contrato " + D.contrato_ref[u.i];
+    var dm = r ? u.v - r.m : null;
+    $("kM").innerHTML = sinal(dm) + "<small>" + CFG.un + "</small>"; $("kM").style.color = dm == null ? "" : dm >= 0 ? COR.vd : "#8A6A4F";
+    $("kMs").textContent = r ? "média de " + br(r.m) + " no período" : " ";
+    $("kP").textContent = pct == null ? "-" : br(pct, 0);
+    $("kPi").style.left = (pct == null ? 50 : pct) + "%";
+    $("kF").innerHTML = "R$ " + br(u.f, 2) + "<small>/sc</small>";
+    $("kFs").textContent = CFG.pagina === "soja" ? "CBOT US$ " + br(D.cbot_ref_cents[u.i] / 100, 2) + "/bu · PTAX " + br(D.ptax[u.i], 4) : "B3 R$ " + br(D.b3[u.i], 2) + "/sc";
+  }
+
+  function render() {
+    var u = ultimo(st.praca);
+    $("abbTit").textContent = st.praca;
+    $("abbMeta").textContent = "fechamento de " + dataBR(u.t) + " · basis em " + CFG.unLongo;
+    $("abbH2").textContent = "Preço projetado em " + st.praca.replace(/ (RS|PR|MT|MS|GO|SP|MG|RO)$/, "");
+    kpis();
+    charts[0].setOption(g0(), true);
+    var o1 = g1(); charts[1]._lista = o1._lista; delete o1._lista; charts[1].setOption(o1, true);
+    charts[2].setOption(g2(), true);
+    // aviso discreto se o último dado tiver mais de 10 dias
+    var dias = (Date.now() - u.t) / DIA;
+    $("abbOld").style.display = dias > 10 ? "inline-block" : "none"; $("abbOld").textContent = "último dado de " + dataBR(u.t);
+  }
+
+  function montarAnos() {
+    var u = ultimo(st.praca), anos = [];
+    for (var a = u.ano; a >= u.ano - 5; a--) if (P[st.praca].some(function (x) { return x.ano === a; })) anos.push(a);
+    if (!st.anos.length) st.anos = anos.slice(0, 2);
+    $("abbAnos").innerHTML = anos.map(function (a, k) { var cor = k === 0 ? COR.vd : CINZAS[Math.min(k - 1, CINZAS.length - 1)]; return '<button class="abb-tg" data-a="' + a + '" aria-pressed="' + (st.anos.indexOf(a) >= 0) + '"><i style="background:' + cor + '"></i>' + a + "</button>"; }).join("");
+  }
+
+  function baixar(i) {
+    var ch = charts[i], tit = ["Basis da " + CFG.produto.toLowerCase() + " · " + st.praca, "Basis da " + CFG.produto.toLowerCase() + " nas praças · " + dataBR(ultimo(st.praca).t), "Preço projetado da " + CFG.produto.toLowerCase() + " · " + st.praca];
+    var opt = [g0, g1, g2][i](); delete opt._lista; opt.animation = false;
+    opt.title = { text: tit[i], left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd } };
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 34, left: 8 });
+    opt.grid = Object.assign({}, opt.grid, { top: opt.legend ? 66 : 48, bottom: 30 });
+    if (i === 2) opt.series[0].label.show = true;
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · " + CFG.fonteCurta, fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    ch.setOption(opt, true);
+    var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-basis-" + CFG.pagina + "-" + ["anual", "pracas", "projecao"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  Promise.all([carregarLib(), json("dados/basis/" + CFG.pagina + ".json"), json(CFG.curva)]).then(function (r) {
+    D = r[1]; CURVA = r[2]; preparar();
+    charts = [0, 1, 2].map(function (i) { return echarts.init($("abbG" + i), null, { renderer: "canvas" }); });
+    var lista = Object.keys(P).filter(function (p) { return P[p].length; }).sort(function (a, b) { return a.localeCompare(b, "pt-BR"); });
+    lista.forEach(function (p) { $("abbPraca").appendChild(new Option(p, p)); });
+    st.praca = lista.indexOf(CFG.padrao) >= 0 ? CFG.padrao : lista[0]; $("abbPraca").value = st.praca;
+    $("abbPraca").addEventListener("change", function () { st.praca = this.value; st.anos = []; montarAnos(); render(); });
+    $("abbAnos").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; var a = +b.dataset.a, k = st.anos.indexOf(a); if (k >= 0) { if (st.anos.length > 1) st.anos.splice(k, 1); } else st.anos.push(a); montarAnos(); charts[0].setOption(g0(), true); });
+    charts[1].on("click", function (q) { var x = charts[1]._lista && charts[1]._lista[q.dataIndex]; if (x && x.p !== st.praca) { st.praca = x.p; $("abbPraca").value = x.p; st.anos = []; montarAnos(); render(); } });
+    document.querySelectorAll("#abb .abb-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    $("abbAtu").textContent = "Atualizado em " + D.atualizado_em;
+    montarAnos(); render();
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); render(); }, 150); });
+  }).catch(function () {
+    $("abb").innerHTML = '<div class="abb-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
