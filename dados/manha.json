@@ -1,5 +1,5 @@
 {
-  "gerado_em_brt": "2026-11-08 17:13",
+  "gerado_em_brt": "2026-11-08 17:14",
   "fonte_cotacoes": "TradingView (atraso de 10 a 15 min)",
   "cbot": {
     "soja": {
@@ -131,7 +131,7 @@
           "descricao": "Soybean Oil Futures (Dec 2026)",
           "preco": 62.26,
           "ajuste_anterior": 62.24,
-          "variacao": 0.01999999999999602,
+          "variacao": 0.02,
           "variacao_pct": 0.03,
           "maxima": 62.56,
           "minima": 61.34,
@@ -143,7 +143,7 @@
           "descricao": "Soybean Oil Futures (Jan 2027)",
           "preco": 62.41,
           "ajuste_anterior": 62.42,
-          "variacao": -0.010000000000005116,
+          "variacao": -0.01,
           "variacao_pct": -0.02,
           "maxima": 62.74,
           "minima": 61.53,
@@ -159,7 +159,7 @@
       "descricao": "U.S. DOLLAR / BRAZILIAN REAL",
       "preco": 5.5057,
       "ajuste_anterior": 5.5044,
-      "variacao": 0.0012999999999996348,
+      "variacao": 0.0013,
       "variacao_pct": 0.02,
       "maxima": 5.5261,
       "minima": 5.48,
@@ -171,7 +171,7 @@
       "descricao": "U.S. Dollar Currency Index",
       "preco": 102.279,
       "ajuste_anterior": 101.565,
-      "variacao": 0.7139999999999986,
+      "variacao": 0.714,
       "variacao_pct": 0.7,
       "maxima": 102.358,
       "minima": 101.494,
@@ -179,7 +179,15 @@
       "nome": "Índice dólar DXY"
     },
     "brent": {
-      "erro": "sem dado",
+      "ticker": "ICEEUR:BRN1!",
+      "descricao": "Brent Crude Futures",
+      "preco": 98.32,
+      "ajuste_anterior": 98.29,
+      "variacao": 0.03,
+      "variacao_pct": 0.03,
+      "maxima": 100.83,
+      "minima": 96.67,
+      "modo": "delayed_streaming_600",
       "nome": "Petróleo Brent (US$/barril)"
     },
     "sp500_fut": {
