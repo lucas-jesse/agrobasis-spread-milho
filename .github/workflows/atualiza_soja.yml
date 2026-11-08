@@ -1,0 +1,41 @@
+name: Atualiza Curva Soja (CBOT + Dólar)
+
+on:
+  schedule:
+    # 21:52 UTC = 18:52 de Brasília, depois do fechamento da CBOT e do DOL na B3
+    - cron: '52 21 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: pip install requests beautifulsoup4
+
+      - name: Atualizar curva de soja e dólar
+        run: python atualiza_curva_soja.py
+
+      - name: Commit da curva pública
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/curva_soja.json
+          git diff --staged --quiet || git commit -m "Atualiza curva soja CBOT + dólar"
+          git pull --rebase origin main
+          git push
