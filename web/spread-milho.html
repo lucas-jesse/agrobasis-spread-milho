@@ -250,6 +250,9 @@
   };
   function eixoY(extra) { return Object.assign({ type: "value", scale: true, splitNumber: 5, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: function (v) { return br(v, 1); } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
   function mobile() { return window.innerWidth < 560; }
+  // marca d'água discreta no fundo de todos os gráficos (tela e PNG exportado)
+  function marca() { var m = window.innerWidth < 560; return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (m ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+
   function dataBR(t) { var d = new Date(t); return ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth() + 1)).slice(-2) + "/" + d.getUTCFullYear(); }
   var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
 
@@ -284,6 +287,7 @@
     var ini = st.range ? Math.max(R.dados[0].t, ultT - st.range * DIA) : R.dados[0].t;
     var fim = R.cal[R.cal.length - 1];
     return Object.assign({}, base, {
+      graphic: [marca()],
       grid: { left: 8, right: mobile() ? 10 : 20, top: 24, bottom: 8, containLabel: true },
       xAxis: { type: "time", min: ini, max: fim, axisLabel: { color: COR.mt, fontSize: 11.5, hideOverlap: true, formatter: function (v) { var d = new Date(v); return MESES[d.getUTCMonth()] + "/" + String(d.getUTCFullYear()).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, splitLine: { show: false } },
       yAxis: eixoY(),
@@ -316,6 +320,7 @@
     });
     s.push(linha(String(R.cur.ano), R.dados.map(function (p) { return [Math.round((p.t - vc) / DIA), p.s]; }), COR.vd, { lineStyle: { width: 2.6, color: COR.vd }, z: 5 }));
     return Object.assign({}, base, {
+      graphic: [marca()],
       legend: { type: "scroll", top: 0, left: 0, right: 0, itemWidth: 14, itemHeight: 3, icon: "rect", textStyle: { color: COR.mt, fontSize: 11.5 }, pageIconSize: 10 },
       grid: { left: 8, right: 12, top: 34, bottom: 22, containLabel: true },
       xAxis: { type: "value", max: 0, min: minX, name: "dias até o vencimento", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: COR.mt, fontSize: 11 }, axisLabel: { color: COR.mt, fontSize: 11 }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
@@ -336,6 +341,7 @@
     while (i30 > 0 && D.t[i30] > alvo) i30--;
     var at = D.cs.filter(function (c) { return c.ativo; });
     return Object.assign({}, base, {
+      graphic: [marca()],
       legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 3, icon: "rect", textStyle: { color: COR.mt, fontSize: 11.5 }, data: ["Hoje", "30 dias atrás"] },
       grid: { left: 8, right: 12, top: 34, bottom: 4, containLabel: true },
       xAxis: { type: "category", data: at.map(rotulo), axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
@@ -418,7 +424,7 @@
     opt.title = { text: titulos[i], left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 16, fontWeight: 700, color: COR.vd } };
     opt.legend = Object.assign({}, opt.legend || {}, leg);
     opt.grid = Object.assign({}, opt.grid, { top: 74, bottom: i === 1 ? 46 : 34 });
-    opt.graphic = [{ type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: B3", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: B3", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
     ch.setOption(opt, true);
     var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
     if (i === 2) ch.setOption(g3(), true); else render();
@@ -426,8 +432,13 @@
     document.body.appendChild(a); a.click(); a.remove();
   }
 
+  var tentativas = 0;
   function iniciar() {
-    if (!window.echarts) return setTimeout(iniciar, 80);
+    if (!window.echarts) {
+      // biblioteca de gráficos reserva caso a jsDelivr não responda em 4 s
+      if (++tentativas === 50) { var sc = document.createElement("script"); sc.src = "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"; document.head.appendChild(sc); }
+      return setTimeout(iniciar, 80);
+    }
     charts = ["absG1", "absG2", "absG3"].map(function (id) { return echarts.init($(id), null, { renderer: "canvas" }); });
     carregar().then(function (j) {
       D = preparar(j);

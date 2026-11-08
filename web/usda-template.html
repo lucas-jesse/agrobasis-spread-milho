@@ -1,0 +1,410 @@
+<!-- AgroBasis · USDA __TITULO__ · dashboard em HTML (sem Streamlit)
+     Dados: dados/usda/__PAGINA__.json no GitHub, exportado do USDA/FAS PSD Online pelo GitHub Actions.
+     Mundo = soma dos países do PSD. Valores em milhões de toneladas no painel. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abu{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abu *{box-sizing:border-box}
+.abu-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abu-bc a{color:var(--mt);text-decoration:none}.abu-bc a:hover{color:var(--vd)}
+.abu-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:16px}
+.abu-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abu-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abu-meta{font-size:13px;color:var(--mt);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.abu-old{display:none;font-size:12px;font-weight:600;color:#8A6A4F;background:#f6efe7;border-radius:6px;padding:2px 8px}
+.abu-ctl{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+.abu-ctl label{display:flex;flex-direction:column;gap:4px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mt);font-weight:600}
+.abu-ctl select{appearance:none;-webkit-appearance:none;font:600 15px Geist,sans-serif;color:var(--tx);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b756d' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border:1px solid #d5ddd7;border-radius:10px;padding:10px 32px 10px 12px;min-width:110px;cursor:pointer}
+.abu-ctl select:focus{outline:2px solid var(--vc);outline-offset:1px}
+.abu-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px}
+.abu-seg button{font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.abu-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abu-seg.big button{font-size:14px;padding:9px 14px}
+.abu-prod{margin-bottom:14px}
+.abu-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:14px}
+.abu-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abu-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abu-k b{display:block;font-family:Sora,sans-serif;font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+.abu-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abu-k em{display:block;font-style:normal;font-size:12.5px;font-weight:600;margin-top:7px}
+.abu-k em.up{color:var(--vd)}.abu-k em.dn{color:#8A6A4F}.abu-k em.nt{color:var(--mt)}
+.abu-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abu-ch{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:8px 10px;margin-bottom:6px}
+.abu-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:0}
+#abuMet{margin-bottom:6px}
+.abu-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.abu-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abu-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abu-chart{width:100%;height:400px}
+.abu-chart.sm{height:330px}
+.abu-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abu-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abu-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abu-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abu-faq details{border-bottom:1px solid var(--ln)}
+.abu-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abu-faq summary::-webkit-details-marker{display:none}
+.abu-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abu-faq details[open] summary:after{content:"−"}
+.abu-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abu-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abu-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abu-mais a:hover{border-color:var(--vc)}
+.abu-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:980px){.abu-kpis{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:820px){.abu-row{grid-template-columns:1fr}}
+@media (max-width:560px){
+  .abu-tit{font-size:24px}
+  .abu-ctl{width:100%}
+  .abu-ctl label{flex:1}
+  .abu-ctl select{width:100%;min-width:0}
+  .abu-kpis{grid-template-columns:repeat(2,1fr)}
+  .abu-kpis .abu-k:first-child{grid-column:1/-1}
+  .abu-k{padding:12px}
+  .abu-k b{font-size:21px}
+  .abu-card{padding:12px 10px 4px;border-radius:14px}
+  .abu-chart{height:320px}
+  .abu-chart.sm{height:300px}
+  .abu-seg.big{display:flex;width:100%}.abu-seg.big button{flex:1}
+  #abuMet{display:flex;width:100%;overflow-x:auto;scrollbar-width:none}#abuMet button{flex:1}
+}
+</style>
+
+<div class="abu" id="abu">
+  <nav class="abu-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abu-top">
+    <div>
+      <h1 class="abu-kick">USDA __TITULO__ · Oferta e demanda</h1>
+      <div class="abu-tit" id="abuTit">Carregando</div>
+      <div class="abu-meta"><span id="abuMeta">&nbsp;</span><span class="abu-old" id="abuOld"></span></div>
+    </div>
+    <div class="abu-ctl">
+      <label>País<select id="abuPais" aria-label="País"></select></label>
+      <label>Safra<select id="abuAno" aria-label="Safra"></select></label>
+    </div>
+  </div>
+  <div class="abu-prod" id="abuProdBox" hidden><div class="abu-seg big" id="abuProd"></div></div>
+
+  <div class="abu-kpis" id="abuKpis"></div>
+
+  <div class="abu-card">
+    <div class="abu-ch"><h3>Produção e consumo</h3>
+      <div class="abu-tools"><button class="abu-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abu-chart" id="abuG0"></div>
+  </div>
+
+  <div class="abu-row">
+    <div class="abu-card">
+      <div class="abu-ch"><h3>Estoque final sobre consumo</h3><button class="abu-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abu-chart sm" id="abuG1"></div>
+    </div>
+    <div class="abu-card">
+      <div class="abu-ch"><h3 id="abuH2">Balanço da safra</h3><button class="abu-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abu-chart sm" id="abuG2"></div>
+    </div>
+  </div>
+
+  <div class="abu-row">
+    <div class="abu-card">
+      <div class="abu-ch"><h3>Ranking mundial</h3><button class="abu-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abu-seg" id="abuMet">
+        <button data-m="producao" aria-pressed="true">Produção</button><button data-m="exportacao">Export.</button><button data-m="importacao">Import.</button><button data-m="consumo">Consumo</button><button data-m="estoque_final">Estoque</button>
+      </div>
+      <div class="abu-chart" id="abuG3"></div>
+    </div>
+    <div class="abu-card">
+      <div class="abu-ch"><h3>Participação nas exportações mundiais</h3><button class="abu-dl" data-dl="4" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abu-chart" id="abuG4"></div>
+    </div>
+  </div>
+
+  <div class="abu-foot"><span>Fonte: USDA/FAS PSD Online · Elaboração: AgroBasis · milhões de toneladas</span><span id="abuAtu"></span></div>
+
+  <section class="abu-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    __FAQ__
+  </section>
+
+  <nav class="abu-mais" aria-label="Continue explorando">__LINKS__</nav>
+</div>
+<script type="application/ld+json">__LD__</script>
+
+<script>
+(function () {
+  "use strict";
+  var PAGINA = "__PAGINA__", PRODUTO_NOME = "__TITULO__";
+  var URLS = [
+    "https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/dados/usda/" + PAGINA + ".json",
+    "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/dados/usda/" + PAGINA + ".json"
+  ];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)", barra: "#CBD3CD" };
+  // cor fixa por país (a cor acompanha o país, não a posição no ranking)
+  var ORDEM_PAIS = ["BR", "US", "AR", "RS", "E4", "CA", "AS", "UP", "PA", "CH", "IN", "KZ"];
+  var PALETA = ["#2F6B1A", "#2F6FB5", "#C0782F", "#9C8A1E"];
+  var NOMES_MES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  var ROT = { producao: "Produção", consumo: "Consumo", exportacao: "Exportação", importacao: "Importação", estoque_final: "Estoque final", estoque_inicial: "Estoque inicial", esmagamento: "Esmagamento", area: "Área", produtividade: "Produtividade" };
+  var $ = function (id) { return document.getElementById(id); };
+  var D, st = { prod: null, pais: "WD", ano: null, met: "producao" }, charts = [];
+
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c == null ? 1 : c, maximumFractionDigits: c == null ? 1 : c }); }
+  function mi(v) { return v == null ? null : v / 1000; } // mil t -> milhões de t
+  function safra(y) { return String(y).slice(-2) + "/" + String(y + 1).slice(-2); }
+  function mobile() { return window.innerWidth < 560; }
+  // marca d'água discreta no fundo de todos os gráficos (tela e PNG exportado)
+  function marca() { var m = window.innerWidth < 560; return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (m ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+
+
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function carregar(i) {
+    i = i || 0;
+    return fetch(URLS[i] + "?v=" + Math.floor(Date.now() / 36e5), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < URLS.length) return carregar(i + 1); throw new Error("sem dados"); });
+  }
+
+  // ---------- acesso aos dados ----------
+  function P() { return D.produtos[st.prod]; }
+  function serie(pais, at) { var p = P().paises[pais]; return p && p.dados[at] ? p.dados[at] : null; }
+  function val(pais, at, ano) { var s = serie(pais, at); var i = D.anos.indexOf(ano); return s && i >= 0 ? s[i] : null; }
+  function consumoChave() { return "consumo"; }
+  function eu(pais, ano) { var e = val(pais, "estoque_final", ano), c = val(pais, consumoChave(), ano); return e != null && c ? e / c * 100 : null; }
+
+  // ---------- estilo comum ----------
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function eixoY(fmt, extra) { return Object.assign({ type: "value", splitNumber: 4, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt || function (v) { return br(v, 0); } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function eixoAnos(extra) { return Object.assign({ type: "category", data: D.anos.map(safra), axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } }, extra || {}); }
+  function linhaTip(marker, nome, v, sufixo) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + marker + nome + "</span><b>" + v + (sufixo || "") + "</b></div>"; }
+  function grid(top) { return { left: 6, right: mobile() ? 8 : 16, top: top == null ? 34 : top, bottom: 6, containLabel: true }; }
+  function legenda(extra) { return Object.assign({ top: 0, left: 0, itemWidth: 14, itemHeight: 8, itemGap: 14, textStyle: { color: COR.mt, fontSize: 12 } }, extra || {}); }
+  var ultimoAno = function () { return D.anos[D.anos.length - 1]; };
+
+  // 0) produção (barras) e consumo (linha) ao longo do tempo
+  function g0() {
+    var prod = serie(st.pais, "producao") || [], cons = serie(st.pais, consumoChave()) || [];
+    var iSel = D.anos.indexOf(st.ano);
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: legenda({ data: ["Produção", "Consumo"] }),
+      grid: grid(), xAxis: eixoAnos(), yAxis: eixoY(),
+      dataZoom: [{ type: "inside", startValue: mobile() ? D.anos.length - 12 : 0, endValue: D.anos.length - 1 }],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } },
+        formatter: function (ps) { var i = ps[0].dataIndex, h = '<div style="font-weight:600;margin-bottom:4px">Safra ' + safra(D.anos[i]) + (i === D.anos.length - 1 ? " (projeção)" : "") + "</div>"; ps.forEach(function (p) { h += linhaTip(p.marker, p.seriesName, br(p.value), " mi t"); }); var a = prod[i], b = cons[i]; if (a != null && b != null) h += '<div style="color:#6b756d;margin-top:2px">Saldo: ' + br(mi(a - b)) + " mi t</div>"; return h; } }),
+      series: [
+        { name: "Produção", type: "bar", itemStyle: { color: "#4F7A3F" }, barMaxWidth: 26, barCategoryGap: "28%", data: prod.map(function (v, i) {
+            var ult = i === D.anos.length - 1, sel = i === iSel;
+            return { value: mi(v), itemStyle: { color: ult ? "rgba(30,72,18,.45)" : sel ? COR.vd : "#4F7A3F", borderRadius: [4, 4, 0, 0], opacity: sel || iSel < 0 ? 1 : .82 } };
+          }), emphasis: { disabled: true } },
+        { name: "Consumo", type: "line", data: cons.map(mi), symbol: "circle", symbolSize: 5, showSymbol: false, lineStyle: { width: 2.2, color: COR.mr }, itemStyle: { color: COR.mr }, z: 5, emphasis: { disabled: true } }
+      ]
+    });
+  }
+
+  // 1) relação estoque final / consumo (%), com média do período
+  function g1() {
+    var s = D.anos.map(function (a) { return eu(st.pais, a); });
+    var vals = s.filter(function (x) { return x != null; });
+    var med = vals.length ? vals.reduce(function (a, b) { return a + b; }, 0) / vals.length : null;
+    var iSel = D.anos.indexOf(st.ano);
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: mobile() ? 26 : 30, top: 24, bottom: 6, containLabel: true }, xAxis: eixoAnos(), yAxis: eixoY(function (v) { return br(v, 0) + "%"; }, { scale: true }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var i = ps[0].dataIndex; return '<div style="font-weight:600;margin-bottom:4px">Safra ' + safra(D.anos[i]) + "</div>" + linhaTip(ps[0].marker, "Estoque/consumo", br(ps[0].value), "%") + (med != null ? '<div style="color:#6b756d;margin-top:2px">Média 2000-hoje: ' + br(med) + "%</div>" : ""); } }),
+      series: [{ name: "Estoque/consumo", type: "line", data: s, smooth: false, symbol: "circle", symbolSize: 6, showSymbol: false,
+        lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd },
+        areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(84,147,27,.20)" }, { offset: 1, color: "rgba(84,147,27,0)" }] } },
+        markLine: med == null ? undefined : { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.4 }, label: { formatter: "média " + br(med) + "%", color: COR.mr, fontSize: 11, position: "insideStartTop" }, data: [{ yAxis: med }] },
+        markPoint: iSel < 0 || s[iSel] == null ? undefined : { symbol: "circle", symbolSize: 9, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, label: { show: true, position: "top", distance: 8, formatter: br(s[iSel]) + "%", color: COR.vd, fontWeight: 700, fontSize: 12 }, data: [{ coord: [iSel, s[iSel]] }] }
+      }]
+    });
+  }
+
+  // 2) balanço da safra em cascata: estoque inicial + produção + importação − consumo − exportação = estoque final
+  function g2() {
+    var a = st.ano, p = st.pais;
+    var ei = val(p, "estoque_inicial", a) || 0, pr = val(p, "producao", a) || 0, im = val(p, "importacao", a) || 0,
+      co = val(p, consumoChave(), a) || 0, ex = val(p, "exportacao", a) || 0, ef = val(p, "estoque_final", a);
+    if (ef == null) ef = ei + pr + im - co - ex;
+    var passos = [["Estoque inicial", ei, "t"], ["Produção", pr, "+"], ["Importação", im, "+"], ["Consumo", -co, "-"], ["Exportação", -ex, "-"], ["Estoque final", ef, "t"]];
+    // no mundo, importação e exportação se compensam: o balanço mostra só produção e consumo
+    if (p === "WD") { passos.splice(2, 1); passos.splice(3, 1); }
+    // fluxos zerados (ex.: país sem importação) não entram no gráfico
+    passos = passos.filter(function (x) { return x[2] === "t" || Math.abs(x[1]) >= 0.05; });
+    var acum = 0, inv = [], vis = [], cores = [], rot = [];
+    passos.forEach(function (s) {
+      var v = mi(s[1]);
+      if (s[2] === "t") { inv.push(0); vis.push(v); cores.push(COR.vd); acum = v; }
+      else if (v >= 0) { inv.push(acum); vis.push(v); cores.push(COR.vc); acum += v; }
+      else { acum += v; inv.push(acum); vis.push(-v); cores.push(COR.mr); }
+      rot.push(s[0]);
+    });
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: mobile() ? 46 : 56, top: 6, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: rot, axisLabel: { color: COR.tx, fontSize: 12 }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoY(null, { splitNumber: 3 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (q) { var s = passos[q.dataIndex]; return "<b>" + s[0] + "</b><br>" + (s[2] === "-" ? "−" : s[2] === "+" ? "+" : "") + br(Math.abs(mi(s[1]))) + " mi t"; } }),
+      series: [
+        { type: "bar", stack: "w", data: inv, itemStyle: { color: "transparent" }, silent: true, tooltip: { show: false }, barWidth: "58%" },
+        { type: "bar", stack: "w", data: vis.map(function (v, i) { return { value: v, itemStyle: { color: cores[i], borderRadius: 4 } }; }),
+          label: { show: true, position: "right", color: COR.tx, fontSize: 11.5, formatter: function (q) { var s = passos[q.dataIndex]; return (s[2] === "-" ? "−" : s[2] === "+" ? "+" : "") + br(q.value); } }, emphasis: { disabled: true } }
+      ]
+    });
+  }
+
+  // 3) ranking dos países na safra escolhida, com o país selecionado em destaque
+  function g3() {
+    var a = st.ano, at = st.met, tot = val("WD", at, a);
+    var lista = Object.keys(P().paises).filter(function (k) { return k !== "WD"; }).map(function (k) { return { k: k, n: P().paises[k].nome, v: val(k, at, a) }; })
+      .filter(function (x) { return x.v != null && x.v > 0; }).sort(function (x, y) { return y.v - x.v; });
+    var pos = lista.map(function (x) { return x.k; }).indexOf(st.pais);
+    var sel = pos >= 10 ? lista[pos] : null;
+    lista = lista.slice(0, 10);
+    if (sel) { sel.n = (pos + 1) + "º " + sel.n; lista.push(sel); } // país escolhido fora do top 10 entra no fim, com a posição
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: 60, top: 6, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: lista.map(function (x) { return x.n; }), axisLabel: { color: COR.tx, fontSize: 12, width: mobile() ? 92 : 130, overflow: "truncate" }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoY(null, { splitNumber: 3 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (q) { var x = lista[q.dataIndex]; return "<b>" + x.n + "</b><br>" + ROT[at] + ": " + br(mi(x.v)) + " mi t" + (tot ? "<br>" + br(x.v / tot * 100) + "% do mundo" : ""); } }),
+      series: [{ type: "bar", barWidth: "62%", data: lista.map(function (x) { return { value: mi(x.v), itemStyle: { color: x.k === st.pais ? COR.vd : st.pais === "WD" ? "#4F7A3F" : COR.barra, borderRadius: [0, 4, 4, 0] } }; }),
+        label: { show: true, position: "right", color: COR.mt, fontSize: 11.5, formatter: function (q) { var x = lista[q.dataIndex]; return tot ? br(x.v / tot * 100, 0) + "%" : br(q.value); } }, emphasis: { disabled: true }, cursor: "pointer" }],
+      _lista: lista
+    });
+  }
+
+  // 4) participação dos 4 maiores exportadores nas exportações mundiais
+  function g4() {
+    var a = ultimoAno(), tot = serie("WD", "exportacao");
+    var top = Object.keys(P().paises).filter(function (k) { return k !== "WD"; })
+      .map(function (k) { var s = serie(k, "exportacao") || []; var m = 0, n = 0; for (var i = s.length - 5; i < s.length; i++) if (s[i] != null) { m += s[i]; n++; } return { k: k, m: n ? m / n : 0 }; })
+      .sort(function (x, y) { return y.m - x.m; }).slice(0, 4).map(function (x) { return x.k; });
+    top.sort(function (x, y) { var a1 = ORDEM_PAIS.indexOf(x), b1 = ORDEM_PAIS.indexOf(y); return (a1 < 0 ? 99 : a1) - (b1 < 0 ? 99 : b1); });
+    var series = top.map(function (k, idx) {
+      var s = serie(k, "exportacao") || [], cor = PALETA[idx], destaque = k === st.pais;
+      return { name: P().paises[k].nome, type: "line", smooth: false, symbol: "circle", symbolSize: 5, showSymbol: false,
+        data: s.map(function (v, i) { return v != null && tot && tot[i] ? +(v / tot[i] * 100).toFixed(1) : null; }),
+        lineStyle: { width: destaque ? 3.2 : 2, color: cor }, itemStyle: { color: cor }, z: destaque ? 5 : 2, emphasis: { focus: "series" },
+        endLabel: { show: !mobile(), formatter: function (q) { return br(q.value, 0) + "%"; }, color: cor, fontSize: 11.5, fontWeight: 600 } };
+    });
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: legenda({ type: "scroll", itemHeight: 3, icon: "rect" }),
+      grid: { left: 6, right: mobile() ? 10 : 40, top: 34, bottom: 6, containLabel: true },
+      xAxis: eixoAnos(), yAxis: eixoY(function (v) { return br(v, 0) + "%"; }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var h = '<div style="font-weight:600;margin-bottom:4px">Safra ' + safra(D.anos[ps[0].dataIndex]) + "</div>"; ps.slice().sort(function (x, y) { return (y.value || 0) - (x.value || 0); }).forEach(function (p) { if (p.value != null) h += linhaTip(p.marker, p.seriesName, br(p.value), "%"); }); return h; } }),
+      series: series
+    });
+  }
+
+  // ---------- KPIs ----------
+  function kpis() {
+    var a = st.ano, p = st.pais, ant = a - 1;
+    var itens = [["producao", "Produção"], ["consumo", "Consumo"], ["exportacao", "Exportação"], ["estoque_final", "Estoque final"], ["eu", "Estoque/consumo"]];
+    if (p !== "WD") {
+      var imp = val(p, "importacao", a) || 0, exp = val(p, "exportacao", a) || 0;
+      if (imp > exp) itens[2] = ["importacao", "Importação"];
+    }
+    if (st.prod === "grao" && PAGINA === "soja") itens[1] = ["esmagamento", "Esmagamento"];
+    $("abuKpis").innerHTML = itens.map(function (it) {
+      var v, va, txt, dif;
+      if (it[0] === "eu") { v = eu(p, a); va = eu(p, ant); txt = br(v) + "<small>%</small>"; dif = v != null && va != null ? v - va : null;
+        return '<div class="abu-k"><span>' + it[1] + "</span><b>" + txt + "</b>" + (dif == null ? '<em class="nt">&nbsp;</em>' : '<em class="' + (Math.abs(dif) < .05 ? "nt" : dif > 0 ? "up" : "dn") + '">' + (dif > 0 ? "+" : "") + br(dif) + " p.p.</em>") + "</div>"; }
+      v = val(p, it[0], a); va = val(p, it[0], ant);
+      dif = v != null && va ? (v / va - 1) * 100 : null;
+      txt = br(mi(v)) + "<small>mi t</small>";
+      return '<div class="abu-k"><span>' + it[1] + "</span><b>" + txt + "</b>" + (dif == null ? '<em class="nt">&nbsp;</em>' : '<em class="' + (Math.abs(dif) < .05 ? "nt" : dif > 0 ? "up" : "dn") + '">' + (dif > 0 ? "+" : "") + br(dif) + "% vs " + safra(ant) + "</em>") + "</div>";
+    }).join("");
+  }
+
+  // ---------- render ----------
+  function render() {
+    var nomePais = P().paises[st.pais] ? P().paises[st.pais].nome : "Mundo";
+    var nomeProd = P().nome;
+    $("abuTit").textContent = nomeProd + (st.pais === "WD" ? " no mundo" : " · " + nomePais);
+    var rel = D.relatorio ? "WASDE de " + NOMES_MES[D.relatorio.mes - 1] + "/" + D.relatorio.ano + " · " : "";
+    $("abuMeta").textContent = rel + "safra " + safra(st.ano) + (st.ano === ultimoAno() ? " (projeção)" : "") + " · milhões de toneladas";
+    $("abuH2").textContent = "Balanço da safra " + safra(st.ano);
+    kpis();
+    charts[0].setOption(g0(), true); charts[1].setOption(g1(), true); charts[2].setOption(g2(), true);
+    var o3 = g3(); charts[3]._lista = o3._lista; delete o3._lista; charts[3].setOption(o3, true);
+    charts[4].setOption(g4(), true);
+  }
+
+  function montar() {
+    var prods = Object.keys(D.produtos);
+    st.prod = prods[0];
+    if (prods.length > 1) {
+      $("abuProdBox").hidden = false;
+      $("abuProd").innerHTML = prods.map(function (k, i) { return '<button data-p="' + k + '" aria-pressed="' + (i === 0) + '">' + D.produtos[k].nome.replace(" de soja", "").replace("Soja em grão", "Grão") + "</button>"; }).join("");
+      $("abuProd").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); st.prod = b.dataset.p; preencherPaises(); render(); });
+    }
+    var sa = $("abuAno");
+    D.anos.slice().reverse().forEach(function (a, i) { sa.appendChild(new Option(safra(a) + (i === 0 ? " (proj.)" : ""), a)); });
+    st.ano = ultimoAno(); sa.value = st.ano;
+    sa.addEventListener("change", function () { st.ano = +this.value; render(); });
+    preencherPaises();
+    $("abuPais").addEventListener("change", function () { st.pais = this.value; render(); });
+    $("abuMet").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); st.met = b.dataset.m; charts[3].setOption(g3(), true); });
+    charts[3].on("click", function (q) { var l = charts[3]._lista || g3()._lista; var x = l && l[q.dataIndex]; if (x) { st.pais = x.k; $("abuPais").value = x.k; render(); } });
+    document.querySelectorAll("#abu .abu-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    $("abuAtu").textContent = "Atualizado em " + D.atualizado_em;
+    // aviso de dado desatualizado: o WASDE sai todo mês; mais de 40 dias sem novo relatório indica falha na coleta
+    if (D.relatorio) {
+      var hoje = new Date(), ref = new Date(D.relatorio.ano, D.relatorio.mes - 1, 12);
+      if ((hoje - ref) / 864e5 > 45) { $("abuOld").textContent = "dados de " + NOMES_MES[D.relatorio.mes - 1] + "/" + D.relatorio.ano; $("abuOld").style.display = "inline-block"; }
+    }
+  }
+
+  function preencherPaises() {
+    var sel = $("abuPais"), atual = st.pais; sel.innerHTML = "";
+    var ks = Object.keys(P().paises);
+    var outros = ks.filter(function (k) { return k !== "WD"; }).sort(function (a, b) { return (val(b, "producao", ultimoAno()) || 0) - (val(a, "producao", ultimoAno()) || 0); });
+    sel.appendChild(new Option("Mundo", "WD"));
+    var og = document.createElement("optgroup"); og.label = "Países";
+    outros.forEach(function (k) { og.appendChild(new Option(P().paises[k].nome, k)); });
+    sel.appendChild(og);
+    st.pais = P().paises[atual] ? atual : "WD"; sel.value = st.pais;
+  }
+
+  function baixar(i) {
+    var ch = charts[i], titulos = ["Produção e consumo", "Estoque final sobre consumo", "Balanço da safra " + safra(st.ano), "Ranking mundial · " + ROT[st.met] + " " + safra(st.ano), "Participação nas exportações mundiais"];
+    var opt = [g0, g1, g2, g3, g4][i](); delete opt._lista;
+    opt.animation = false;
+    opt.title = { text: P().nome + (st.pais === "WD" || i >= 3 ? "" : " · " + P().paises[st.pais].nome) + " · " + titulos[i], left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd } };
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 34, left: 8 });
+    opt.grid = Object.assign({}, opt.grid, { top: opt.legend ? 66 : 44, bottom: 30 });
+    if (opt.dataZoom) opt.dataZoom = [{ type: "inside", start: 0, end: 100 }];
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: USDA/FAS · mi t", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    ch.setOption(opt, true);
+    var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-usda-" + PAGINA + "-" + ["producao-consumo", "estoque-consumo", "balanco", "ranking", "exportacoes"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  Promise.all([carregarLib(), carregar()]).then(function (r) {
+    D = r[1];
+    charts = [0, 1, 2, 3, 4].map(function (i) { return echarts.init($("abuG" + i), null, { renderer: "canvas" }); });
+    montar(); render();
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); render(); }, 150); });
+  }).catch(function () {
+    $("abu").innerHTML = '<div class="abu-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
