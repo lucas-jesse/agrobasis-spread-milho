@@ -1,0 +1,453 @@
+<!-- AgroBasis · Spread Milho B3 · dashboard em HTML (sem Streamlit)
+     Dados: dados/ccm_historico.json no GitHub (atualizado pelo GitHub Actions após o fechamento).
+     Cálculo replicado do app Streamlit: spread = curto − longo; média e desvio por dia do ano
+     nos spreads equivalentes dos N anos anteriores; média e ano anterior suavizados em 15 dias. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abs{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abs *{box-sizing:border-box}
+.abs-top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px 24px;margin-bottom:18px}
+.abs-kick{margin:0;font-family:Geist,sans-serif;line-height:1.3;font-size:12px;letter-spacing:.16em;font-weight:600;color:var(--vc);text-transform:uppercase}
+.abs-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abs-meta{font-size:13px;color:var(--mt)}
+.abs-sel{display:flex;gap:8px;align-items:center}
+.abs-sel label{display:flex;flex-direction:column;gap:4px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mt);font-weight:600}
+.abs-sel select{appearance:none;-webkit-appearance:none;font:600 15px Geist,sans-serif;color:var(--tx);background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b756d' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 12px center;
+  border:1px solid #d5ddd7;border-radius:10px;padding:10px 32px 10px 12px;min-width:118px;cursor:pointer}
+.abs-sel select:focus{outline:2px solid var(--vc);outline-offset:1px}
+.abs-x{color:var(--mt);font-weight:600;padding-top:18px}
+.abs-pre{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 0 16px;padding-bottom:2px}
+.abs-pre::-webkit-scrollbar{display:none}
+.abs-chip{flex:none;font:500 13px Geist,sans-serif;color:var(--tx);background:#fff;border:1px solid var(--ln);border-radius:999px;padding:7px 12px;cursor:pointer;white-space:nowrap}
+.abs-chip[aria-pressed=true]{background:var(--vd);border-color:var(--vd);color:#fff}
+.abs-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abs-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px}
+.abs-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600}
+.abs-k b{display:block;font-family:Sora,sans-serif;font-size:26px;font-weight:700;margin-top:6px;line-height:1}
+.abs-k small{font-size:13px;color:var(--mt);font-weight:500;margin-left:4px;font-family:Geist,sans-serif}
+.abs-z{position:relative;height:6px;border-radius:3px;margin-top:12px;background:linear-gradient(90deg,#e9d3bd 0 20%,#f1e7dc 20% 40%,#eef1ef 40% 60%,#dfeacf 60% 80%,#c9dcb3 80%)}
+.abs-z i{position:absolute;top:-4px;width:4px;height:14px;border-radius:2px;background:var(--vd);transform:translateX(-50%)}
+.abs-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px}
+.abs-ch{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.abs-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx)}
+.abs-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.abs-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px}
+.abs-seg button{font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer}
+.abs-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abs-tg{font:500 12.5px Geist,sans-serif;border:1px solid var(--ln);background:#fff;color:var(--mt);padding:6px 10px;border-radius:8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.abs-tg i{width:12px;height:3px;border-radius:2px;display:inline-block}
+.abs-tg[aria-pressed=false]{opacity:.45}
+.abs-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt)}
+.abs-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abs-chart{width:100%;height:440px}
+.abs-chart.sm{height:330px}
+.abs-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abs-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abs-tg .sh{display:none}
+.abs-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abs-bc a{color:var(--mt);text-decoration:none}.abs-bc a:hover{color:var(--vd)}
+.abs-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abs-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abs-faq details{border-bottom:1px solid var(--ln)}
+.abs-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abs-faq summary::-webkit-details-marker{display:none}
+.abs-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abs-faq details[open] summary:after{content:"−"}
+.abs-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abs-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abs-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abs-mais a:hover{border-color:var(--vc)}
+.abs-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:820px){
+  .abs-row{grid-template-columns:1fr}
+  .abs-kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:560px){
+  .abs-tit{font-size:24px}
+  .abs-top{align-items:stretch}
+  .abs-sel{width:100%}
+  .abs-sel label{flex:1}
+  .abs-sel select{width:100%;min-width:0}
+  .abs-k{padding:12px}
+  .abs-k b{font-size:21px}
+  .abs-card{padding:12px 10px 4px;border-radius:14px}
+  .abs-ch{gap:8px}
+  .abs-chart{height:340px}
+  .abs-tg .lg{display:none}.abs-tg .sh{display:inline}
+  .abs-chart.sm{height:280px}
+}
+</style>
+
+<div class="abs" id="abs">
+  <nav class="abs-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abs-top">
+    <div>
+      <h1 class="abs-kick">Spread Milho B3</h1>
+      <div class="abs-tit" id="absTit">Carregando</div>
+      <div class="abs-meta" id="absMeta">&nbsp;</div>
+    </div>
+    <div class="abs-sel">
+      <label>Contrato 1<select id="absC1" aria-label="Contrato 1"></select></label>
+      <span class="abs-x">×</span>
+      <label>Contrato 2<select id="absC2" aria-label="Contrato 2"></select></label>
+    </div>
+  </div>
+  <div class="abs-pre" id="absPre" aria-label="Spreads mais negociados"></div>
+
+  <div class="abs-kpis">
+    <div class="abs-k"><span>Spread atual</span><b id="kSp">-</b></div>
+    <div class="abs-k"><span id="kMl">Vs. média</span><b id="kMd">-</b></div>
+    <div class="abs-k"><span>Z-score</span><b id="kZ">-</b><div class="abs-z" title="de -2 a +2 desvios"><i id="kZi" style="left:50%"></i></div></div>
+    <div class="abs-k"><span>Variação 30 dias</span><b id="kV">-</b></div>
+  </div>
+
+  <div class="abs-card">
+    <div class="abs-ch">
+      <h3 id="absH1">Spread x histórico</h3>
+      <div class="abs-tools">
+        <div class="abs-seg" id="absRange">
+          <button data-r="90">3M</button><button data-r="180" aria-pressed="true">6M</button><button data-r="365">1A</button><button data-r="0">Tudo</button>
+        </div>
+        <div class="abs-seg" id="absAnos" title="Anos de histórico">
+          <button data-a="3">3a</button><button data-a="5" aria-pressed="true">5a</button><button data-a="10">10a</button>
+        </div>
+        <button class="abs-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button>
+      </div>
+    </div>
+    <div class="abs-tools" id="absLayers" style="margin-bottom:4px">
+      <button class="abs-tg" data-l="media" aria-pressed="true"><i style="background:var(--mr)"></i><span class="lg">Média histórica</span><span class="sh">Média</span></button>
+      <button class="abs-tg" data-l="ant" aria-pressed="true"><i style="background:var(--cz)"></i><span class="lg">Ano anterior</span><span class="sh">Ano ant.</span></button>
+      <button class="abs-tg" data-l="b1" aria-pressed="true"><i style="background:rgba(84,147,27,.35);height:8px"></i><span class="lg">±1 desvio</span><span class="sh">±1σ</span></button>
+      <button class="abs-tg" data-l="b2" aria-pressed="false"><i style="background:rgba(84,147,27,.15);height:8px"></i><span class="lg">±2 desvios</span><span class="sh">±2σ</span></button>
+    </div>
+    <div class="abs-chart" id="absG1"></div>
+  </div>
+
+  <div class="abs-row">
+    <div class="abs-card">
+      <div class="abs-ch"><h3>Mesmo spread nos anos anteriores</h3>
+        <button class="abs-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abs-chart sm" id="absG2"></div>
+    </div>
+    <div class="abs-card">
+      <div class="abs-ch"><h3>Curva do milho B3</h3>
+        <button class="abs-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abs-chart sm" id="absG3"></div>
+    </div>
+  </div>
+
+  <div class="abs-foot"><span>Fonte: B3 · Elaboração: AgroBasis · R$/saca de 60 kg</span><span id="absAtu"></span></div>
+
+  <section class="abs-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>O que é o spread entre contratos de milho?</summary><p>É a diferença de preço entre dois vencimentos do milho na B3, sempre calculada como contrato mais curto menos contrato mais longo. Spread negativo indica que o mercado paga mais pelo milho entregue mais tarde (carrego); positivo indica prêmio para o milho disponível antes (inversão).</p></details><details><summary>Como ler o Z-score?</summary><p>Mostra quantos desvios-padrão o spread de hoje está distante da média dos anos anteriores na mesma época do ano. Entre −1 e +1 é a faixa usual; acima de +1,5 ou abaixo de −1,5 indica uma distorção pouco frequente frente ao histórico.</p></details><details><summary>Como são calculadas a média e as bandas?</summary><p>Com os spreads equivalentes dos anos anteriores: os mesmos meses de contrato, com a mesma distância entre os vencimentos. Média e desvio-padrão são calculados por dia do ano, suavizados em 15 dias e projetados até o vencimento do contrato curto.</p></details><details><summary>Com que frequência os dados são atualizados?</summary><p>Todo dia útil, depois do fechamento da B3. A data do último fechamento aparece no topo do painel.</p></details><details><summary>O painel é uma recomendação de compra ou venda?</summary><p>Não. É uma ferramenta de análise de mercado. A decisão deve considerar a sua posição física, custos e estratégia de comercialização.</p></details>
+  </section>
+
+  <nav class="abs-mais" aria-label="Continue explorando">
+    <a href="/ferramentas/simulador-de-milho/">Simulador de Milho</a><a href="/dashboards/basis-milho-brasil/">Basis Milho</a><a href="/dashboards/curva-do-dolar/">Curva do Dólar</a><a href="/agenda/">Agenda do Agro</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "O que é o spread entre contratos de milho?", "acceptedAnswer": {"@type": "Answer", "text": "É a diferença de preço entre dois vencimentos do milho na B3, sempre calculada como contrato mais curto menos contrato mais longo. Spread negativo indica que o mercado paga mais pelo milho entregue mais tarde (carrego); positivo indica prêmio para o milho disponível antes (inversão)."}}, {"@type": "Question", "name": "Como ler o Z-score?", "acceptedAnswer": {"@type": "Answer", "text": "Mostra quantos desvios-padrão o spread de hoje está distante da média dos anos anteriores na mesma época do ano. Entre −1 e +1 é a faixa usual; acima de +1,5 ou abaixo de −1,5 indica uma distorção pouco frequente frente ao histórico."}}, {"@type": "Question", "name": "Como são calculadas a média e as bandas?", "acceptedAnswer": {"@type": "Answer", "text": "Com os spreads equivalentes dos anos anteriores: os mesmos meses de contrato, com a mesma distância entre os vencimentos. Média e desvio-padrão são calculados por dia do ano, suavizados em 15 dias e projetados até o vencimento do contrato curto."}}, {"@type": "Question", "name": "Com que frequência os dados são atualizados?", "acceptedAnswer": {"@type": "Answer", "text": "Todo dia útil, depois do fechamento da B3. A data do último fechamento aparece no topo do painel."}}, {"@type": "Question", "name": "O painel é uma recomendação de compra ou venda?", "acceptedAnswer": {"@type": "Answer", "text": "Não. É uma ferramenta de análise de mercado. A decisão deve considerar a sua posição física, custos e estratégia de comercialização."}}]}, {"@type": "WebApplication", "name": "Spread Milho B3 · AgroBasis", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/dashboards/spread-milho-b3/", "description": "Spread entre contratos futuros de milho da B3 com média histórica, bandas de desvio, Z-score, comparação com anos anteriores e curva futura.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script>
+(function () {
+  "use strict";
+  var URLS = [
+    "https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/dados/ccm_historico.json",
+    "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/dados/ccm_historico.json"
+  ];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)" };
+  var MES = { F: 1, H: 3, K: 5, N: 7, U: 9, X: 11 };
+  var NOME = { F: "Jan", H: "Mar", K: "Mai", N: "Jul", U: "Set", X: "Nov" };
+  var DIA = 864e5;
+  var $ = function (id) { return document.getElementById(id); };
+  var st = { anos: 5, range: 180, camadas: { media: true, ant: true, b1: true, b2: false } };
+  var D, charts = [];
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c == null ? 2 : c, maximumFractionDigits: c == null ? 2 : c }); }
+  function sinal(v, c) { return v == null || isNaN(v) ? "-" : (v > 0 ? "+" : "") + br(v, c); }
+  function parse(cod) { var l = cod.charAt(3), a = 2000 + +cod.slice(4); return { cod: cod, l: l, mes: MES[l], ano: a, k: a * 12 + MES[l] }; }
+  function codigo(l, ano) { return "CCM" + l + String(ano).slice(-2); }
+  function rotulo(c) { return NOME[c.l] + "/" + String(c.ano).slice(-2); }
+  function venc(c) { return Date.UTC(c.ano, c.mes - 1, 15); } // aproximação usada no app original
+  function doy(t) { var d = new Date(t); return Math.round((t - Date.UTC(d.getUTCFullYear(), 0, 1)) / DIA) + 1; }
+  function media(a) { var s = 0, n = 0; for (var i = 0; i < a.length; i++) if (a[i] != null) { s += a[i]; n++; } return n ? s / n : null; }
+  function desvio(a) { var v = a.filter(function (x) { return x != null; }); if (v.length < 2) return v.length ? 0 : null; var m = media(v), s = 0; v.forEach(function (x) { s += (x - m) * (x - m); }); return Math.sqrt(s / (v.length - 1)); }
+  function rolar(a, j) { return a.map(function (_, i) { return media(a.slice(Math.max(0, i - j + 1), i + 1)); }); }
+
+  // ---------- dados ----------
+  function carregar(i) {
+    i = i || 0;
+    return fetch(URLS[i] + "?v=" + Math.floor(Date.now() / 36e5), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < URLS.length) return carregar(i + 1); throw new Error("sem dados"); });
+  }
+
+  function preparar(j) {
+    var t = j.datas.map(function (s) { return Date.parse(s + "T00:00:00Z"); });
+    var cs = Object.keys(j.contratos).map(parse).sort(function (a, b) { return a.k - b.k; });
+    var ult = t.length - 1;
+    cs.forEach(function (c) { c.v = j.contratos[c.cod]; c.ativo = c.v[ult] != null; });
+    return { t: t, cs: cs, por: cs.reduce(function (o, c) { o[c.cod] = c; return o; }, {}), atualizado: j.atualizado_em };
+  }
+
+  function serieSpread(cc, cl) {
+    var out = [];
+    for (var i = 0; i < D.t.length; i++) {
+      var a = cc.v[i], b = cl.v[i];
+      if (a != null && b != null) out.push({ t: D.t[i], s: +(a - b).toFixed(4), d: doy(D.t[i]) });
+    }
+    return out;
+  }
+
+  function calcular(c1, c2) {
+    var cur = c1.k <= c2.k ? c1 : c2, lon = c1.k <= c2.k ? c2 : c1;
+    var dados = serieSpread(cur, lon);
+    var off = lon.ano - cur.ano, hist = [];
+    for (var y = cur.ano - st.anos; y < cur.ano; y++) {
+      var hc = D.por[codigo(cur.l, y)], hl = D.por[codigo(lon.l, y + off)];
+      if (hc && hl) serieSpread(hc, hl).forEach(function (p) { p.y = y; hist.push(p); });
+    }
+    // média e desvio por dia do ano
+    var porDia = {}; hist.forEach(function (p) { (porDia[p.d] = porDia[p.d] || []).push(p.s); });
+    var mDia = {}, sDia = {};
+    Object.keys(porDia).forEach(function (d) { mDia[d] = media(porDia[d]); sDia[d] = desvio(porDia[d]); });
+    var antDia = {}, antAux = {};
+    hist.filter(function (p) { return p.y === cur.ano - 1; }).forEach(function (p) { (antAux[p.d] = antAux[p.d] || []).push(p.s); });
+    Object.keys(antAux).forEach(function (d) { antDia[d] = media(antAux[d]); });
+    // calendário diário até o vencimento do contrato curto
+    var cal = [], fim = Math.max(dados.length ? dados[dados.length - 1].t : 0, venc(cur));
+    if (dados.length) for (var tt = dados[0].t; tt <= fim; tt += DIA) cal.push(tt);
+    var mBruta = cal.map(function (x) { var v = mDia[doy(x)]; return v == null ? null : v; });
+    var mSuave = rolar(mBruta, 15);
+    // desvio por dia do ano suavizado em 15 dias, como a média (evita bandas serrilhadas)
+    var dvBruto = cal.map(function (x) { var v = sDia[doy(x)]; return v == null ? null : v; });
+    var dv = rolar(dvBruto, 15);
+    var ant = rolar(cal.map(function (x) { var v = antDia[doy(x)]; return v == null ? null : v; }), 15);
+    var ultimo = dados[dados.length - 1];
+    var iU = ultimo ? cal.indexOf(ultimo.t) : -1;
+    var mU = iU >= 0 ? mSuave[iU] : null, sU = iU >= 0 ? dvBruto[iU] : null; // z-score igual ao app original (desvio do dia, sem suavizar)
+    if (!sU) sU = desvio(hist.map(function (p) { return p.s; }));
+    var z = ultimo && mU != null && sU ? (ultimo.s - mU) / sU : null;
+    function varN(n) { return dados.length > n ? dados[dados.length - 1].s - dados[dados.length - 1 - n].s : null; }
+    return { cur: cur, lon: lon, dados: dados, hist: hist, cal: cal, m: mSuave, dv: dv, ant: ant, z: z, mU: mU, ultimo: ultimo, v30: varN(30), v7: varN(7) };
+  }
+
+  // ---------- gráficos ----------
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx },
+    animationDuration: 500,
+    tooltip: {
+      trigger: "axis", confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12],
+      textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px",
+      axisPointer: { type: "line", lineStyle: { color: "#b8c2bb", type: "dashed" } }
+    }
+  };
+  function eixoY(extra) { return Object.assign({ type: "value", scale: true, splitNumber: 5, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: function (v) { return br(v, 1); } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function mobile() { return window.innerWidth < 560; }
+  function dataBR(t) { var d = new Date(t); return ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth() + 1)).slice(-2) + "/" + d.getUTCFullYear(); }
+  var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+  function linha(nome, dados, cor, extra) {
+    return Object.assign({ name: nome, type: "line", data: dados, showSymbol: false, symbolSize: 8, connectNulls: false, lineStyle: { width: 2, color: cor }, itemStyle: { color: cor }, emphasis: { disabled: true } }, extra || {});
+  }
+
+  function g1(R) {
+    var ultT = R.ultimo.t, cam = st.camadas, s = [];
+    var pass = function (arr) { return R.cal.map(function (t, i) { return t <= ultT ? [t, arr[i]] : [t, null]; }); };
+    var fut = function (arr) { return R.cal.map(function (t, i) { return t >= ultT ? [t, arr[i]] : [t, null]; }); };
+    function banda(k, alfa, id) {
+      var lo = R.cal.map(function (t, i) { return [t, R.m[i] == null || R.dv[i] == null ? null : R.m[i] - k * R.dv[i]]; });
+      var w = R.cal.map(function (t, i) { return [t, R.m[i] == null || R.dv[i] == null ? null : 2 * k * R.dv[i]]; });
+      s.push({ name: id + "lo", type: "line", data: lo, stack: id, stackStrategy: "all", symbol: "none", lineStyle: { opacity: 0 }, silent: true, tooltip: { show: false } });
+      s.push({ name: id, type: "line", data: w, stack: id, stackStrategy: "all", symbol: "none", lineStyle: { opacity: 0 }, areaStyle: { color: "rgba(84,147,27," + alfa + ")" }, silent: true, tooltip: { show: false } });
+    }
+    if (cam.b2) banda(2, 0.07, "b2");
+    if (cam.b1) banda(1, 0.13, "b1");
+    if (cam.ant) {
+      s.push(linha("Ano anterior", pass(R.ant), COR.cz, { lineStyle: { width: 1.6, color: COR.cz, type: [5, 4] } }));
+      s.push(linha("Ano anterior (projeção)", fut(R.ant), COR.cz, { lineStyle: { width: 1.6, color: COR.cz, type: [2, 4], opacity: .7 }, tooltip: { show: false } }));
+    }
+    if (cam.media) {
+      s.push(linha("Média " + st.anos + " anos", pass(R.m), COR.mr, { lineStyle: { width: 2, color: COR.mr } }));
+      s.push(linha("Média (projeção)", fut(R.m), COR.mr, { lineStyle: { width: 2, color: COR.mr, type: [6, 4], opacity: .8 }, tooltip: { show: false } }));
+    }
+    s.push(linha("Spread", R.dados.map(function (p) { return [p.t, p.s]; }), COR.vd, {
+      lineStyle: { width: 2.6, color: COR.vd }, z: 5,
+      markPoint: { symbol: "circle", symbolSize: 9, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, label: { show: true, position: "top", distance: 8, formatter: br(R.ultimo.s), color: COR.vd, fontWeight: 700, fontSize: 12.5 }, data: [{ coord: [ultT, R.ultimo.s] }] }
+    }));
+    var ini = st.range ? Math.max(R.dados[0].t, ultT - st.range * DIA) : R.dados[0].t;
+    var fim = R.cal[R.cal.length - 1];
+    return Object.assign({}, base, {
+      grid: { left: 8, right: mobile() ? 10 : 20, top: 24, bottom: 8, containLabel: true },
+      xAxis: { type: "time", min: ini, max: fim, axisLabel: { color: COR.mt, fontSize: 11.5, hideOverlap: true, formatter: function (v) { var d = new Date(v); return MESES[d.getUTCMonth()] + "/" + String(d.getUTCFullYear()).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, splitLine: { show: false } },
+      yAxis: eixoY(),
+      dataZoom: [{ type: "inside", filterMode: "none" }],
+      tooltip: Object.assign({}, base.tooltip, {
+        formatter: function (ps) {
+          var t = ps[0].value[0], h = '<div style="font-weight:600;margin-bottom:4px">' + dataBR(t) + "</div>";
+          ps.forEach(function (p) { if (p.value[1] == null || /lo$|^b\d$/.test(p.seriesName)) return; h += '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + p.marker + p.seriesName + "</span><b>" + br(p.value[1]) + "</b></div>"; });
+          var i = R.cal.indexOf(t);
+          if (i >= 0 && R.dv[i] != null && st.camadas.b1) h += '<div style="color:#6b756d;margin-top:2px">±1 desvio: ' + br(R.m[i] - R.dv[i]) + " a " + br(R.m[i] + R.dv[i]) + "</div>";
+          return h;
+        }
+      }),
+      series: s
+    });
+  }
+
+  function g2(R) {
+    // spread equivalente de cada ano, alinhado por dias até o vencimento do contrato curto
+    var anos = {}, vc = venc(R.cur);
+    R.hist.forEach(function (p) { (anos[p.y] = anos[p.y] || []).push(p); });
+    var s = [], cinzas = ["#d9dfe5", "#cdd4dc", "#bfc8d2", "#adb7c3", "#9aa5b3", "#8a95a4", "#7c8798", "#6e7b8f"];
+    var ys = Object.keys(anos).map(Number).sort();
+    var minX = Math.max(-365, Math.round((R.dados[0].t - vc) / DIA));
+    ys.forEach(function (y, idx) {
+      var v = Date.UTC(y, R.cur.mes - 1, 15);
+      var ultimoAno = y === R.cur.ano - 1;
+      var cor = ultimoAno ? COR.cz : cinzas[Math.max(0, cinzas.length - 1 - (ys.length - 1 - idx) * 2)];
+      s.push(linha(String(y), anos[y].map(function (p) { return [Math.round((p.t - v) / DIA), p.s]; }).filter(function (p) { return p[0] >= minX - 5 && p[0] <= 0; }), cor, { lineStyle: { width: ultimoAno ? 1.8 : 1.2, color: cor } }));
+    });
+    s.push(linha(String(R.cur.ano), R.dados.map(function (p) { return [Math.round((p.t - vc) / DIA), p.s]; }), COR.vd, { lineStyle: { width: 2.6, color: COR.vd }, z: 5 }));
+    return Object.assign({}, base, {
+      legend: { type: "scroll", top: 0, left: 0, right: 0, itemWidth: 14, itemHeight: 3, icon: "rect", textStyle: { color: COR.mt, fontSize: 11.5 }, pageIconSize: 10 },
+      grid: { left: 8, right: 12, top: 34, bottom: 22, containLabel: true },
+      xAxis: { type: "value", max: 0, min: minX, name: "dias até o vencimento", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: COR.mt, fontSize: 11 }, axisLabel: { color: COR.mt, fontSize: 11 }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, {
+        formatter: function (ps) {
+          var h = '<div style="font-weight:600;margin-bottom:4px">' + (-ps[0].value[0]) + " dias para o vencimento</div>";
+          ps.slice().reverse().forEach(function (p) { if (p.value[1] != null) h += '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + p.marker + p.seriesName + "</span><b>" + br(p.value[1]) + "</b></div>"; });
+          return h;
+        }
+      }),
+      series: s
+    });
+  }
+
+  function g3() {
+    var ult = D.t.length - 1, alvo = D.t[ult] - 30 * DIA, i30 = ult;
+    while (i30 > 0 && D.t[i30] > alvo) i30--;
+    var at = D.cs.filter(function (c) { return c.ativo; });
+    return Object.assign({}, base, {
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 3, icon: "rect", textStyle: { color: COR.mt, fontSize: 11.5 }, data: ["Hoje", "30 dias atrás"] },
+      grid: { left: 8, right: 12, top: 34, bottom: 4, containLabel: true },
+      xAxis: { type: "category", data: at.map(rotulo), axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, {
+        formatter: function (ps) {
+          var h = '<div style="font-weight:600;margin-bottom:4px">' + ps[0].name + "</div>";
+          ps.forEach(function (p) { if (p.value != null) h += '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + p.marker + p.seriesName + "</span><b>R$ " + br(p.value) + "</b></div>"; });
+          return h;
+        }
+      }),
+      series: [
+        linha("30 dias atrás", at.map(function (c) { return c.v[i30]; }), COR.cz, { showSymbol: true, symbolSize: 7, lineStyle: { width: 1.6, color: COR.cz, type: [5, 4] }, itemStyle: { color: "#fff", borderColor: COR.cz, borderWidth: 1.6 } }),
+        linha("Hoje", at.map(function (c) { return c.v[ult]; }), COR.vd, { showSymbol: true, symbolSize: 8, lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, z: 5,
+          label: { show: !mobile(), position: "top", distance: 6, color: COR.tx, fontSize: 11, formatter: function (p) { return br(p.value); } } })
+      ]
+    });
+  }
+
+  // ---------- render ----------
+  var R;
+  function render() {
+    var c1 = D.por[$("absC1").value], c2 = D.por[$("absC2").value];
+    if (!c1 || !c2 || c1 === c2) return;
+    R = calcular(c1, c2);
+    if (!R.dados.length) { $("absTit").textContent = "Sem dados para esse par"; return; }
+    $("absTit").textContent = rotulo(R.cur) + " × " + rotulo(R.lon);
+    $("absMeta").textContent = R.cur.cod + " − " + R.lon.cod + " · fechamento de " + dataBR(R.ultimo.t) + " · R$/saca";
+    $("kSp").innerHTML = br(R.ultimo.s) + "<small>R$/sc</small>";
+    var dm = R.mU == null ? null : R.ultimo.s - R.mU;
+    $("kMl").textContent = "Vs. média " + st.anos + " anos";
+    $("kMd").innerHTML = sinal(dm) + "<small>R$/sc</small>";
+    $("kZ").textContent = R.z == null ? "-" : sinal(R.z);
+    $("kZi").style.left = (R.z == null ? 50 : Math.max(0, Math.min(100, (R.z + 2) / 4 * 100))) + "%";
+    $("kV").innerHTML = sinal(R.v30) + "<small>R$/sc</small>";
+    [["kMd", dm], ["kZ", R.z], ["kV", R.v30]].forEach(function (p) { $(p[0]).style.color = p[1] == null ? "" : p[1] >= 0 ? COR.vd : "#8A6A4F"; });
+    charts[0].setOption(g1(R), true);
+    charts[1].setOption(g2(R), true);
+    document.querySelectorAll("#absPre .abs-chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.a === R.cur.cod && b.dataset.b === R.lon.cod)); });
+  }
+
+  function montarSelects() {
+    var cs = D.cs.filter(function (c) { return c.ativo; }).concat(D.cs.filter(function (c) { return !c.ativo; }).reverse());
+    ["absC1", "absC2"].forEach(function (id) {
+      var sel = $(id), og1 = document.createElement("optgroup"), og2 = document.createElement("optgroup");
+      og1.label = "Em negociação"; og2.label = "Vencidos";
+      cs.forEach(function (c) { var o = new Option(rotulo(c), c.cod); (c.ativo ? og1 : og2).appendChild(o); });
+      sel.appendChild(og1); sel.appendChild(og2);
+      sel.addEventListener("change", render);
+    });
+    var at = D.cs.filter(function (c) { return c.ativo; });
+    $("absC1").value = at[0].cod; $("absC2").value = at[1].cod;
+    // atalhos: pares consecutivos em negociação
+    var pre = $("absPre");
+    for (var i = 0; i + 1 < at.length && i < 6; i++) {
+      var b = document.createElement("button");
+      b.className = "abs-chip"; b.dataset.a = at[i].cod; b.dataset.b = at[i + 1].cod;
+      b.textContent = rotulo(at[i]) + " × " + rotulo(at[i + 1]);
+      b.addEventListener("click", function () { $("absC1").value = this.dataset.a; $("absC2").value = this.dataset.b; render(); });
+      pre.appendChild(b);
+    }
+  }
+
+  function grupo(id, attr, fn) {
+    $(id).addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      fn(+b.dataset[attr]); render();
+    });
+  }
+
+  function baixar(i) {
+    // versão para exportar: título, legenda e assinatura entram só na imagem
+    var ch = charts[i], tit = $("absTit").textContent;
+    var titulos = ["Spread milho B3 " + tit, "Spread " + tit + " nos anos anteriores", "Curva do milho B3 · " + dataBR(D.t[D.t.length - 1])];
+    var leg = { show: true, top: 36, left: 8, itemWidth: 14, itemHeight: 3, icon: "rect", textStyle: { color: COR.mt, fontSize: 12 } };
+    if (i === 0) leg.data = ["Spread"].concat(st.camadas.media ? ["Média " + st.anos + " anos"] : [], st.camadas.ant ? ["Ano anterior"] : []);
+    var opt = [g1, g2, g3][i](R);
+    opt.animation = false;
+    opt.title = { text: titulos[i], left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 16, fontWeight: 700, color: COR.vd } };
+    opt.legend = Object.assign({}, opt.legend || {}, leg);
+    opt.grid = Object.assign({}, opt.grid, { top: 74, bottom: i === 1 ? 46 : 34 });
+    opt.graphic = [{ type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: B3", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    ch.setOption(opt, true);
+    var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    if (i === 2) ch.setOption(g3(), true); else render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-spread-milho-" + ["historico", "anos", "curva"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function iniciar() {
+    if (!window.echarts) return setTimeout(iniciar, 80);
+    charts = ["absG1", "absG2", "absG3"].map(function (id) { return echarts.init($(id), null, { renderer: "canvas" }); });
+    carregar().then(function (j) {
+      D = preparar(j);
+      montarSelects();
+      grupo("absRange", "r", function (v) { st.range = v; });
+      grupo("absAnos", "a", function (v) { st.anos = v; });
+      $("absLayers").addEventListener("click", function (e) {
+        var b = e.target.closest("button"); if (!b) return;
+        var on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(on));
+        st.camadas[b.dataset.l] = on; render();
+      });
+      document.querySelectorAll("#abs .abs-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+      charts[2].setOption(g3());
+      $("absAtu").textContent = "Atualizado em " + D.atualizado;
+      render();
+    }).catch(function () {
+      $("abs").innerHTML = '<div class="abs-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+    });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (D) { charts[2].setOption(g3(), true); render(); } }, 150); });
+  }
+  iniciar();
+})();
+</script>
