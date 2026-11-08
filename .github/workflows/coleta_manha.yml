@@ -2,10 +2,10 @@ name: Coleta da manhã (áudio diário)
 
 on:
   schedule:
-    # 08:07 e 08:27 UTC = 05:07 e 05:27 de Brasília, com o noturno da CBOT aberto.
+    # 07:52 e 08:12 UTC = 04:52 e 05:12 de Brasília, com o noturno da CBOT aberto.
     # Duas execuções porque o agendador do GitHub pode atrasar; a segunda sobrescreve com dado mais novo.
-    - cron: '7 8 * * 1-5'
-    - cron: '27 8 * * 1-5'
+    - cron: '52 7 * * 1-5'
+    - cron: '12 8 * * 1-5'
   workflow_dispatch:
   push:
     paths:
