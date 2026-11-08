@@ -1,0 +1,48 @@
+name: Exporta Basis Soja e Milho (dashboards HTML)
+
+on:
+  schedule:
+    # de hora em hora, das 8h às 20h de Brasília, nos dias úteis
+    - cron: '23 11-23 * * 1-5'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_basis.py
+      - .github/workflows/exporta_basis.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: lucas-jesse/agrobasis-basis-milho
+          path: basis-milho
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy gspread google-auth requests
+      - name: Atualiza base do milho (Conab + B3), mesma rotina do app antigo
+        continue-on-error: true
+        working-directory: basis-milho
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: python atualizar_basis_milho.py
+      - name: Exporta JSON
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+        run: python exporta_basis.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/basis
+          git diff --staged --quiet || (git commit -m "Atualiza basis soja e milho" && git pull --rebase origin main && git push)
