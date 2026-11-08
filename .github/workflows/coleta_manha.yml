@@ -34,7 +34,7 @@ jobs:
         run: |
           git config user.name "AgroBasis Bot"
           git config user.email "bot@agrobasis.com.br"
-          git add dados/manha.json
+          git add dados/manha.json dados/historico_ajustes.json
           git diff --staged --quiet || git commit -m "Coleta da manhã"
           git pull --rebase origin main
           git push

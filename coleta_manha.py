@@ -6,7 +6,7 @@ Grava dados/manha.json com:
   fechamentos dos últimos dias, no contrato de referência de cada produto;
 - macro: dólar (USD/BRL), DXY, petróleo, S&P futuro, Ibovespa;
 - Banco Central: PTAX e meta Selic.
-Fontes: Yahoo Finance (chart API, sem chave) e API pública do Banco Central (SGS/Olinda).
+Fontes: scanner público do TradingView (atraso de 10 a 15 min) e API pública do Banco Central (SGS/Olinda).
 Se uma fonte falhar, o item fica com "erro" e o restante segue.
 """
 import json
@@ -29,11 +29,11 @@ CBOT = {
     "oleo": ("ZL", "FHKNQUVZ", "Óleo de soja", "US$ cents/libra"),
 }
 MACRO = {
-    "usdbrl": ("BRL=X", "Dólar comercial (USD/BRL)"),
-    "dxy": ("DX-Y.NYB", "Índice dólar DXY"),
-    "brent": ("BZ=F", "Petróleo Brent (US$/barril)"),
-    "sp500_fut": ("ES=F", "S&P 500 futuro"),
-    "ibov": ("^BVSP", "Ibovespa"),
+    "usdbrl": ("FX_IDC:USDBRL", "Dólar comercial (USD/BRL)"),
+    "dxy": ("TVC:DXY", "Índice dólar DXY"),
+    "brent": ("TVC:UKOIL", "Petróleo Brent (US$/barril)"),
+    "sp500_fut": ("CME_MINI:ES1!", "S&P 500 futuro"),
+    "ibov": ("BMFBOVESPA:IBOV", "Ibovespa"),
 }
 
 
@@ -50,36 +50,26 @@ def contratos(meses, hoje, n=2):
     return out
 
 
-def yahoo(simbolo):
-    """Preço atual (com noturno), horário, ajuste anterior e últimos fechamentos diários."""
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{simbolo}"
-    r = requests.get(url, params={"range": "10d", "interval": "1d", "includePrePost": "true"},
-                     headers=UA, timeout=20)
+COLUNAS = ["close", "change", "change_abs", "open", "high", "low", "description", "update_mode"]
+
+
+def tv_scan(tickers):
+    """Cotação atual (com 10-15 min de atraso) via scanner público do TradingView."""
+    r = requests.post("https://scanner.tradingview.com/global/scan",
+                      json={"symbols": {"tickers": tickers, "query": {"types": []}}, "columns": COLUNAS},
+                      headers=UA, timeout=25)
     r.raise_for_status()
-    res = r.json()["chart"]["result"][0]
-    meta = res["meta"]
-    ts = res.get("timestamp") or []
-    closes = res["indicators"]["quote"][0].get("close") or []
-    hist = [{"data": datetime.fromtimestamp(t, BRT).date().isoformat(), "fech": round(c, 4)}
-            for t, c in zip(ts, closes) if c is not None]
-    preco = meta.get("regularMarketPrice")
-    t_preco = meta.get("regularMarketTime")
-    # ajuste anterior: último fechamento diário anterior à data do preço atual
-    d_preco = datetime.fromtimestamp(t_preco, BRT).date().isoformat() if t_preco else None
-    anteriores = [h for h in hist if d_preco is None or h["data"] < d_preco]
-    ajuste_ant = anteriores[-1]["fech"] if anteriores else meta.get("chartPreviousClose")
-    var = None
-    if preco is not None and ajuste_ant:
-        var = round(preco - ajuste_ant, 4)
-    return {
-        "simbolo": simbolo,
-        "preco": preco,
-        "horario_brt": datetime.fromtimestamp(t_preco, BRT).strftime("%Y-%m-%d %H:%M") if t_preco else None,
-        "ajuste_anterior": ajuste_ant,
-        "variacao": var,
-        "variacao_pct": round(var / ajuste_ant * 100, 2) if var is not None and ajuste_ant else None,
-        "fechamentos": hist[-6:],
-    }
+    out = {}
+    for item in r.json().get("data", []):
+        v = dict(zip(COLUNAS, item["d"]))
+        preco, var = v.get("close"), v.get("change_abs")
+        out[item["s"]] = {
+            "ticker": item["s"], "descricao": v.get("description"), "preco": preco,
+            "ajuste_anterior": round(preco - var, 4) if preco is not None and var is not None else None,
+            "variacao": var, "variacao_pct": round(v["change"], 2) if v.get("change") is not None else None,
+            "maxima": v.get("high"), "minima": v.get("low"), "modo": v.get("update_mode"),
+        }
+    return out
 
 
 def tentar(fn, *a):
@@ -113,23 +103,30 @@ def bcb_selic():
 
 
 def main():
-    hoje = datetime.now(BRT).date()
-    saida = {"gerado_em_brt": datetime.now(BRT).strftime("%Y-%m-%d %H:%M"), "cbot": {}, "macro": {}, "bcb": {}}
+    agora = datetime.now(BRT)
+    hoje = agora.date()
+    saida = {"gerado_em_brt": agora.strftime("%Y-%m-%d %H:%M"), "fonte_cotacoes": "TradingView (atraso de 10 a 15 min)",
+             "cbot": {}, "macro": {}, "bcb": {}}
+    tickers, mapa = [], {}
+    for chave, (raiz, meses, nome, unid) in CBOT.items():
+        for letra, ano in contratos(meses, hoje):
+            t = f"CBOT:{raiz}{letra}{ano}"
+            tickers.append(t)
+            mapa[t] = (chave, f"{raiz}{letra}{str(ano)[-2:]}")
+    for chave, (t, nome) in MACRO.items():
+        tickers.append(t)
+    dados = tentar(tv_scan, tickers)
+    erro = dados.get("erro") if isinstance(dados.get("erro"), str) else None
     for chave, (raiz, meses, nome, unid) in CBOT.items():
         itens = []
-        for letra, ano in contratos(meses, hoje):
-            cod = f"{raiz}{letra}{str(ano)[-2:]}"
-            d = tentar(yahoo, f"{cod}.CBT")
-            d["contrato"] = cod
-            itens.append(d)
-        # reserva: contrato contínuo, caso os contratos específicos falhem
-        if all("erro" in i for i in itens):
-            d = tentar(yahoo, f"{raiz}=F")
-            d["contrato"] = f"{raiz} contínuo"
-            itens.append(d)
+        for t, (c, cod) in mapa.items():
+            if c == chave:
+                d = dict(dados.get(t) or {"erro": erro or "sem dado"})
+                d["contrato"] = cod
+                itens.append(d)
         saida["cbot"][chave] = {"nome": nome, "unidade": unid, "contratos": itens}
-    for chave, (sim, nome) in MACRO.items():
-        d = tentar(yahoo, sim)
+    for chave, (t, nome) in MACRO.items():
+        d = dict(dados.get(t) or {"erro": erro or "sem dado"})
         d["nome"] = nome
         saida["macro"][chave] = d
     saida["bcb"]["ptax"] = tentar(bcb_ptax)
@@ -143,8 +140,22 @@ def main():
     except Exception as e:  # noqa: BLE001
         saida["dolar_futuro_b3"] = {"erro": str(e)[:200]}
     Path("dados").mkdir(exist_ok=True)
+    hist_p = Path("dados/historico_ajustes.json")
+    hist = json.loads(hist_p.read_text(encoding="utf-8")) if hist_p.exists() else {}
+    for chave, p in saida["cbot"].items():
+        c = p["contratos"][0]
+        if c.get("ajuste_anterior") is not None:
+            serie = hist.setdefault(c["contrato"], {})
+            # o ajuste anterior visto hoje cedo é o fechamento do último pregão
+            serie[(hoje - timedelta(days=3 if hoje.weekday() == 0 else 1)).isoformat()] = c["ajuste_anterior"]
+            datas = sorted(serie)
+            if len(datas) >= 2:
+                c["movimento_ontem"] = round(serie[datas[-1]] - serie[datas[-2]], 4)
+    hist_p.write_text(json.dumps(hist, ensure_ascii=False, indent=1), encoding="utf-8")
     Path("dados/manha.json").write_text(json.dumps(saida, ensure_ascii=False, indent=2), encoding="utf-8")
     erros = sum("erro" in c for p in saida["cbot"].values() for c in p["contratos"])
+    if erros == sum(len(p["contratos"]) for p in saida["cbot"].values()):
+        raise SystemExit("nenhuma cotação da CBOT coletada")
     print(json.dumps(saida, ensure_ascii=False)[:3000])
     print(f"contratos com erro: {erros}")
 
