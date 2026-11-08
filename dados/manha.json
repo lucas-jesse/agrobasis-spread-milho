@@ -1,21 +1,34 @@
 {
-  "gerado_em_brt": "2026-11-08 17:05",
+  "gerado_em_brt": "2026-11-08 17:13",
+  "fonte_cotacoes": "TradingView (atraso de 10 a 15 min)",
   "cbot": {
     "soja": {
       "nome": "Soja",
       "unidade": "US$ cents/bushel",
       "contratos": [
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZSF27.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZSF2027",
+          "descricao": "Soybean Futures (Jan 2027)",
+          "preco": 1193.75,
+          "ajuste_anterior": 1188.25,
+          "variacao": 5.5,
+          "variacao_pct": 0.46,
+          "maxima": 1195.5,
+          "minima": 1184,
+          "modo": "delayed_streaming_600",
           "contrato": "ZSF27"
         },
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZSH27.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZSH2027",
+          "descricao": "Soybean Futures (Mar 2027)",
+          "preco": 1199.25,
+          "ajuste_anterior": 1196.25,
+          "variacao": 3,
+          "variacao_pct": 0.25,
+          "maxima": 1201.25,
+          "minima": 1190.75,
+          "modo": "delayed_streaming_600",
           "contrato": "ZSH27"
-        },
-        {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZS=F?range=10d&interval=1d&includePrePost=true",
-          "contrato": "ZS contínuo"
         }
       ]
     },
@@ -24,16 +37,28 @@
       "unidade": "US$ cents/bushel",
       "contratos": [
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZCZ26.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZCZ2026",
+          "descricao": "Corn Futures (Dec 2026)",
+          "preco": 441.5,
+          "ajuste_anterior": 440.0,
+          "variacao": 1.5,
+          "variacao_pct": 0.34,
+          "maxima": 442.5,
+          "minima": 438.5,
+          "modo": "delayed_streaming_600",
           "contrato": "ZCZ26"
         },
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZCH27.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZCH2027",
+          "descricao": "Corn Futures (Mar 2027)",
+          "preco": 455.25,
+          "ajuste_anterior": 454.5,
+          "variacao": 0.75,
+          "variacao_pct": 0.17,
+          "maxima": 456.5,
+          "minima": 452.5,
+          "modo": "delayed_streaming_600",
           "contrato": "ZCH27"
-        },
-        {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZC=F?range=10d&interval=1d&includePrePost=true",
-          "contrato": "ZC contínuo"
         }
       ]
     },
@@ -42,16 +67,28 @@
       "unidade": "US$ cents/bushel",
       "contratos": [
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZWZ26.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZWZ2026",
+          "descricao": "Chicago SRW Wheat Futures (Dec 2026)",
+          "preco": 591.25,
+          "ajuste_anterior": 599.25,
+          "variacao": -8,
+          "variacao_pct": -1.34,
+          "maxima": 602.25,
+          "minima": 585,
+          "modo": "delayed_streaming_600",
           "contrato": "ZWZ26"
         },
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZWH27.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZWH2027",
+          "descricao": "Chicago SRW Wheat Futures (Mar 2027)",
+          "preco": 602.75,
+          "ajuste_anterior": 609.75,
+          "variacao": -7,
+          "variacao_pct": -1.15,
+          "maxima": 612.25,
+          "minima": 596.25,
+          "modo": "delayed_streaming_600",
           "contrato": "ZWH27"
-        },
-        {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZW=F?range=10d&interval=1d&includePrePost=true",
-          "contrato": "ZW contínuo"
         }
       ]
     },
@@ -60,16 +97,28 @@
       "unidade": "US$/tonelada curta",
       "contratos": [
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZMZ26.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZMZ2026",
+          "descricao": "Soybean Meal Futures (Dec 2026)",
+          "preco": 319.2,
+          "ajuste_anterior": 317.2,
+          "variacao": 2,
+          "variacao_pct": 0.63,
+          "maxima": 320.7,
+          "minima": 316.5,
+          "modo": "delayed_streaming_600",
           "contrato": "ZMZ26"
         },
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZMF27.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZMF2027",
+          "descricao": "Soybean Meal Futures (Jan 2027)",
+          "preco": 319.7,
+          "ajuste_anterior": 317.7,
+          "variacao": 2,
+          "variacao_pct": 0.63,
+          "maxima": 321,
+          "minima": 316.9,
+          "modo": "delayed_streaming_600",
           "contrato": "ZMF27"
-        },
-        {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZM=F?range=10d&interval=1d&includePrePost=true",
-          "contrato": "ZM contínuo"
         }
       ]
     },
@@ -78,39 +127,83 @@
       "unidade": "US$ cents/libra",
       "contratos": [
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZLZ26.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZLZ2026",
+          "descricao": "Soybean Oil Futures (Dec 2026)",
+          "preco": 62.26,
+          "ajuste_anterior": 62.24,
+          "variacao": 0.01999999999999602,
+          "variacao_pct": 0.03,
+          "maxima": 62.56,
+          "minima": 61.34,
+          "modo": "delayed_streaming_600",
           "contrato": "ZLZ26"
         },
         {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZLF27.CBT?range=10d&interval=1d&includePrePost=true",
+          "ticker": "CBOT:ZLF2027",
+          "descricao": "Soybean Oil Futures (Jan 2027)",
+          "preco": 62.41,
+          "ajuste_anterior": 62.42,
+          "variacao": -0.010000000000005116,
+          "variacao_pct": -0.02,
+          "maxima": 62.74,
+          "minima": 61.53,
+          "modo": "delayed_streaming_600",
           "contrato": "ZLF27"
-        },
-        {
-          "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ZL=F?range=10d&interval=1d&includePrePost=true",
-          "contrato": "ZL contínuo"
         }
       ]
     }
   },
   "macro": {
     "usdbrl": {
-      "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/BRL=X?range=10d&interval=1d&includePrePost=true",
+      "ticker": "FX_IDC:USDBRL",
+      "descricao": "U.S. DOLLAR / BRAZILIAN REAL",
+      "preco": 5.5057,
+      "ajuste_anterior": 5.5044,
+      "variacao": 0.0012999999999996348,
+      "variacao_pct": 0.02,
+      "maxima": 5.5261,
+      "minima": 5.48,
+      "modo": "streaming",
       "nome": "Dólar comercial (USD/BRL)"
     },
     "dxy": {
-      "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?range=10d&interval=1d&includePrePost=true",
+      "ticker": "TVC:DXY",
+      "descricao": "U.S. Dollar Currency Index",
+      "preco": 102.279,
+      "ajuste_anterior": 101.565,
+      "variacao": 0.7139999999999986,
+      "variacao_pct": 0.7,
+      "maxima": 102.358,
+      "minima": 101.494,
+      "modo": "streaming",
       "nome": "Índice dólar DXY"
     },
     "brent": {
-      "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/BZ=F?range=10d&interval=1d&includePrePost=true",
+      "erro": "sem dado",
       "nome": "Petróleo Brent (US$/barril)"
     },
     "sp500_fut": {
-      "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/ES=F?range=10d&interval=1d&includePrePost=true",
+      "ticker": "CME_MINI:ES1!",
+      "descricao": "E-mini S&P 500 Futures",
+      "preco": 7402,
+      "ajuste_anterior": 7383,
+      "variacao": 19,
+      "variacao_pct": 0.26,
+      "maxima": 7469,
+      "minima": 7322.25,
+      "modo": "delayed_streaming_600",
       "nome": "S&P 500 futuro"
     },
     "ibov": {
-      "erro": "HTTPError: 429 Client Error: Too Many Requests for url: https://query1.finance.yahoo.com/v8/finance/chart/%5EBVSP?range=10d&interval=1d&includePrePost=true",
+      "ticker": "BMFBOVESPA:IBOV",
+      "descricao": "Bovespa Index",
+      "preco": 168498.45,
+      "ajuste_anterior": 166191.45,
+      "variacao": 2307,
+      "variacao_pct": 1.39,
+      "maxima": 169073.04,
+      "minima": 165909.74,
+      "modo": "delayed_streaming_900",
       "nome": "Ibovespa"
     }
   },
