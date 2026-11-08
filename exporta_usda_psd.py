@@ -149,6 +149,16 @@ def main():
                                       "mes_relatorio": int(ult["Month"].max()) if "Month" in ult else None,
                                       "paises": paises}
         arq = destino / f"{pagina}.json"
+        hoje = datetime.now(ZoneInfo("America/Sao_Paulo"))
+        mes = out["produtos"][produtos[0][0]]["mes_relatorio"]
+        if mes:
+            ano_rel = hoje.year if mes <= hoje.month else hoje.year - 1
+            out["relatorio"] = {"mes": mes, "ano": ano_rel}
+        # mantém a data de atualização se os números não mudaram (evita commit diário sem novidade)
+        if arq.exists():
+            antigo = json.loads(arq.read_text(encoding="utf-8"))
+            if antigo.get("produtos") == out["produtos"]:
+                out["atualizado_em"] = antigo.get("atualizado_em", agora)
         arq.write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
         print(pagina, f"{arq.stat().st_size/1024:.0f} KB", {k: list(v["paises"]["WD"]["dados"].keys()) for k, v in out["produtos"].items()})
 

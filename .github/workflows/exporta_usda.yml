@@ -33,13 +33,4 @@ jobs:
           git config user.name "AgroBasis Bot"
           git config user.email "bot@agrobasis.com.br"
           git add dados/usda
-          # ignora mudança apenas na data de atualização
-          if git diff --staged --numstat | awk '{s+=$1} END {exit !(s>0)}'; then
-            if git diff --staged -U0 | grep '^[+-]' | grep -v '^[+-][+-]' | grep -qv 'atualizado_em'; then
-              git commit -m "Atualiza USDA PSD"
-            else
-              git commit -m "USDA PSD: checagem diária"
-            fi
-            git pull --rebase origin main
-            git push
-          fi
+          git diff --staged --quiet || (git commit -m "Atualiza USDA PSD" && git pull --rebase origin main && git push)
