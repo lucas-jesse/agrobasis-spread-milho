@@ -120,18 +120,27 @@ def exportar_milho(cli):
     for c in ["Preco_Fisico", "Preco_B3", "Basis"]:
         df[c] = df[c].map(num)
     df = df.dropna(subset=["Data", "Cidade", "Basis"]).sort_values("Data")
+    # formato colunar: uma lista de datas comum e, por praça, valores alinhados a ela;
+    # B3 e contrato de referência são os mesmos para todas as praças na mesma data
+    df = df.drop_duplicates(["Data", "Cidade"], keep="last")
+    datas = sorted(df["Data"].unique())
+    pos = {d: i for i, d in enumerate(datas)}
+    n = len(datas)
+    b3, contrato = [None] * n, [None] * n
     pracas = {}
     for cid, g in df.groupby("Cidade"):
-        g = g.drop_duplicates("Data", keep="last")
-        pracas[cid] = {
-            "datas": g["Data"].dt.strftime("%Y-%m-%d").tolist(),
-            "fisico": [r(v) for v in g["Preco_Fisico"]],
-            "b3": [r(v) for v in g["Preco_B3"]],
-            "basis": [r(v) for v in g["Basis"]],
-            "contrato": g["Contrato_Ref"].astype(str).tolist(),
-            "fonte": g["Fonte"].astype(str).str[0].tolist() if "Fonte" in g else None,  # M = manual, C = Conab
-        }
-    return {"fonte": "Planilha AgroBasis (físico) · Conab · B3", "unidade_basis": "R$/saca", "pracas": pracas}
+        fis, bas, fon = [None] * n, [None] * n, [" "] * n
+        for row in g.itertuples(index=False):
+            i = pos[row.Data]
+            fis[i], bas[i] = r(row.Preco_Fisico), r(row.Basis)
+            fon[i] = str(getattr(row, "Fonte", "M"))[:1] or " "
+            if b3[i] is None:
+                b3[i], contrato[i] = r(row.Preco_B3), str(row.Contrato_Ref)
+        pracas[cid] = {"fisico": fis, "basis": bas, "fonte": "".join(fon)}  # fonte: M = manual, C = Conab
+    return {"fonte": "Planilha AgroBasis (físico) · Conab · B3", "unidade_basis": "R$/saca",
+            "datas": [pd.Timestamp(d).strftime("%Y-%m-%d") for d in datas], "b3": b3, "contrato_ref": contrato, "pracas": pracas}
+
+
 
 
 def gravar(nome, dados):
