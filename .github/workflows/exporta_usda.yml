@@ -1,0 +1,45 @@
+name: Exporta USDA PSD (dashboards HTML)
+
+on:
+  schedule:
+    # todo dia útil às 17:17 de Brasília; o PSD muda no dia do WASDE e o commit só ocorre se houver mudança
+    - cron: '17 20 * * 1-5'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_usda_psd.py
+      - .github/workflows/exporta_usda.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas requests
+      - name: Exportar PSD
+        run: python exporta_usda_psd.py
+      - name: Commit (só se os números mudaram)
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/usda
+          # ignora mudança apenas na data de atualização
+          if git diff --staged --numstat | awk '{s+=$1} END {exit !(s>0)}'; then
+            if git diff --staged -U0 | grep '^[+-]' | grep -v '^[+-][+-]' | grep -qv 'atualizado_em'; then
+              git commit -m "Atualiza USDA PSD"
+            else
+              git commit -m "USDA PSD: checagem diária"
+            fi
+            git pull --rebase origin main
+            git push
+          fi
