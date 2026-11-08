@@ -1,0 +1,40 @@
+name: Coleta da manhã (áudio diário)
+
+on:
+  schedule:
+    # 08:07 e 08:27 UTC = 05:07 e 05:27 de Brasília, com o noturno da CBOT aberto.
+    # Duas execuções porque o agendador do GitHub pode atrasar; a segunda sobrescreve com dado mais novo.
+    - cron: '7 8 * * 1-5'
+    - cron: '27 8 * * 1-5'
+  workflow_dispatch:
+  push:
+    paths:
+      - coleta_manha.py
+      - .github/workflows/coleta_manha.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  coletar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Coletar mercado
+        run: python coleta_manha.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/manha.json
+          git diff --staged --quiet || git commit -m "Coleta da manhã"
+          git pull --rebase origin main
+          git push
