@@ -1,7 +1,8 @@
 import json
 from pathlib import Path
 T = Path("basis-template.html").read_text()
-FAQ_COMUM = [("Com que frequência os dados são atualizados?", "O painel lê a planilha de preços físicos do AgroBasis de hora em hora, das 8h às 20h nos dias úteis. A data do último preço aparece no topo."),
+FAQ_COMUM = [("Por que o basis daqui é diferente do que eu vejo na cooperativa ou na cerealista?", "Porque o painel usa preços do mercado disponível, negociados entre empresas nas praças de referência. O preço de balcão pago ao produtor desconta frete, armazenagem, quebra e a margem de quem compra, então o basis de balcão costuma ser mais fraco que o mostrado aqui."),
+             ("Com que frequência os dados são atualizados?", "O painel lê a planilha de preços físicos do AgroBasis de hora em hora, das 8h às 20h nos dias úteis. A data do último preço aparece no topo."),
              ("O preço projetado é um preço negociável?", "Não. É uma referência teórica que combina a curva futura de hoje com o basis médio dos últimos cinco anos para o mesmo período. Serve para comparar cenários, não como cotação de compra ou venda.")]
 PAGS = {
  "soja": dict(produto="Soja", slug="basis-soja-brasil", curva="dados/curva_soja.json", fonte="Fonte: preços físicos AgroBasis · CBOT · PTAX/BCB", curta="Fonte: físico AgroBasis · CBOT · PTAX",

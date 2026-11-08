@@ -54,6 +54,10 @@
 .abu-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
 .abu-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
 .abu-mais a:hover{border-color:var(--vc)}
+.abu-hist{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;margin-bottom:6px}
+#abuSer{max-width:100%;overflow-x:auto;scrollbar-width:none}#abuSer::-webkit-scrollbar{display:none}
+.abu-cmp{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mt);font-weight:500}
+.abu-cmp select{appearance:none;-webkit-appearance:none;font:500 13px Geist,sans-serif;color:var(--tx);border:1px solid var(--ln);border-radius:8px;padding:6px 28px 6px 10px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b756d' stroke-width='1.6' fill='none'/%3E%3C/svg%3E") no-repeat right 10px center;cursor:pointer}
 .abu-err{padding:40px;text-align:center;color:var(--mt)}
 @media (max-width:980px){.abu-kpis{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:820px){.abu-row{grid-template-columns:1fr}}
@@ -69,6 +73,7 @@
   .abu-card{padding:12px 10px 4px;border-radius:14px}
   .abu-chart{height:320px}
   .abu-chart.sm{height:300px}
+  .abu-cmp{width:100%}.abu-cmp select{flex:1}
   .abu-seg.big{display:flex;width:100%}.abu-seg.big button{flex:1}
   #abuMet{display:flex;width:100%;overflow-x:auto;scrollbar-width:none}#abuMet button{flex:1}
 }
@@ -92,8 +97,12 @@
   <div class="abu-kpis" id="abuKpis"></div>
 
   <div class="abu-card">
-    <div class="abu-ch"><h3>Produção e consumo</h3>
+    <div class="abu-ch"><h3 id="abuH0">Produção e consumo</h3>
       <div class="abu-tools"><button class="abu-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abu-hist">
+      <div class="abu-seg" id="abuSer"></div>
+      <label class="abu-cmp">Comparar com<select id="abuCmp" aria-label="Comparar com outro país"></select></label>
+    </div>
     <div class="abu-chart" id="abuG0"></div>
   </div>
 
@@ -149,7 +158,7 @@
   var NOMES_MES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
   var ROT = { producao: "Produção", consumo: "Consumo", exportacao: "Exportação", importacao: "Importação", estoque_final: "Estoque final", estoque_inicial: "Estoque inicial", esmagamento: "Esmagamento", area: "Área", produtividade: "Produtividade" };
   var $ = function (id) { return document.getElementById(id); };
-  var D, st = { prod: null, pais: "WD", ano: null, met: "producao" }, charts = [];
+  var D, st = { prod: null, pais: "WD", ano: null, met: "producao", ser: "pc", cmp: "" }, charts = [];
 
   function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c == null ? 1 : c, maximumFractionDigits: c == null ? 1 : c }); }
   function mi(v) { return v == null ? null : v / 1000; } // mil t -> milhões de t
@@ -194,8 +203,24 @@
   function legenda(extra) { return Object.assign({ top: 0, left: 0, itemWidth: 14, itemHeight: 8, itemGap: 14, textStyle: { color: COR.mt, fontSize: 12 } }, extra || {}); }
   var ultimoAno = function () { return D.anos[D.anos.length - 1]; };
 
-  // 0) produção (barras) e consumo (linha) ao longo do tempo
+  // 0) histórico: produção x consumo ou um indicador escolhido, com comparação opcional com outro país
+  // indicadores do gráfico histórico: chave, rótulo do botão, título, unidade, divisor, casas
+  var SERIES = [
+    ["pc", "Produção e consumo", "Produção e consumo", "mi t", 1000, 1],
+    ["produtividade", "Produtividade", "Produtividade", "t/ha", 1, 2],
+    ["area", "Área", "Área colhida", "mi ha", 1000, 1],
+    ["producao", "Produção", "Produção", "mi t", 1000, 1],
+    ["esmagamento", "Esmagamento", "Esmagamento", "mi t", 1000, 1],
+    ["consumo", "Consumo", "Consumo", "mi t", 1000, 1],
+    ["exportacao", "Exportação", "Exportação", "mi t", 1000, 1],
+    ["importacao", "Importação", "Importação", "mi t", 1000, 1],
+    ["estoque_final", "Estoque", "Estoque final", "mi t", 1000, 1]
+  ];
+  function serieCfg() { return SERIES.filter(function (x) { return x[0] === st.ser; })[0]; }
+  function seriesDisponiveis() { return SERIES.filter(function (x) { return x[0] === "pc" || (serie("WD", x[0]) && serie("WD", x[0]).some(function (v) { return v != null; })); }); }
+
   function g0() {
+    if (st.ser !== "pc") return g0Indicador();
     var prod = serie(st.pais, "producao") || [], cons = serie(st.pais, consumoChave()) || [];
     var iSel = D.anos.indexOf(st.ano);
     return Object.assign({}, base, {
@@ -212,6 +237,35 @@
           }), emphasis: { disabled: true } },
         { name: "Consumo", type: "line", data: cons.map(mi), symbol: "circle", symbolSize: 5, showSymbol: false, lineStyle: { width: 2.2, color: COR.mr }, itemStyle: { color: COR.mr }, z: 5, emphasis: { disabled: true } }
       ]
+    });
+  }
+
+  function g0Indicador() {
+    var c = serieCfg(), k = c[0], div = c[4], dec = c[5], un = c[3];
+    var s1 = serie(st.pais, k) || [], iSel = D.anos.indexOf(st.ano);
+    var nome1 = st.pais === "WD" ? "Mundo" : P().paises[st.pais].nome;
+    var conv = function (v) { return v == null ? null : v / div; };
+    var series = [{ name: nome1, type: "bar", barMaxWidth: 26, barCategoryGap: "28%", itemStyle: { color: "#4F7A3F" }, emphasis: { disabled: true },
+      data: s1.map(function (v, i) { var ult = i === D.anos.length - 1; return { value: conv(v), itemStyle: { color: ult ? "rgba(30,72,18,.45)" : i === iSel ? COR.vd : "#4F7A3F", borderRadius: [4, 4, 0, 0] } }; }) }];
+    if (st.cmp && P().paises[st.cmp] && st.cmp !== st.pais) {
+      var s2 = serie(st.cmp, k) || [];
+      series.push({ name: st.cmp === "WD" ? "Mundo" : P().paises[st.cmp].nome, type: "line", data: s2.map(conv), symbol: "circle", symbolSize: 5, showSymbol: false, lineStyle: { width: 2.4, color: "#2F6FB5" }, itemStyle: { color: "#2F6FB5" }, z: 5, emphasis: { disabled: true } });
+    }
+    // variação acumulada desde 2000/01 (ou do primeiro ano com dado) para o país escolhido
+    var ini = null, fim = s1[s1.length - 1];
+    for (var i = 0; i < s1.length; i++) if (s1[i] != null) { ini = s1[i]; break; }
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: legenda({ data: series.map(function (x) { return x.name; }) }),
+      grid: grid(), xAxis: eixoAnos(), yAxis: eixoY(function (v) { return br(v, dec > 1 ? 1 : 0); }),
+      dataZoom: [{ type: "inside", startValue: mobile() ? D.anos.length - 12 : 0, endValue: D.anos.length - 1 }],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } },
+        formatter: function (ps) { var i = ps[0].dataIndex, h = '<div style="font-weight:600;margin-bottom:4px">' + c[2] + " · safra " + safra(D.anos[i]) + (i === D.anos.length - 1 ? " (projeção)" : "") + "</div>";
+          ps.forEach(function (q) { if (q.value != null) h += linhaTip(q.marker, q.seriesName, br(q.value, dec), " " + un); });
+          var a = s1[i], b = i > 0 ? s1[i - 1] : null; if (a != null && b) h += '<div style="color:#6b756d;margin-top:2px">' + nome1 + " vs safra anterior: " + (a >= b ? "+" : "") + br((a / b - 1) * 100, 1) + "%</div>";
+          return h; } }),
+      title: ini && fim ? { text: nome1 + ": " + (fim >= ini ? "+" : "") + br((fim / ini - 1) * 100, 0) + "% desde " + safra(D.anos[0]), right: 6, top: 0, textStyle: { fontSize: 12, fontWeight: 600, color: COR.mt, fontFamily: "Geist, sans-serif" } } : undefined,
+      series: series
     });
   }
 
@@ -341,6 +395,8 @@
     $("abuMeta").textContent = rel + "safra " + safra(st.ano) + (st.ano === ultimoAno() ? " (projeção)" : "") + " · milhões de toneladas";
     $("abuH2").textContent = "Balanço da safra " + safra(st.ano);
     kpis();
+    montarSeries();
+    $("abuH0").textContent = serieCfg()[2] + (st.pais === "WD" ? " no mundo" : " · " + nomePais);
     charts[0].setOption(g0(), true); charts[1].setOption(g1(), true); charts[2].setOption(g2(), true);
     var o3 = g3(); charts[3]._lista = o3._lista; delete o3._lista; charts[3].setOption(o3, true);
     charts[4].setOption(g4(), true);
@@ -358,6 +414,8 @@
     D.anos.slice().reverse().forEach(function (a, i) { sa.appendChild(new Option(safra(a) + (i === 0 ? " (proj.)" : ""), a)); });
     st.ano = ultimoAno(); sa.value = st.ano;
     sa.addEventListener("change", function () { st.ano = +this.value; render(); });
+    $("abuSer").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.ser = b.dataset.s; render(); });
+    $("abuCmp").addEventListener("change", function () { st.cmp = this.value; charts[0].setOption(g0(), true); });
     preencherPaises();
     $("abuPais").addEventListener("change", function () { st.pais = this.value; render(); });
     $("abuMet").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); st.met = b.dataset.m; charts[3].setOption(g3(), true); });
@@ -369,6 +427,19 @@
       var hoje = new Date(), ref = new Date(D.relatorio.ano, D.relatorio.mes - 1, 12);
       if ((hoje - ref) / 864e5 > 45) { $("abuOld").textContent = "dados de " + NOMES_MES[D.relatorio.mes - 1] + "/" + D.relatorio.ano; $("abuOld").style.display = "inline-block"; }
     }
+  }
+
+  function montarSeries() {
+    var disp = seriesDisponiveis();
+    if (!disp.some(function (x) { return x[0] === st.ser; })) st.ser = "pc";
+    $("abuSer").innerHTML = disp.map(function (x) { return '<button data-s="' + x[0] + '" aria-pressed="' + (x[0] === st.ser) + '">' + x[1] + "</button>"; }).join("");
+    $("abuCmp").parentNode.style.display = st.ser === "pc" ? "none" : "flex";
+    var sel = $("abuCmp"), atual = st.cmp; sel.innerHTML = "";
+    sel.appendChild(new Option("Nenhum", ""));
+    if (st.pais !== "WD") sel.appendChild(new Option("Mundo", "WD"));
+    Object.keys(P().paises).filter(function (k) { return k !== "WD" && k !== st.pais; }).sort(function (a, b) { return P().paises[a].nome.localeCompare(P().paises[b].nome, "pt-BR"); })
+      .forEach(function (k) { sel.appendChild(new Option(P().paises[k].nome, k)); });
+    st.cmp = [].some.call(sel.options, function (o) { return o.value === atual; }) ? atual : ""; sel.value = st.cmp;
   }
 
   function preencherPaises() {
@@ -383,12 +454,15 @@
   }
 
   function baixar(i) {
-    var ch = charts[i], titulos = ["Produção e consumo", "Estoque final sobre consumo", "Balanço da safra " + safra(st.ano), "Ranking mundial · " + ROT[st.met] + " " + safra(st.ano), "Participação nas exportações mundiais"];
+    var ch = charts[i], titulos = [serieCfg()[2], "Estoque final sobre consumo", "Balanço da safra " + safra(st.ano), "Ranking mundial · " + ROT[st.met] + " " + safra(st.ano), "Participação nas exportações mundiais"];
     var opt = [g0, g1, g2, g3, g4][i](); delete opt._lista;
     opt.animation = false;
+    var sub = opt.title && opt.title.text;
     opt.title = { text: P().nome + (st.pais === "WD" || i >= 3 ? "" : " · " + P().paises[st.pais].nome) + " · " + titulos[i], left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd } };
-    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 34, left: 8 });
-    opt.grid = Object.assign({}, opt.grid, { top: opt.legend ? 66 : 44, bottom: 30 });
+    if (sub) { opt.title.subtext = sub; opt.title.subtextStyle = { fontSize: 12, color: COR.mt, fontFamily: "Geist, sans-serif" }; }
+    var dy = sub ? 18 : 0;
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 34 + dy, left: 8 });
+    opt.grid = Object.assign({}, opt.grid, { top: (opt.legend ? 66 : 44) + dy, bottom: 30 });
     if (opt.dataZoom) opt.dataZoom = [{ type: "inside", start: 0, end: 100 }];
     opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: USDA/FAS · mi t", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
     ch.setOption(opt, true);
