@@ -31,7 +31,7 @@ CBOT = {
 MACRO = {
     "usdbrl": ("FX_IDC:USDBRL", "Dólar comercial (USD/BRL)"),
     "dxy": ("TVC:DXY", "Índice dólar DXY"),
-    "brent": ("TVC:UKOIL", "Petróleo Brent (US$/barril)"),
+    "brent": ("ICEEUR:BRN1!", "Petróleo Brent (US$/barril)"),
     "sp500_fut": ("CME_MINI:ES1!", "S&P 500 futuro"),
     "ibov": ("BMFBOVESPA:IBOV", "Ibovespa"),
 }
@@ -66,7 +66,7 @@ def tv_scan(tickers):
         out[item["s"]] = {
             "ticker": item["s"], "descricao": v.get("description"), "preco": preco,
             "ajuste_anterior": round(preco - var, 4) if preco is not None and var is not None else None,
-            "variacao": var, "variacao_pct": round(v["change"], 2) if v.get("change") is not None else None,
+            "variacao": round(var, 4) if var is not None else None, "variacao_pct": round(v["change"], 2) if v.get("change") is not None else None,
             "maxima": v.get("high"), "minima": v.get("low"), "modo": v.get("update_mode"),
         }
     return out
