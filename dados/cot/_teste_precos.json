@@ -1,0 +1,11 @@
+{
+ "yahoo_q1": "200 application/json;charset=utf-8 4091b :: '{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USX\",\"symbol\":\"ZS=F\",\"exchangeName\":\"CBT\",\"fullExchangeName\":\"CBOT\",\"instrumentType\":\"FUTURE\",\"firstTradeDate\":96899040'",
+ "yahoo_q2": "200 application/json;charset=utf-8 4091b :: '{\"chart\":{\"result\":[{\"meta\":{\"currency\":\"USX\",\"symbol\":\"ZS=F\",\"exchangeName\":\"CBT\",\"fullExchangeName\":\"CBOT\",\"instrumentType\":\"FUTURE\",\"firstTradeDate\":96899040'",
+ "stooq_pl": "200 text/html; charset=utf-8 796b :: '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"noindex,nofollow\"></head><body><noscript>This site requires JavaScript to verify y'",
+ "nasdaq": "200 application/json; charset=utf-8 167b :: '{\"data\":null,\"message\":null,\"status\":{\"rCode\":400,\"bCodeMessage\":[{\"code\":1007,\"errorMessage\":\"Bad or No parameterassetclass : commodities\"}],\"developerMessage\"'",
+ "barchart": "403 application/json 21b :: '{\"error\":\"Forbidden\"}'",
+ "tv_history": "200 text/html; charset=utf-8 429682b :: '\\n<!DOCTYPE html>\\n<html lang=\"en\" dir=\"ltr\" class=\"is-not-authenticated is-not-pro  theme-light\"\\n data-theme=\"light\">\\n<head><meta charset=\"utf-8\" />\\n<meta name=\"'",
+ "cme_settle": "403 application/json 602b :: '{\"message\": \"This IP address is blocked due to suspected web scraping activity associated with it on this CMEgroup.com page. Use of scripts, software, spiders, '",
+ "fred": "ERRO ReadTimeout HTTPSConnectionPool(host='fred.stlouisfed.org', port=443): Read timed out. (read timeout=30)",
+ "investing": "403 text/plain 3b :: '403'"
+}
