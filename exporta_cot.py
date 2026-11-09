@@ -26,7 +26,7 @@ ANO_INICIAL = 2010
 DESTINO = Path("dados/cot")
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}
 
-# slug: (nome, código CFTC, símbolo Stooq, divisor do preço, unidade do preço, seção do bulletin CME, tamanho do contrato)
+# slug: (nome, código CFTC, símbolo Yahoo, divisor do preço, unidade do preço, seção do bulletin CME, tamanho do contrato)
 PRODUTOS = {
     "soja": ("Soja", 5602, "ZS=F", 100, "US$/bushel", "SOYBEAN FUT", "5.000 bushels"),
     "milho": ("Milho", 2602, "ZC=F", 100, "US$/bushel", "CORN FUT", "5.000 bushels"),
@@ -77,11 +77,13 @@ def col(df, *opcoes):
 
 
 DIAG = []
+HIST_PRECO = {}
 
 
 def precos_yahoo(simbolo, divisor):
     """Fechamento diário do contrato contínuo (Yahoo Finance), desde 2010."""
     import time
+    time.sleep(3)
     p1 = int(datetime(ANO_INICIAL, 1, 1).timestamp())
     for tentativa in range(4):
         try:
@@ -185,6 +187,9 @@ def main():
     bruto["data"] = data
     bruto = bruto.dropna(subset=["data"])
     oi_venc = oi_por_vencimento()
+    global HIST_PRECO
+    arq_hist = DESTINO / "precos.json"
+    HIST_PRECO = json.loads(arq_hist.read_text(encoding="utf-8")) if arq_hist.exists() else {}
     DESTINO.mkdir(parents=True, exist_ok=True)
     agora = datetime.now(TZ).strftime("%d/%m/%Y %H:%M")
     resumo = {"atualizado_em": agora, "produtos": {}}
@@ -204,12 +209,16 @@ def main():
         for k, c in TRADERS.items():
             c = col(d, c)
             out["traders"][k] = lista(pd.to_numeric(d[c], errors="coerce")) if c else None
+        # preço alinhado à terça de cada relatório; o histórico fica salvo e só é completado
+        # quando o Yahoo responde (ele às vezes bloqueia os servidores do GitHub por excesso de acessos)
+        hist = HIST_PRECO.setdefault(slug, {})
         pr = precos_yahoo(stq, div)
         if pr is not None and not pr.empty:
             al = pr.reindex(pd.to_datetime(out["datas"]), method="ffill")
-            out["preco"] = lista(al, 4)
-        else:
-            out["preco"] = None
+            for dt, v in zip(out["datas"], al):
+                if pd.notna(v):
+                    hist[dt] = round(float(v), 4)
+        out["preco"] = [hist.get(dt) for dt in out["datas"]] if hist else None
         if slug in oi_venc:
             out["oi_vencimento"] = oi_venc[slug]
         arq = DESTINO / f"{slug}.json"
@@ -229,6 +238,7 @@ def main():
             "preco": out["preco"][-1] if out["preco"] else None, "unidade_preco": un,
         }
         print(slug, len(out["datas"]), out["datas"][-1], "net MM", int(n), "preço", out["preco"][-1] if out["preco"] else None, f"{arq.stat().st_size/1024:.0f} KB")
+    arq_hist.write_text(json.dumps(HIST_PRECO, separators=(",", ":")), encoding="utf-8")
     resumo["diagnostico"] = DIAG
     (DESTINO / "resumo.json").write_text(json.dumps(resumo, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
