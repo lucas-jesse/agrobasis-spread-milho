@@ -1,0 +1,38 @@
+name: Exporta COT CFTC (Posição dos Fundos)
+
+on:
+  schedule:
+    # a CFTC publica às sextas, 15h30 de Nova York (17h30 de Brasília); com feriado nos EUA, sai na segunda.
+    # roda todo dia útil às 18h47 de Brasília (também atualiza o open interest por vencimento da CME) e sábado de manhã
+    - cron: '47 21 * * 1-5'
+    - cron: '17 13 * * 6'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_cot.py
+      - .github/workflows/exporta_cot.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install pandas numpy requests pdfplumber
+      - name: Exportar COT
+        run: python exporta_cot.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/cot
+          git diff --staged --quiet || (git commit -m "Atualiza COT CFTC" && git pull --rebase origin main && git push)
