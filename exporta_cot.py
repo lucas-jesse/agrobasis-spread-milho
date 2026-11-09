@@ -2,7 +2,7 @@
 
 Fontes:
   - CFTC, Disaggregated Futures Only (arquivos anuais oficiais, atualizados toda sexta)
-  - Yahoo Finance: fechamento diário do contrato contínuo, alinhado à terça do relatório
+  - TradingView (websocket público, atraso): fechamento diário do contrato contínuo, alinhado à terça do relatório
   - CME Group Daily Bulletin (open interest por vencimento): a CME bloqueia servidores, então é opcional
 
 Grava em dados/cot/:
@@ -26,15 +26,15 @@ ANO_INICIAL = 2010
 DESTINO = Path("dados/cot")
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"}
 
-# slug: (nome, código CFTC, símbolo Yahoo, divisor do preço, unidade do preço, seção do bulletin CME, tamanho do contrato)
+# slug: (nome, código CFTC, símbolo TradingView (contrato contínuo), divisor do preço, unidade do preço, seção do bulletin CME, tamanho do contrato)
 PRODUTOS = {
-    "soja": ("Soja", 5602, "ZS=F", 100, "US$/bushel", "SOYBEAN FUT", "5.000 bushels"),
-    "milho": ("Milho", 2602, "ZC=F", 100, "US$/bushel", "CORN FUT", "5.000 bushels"),
-    "farelo": ("Farelo de soja", 26603, "ZM=F", 1, "US$/tonelada curta", "SOY MEAL FUT", "100 toneladas curtas"),
-    "oleo": ("Óleo de soja", 7601, "ZL=F", 100, "US$/libra", "SOY OIL FUT", "60.000 libras"),
-    "trigo": ("Trigo Chicago", 1602, "ZW=F", 100, "US$/bushel", "WHEAT FUT", "5.000 bushels"),
-    "trigo_kansas": ("Trigo Kansas", 1612, "KE=F", 100, "US$/bushel", None, "5.000 bushels"),
-    "algodao": ("Algodão", 33661, "CT=F", 100, "US$/libra", None, "50.000 libras"),
+    "soja": ("Soja", 5602, "CBOT:ZS1!", 100, "US$/bushel", "SOYBEAN FUT", "5.000 bushels"),
+    "milho": ("Milho", 2602, "CBOT:ZC1!", 100, "US$/bushel", "CORN FUT", "5.000 bushels"),
+    "farelo": ("Farelo de soja", 26603, "CBOT:ZM1!", 1, "US$/tonelada curta", "SOY MEAL FUT", "100 toneladas curtas"),
+    "oleo": ("Óleo de soja", 7601, "CBOT:ZL1!", 100, "US$/libra", "SOY OIL FUT", "60.000 libras"),
+    "trigo": ("Trigo Chicago", 1602, "CBOT:ZW1!", 100, "US$/bushel", "WHEAT FUT", "5.000 bushels"),
+    "trigo_kansas": ("Trigo Kansas", 1612, "KCBT:KE1!", 100, "US$/bushel", None, "5.000 bushels"),
+    "algodao": ("Algodão", 33661, "ICEUS:CT1!", 100, "US$/libra", None, "50.000 libras"),
 }
 
 # categoria: (rótulo, coluna long, coluna short, coluna spread)
@@ -78,6 +78,23 @@ def col(df, *opcoes):
 
 DIAG = []
 HIST_PRECO = {}
+
+
+def precos_tv(simbolo, divisor):
+    """Fechamentos diários do contrato contínuo pelo websocket do TradingView (cerca de 4.500 pregões)."""
+    import time
+    from tv_historico import historico
+    err = ""
+    for tentativa in range(3):
+        try:
+            s = historico(simbolo, "D", 5000)
+            s = s[s.index >= f"{ANO_INICIAL}-01-01"]
+            return (s / divisor).sort_index()
+        except Exception as e:  # noqa: BLE001
+            err = f"{type(e).__name__} {str(e)[:160]}"
+            time.sleep(3 + 4 * tentativa)
+    DIAG.append(f"TradingView {simbolo}: {err}")
+    return None
 
 
 YSESS = None
@@ -233,7 +250,7 @@ def main():
         # preço alinhado à terça de cada relatório; o histórico fica salvo e só é completado
         # quando o Yahoo responde (ele às vezes bloqueia os servidores do GitHub por excesso de acessos)
         hist = HIST_PRECO.setdefault(slug, {})
-        pr = precos_yahoo(stq, div)
+        pr = precos_tv(stq, div)
         if pr is not None and not pr.empty:
             al = pr.reindex(pd.to_datetime(out["datas"]), method="ffill")
             for dt, v in zip(out["datas"], al):
