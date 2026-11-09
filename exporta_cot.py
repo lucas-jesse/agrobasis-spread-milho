@@ -2,8 +2,8 @@
 
 Fontes:
   - CFTC, Disaggregated Futures Only (arquivos anuais oficiais, atualizados toda sexta)
-  - Stooq: preço de fechamento diário do contrato contínuo, alinhado à terça do relatório
-  - CME Group Daily Bulletin, Section 03: open interest por vencimento (produtos CBOT)
+  - Yahoo Finance: fechamento diário do contrato contínuo, alinhado à terça do relatório
+  - CME Group Daily Bulletin (open interest por vencimento): a CME bloqueia servidores, então é opcional
 
 Grava em dados/cot/:
   <produto>.json : série semanal completa (desde 2010) por categoria de participante
@@ -28,13 +28,13 @@ UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, 
 
 # slug: (nome, código CFTC, símbolo Stooq, divisor do preço, unidade do preço, seção do bulletin CME, tamanho do contrato)
 PRODUTOS = {
-    "soja": ("Soja", 5602, "zs.f", 100, "US$/bushel", "SOYBEAN FUT", "5.000 bushels"),
-    "milho": ("Milho", 2602, "zc.f", 100, "US$/bushel", "CORN FUT", "5.000 bushels"),
-    "farelo": ("Farelo de soja", 26603, "zm.f", 1, "US$/tonelada curta", "SOY MEAL FUT", "100 toneladas curtas"),
-    "oleo": ("Óleo de soja", 7601, "zl.f", 100, "US$/libra", "SOY OIL FUT", "60.000 libras"),
-    "trigo": ("Trigo Chicago", 1602, "zw.f", 100, "US$/bushel", "WHEAT FUT", "5.000 bushels"),
-    "trigo_kansas": ("Trigo Kansas", 1612, "ke.f", 100, "US$/bushel", None, "5.000 bushels"),
-    "algodao": ("Algodão", 33661, "ct.f", 100, "US$/libra", None, "50.000 libras"),
+    "soja": ("Soja", 5602, "ZS=F", 100, "US$/bushel", "SOYBEAN FUT", "5.000 bushels"),
+    "milho": ("Milho", 2602, "ZC=F", 100, "US$/bushel", "CORN FUT", "5.000 bushels"),
+    "farelo": ("Farelo de soja", 26603, "ZM=F", 1, "US$/tonelada curta", "SOY MEAL FUT", "100 toneladas curtas"),
+    "oleo": ("Óleo de soja", 7601, "ZL=F", 100, "US$/libra", "SOY OIL FUT", "60.000 libras"),
+    "trigo": ("Trigo Chicago", 1602, "ZW=F", 100, "US$/bushel", "WHEAT FUT", "5.000 bushels"),
+    "trigo_kansas": ("Trigo Kansas", 1612, "KE=F", 100, "US$/bushel", None, "5.000 bushels"),
+    "algodao": ("Algodão", 33661, "CT=F", 100, "US$/libra", None, "50.000 libras"),
 }
 
 # categoria: (rótulo, coluna long, coluna short, coluna spread)
@@ -79,19 +79,23 @@ def col(df, *opcoes):
 DIAG = []
 
 
-def precos_stooq(simbolo, divisor):
-    try:
-        r = requests.get("https://stooq.com/q/d/l/", params={"s": simbolo, "i": "d"}, headers=UA, timeout=60)
-        r.raise_for_status()
-        if not r.text.startswith("Date"):
-            raise ValueError("resposta inesperada: " + r.text[:120].replace("\n", " "))
-        p = pd.read_csv(io.StringIO(r.text))
-        p["Date"] = pd.to_datetime(p["Date"])
-        s = (p.set_index("Date")["Close"] / divisor).sort_index()
-        return s[s.index >= f"{ANO_INICIAL}-01-01"]
-    except Exception as e:  # noqa: BLE001
-        DIAG.append(f"Stooq {simbolo}: {type(e).__name__} {str(e)[:200]}")
-        return None
+def precos_yahoo(simbolo, divisor):
+    """Fechamento diário do contrato contínuo (Yahoo Finance), desde 2010."""
+    import time
+    p1 = int(datetime(ANO_INICIAL, 1, 1).timestamp())
+    for tentativa in range(4):
+        try:
+            r = requests.get(f"https://query{1 + tentativa % 2}.finance.yahoo.com/v8/finance/chart/{simbolo}",
+                             params={"period1": p1, "period2": int(time.time()), "interval": "1d"}, headers=UA, timeout=60)
+            r.raise_for_status()
+            res = r.json()["chart"]["result"][0]
+            s = pd.Series(res["indicators"]["quote"][0]["close"], index=pd.to_datetime(res["timestamp"], unit="s").normalize(), dtype="float")
+            return (s.dropna() / divisor).sort_index()
+        except Exception as e:  # noqa: BLE001
+            err = f"{type(e).__name__} {str(e)[:160]}"
+            time.sleep(5 + 5 * tentativa)
+    DIAG.append(f"Yahoo {simbolo}: {err}")
+    return None
 
 
 RE_VENC = re.compile(r"^(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)(\d{2})$")
@@ -200,7 +204,7 @@ def main():
         for k, c in TRADERS.items():
             c = col(d, c)
             out["traders"][k] = lista(pd.to_numeric(d[c], errors="coerce")) if c else None
-        pr = precos_stooq(stq, div)
+        pr = precos_yahoo(stq, div)
         if pr is not None and not pr.empty:
             al = pr.reindex(pd.to_datetime(out["datas"]), method="ffill")
             out["preco"] = lista(al, 4)
