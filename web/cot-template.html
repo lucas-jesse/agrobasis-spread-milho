@@ -1,0 +1,461 @@
+<!-- AgroBasis · Posição dos Fundos (COT/CFTC) · dashboard em HTML (sem Streamlit)
+     Dados: dados/cot/*.json no GitHub, exportados do relatório Disaggregated Futures Only da CFTC
+     pelo GitHub Actions (atualiza às sextas, após a publicação da CFTC). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abc{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--mr2:#8A6A4F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abc *{box-sizing:border-box}
+.abc-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abc-bc a{color:var(--mt);text-decoration:none}.abc-bc a:hover{color:var(--vd)}
+.abc-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abc-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 20px;margin-bottom:14px}
+.abc-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abc-meta{font-size:13px;color:var(--mt)}
+.abc-prox{font-size:12.5px;color:var(--mt);text-align:right;line-height:1.5}
+.abc-prox b{color:var(--tx);font-weight:600}
+/* termômetro: um cartão por commodity */
+.abc-board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.abc-c{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:11px 12px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .15s,box-shadow .15s;min-width:0}
+.abc-c:hover{border-color:#cfd9d1}
+.abc-c[aria-pressed=true]{border-color:var(--vd);box-shadow:0 0 0 1px var(--vd) inset}
+.abc-c .n{font-size:12px;font-weight:600;color:var(--mt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-c .v{font-family:Sora,sans-serif;font-weight:700;font-size:18px;margin-top:4px;line-height:1.1;white-space:nowrap}
+.abc-c .d{font-size:11.5px;font-weight:600;margin-top:3px;white-space:nowrap}
+.abc-c .g{position:relative;height:5px;border-radius:3px;margin-top:9px;background:linear-gradient(90deg,#e9d3bd,#eef1ef 50%,#c9dcb3)}
+.abc-c .g i{position:absolute;top:-3px;width:3px;height:11px;border-radius:2px;background:var(--tx);transform:translateX(-50%)}
+.abc-c .p{display:flex;justify-content:space-between;font-size:10.5px;color:#98a29a;margin-top:4px}
+.abc-c svg{display:block;width:100%;height:26px;margin-top:6px}
+.pos{color:var(--vd)}.neg{color:var(--mr2)}
+/* frase-resumo */
+.abc-lead{display:flex;gap:10px;align-items:flex-start;background:#f6f8f4;border:1px solid var(--ln);border-radius:12px;padding:11px 14px;font-size:14px;line-height:1.5;margin-bottom:14px}
+.abc-lead svg{flex:none;margin-top:3px;color:var(--vc)}
+.abc-lead b{font-weight:600}
+.abc-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.abc-seg::-webkit-scrollbar{display:none}
+.abc-seg button{flex:none;font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.abc-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abc-cats{margin-bottom:12px}
+.abc-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abc-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abc-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-k b{display:block;font-family:Sora,sans-serif;font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+.abc-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abc-k em{display:block;font-style:normal;font-size:12.5px;color:var(--mt);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abc-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.abc-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:0}
+.abc-ch h3 small{font-size:12px;font-weight:500;color:var(--mt);margin-left:6px}
+.abc-tools{display:flex;gap:6px;align-items:center;flex:none}
+.abc-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abc-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abc-chart{width:100%;height:520px}
+.abc-chart.md{height:380px}
+.abc-chart.sm{height:340px}
+.abc-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abc-nota{margin:0 4px 8px;font-size:12px;line-height:1.5;color:var(--mt)}
+.abc-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abc-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abc-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abc-faq details{border-bottom:1px solid var(--ln)}
+.abc-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abc-faq summary::-webkit-details-marker{display:none}
+.abc-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abc-faq details[open] summary:after{content:"−"}
+.abc-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abc-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abc-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abc-mais a:hover{border-color:var(--vc)}
+.abc-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:1020px){.abc-board{display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.abc-board::-webkit-scrollbar{display:none}.abc-c{flex:0 0 150px}}
+@media (max-width:820px){.abc-row{grid-template-columns:1fr}.abc-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .abc-tit{font-size:24px}.abc-prox{text-align:left}
+  .abc-k{padding:12px}.abc-k b{font-size:21px}
+  .abc-card{padding:12px 10px 4px;border-radius:14px}
+  .abc-chart{height:440px}.abc-chart.md{height:330px}.abc-chart.sm{height:310px}
+  .abc-ch{flex-wrap:wrap}.abc-ch .abc-tools{order:3;width:100%}.abc-ch .abc-tools .abc-seg{flex:1;display:flex}.abc-ch .abc-tools .abc-seg button{flex:1}
+  .abc-k b{font-size:19px;white-space:nowrap}
+  .abc-lead{font-size:13.5px}
+}
+</style>
+
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Posição dos fundos · COT CFTC</h1>
+      <div class="abc-tit" id="abcTit">Carregando</div>
+      <div class="abc-meta" id="abcMeta">&nbsp;</div>
+    </div>
+    <div class="abc-prox" id="abcProx"></div>
+  </div>
+
+  <div class="abc-board" id="abcBoard" aria-label="Posição líquida dos fundos em cada commodity"></div>
+
+  <p class="abc-lead" id="abcLead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>&nbsp;</span></p>
+
+  <div class="abc-cats"><div class="abc-seg" id="abcCat"></div></div>
+
+  <div class="abc-kpis">
+    <div class="abc-k"><span>Posição líquida</span><b id="kN">-</b><em id="kNs">&nbsp;</em></div>
+    <div class="abc-k"><span>Variação na semana</span><b id="kD">-</b><em id="kDs">&nbsp;</em></div>
+    <div class="abc-k"><span>Percentil 5 anos</span><b id="kP">-</b><em id="kPs">&nbsp;</em></div>
+    <div class="abc-k"><span>Fatia do open interest</span><b id="kO">-</b><em id="kOs">&nbsp;</em></div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH0">Posição líquida e preço</h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcRange"><button data-r="26">6M</button><button data-r="52">1A</button><button data-r="156" aria-pressed="true">3A</button><button data-r="260">5A</button><button data-r="0">Tudo</button></div>
+      <button class="abc-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart" id="abcG0"></div>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Quem está do outro lado <small id="abcH1s"></small></h3><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart sm" id="abcG1"></div>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Comprados e vendidos <small>últimas 52 semanas</small></h3><button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart sm" id="abcG2"></div>
+    </div>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Sazonalidade da posição <small>semana a semana</small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart md" id="abcG3"></div>
+    </div>
+    <div class="abc-card" id="abcCard4">
+      <div class="abc-ch"><h3>Quando os fundos compram, o preço sobe? <small>últimos 3 anos</small></h3><button class="abc-dl" data-dl="4" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart md" id="abcG4"></div>
+      <p class="abc-nota" id="abcN4"></p>
+    </div>
+  </div>
+
+  <div class="abc-foot"><span>Fonte: CFTC (Disaggregated Futures Only) · preços: contrato contínuo · Elaboração: AgroBasis</span><span id="abcAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    __FAQ__
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/agenda/">Agenda do Agro</a><a href="/dashboards/usda-complexo-soja/">USDA Soja</a><a href="/dashboards/usda-milho/">USDA Milho</a><a href="/dashboards/curva-do-dolar/">Curva do Dólar</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+</div>
+<script type="application/ld+json">__LD__</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", mr2: "#8A6A4F", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)", pos: "#3F7A2A", neg: "#B9773F" };
+  var ORDEM = ["soja", "milho", "farelo", "oleo", "trigo", "trigo_kansas", "algodao"];
+  var CURTO = { soja: "Soja", milho: "Milho", farelo: "Farelo", oleo: "Óleo de soja", trigo: "Trigo Chicago", trigo_kansas: "Trigo Kansas", algodao: "Algodão" };
+  var CATS = [["mm", "Fundos", "fundos"], ["pm", "Produtores e comerciais", "produtores e comerciais"], ["sw", "Swap dealers", "swap dealers"], ["or", "Outros reportáveis", "outros reportáveis"], ["nr", "Pequenos", "pequenos especuladores"]];
+  var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var DIA = 864e5;
+  var $ = function (id) { return document.getElementById(id); };
+  var RES, CACHE = {}, D, st = { prod: "soja", cat: "mm", range: 156 }, charts = [];
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function mil(v, c) { return v == null ? "-" : br(v / 1000, c == null ? 1 : c) + " mil"; }
+  function sinal(v) { return v == null ? "-" : (v > 0 ? "+" : v < 0 ? "−" : "") + br(Math.abs(v)); }
+  function sinalMil(v, c) { return v == null ? "-" : (v > 0 ? "+" : v < 0 ? "−" : "") + mil(Math.abs(v), c); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function dataBR(t, ano) { var d = new Date(t); return ("0" + d.getUTCDate()).slice(-2) + " " + MESES[d.getUTCMonth()] + (ano === false ? "" : " " + d.getUTCFullYear()); }
+  function ts(s) { return Date.parse(s + "T00:00:00Z"); }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  function produto(slug) {
+    if (CACHE[slug]) return Promise.resolve(CACHE[slug]);
+    return json("dados/cot/" + slug + ".json").then(function (d) { d.t = d.datas.map(ts); CACHE[slug] = d; return d; });
+  }
+  function net(d, cat) { var c = d.cat[cat]; return c.l.map(function (l, i) { return l == null || c.s[i] == null ? null : l - c.s[i]; }); }
+  function janela5(d) { var lim = d.t[d.t.length - 1] - 5 * 365.25 * DIA; return d.t.map(function (t) { return t >= lim; }); }
+  function pctl(arr, v) { var x = arr.filter(function (a) { return a != null; }); return x.length ? x.filter(function (a) { return a < v; }).length / x.length * 100 : null; }
+
+  // ---------- termômetro (todas as commodities) ----------
+  function spark(v) {
+    var mn = Math.min.apply(null, v.concat([0])), mx = Math.max.apply(null, v.concat([0])), w = 120, h = 26, r = mx - mn || 1;
+    var x = function (i) { return i / (v.length - 1) * w; }, y = function (a) { return h - 2 - (a - mn) / r * (h - 4); };
+    var pts = v.map(function (a, i) { return x(i).toFixed(1) + "," + y(a).toFixed(1); }).join(" ");
+    var ult = v[v.length - 1];
+    return '<svg viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none"><line x1="0" x2="' + w + '" y1="' + y(0) + '" y2="' + y(0) + '" stroke="#dfe5e0" stroke-dasharray="3 3"/><polyline fill="none" stroke="' + (ult >= 0 ? COR.pos : COR.neg) + '" stroke-width="1.8" points="' + pts + '"/></svg>';
+  }
+  function board() {
+    $("abcBoard").innerHTML = ORDEM.filter(function (k) { return RES.produtos[k]; }).map(function (k) {
+      var p = RES.produtos[k], pc = p.pctl5 == null ? 50 : p.pctl5;
+      return '<button class="abc-c" data-p="' + k + '" aria-pressed="' + (k === st.prod) + '"><div class="n">' + CURTO[k] + '</div>' +
+        '<div class="v ' + (p.net >= 0 ? "pos" : "neg") + '">' + sinalMil(p.net) + '</div>' +
+        '<div class="d ' + (p.d1 >= 0 ? "pos" : "neg") + '">' + (p.d1 >= 0 ? "▲ " : "▼ ") + mil(Math.abs(p.d1)) + " na semana</div>" +
+        '<div class="g" title="Percentil dos últimos 5 anos: ' + br(pc) + '"><i style="left:' + pc + '%"></i></div><div class="p"><span>vendido</span><span>' + br(pc) + 'º</span><span>comprado</span></div>' + spark(p.spark) + "</button>";
+    }).join("");
+  }
+
+  // ---------- estilo ----------
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function eixoV(fmt, extra) { return Object.assign({ type: "value", splitNumber: 4, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt || function (v) { return br(v / 1000) + "k"; } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function eixoT(extra) { return Object.assign({ type: "time", axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true, formatter: function (v) { var d = new Date(v); return MESES[d.getUTCMonth()] + "/" + String(d.getUTCFullYear()).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, splitLine: { show: false } }, extra || {}); }
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+  function catNome(c) { return CATS.filter(function (x) { return x[0] === c; })[0]; }
+
+  // 0) posição líquida (área verde/marrom) com o preço logo abaixo, mesmo eixo de tempo
+  function g0() {
+    var n = net(D, st.cat), j5 = janela5(D), n5 = n.filter(function (v, i) { return j5[i] && v != null; });
+    var mx = Math.max.apply(null, n5), mn = Math.min.apply(null, n5), ult = D.t.length - 1;
+    var ini = st.range ? D.t[Math.max(0, ult - st.range)] : D.t[0];
+    var temPreco = D.preco && D.preco.some(function (v) { return v != null; });
+    var m = mobile(), top1 = 30, h1 = temPreco ? (m ? "50%" : "56%") : "82%";
+    var grids = [{ left: 6, right: m ? 8 : 16, top: top1, height: h1, containLabel: true }];
+    if (temPreco) grids.push({ left: 6, right: m ? 8 : 16, top: m ? "66%" : "70%", bottom: 24, containLabel: true });
+    var dados = D.t.map(function (t, i) { return [t, n[i]]; });
+    // áreas separadas para comprado (verde) e vendido (marrom), com a linha da posição por cima
+    var series = [
+      { name: "comprado", type: "line", data: dados.map(function (q) { return [q[0], q[1] == null ? null : Math.max(q[1], 0)]; }), symbol: "none", lineStyle: { width: 0 }, areaStyle: { color: "rgba(63,122,42,.55)", origin: 0 }, silent: true, tooltip: { show: false }, xAxisIndex: 0, yAxisIndex: 0, z: 2 },
+      { name: "vendido", type: "line", data: dados.map(function (q) { return [q[0], q[1] == null ? null : Math.min(q[1], 0)]; }), symbol: "none", lineStyle: { width: 0 }, areaStyle: { color: "rgba(185,119,63,.55)", origin: 0 }, silent: true, tooltip: { show: false }, xAxisIndex: 0, yAxisIndex: 0, z: 2 },
+      {
+      name: "Posição líquida", type: "line", data: dados, symbol: "none", lineStyle: { width: 1.4, color: COR.tx }, itemStyle: { color: COR.tx }, xAxisIndex: 0, yAxisIndex: 0, z: 3,
+      markLine: { silent: true, symbol: "none", label: { color: COR.mt, fontSize: 10.5, position: "insideEndTop" }, lineStyle: { type: [4, 4], width: 1 },
+        data: [{ yAxis: mx, label: { formatter: "máx. 5 anos " + mil(mx, 0) }, lineStyle: { color: COR.pos } }, { yAxis: mn, label: { formatter: "mín. 5 anos " + mil(mn, 0), position: "insideEndBottom" }, lineStyle: { color: COR.neg } }] },
+      markPoint: { symbol: "circle", symbolSize: 9, itemStyle: { color: n[ult] >= 0 ? COR.vd : COR.mr2, borderColor: "#fff", borderWidth: 2 }, label: { show: true, position: "left", distance: 8, formatter: sinalMil(n[ult]), color: COR.tx, fontWeight: 700, fontSize: 12 }, data: [{ coord: [D.t[ult], n[ult]] }] }
+    }];
+    if (temPreco) series.push({ name: "Preço (" + D.unidade_preco + ")", type: "line", data: D.t.map(function (t, i) { return [t, D.preco[i]]; }), symbol: "none", connectNulls: true, xAxisIndex: 1, yAxisIndex: 1, lineStyle: { width: 1.8, color: COR.mr }, itemStyle: { color: COR.mr } });
+    var xs = [eixoT({ gridIndex: 0, axisLabel: { show: !temPreco, color: COR.mt, fontSize: 11, hideOverlap: true, formatter: function (v) { var d = new Date(v); return MESES[d.getUTCMonth()] + "/" + String(d.getUTCFullYear()).slice(-2); } } })];
+    var ys = [eixoV(null, { gridIndex: 0, name: "contratos", nameTextStyle: { color: COR.mt, fontSize: 11, align: "left" } })];
+    if (temPreco) { xs.push(eixoT({ gridIndex: 1 })); ys.push(eixoV(function (v) { return br(v, v < 10 ? 2 : 0); }, { gridIndex: 1, scale: true, splitNumber: 3, name: D.unidade_preco, nameTextStyle: { color: COR.mt, fontSize: 11, align: "left" } })); }
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: grids, xAxis: xs, yAxis: ys,
+      axisPointer: { link: [{ xAxisIndex: "all" }], lineStyle: { color: "#b8c2bb", type: "dashed" } },
+      dataZoom: [{ type: "inside", xAxisIndex: temPreco ? [0, 1] : [0], filterMode: "filter", startValue: ini, endValue: D.t[ult] }],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var t = ps[0].value[0], i = D.t.indexOf(t);
+        var h = '<div style="font-weight:600;margin-bottom:4px">Semana de ' + dataBR(t) + "</div>";
+        if (i < 0) return "";
+        if (i >= 0) {
+          h += tl("", "Posição líquida", sinal(n[i]));
+          if (i > 0 && n[i - 1] != null) h += tl("", "Na semana", sinal(n[i] - n[i - 1]));
+          if (D.preco && D.preco[i] != null) h += tl("", "Preço", br(D.preco[i], D.preco[i] < 10 ? 2 : 1) + " " + D.unidade_preco.replace("US$/", "US$/"));
+        }
+        return h; } }),
+      series: series
+    });
+  }
+
+  // 1) última posição líquida de cada grupo de participantes, com a variação da semana
+  function g1() {
+    var ult = D.t.length - 1;
+    var lista = CATS.map(function (c) { var n = net(D, c[0]); return { k: c[0], nome: c[1], v: n[ult], d: n[ult] - n[ult - 1] }; });
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 12, right: mobile() ? 92 : 110, top: 8, bottom: 8, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: lista.map(function (x) { return x.nome; }), axisLabel: { color: COR.tx, fontSize: 12, width: mobile() ? 96 : 160, overflow: "break" }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoV(null, { splitNumber: mobile() ? 2 : 3, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true, formatter: function (v) { return br(v / 1000) + "k"; } } }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (q) { var x = lista[q.dataIndex]; return "<b>" + x.nome + "</b>" + tl("", "Posição líquida", sinal(x.v)) + tl("", "Na semana", sinal(x.d)); } }),
+      series: [{ type: "bar", barWidth: "56%", data: lista.map(function (x) { return { value: x.v, itemStyle: { color: x.v >= 0 ? (x.k === st.cat ? COR.vd : "#8DB07A") : (x.k === st.cat ? COR.mr2 : "#D7AE86"), borderRadius: x.v >= 0 ? [0, 4, 4, 0] : [4, 0, 0, 4] } }; }),
+        label: { show: true, position: "right", distance: 6, color: COR.tx, fontSize: 11.5, fontWeight: 600, formatter: function (q) { var x = lista[q.dataIndex]; return sinalMil(x.v) + (mobile() ? "" : "{d|  " + (x.d >= 0 ? "▲" : "▼") + mil(Math.abs(x.d), 0) + "}"); }, rich: { d: { color: COR.mt, fontWeight: 400, fontSize: 11 } } },
+        emphasis: { disabled: true }, cursor: "pointer" }],
+      _lista: lista
+    });
+  }
+
+  // 2) comprados (para cima) e vendidos (para baixo) da categoria, últimas 52 semanas
+  function g2() {
+    var c = D.cat[st.cat], n = D.t.length, i0 = Math.max(0, n - 52), idx = [];
+    for (var i = i0; i < n; i++) idx.push(i);
+    var temSp = c.sp && c.sp.some(function (v) { return v; });
+    var series = [
+      { name: "Comprados", type: "bar", stack: "a", data: idx.map(function (i) { return [D.t[i], c.l[i]]; }), itemStyle: { color: "#8DB07A" }, barWidth: "70%" },
+      { name: "Vendidos", type: "bar", stack: "a", data: idx.map(function (i) { return [D.t[i], c.s[i] == null ? null : -c.s[i]]; }), itemStyle: { color: "#D7AE86" }, barWidth: "70%" },
+      { name: "Líquido", type: "line", data: idx.map(function (i) { return [D.t[i], c.l[i] - c.s[i]]; }), symbol: "none", lineStyle: { width: 2.2, color: COR.tx }, itemStyle: { color: COR.tx }, z: 5 }
+    ];
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 10, top: 30, bottom: 6, containLabel: true },
+      xAxis: eixoT(), yAxis: eixoV(function (v) { return br(Math.abs(v) / 1000) + "k"; }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var t = ps[0].value[0], i = D.t.indexOf(t), h = '<div style="font-weight:600;margin-bottom:4px">Semana de ' + dataBR(t) + "</div>";
+        h += tl("", "Comprados", br(c.l[i])) + tl("", "Vendidos", br(c.s[i])) + tl("", "Líquido", sinal(c.l[i] - c.s[i]));
+        if (temSp) h += tl("", "Spread (compra e venda)", br(c.sp[i]));
+        if (st.cat === "mm" && D.traders && D.traders.mm_l) h += '<div style="color:#6b756d;margin-top:2px">' + br(D.traders.mm_l[i]) + " fundos comprados · " + br(D.traders.mm_s[i]) + " vendidos</div>";
+        return h; } }),
+      series: series
+    });
+  }
+
+  // 3) sazonalidade: posição líquida por semana do ano, ano atual x anterior x faixa dos 5 anos anteriores
+  function g3() {
+    var n = net(D, st.cat), ultAno = new Date(D.t[D.t.length - 1]).getUTCFullYear(), porSem = {}, cur = [], ant = [];
+    D.t.forEach(function (t, i) {
+      var d = new Date(t), a = d.getUTCFullYear(), s = Math.min(52, Math.floor((t - Date.UTC(a, 0, 1)) / (7 * DIA)) + 1);
+      if (n[i] == null) return;
+      if (a === ultAno) cur.push([s, n[i]]);
+      else if (a === ultAno - 1) ant.push([s, n[i]]);
+      if (a >= ultAno - 5 && a < ultAno) (porSem[s] = porSem[s] || []).push(n[i]);
+    });
+    var sems = Object.keys(porSem).map(Number).sort(function (a, b) { return a - b; });
+    var lo = sems.map(function (s) { return [s, Math.min.apply(null, porSem[s])]; }), hi = sems.map(function (s) { return [s, Math.max.apply(null, porSem[s])]; });
+    var md = sems.map(function (s) { var a = porSem[s]; return [s, a.reduce(function (x, y) { return x + y; }, 0) / a.length]; });
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { type: "scroll", top: 0, left: 0, right: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: [String(ultAno), String(ultAno - 1), { name: "Média " + (ultAno - 5) + "-" + (ultAno - 1), icon: "path://M0,3h6v2H0z M9,3h6v2H9z" }, { name: "Faixa 5 anos", icon: "rect" }] },
+      grid: { left: 6, right: 10, top: 34, bottom: 6, containLabel: true },
+      xAxis: { type: "value", min: 1, max: 53, interval: (mobile() ? 3 : 1) * 52 / 12, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return MESES[Math.min(11, Math.round((v - 1) / (52 / 12)))]; }, showMaxLabel: false }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoV(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var h = '<div style="font-weight:600;margin-bottom:4px">Semana ' + Math.round(ps[0].value[0]) + "</div>"; ps.forEach(function (q) { if (q.seriesName !== "Faixa 5 anos" && q.value && q.value[1] != null) h += tl(q.marker, q.seriesName, sinal(Math.round(q.value[1]))); }); return h; } }),
+      series: [
+        { name: "Faixa 5 anos", type: "custom", silent: true, z: 1, data: [0], itemStyle: { color: "rgba(84,147,27,.13)" }, tooltip: { show: false },
+          renderItem: function (p, api) { var pts = hi.map(function (q) { return api.coord(q); }).concat(lo.slice().reverse().map(function (q) { return api.coord(q); })); return { type: "polygon", shape: { points: pts }, style: { fill: "rgba(84,147,27,.13)" } }; } },
+        { name: "Média " + (ultAno - 5) + "-" + (ultAno - 1), type: "line", data: md, symbol: "none", lineStyle: { width: 1.8, color: COR.mr, type: [6, 4] }, itemStyle: { color: COR.mr } },
+        { name: String(ultAno - 1), type: "line", data: ant, symbol: "none", lineStyle: { width: 1.6, color: COR.cz }, itemStyle: { color: COR.cz } },
+        { name: String(ultAno), type: "line", data: cur, symbol: "none", lineStyle: { width: 2.8, color: COR.vd }, itemStyle: { color: COR.vd }, z: 5,
+          endLabel: { show: true, formatter: function (q) { return mil(q.value[1], 0); }, color: COR.vd, fontWeight: 700, fontSize: 11.5 } }
+      ]
+    });
+  }
+
+  // 4) variação semanal da posição x variação do preço na mesma semana, com reta de tendência
+  function reg(pts) {
+    var n = pts.length, sx = 0, sy = 0, sxx = 0, sxy = 0, syy = 0;
+    pts.forEach(function (p) { sx += p[0]; sy += p[1]; sxx += p[0] * p[0]; sxy += p[0] * p[1]; syy += p[1] * p[1]; });
+    var b = (n * sxy - sx * sy) / (n * sxx - sx * sx), a = (sy - b * sx) / n;
+    var r = (n * sxy - sx * sy) / Math.sqrt((n * sxx - sx * sx) * (n * syy - sy * sy));
+    return { a: a, b: b, r: r };
+  }
+  function g4() {
+    var n = net(D, st.cat), pts = [], ult = D.t.length - 1;
+    for (var i = Math.max(1, ult - 156); i <= ult; i++) {
+      var p0 = D.preco[i - 1], p1 = D.preco[i];
+      if (n[i] == null || n[i - 1] == null || p0 == null || p1 == null) continue;
+      pts.push([(n[i] - n[i - 1]) / 1000, (p1 / p0 - 1) * 100, D.t[i]]);
+    }
+    if (pts.length < 20) return null;
+    var R = reg(pts), xs = pts.map(function (p) { return p[0]; }), x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+    var uw = pts[pts.length - 1];
+    $("abcN4").innerHTML = "Cada 10 mil contratos comprados pelos " + catNome(st.cat)[2] + " numa semana vieram, em média, com o preço " + (R.b >= 0 ? "subindo " : "caindo ") + "<b>" + br(Math.abs(R.b * 10), 1) + "%</b> na mesma semana. Correlação de " + br(R.r, 2) + ". O ponto verde-escuro é a última semana.";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: 14, top: 14, bottom: 26, containLabel: true },
+      xAxis: { type: "value", name: "variação da posição (mil contratos)", nameLocation: "middle", nameGap: 26, nameTextStyle: { color: COR.mt, fontSize: 11 }, axisLabel: { color: COR.mt, fontSize: 11 }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { onZero: true, lineStyle: { color: "#c9d1cb" } }, axisTick: { show: false } },
+      yAxis: eixoV(function (v) { return br(v) + "%"; }, { axisLine: { onZero: true, show: true, lineStyle: { color: "#c9d1cb" } } }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (q) { if (q.seriesType !== "scatter") return ""; var p = q.data; return "<b>Semana de " + dataBR(p[2]) + "</b>" + tl("", "Posição", (p[0] >= 0 ? "+" : "−") + br(Math.abs(p[0]), 1) + " mil") + tl("", "Preço", (p[1] >= 0 ? "+" : "") + br(p[1], 1) + "%"); } }),
+      series: [
+        { type: "scatter", data: pts.slice(0, -1), symbolSize: 7, itemStyle: { color: "rgba(84,147,27,.35)", borderColor: "rgba(30,72,18,.5)", borderWidth: 0.6 } },
+        { type: "line", data: [[x0, R.a + R.b * x0], [x1, R.a + R.b * x1]], symbol: "none", lineStyle: { color: COR.mr, width: 2, type: [6, 4] }, silent: true, tooltip: { show: false } },
+        { type: "scatter", data: [uw], symbolSize: 13, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, z: 5, label: { show: true, position: "top", formatter: "última", color: COR.vd, fontWeight: 700, fontSize: 11 } }
+      ]
+    });
+  }
+
+  // ---------- indicadores e frase de leitura ----------
+  function kpis() {
+    var n = net(D, st.cat), ult = n.length - 1, j5 = janela5(D), n5 = n.filter(function (v, i) { return j5[i]; });
+    var v = n[ult], d1 = v - n[ult - 1], d4 = v - n[ult - 4], p = pctl(n5, v), oi = D.oi[ult];
+    var nome = catNome(st.cat)[2];
+    $("kN").innerHTML = sinalMil(v) + "<small>contratos</small>";
+    $("kN").className = v >= 0 ? "pos" : "neg";
+    $("kNs").textContent = v >= 0 ? "comprados no líquido" : "vendidos no líquido";
+    $("kD").innerHTML = sinalMil(d1) + "<small>contratos</small>";
+    $("kD").className = d1 >= 0 ? "pos" : "neg";
+    $("kDs").textContent = "4 semanas: " + sinalMil(d4);
+    $("kP").textContent = br(p) + "º";
+    $("kPs").textContent = p >= 80 ? "perto do mais comprado em 5 anos" : p <= 20 ? "perto do mais vendido em 5 anos" : "faixa intermediária";
+    $("kO").textContent = (v >= 0 ? "" : "−") + br(Math.abs(v / oi * 100), 1) + "%";
+    $("kOs").textContent = "open interest de " + mil(oi, 0) + " contratos";
+    // frase-resumo da semana, em linguagem direta
+    var sujeito = { mm: "Os fundos", pm: "Produtores e comerciais", sw: "Os swap dealers", or: "Outros grandes operadores", nr: "Os pequenos especuladores" }[st.cat];
+    var preco = "";
+    if (D.preco && D.preco[ult] != null && D.preco[ult - 1] != null) { var vp = (D.preco[ult] / D.preco[ult - 1] - 1) * 100; preco = ", e o preço " + (vp >= 0 ? "subiu " : "caiu ") + br(Math.abs(vp), 1) + "%"; }
+    var lado = v >= 0 ? "comprados" : "vendidos";
+    var nivel = p >= 90 ? ", perto do recorde de compra dos últimos 5 anos" : p <= 10 ? ", perto do recorde de venda dos últimos 5 anos" : ", no " + br(p) + "º percentil dos últimos 5 anos";
+    $("abcLead").querySelector("span").innerHTML = "<b>" + sujeito + " " + (d1 >= 0 ? "compraram " : "venderam ") + mil(Math.abs(d1)) + " contratos de " + D.produto.toLowerCase() + "</b> na semana até " + dataBR(D.t[ult], false) + preco + ". Estão " + lado + " em " + mil(Math.abs(v)) + " contratos" + nivel + ".";
+  }
+
+  function proxima() {
+    // a CFTC publica toda sexta às 15h30 de Nova York com as posições da terça
+    var hoje = new Date(), d = new Date(hoje), dif = (5 - hoje.getDay() + 7) % 7;
+    d.setDate(hoje.getDate() + (dif === 0 && hoje.getHours() >= 18 ? 7 : dif));
+    var ult = D.t[D.t.length - 1];
+    $("abcProx").innerHTML = "Posições de terça, " + dataBR(ult, false) + "<br>Próximo relatório: <b>sexta, " + ("0" + d.getDate()).slice(-2) + " " + MESES[d.getMonth()] + ", 17h30</b>";
+  }
+
+  function render() {
+    var ult = D.t.length - 1;
+    $("abcTit").textContent = D.produto;
+    $("abcMeta").textContent = D.mercado.replace(" - ", " · ").toLowerCase().replace(/\b\w/g, function (c) { return c.toUpperCase(); }) + " · contrato de " + D.contrato;
+    $("abcH0").textContent = "Posição líquida dos " + catNome(st.cat)[2] + (D.preco && D.preco.some(function (v) { return v != null; }) ? " e preço" : "");
+    $("abcH1s").textContent = "posição líquida em " + dataBR(D.t[ult], false);
+    proxima(); kpis();
+    charts[0].setOption(g0(), true);
+    var o1 = g1(); charts[1]._lista = o1._lista; delete o1._lista; charts[1].setOption(o1, true);
+    charts[2].setOption(g2(), true); charts[3].setOption(g3(), true);
+    var o4 = D.preco ? g4() : null;
+    $("abcCard4").style.display = o4 ? "" : "none";
+    if (o4) { charts[4].resize(); charts[4].setOption(o4, true); }
+    $("abcAtu").textContent = "Atualizado em " + D.atualizado_em;
+  }
+
+  function trocar(slug) {
+    st.prod = slug;
+    document.querySelectorAll("#abcBoard .abc-c").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.p === slug)); });
+    return produto(slug).then(function (d) { D = d; render(); });
+  }
+
+  function baixar(i) {
+    var ch = charts[i], t = ["Posição líquida dos " + catNome(st.cat)[2] + " · " + D.produto, "Quem está do outro lado · " + D.produto, "Comprados e vendidos · " + catNome(st.cat)[1] + " · " + D.produto, "Sazonalidade da posição dos " + catNome(st.cat)[2] + " · " + D.produto, "Posição dos " + catNome(st.cat)[2] + " x preço · " + D.produto];
+    var opt = [g0, g1, g2, g3, g4][i](); delete opt._lista; opt.animation = false;
+    opt.title = { text: t[i], subtext: "COT/CFTC · posições de " + dataBR(D.t[D.t.length - 1]), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    var dy = 34;
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 6 + dy + 14, left: 8 });
+    if (Array.isArray(opt.grid)) { opt.grid[0] = Object.assign({}, opt.grid[0], { top: 30 + dy + 14 }); opt.grid[opt.grid.length - 1].bottom = 36; }
+    else opt.grid = Object.assign({}, opt.grid, { top: (opt.legend ? 34 : 14) + dy + 14, bottom: Math.max(opt.grid.bottom || 0, 30) });
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: CFTC", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    ch.setOption(opt, true);
+    var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-cot-" + st.prod + "-" + ["posicao", "participantes", "comprados-vendidos", "sazonalidade", "posicao-x-preco"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  Promise.all([carregarLib(), json("dados/cot/resumo.json")]).then(function (r) {
+    RES = r[1];
+    var q = (location.hash || "").replace("#", ""); if (RES.produtos[q]) st.prod = q;
+    board();
+    charts = [0, 1, 2, 3, 4].map(function (i) { return echarts.init($("abcG" + i), null, { renderer: "canvas" }); });
+    $("abcCat").innerHTML = CATS.map(function (c) { return '<button data-c="' + c[0] + '" aria-pressed="' + (c[0] === st.cat) + '">' + c[1] + "</button>"; }).join("");
+    $("abcCat").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.cat = b.dataset.c; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); render(); });
+    $("abcRange").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.range = +b.dataset.r; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); charts[0].setOption(g0(), true); });
+    $("abcBoard").addEventListener("click", function (e) { var b = e.target.closest(".abc-c"); if (b) { trocar(b.dataset.p); history.replaceState(null, "", "#" + b.dataset.p); } });
+    charts[1].on("click", function (q) { var x = charts[1]._lista && charts[1]._lista[q.dataIndex]; if (x) { st.cat = x.k; $("abcCat").querySelectorAll("button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.c === x.k)); }); render(); } });
+    document.querySelectorAll("#abc .abc-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (D) render(); }, 150); });
+    return trocar(st.prod);
+  }).catch(function (e) {
+    if (window.console) console.error("AgroBasis COT:", e);
+    $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
