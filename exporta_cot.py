@@ -76,16 +76,21 @@ def col(df, *opcoes):
     return None
 
 
+DIAG = []
+
+
 def precos_stooq(simbolo, divisor):
     try:
         r = requests.get("https://stooq.com/q/d/l/", params={"s": simbolo, "i": "d"}, headers=UA, timeout=60)
         r.raise_for_status()
+        if not r.text.startswith("Date"):
+            raise ValueError("resposta inesperada: " + r.text[:120].replace("\n", " "))
         p = pd.read_csv(io.StringIO(r.text))
         p["Date"] = pd.to_datetime(p["Date"])
         s = (p.set_index("Date")["Close"] / divisor).sort_index()
         return s[s.index >= f"{ANO_INICIAL}-01-01"]
     except Exception as e:  # noqa: BLE001
-        print("Stooq", simbolo, "falhou:", type(e).__name__, str(e)[:120])
+        DIAG.append(f"Stooq {simbolo}: {type(e).__name__} {str(e)[:200]}")
         return None
 
 
@@ -101,12 +106,12 @@ def oi_por_vencimento():
                          headers={**UA, "Accept": "application/pdf,*/*", "Referer": "https://www.cmegroup.com/market-data/daily-bulletin.html"}, timeout=60)
         r.raise_for_status()
         if not r.content.startswith(b"%PDF"):
-            print("CME: resposta não é PDF", r.headers.get("Content-Type"))
+            DIAG.append(f"CME: resposta não é PDF ({r.headers.get('Content-Type')}): {r.content[:120]!r}")
             return {}
         with pdfplumber.open(io.BytesIO(r.content)) as pdf:
             texto = "\n".join(pg.extract_text() or "" for pg in pdf.pages)
     except Exception as e:  # noqa: BLE001
-        print("CME falhou:", type(e).__name__, str(e)[:160])
+        DIAG.append(f"CME: {type(e).__name__} {str(e)[:200]}")
         return {}
     m = re.search(r"(\d{2}/\d{2}/\d{4})", texto[:3000])
     data_bul = m.group(1) if m else None
@@ -164,9 +169,17 @@ def main():
         raise SystemExit("nenhum arquivo da CFTC")
     bruto = pd.concat(partes, ignore_index=True)
     c_cod = col(bruto, "cftc_contract_market_code")
-    c_data = col(bruto, "report_date_as_yyyy_mm_dd", "as_of_date_in_form_yymmdd")
     bruto["cod"] = pd.to_numeric(bruto[c_cod], errors="coerce")
-    bruto["data"] = pd.to_datetime(bruto[c_data], errors="coerce")
+    # a coluna de data muda de nome/formato entre os anos: usa a primeira que existir em cada linha
+    data = pd.Series(pd.NaT, index=bruto.index)
+    for c in ("report_date_as_yyyy_mm_dd", "report_date_as_mm_dd_yyyy"):
+        if c in bruto.columns:
+            data = data.fillna(pd.to_datetime(bruto[c], errors="coerce"))
+    for c in ("as_of_date_in_form_yymmdd", "as_of_date_form_yymmdd"):
+        if c in bruto.columns:
+            data = data.fillna(pd.to_datetime(pd.to_numeric(bruto[c], errors="coerce").astype("Int64").astype(str).str.zfill(6), format="%y%m%d", errors="coerce"))
+    bruto["data"] = data
+    bruto = bruto.dropna(subset=["data"])
     oi_venc = oi_por_vencimento()
     DESTINO.mkdir(parents=True, exist_ok=True)
     agora = datetime.now(TZ).strftime("%d/%m/%Y %H:%M")
@@ -212,6 +225,7 @@ def main():
             "preco": out["preco"][-1] if out["preco"] else None, "unidade_preco": un,
         }
         print(slug, len(out["datas"]), out["datas"][-1], "net MM", int(n), "preço", out["preco"][-1] if out["preco"] else None, f"{arq.stat().st_size/1024:.0f} KB")
+    resumo["diagnostico"] = DIAG
     (DESTINO / "resumo.json").write_text(json.dumps(resumo, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
 
