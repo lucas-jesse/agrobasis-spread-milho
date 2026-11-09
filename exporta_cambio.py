@@ -37,7 +37,7 @@ def proximos_meses(hoje, n):
 
 def primeiro_dia_util(a, m):
     d = date(a, m, 1)
-    while d.weekday() >= 5:
+    while d.weekday() >= 5 or (d.month == 1 and d.day == 1):  # fim de semana ou Confraternização
         d += timedelta(days=1)
     return d
 
@@ -75,7 +75,14 @@ def coletar_dol(hoje):
         out.append({"contrato": f"DOL{LETRAS[m - 1]}{str(a)[-2:]}", "vencimento": primeiro_dia_util(a, m).isoformat(),
                     "preco": round(preco, 4), "volume": v.get("volume"), "em_aberto": v.get("open_interest"),
                     "var_pct": round(v["change"], 2) if v.get("change") is not None else None})
-    return out
+    # contratos longos sem liquidez às vezes trazem ajuste defasado: descarta o que quebra a curva
+    out.sort(key=lambda x: x["vencimento"])
+    limpo, topo = [], 0
+    for x in out:
+        if x["preco"] >= topo * 0.995:
+            limpo.append(x)
+            topo = max(topo, x["preco"])
+    return limpo
 
 
 def coletar_di1(hoje):
@@ -117,12 +124,14 @@ def coletar_ptax(hoje):
 
 
 def coletar_focus(hoje):
-    url = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais"
-    r = requests.get(url, params={"$top": "60", "$filter": "Indicador eq 'Câmbio'", "$orderby": "Data desc", "$format": "json",
-                                  "$select": "Data,DataReferencia,Mediana,baseCalculo"},
-                     headers={"User-Agent": UA["User-Agent"]}, timeout=40)
+    from urllib.parse import quote
+    # o OData do BCB não aceita "+" no lugar de espaço: monta a URL com %20
+    q = {"$top": "60", "$filter": "Indicador eq 'Câmbio'", "$orderby": "Data desc", "$format": "json"}
+    url = ("https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais?"
+           + "&".join(f"{k}={quote(v, safe='')}" for k, v in q.items()))
+    r = requests.get(url, headers={"User-Agent": UA["User-Agent"]}, timeout=40)
     r.raise_for_status()
-    v = [x for x in r.json()["value"] if str(x.get("baseCalculo")) == "0"]
+    v = [x for x in r.json()["value"] if str(x.get("baseCalculo", 0)) == "0"]
     if not v:
         return None
     ult = max(x["Data"] for x in v)
