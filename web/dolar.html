@@ -1,0 +1,379 @@
+<!-- AgroBasis · Curva do Dólar · dashboard em HTML (sem Streamlit)
+     Dados: dados/cambio.json e dados/cambio_curvas.json (GitHub Actions, duas vezes por dia útil):
+     contratos DOL e DI1 da B3 (TradingView), PTAX, Focus e Selic (Banco Central).
+     Dólar ao vivo no navegador: AwesomeAPI (mesma fonte do ticker do site). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abd{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--az:#2F6FB5;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abd *{box-sizing:border-box}
+.abd-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abd-bc a{color:var(--mt);text-decoration:none}.abd-bc a:hover{color:var(--vd)}
+.abd-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abd-hero{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin:6px 0 16px}
+.abd-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:0 0 4px;letter-spacing:-.01em}
+.abd-meta{font-size:13px;color:var(--mt)}
+.abd-live{display:flex;align-items:baseline;gap:12px}
+.abd-live b{font-family:Sora,sans-serif;font-size:40px;font-weight:700;line-height:1;color:var(--tx)}
+.abd-live span{font-size:14px;font-weight:600}
+.abd-live small{display:block;font-size:12px;color:var(--mt);margin-top:4px;text-align:right}
+.abd-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--vc);margin-right:6px;animation:abdp 2s infinite}
+@keyframes abdp{0%,100%{opacity:1}50%{opacity:.25}}
+.up{color:var(--vd)}.dn{color:#8A6A4F}
+.abd-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abd-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abd-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abd-k b{display:block;font-family:Sora,sans-serif;font-size:24px;font-weight:700;margin-top:6px;line-height:1}
+.abd-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abd-k em{display:block;font-style:normal;font-size:12.5px;color:var(--mt);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abd-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abd-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.abd-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:180px}
+.abd-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.abd-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px}
+.abd-seg button{font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.abd-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abd-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abd-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abd-chart{width:100%;height:430px}
+.abd-chart.sm{height:340px}
+.abd-row{display:grid;grid-template-columns:5fr 6fr;gap:14px}
+/* simulador de trava */
+.abd-sim{display:flex;flex-direction:column;gap:14px;padding:4px 2px 10px}
+.abd-meses{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.abd-meses::-webkit-scrollbar{display:none}
+.abd-meses button{flex:none;font:500 13px Geist,sans-serif;border:1px solid var(--ln);background:#fff;color:var(--tx);padding:8px 11px;border-radius:9px;cursor:pointer}
+.abd-meses button[aria-pressed=true]{background:var(--vd);border-color:var(--vd);color:#fff}
+.abd-res{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.abd-res div{background:var(--bg);border-radius:12px;padding:12px 14px}
+.abd-res span{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600}
+.abd-res b{display:block;font-family:Sora,sans-serif;font-size:22px;margin-top:6px}
+.abd-res em{display:block;font-style:normal;font-size:12px;color:var(--mt);margin-top:4px}
+.abd-res .big{grid-column:1/-1;background:#EEF4E7}
+.abd-res .big b{font-size:30px;color:var(--vd)}
+.abd-val{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mt)}
+.abd-val input{font:600 15px Geist,sans-serif;width:150px;border:1px solid #d5ddd7;border-radius:9px;padding:8px 10px;color:var(--tx)}
+.abd-val input:focus{outline:2px solid var(--vc);outline-offset:1px}
+.abd-nota{margin:2px 4px 8px;font-size:12px;line-height:1.5;color:var(--mt)}
+.abd-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abd-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abd-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abd-faq details{border-bottom:1px solid var(--ln)}
+.abd-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abd-faq summary::-webkit-details-marker{display:none}
+.abd-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abd-faq details[open] summary:after{content:"−"}
+.abd-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abd-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abd-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abd-mais a:hover{border-color:var(--vc)}
+.abd-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:900px){.abd-row{grid-template-columns:1fr}.abd-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .abd-tit{font-size:24px}.abd-live b{font-size:32px}.abd-live{width:100%;justify-content:space-between}.abd-live small{text-align:left}
+  .abd-k{padding:12px}.abd-k b{font-size:20px}
+  .abd-card{padding:12px 10px 4px;border-radius:14px}
+  .abd-chart{height:340px}.abd-chart.sm{height:320px}
+  .abd-res b{font-size:19px}.abd-res .big b{font-size:26px}
+}
+</style>
+
+<div class="abd" id="abd">
+  <nav class="abd-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <h1 class="abd-kick">Curva do Dólar · USD/BRL</h1>
+  <div class="abd-hero">
+    <div>
+      <div class="abd-tit">Dólar futuro e juros</div>
+      <div class="abd-meta" id="abdMeta">&nbsp;</div>
+    </div>
+    <div class="abd-live" aria-live="polite">
+      <div><b id="abdSpot">-</b></div>
+      <div><span id="abdVar">&nbsp;</span><small id="abdHora"><i class="abd-dot"></i>dólar comercial</small></div>
+    </div>
+  </div>
+
+  <div class="abd-kpis">
+    <div class="abd-k"><span>PTAX</span><b id="kPtax">-</b><em id="kPtaxS">&nbsp;</em></div>
+    <div class="abd-k"><span id="kFutL">Dólar futuro</span><b id="kFut">-</b><em id="kFutS">&nbsp;</em></div>
+    <div class="abd-k"><span>Dólar em 12 meses</span><b id="k12">-</b><em id="k12S">&nbsp;</em></div>
+    <div class="abd-k"><span>Selic</span><b id="kSel">-</b><em id="kSelS">&nbsp;</em></div>
+  </div>
+
+  <div class="abd-card">
+    <div class="abd-ch"><h3>Curva do dólar futuro</h3>
+      <div class="abd-tools"><div class="abd-seg" id="abdPrazo"><button data-m="13">12M</button><button data-m="25" aria-pressed="true">24M</button><button data-m="0">Tudo</button></div>
+      <button class="abd-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abd-chart" id="abdG0"></div>
+  </div>
+
+  <div class="abd-row">
+    <div class="abd-card">
+      <div class="abd-ch"><h3>Quanto vale travar o dólar</h3></div>
+      <div class="abd-sim">
+        <div class="abd-meses" id="abdMeses" aria-label="Mês da trava"></div>
+        <div class="abd-res">
+          <div class="big"><span id="sLbl">Dólar para</span><b id="sFut">-</b><em id="sFutS">&nbsp;</em></div>
+          <div><span>Prêmio sobre o spot</span><b id="sPrem">-</b><em id="sPremS">&nbsp;</em></div>
+          <div><span>Taxa implícita</span><b id="sTx">-</b><em id="sTxS">&nbsp;</em></div>
+        </div>
+        <label class="abd-val">Valor da venda em US$ <input id="sUsd" inputmode="numeric" value="100.000" aria-label="Valor em dólares"></label>
+        <div class="abd-res">
+          <div><span>Recebe hoje</span><b id="sHoje">-</b><em>no câmbio à vista</em></div>
+          <div><span>Recebe travando</span><b id="sTrava">-</b><em id="sDif">&nbsp;</em></div>
+        </div>
+      </div>
+      <p class="abd-nota">Referência pelos contratos futuros da B3, interpolados por data. Não inclui custos de corretagem, margem nem o spread do banco numa trava (NDF).</p>
+    </div>
+    <div class="abd-card">
+      <div class="abd-ch"><h3>Juros futuros e carrego do dólar</h3><button class="abd-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abd-chart sm" id="abdG1"></div>
+      <p class="abd-nota">O dólar futuro sobe com o prazo porque embute a diferença entre o juro brasileiro e o americano. Quanto maior o DI, maior o carrego da curva.</p>
+    </div>
+  </div>
+
+  <div class="abd-card">
+    <div class="abd-ch"><h3 id="abdH2">PTAX no histórico</h3>
+      <div class="abd-tools"><div class="abd-seg" id="abdHist"><button data-v="ptax" aria-pressed="true">Cotação</button><button data-v="vol">Volatilidade</button></div>
+      <div class="abd-seg" id="abdPer"><button data-d="182">6M</button><button data-d="365" aria-pressed="true">1A</button><button data-d="1095">3A</button><button data-d="0">6A</button></div>
+      <button class="abd-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abd-chart sm" id="abdG2"></div>
+  </div>
+
+  <div class="abd-foot"><span>Fonte: B3 (via TradingView) · Banco Central (PTAX, Focus, Selic) · Elaboração: AgroBasis</span><span id="abdAtu"></span></div>
+
+  <section class="abd-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    __FAQ__
+  </section>
+  <nav class="abd-mais" aria-label="Continue explorando"><a href="/simulador-de-soja/">Simulador de Soja</a><a href="/dashboards/basis-soja-brasil/">Basis Soja</a><a href="/dashboards/spread-milho-b3/">Spread Milho B3</a><a href="/agenda/">Agenda do Agro</a><a href="/dashboards/">Todos os dashboards</a></nav>
+</div>
+<script type="application/ld+json">__LD__</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", az: "#2F6FB5", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)" };
+  var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var DIA = 864e5;
+  var $ = function (id) { return document.getElementById(id); };
+  var C, H, charts = [], st = { prazo: 25, hist: "ptax", per: 365, mes: 6 }, spot = null, spotFonte = "PTAX";
+
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); }
+  function sinal(v, c) { return v == null || isNaN(v) ? "-" : (v > 0 ? "+" : v < 0 ? "−" : "") + br(Math.abs(v), c); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { var m = mobile(); return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (m ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function dt(s) { return Date.parse(s + "T12:00:00Z"); }
+  function dBR(t) { var d = new Date(t); return ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth() + 1)).slice(-2) + "/" + d.getUTCFullYear(); }
+  function rotMes(t) { var d = new Date(t); return MESES[d.getUTCMonth()] + "/" + String(d.getUTCFullYear()).slice(-2); }
+  function hojeUTC() { var n = new Date(); return Date.UTC(n.getFullYear(), n.getMonth(), n.getDate(), 12); }
+  function interp(p, t) { if (!p.length) return null; if (t <= p[0][0]) return p[0][1]; for (var i = 1; i < p.length; i++) if (t <= p[i][0]) { var a = p[i - 1], b = p[i]; return a[1] + (b[1] - a[1]) * (t - a[0]) / (b[0] - a[0]); } return p[p.length - 1][1]; }
+  function du(t) { return Math.max(1, (t - hojeUTC()) / DIA * 252 / 365); } // dias úteis aproximados
+
+  function carregarLib(i) { i = i || 0; return new Promise(function (ok, nok) { if (window.echarts) return ok(); var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok; s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); }; document.head.appendChild(s); }); }
+  function json(c, i) { i = i || 0; return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 6e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); }); }
+
+  // ---------- curvas ----------
+  function pontosDol() { return C.dol.map(function (x) { return [dt(x.vencimento), x.preco]; }); }
+  function pontosDI() { return (C.di1 || []).map(function (x) { return [dt(x.vencimento), x.taxa]; }); }
+  function ptaxUlt() { var p = C.ptax; return p ? { t: dt(p.datas[p.datas.length - 1]), v: p.valores[p.valores.length - 1] } : null; }
+  function base() { return spot || ptaxUlt().v; }
+  function curvaAnterior(dias) {
+    if (!H) return null;
+    var alvo = hojeUTC() - dias * DIA, chaves = Object.keys(H).sort(), esc = null;
+    chaves.forEach(function (k) { if (dt(k) <= alvo) esc = k; });
+    if (!esc || (alvo - dt(esc)) > 6 * DIA) return null;
+    var venc = {}; C.dol.forEach(function (x) { venc[x.contrato] = x.vencimento; });
+    var pts = Object.keys(H[esc].dol).filter(function (c) { return venc[c]; }).map(function (c) { return [dt(venc[c]), H[esc].dol[c]]; }).sort(function (a, b) { return a[0] - b[0]; });
+    return pts.length ? { data: esc, pts: pts } : null;
+  }
+
+  var baseOpt = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function eixoTempo(min, max) { return { type: "time", min: min, max: max, axisLabel: { color: COR.mt, fontSize: 11.5, hideOverlap: true, formatter: function (v) { return rotMes(v); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, splitLine: { show: false } }; }
+  function eixoY(fmt, extra) { return Object.assign({ type: "value", scale: true, splitNumber: 5, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function tip(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+
+  // 0) curva do dólar futuro: contratos da B3, à vista, Focus e curvas anteriores
+  function g0() {
+    var S = base(), t0 = hojeUTC(), P = pontosDol();
+    var fim = st.prazo ? t0 + st.prazo * 30.5 * DIA : P[P.length - 1][0] + 20 * DIA;
+    var vis = P.filter(function (p) { return p[0] <= fim; });
+    var s = [];
+    [[30, "Há 1 mês", "#bcc4cd"], [7, "Há 1 semana", "#8a95a4"]].forEach(function (c) {
+      var a = curvaAnterior(c[0]); if (!a) return;
+      s.push({ name: c[1], type: "line", data: [[t0, null]].concat(a.pts.filter(function (p) { return p[0] <= fim; })), symbol: "circle", symbolSize: 5, showSymbol: false, lineStyle: { width: 1.6, color: c[2], type: [5, 4] }, itemStyle: { color: c[2] }, connectNulls: true });
+    });
+    s.push({ name: "Curva hoje", type: "line", data: [[t0, S]].concat(vis), smooth: false, symbol: "circle", symbolSize: 8, showSymbol: true,
+      lineStyle: { width: 2.8, color: COR.vd }, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, z: 5,
+      areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(84,147,27,.16)" }, { offset: 1, color: "rgba(84,147,27,0)" }] } },
+      label: { show: !mobile(), position: "top", distance: 8, fontSize: 11, color: COR.tx, formatter: function (q) { return q.dataIndex === 0 ? "" : br(q.value[1], 3); } },
+      markPoint: { symbol: "circle", symbolSize: 11, itemStyle: { color: "#fff", borderColor: COR.vd, borderWidth: 2.5 }, label: { show: true, position: mobile() ? "bottom" : "left", distance: 8, formatter: mobile() ? "hoje " + br(S, 3) : "hoje\n" + br(S, 3), color: COR.vd, fontWeight: 700, fontSize: 11.5, lineHeight: 14 }, data: [{ coord: [t0, S] }] } });
+    if (C.focus) {
+      var fp = Object.keys(C.focus.fim_de_ano).map(function (a) { return [Date.UTC(+a, 11, 31, 12), C.focus.fim_de_ano[a]]; }).filter(function (p) { return p[0] > t0 && p[0] <= fim + 40 * DIA; });
+      s.push({ name: "Focus (economistas)", type: "scatter", data: fp, symbol: "diamond", symbolSize: 13, itemStyle: { color: COR.mr, borderColor: "#fff", borderWidth: 1.5 }, z: 6,
+        label: { show: true, position: "bottom", distance: 6, color: COR.mr, fontSize: 11, fontWeight: 600, formatter: function (q) { return br(q.value[1], 2); } } });
+    }
+    return Object.assign({}, baseOpt, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: mobile() ? 12 : 26, top: 36, bottom: 6, containLabel: true },
+      xAxis: eixoTempo(t0 - 25 * DIA, fim + 15 * DIA), yAxis: eixoY(function (v) { return br(v, 2); }),
+      tooltip: Object.assign({}, baseOpt.tooltip, { trigger: "item", formatter: function (q) {
+        var t = q.value[0], v = q.value[1];
+        if (q.seriesName.indexOf("Focus") === 0) return "<b>Focus: câmbio no fim de " + new Date(t).getUTCFullYear() + "</b>" + tip("", "Mediana dos economistas", "R$ " + br(v, 4)) + tip("", "Curva da B3 na data", "R$ " + br(interp(pontosDol(), t), 4)) + '<div style="color:#6b756d;margin-top:2px">Focus de ' + dBR(dt(C.focus.data)) + "</div>";
+        if (t <= t0 + DIA) return "<b>À vista (" + spotFonte + ")</b>" + tip("", "Cotação", "R$ " + br(v, 4));
+        var x = C.dol.filter(function (c) { return dt(c.vencimento) === t; })[0], pr = (v / S - 1) * 100, tx = (Math.pow(v / S, 252 / du(t)) - 1) * 100;
+        return "<b>" + (x ? x.contrato + " · " : "") + "vence " + dBR(t) + "</b>" + (q.seriesName !== "Curva hoje" ? '<div style="color:#6b756d">' + q.seriesName + "</div>" : "") + tip("", "Dólar futuro", "R$ " + br(v, 4)) + tip("", "Prêmio sobre o spot", sinal(pr, 2) + "%") + tip("", "Carrego anualizado", br(tx, 2) + "% a.a.") + (x && x.em_aberto ? tip("", "Contratos em aberto", br(x.em_aberto, 0)) : "");
+      } }),
+      series: s
+    });
+  }
+
+  // 1) curva de juros (DI1) x carrego anualizado do dólar, ambos em % ao ano
+  function g1() {
+    var S = base(), t0 = hojeUTC(), fim = t0 + 3.2 * 365 * DIA;
+    var di = pontosDI().filter(function (p) { return p[0] <= fim; });
+    var car = pontosDol().filter(function (p) { return p[0] <= fim && p[0] - t0 > 45 * DIA; }).map(function (p) { return [p[0], +((Math.pow(p[1] / S, 252 / du(p[0])) - 1) * 100).toFixed(2)]; });
+    var s = [
+      { name: "Juro DI (B3)", type: "line", data: di, symbol: "circle", symbolSize: 6, showSymbol: true, lineStyle: { width: 2.6, color: COR.vd }, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 1.5 }, z: 5 },
+      { name: "Carrego do dólar", type: "line", data: car, symbol: "circle", symbolSize: 6, showSymbol: true, lineStyle: { width: 2.2, color: COR.az }, itemStyle: { color: COR.az, borderColor: "#fff", borderWidth: 1.5 } }
+    ];
+    if (C.selic) s[0].markLine = { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.4 }, label: { formatter: "Selic " + br(C.selic.meta_aa, 2) + "%", color: COR.mr, fontSize: 11, position: "insideStartTop" }, data: [{ yAxis: C.selic.meta_aa }] };
+    return Object.assign({}, baseOpt, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: mobile() ? 22 : 18, top: 36, bottom: 6, containLabel: true },
+      xAxis: eixoTempo(t0, fim), yAxis: eixoY(function (v) { return br(v, 0) + "%"; }, { min: 0 }),
+      tooltip: Object.assign({}, baseOpt.tooltip, { trigger: "axis", formatter: function (ps) {
+        var t = ps[0].value[0], d = interp(di, t), c = interp(car, t);
+        return "<b>" + dBR(t) + "</b>" + tip("", "Juro DI", br(d, 2) + "% a.a.") + tip("", "Carrego do dólar", br(c, 2) + "% a.a.") + '<div style="color:#6b756d;margin-top:2px">Diferença (≈ juro em dólar): ' + br(d - c, 2) + " p.p.</div>";
+      } }),
+      series: s
+    });
+  }
+
+  // 2) PTAX no histórico ou volatilidade realizada de 21 pregões (anualizada)
+  function g2() {
+    var p = C.ptax, t = p.datas.map(dt), v = p.valores, ini = st.per ? hojeUTC() - st.per * DIA : t[0];
+    var serie, nome, fmt, dec;
+    if (st.hist === "vol") {
+      var r = v.map(function (x, i) { return i ? Math.log(x / v[i - 1]) : null; });
+      serie = t.map(function (x, i) { if (i < 21) return [x, null]; var j = r.slice(i - 20, i + 1), m = j.reduce(function (a, b) { return a + b; }, 0) / 21, s2 = j.reduce(function (a, b) { return a + (b - m) * (b - m); }, 0) / 20; return [x, +(Math.sqrt(s2 * 252) * 100).toFixed(2)]; });
+      nome = "Volatilidade 21 pregões"; fmt = function (x) { return br(x, 0) + "%"; }; dec = 1;
+    } else { serie = t.map(function (x, i) { return [x, v[i]]; }); nome = "PTAX"; fmt = function (x) { return br(x, 2); }; dec = 4; }
+    var vis = serie.filter(function (q) { return q[0] >= ini && q[1] != null; });
+    var vals = vis.map(function (q) { return q[1]; }), mx = Math.max.apply(null, vals), mn = Math.min.apply(null, vals);
+    var iMx = vis[vals.indexOf(mx)], iMn = vis[vals.indexOf(mn)];
+    var varPer = st.hist === "ptax" && vis.length ? (vis[vis.length - 1][1] / vis[0][1] - 1) * 100 : null;
+    return Object.assign({}, baseOpt, {
+      graphic: [marca()],
+      title: { text: st.hist === "ptax" ? "Variação no período: " + sinal(varPer, 1) + "%" : "Média no período: " + br(vals.reduce(function (a, b) { return a + b; }, 0) / vals.length, 1) + "% a.a.", right: 4, top: 0, textStyle: { fontSize: 12, fontWeight: 600, color: COR.mt, fontFamily: "Geist, sans-serif" } },
+      grid: { left: 6, right: mobile() ? 22 : 18, top: 32, bottom: 6, containLabel: true },
+      xAxis: { type: "time", min: ini, max: t[t.length - 1], axisLabel: { color: COR.mt, fontSize: 11.5, hideOverlap: true, formatter: function (x) { return st.per && st.per <= 365 ? rotMes(x) : String(new Date(x).getUTCFullYear()); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, splitLine: { show: false } },
+      yAxis: eixoY(fmt),
+      dataZoom: [{ type: "inside", filterMode: "none" }],
+      tooltip: Object.assign({}, baseOpt.tooltip, { trigger: "axis", axisPointer: { type: "line", lineStyle: { color: "#b8c2bb", type: "dashed" } }, formatter: function (ps) { return "<b>" + dBR(ps[0].value[0]) + "</b>" + tip(ps[0].marker, nome, (st.hist === "vol" ? br(ps[0].value[1], 1) + "% a.a." : "R$ " + br(ps[0].value[1], 4))); } }),
+      series: [{ name: nome, type: "line", data: vis, symbol: "none", lineStyle: { width: 2, color: st.hist === "vol" ? COR.az : COR.vd },
+        areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: st.hist === "vol" ? "rgba(47,111,181,.14)" : "rgba(84,147,27,.16)" }, { offset: 1, color: "rgba(255,255,255,0)" }] } },
+        markPoint: { symbol: "circle", symbolSize: 7, itemStyle: { color: "#fff", borderColor: COR.mt, borderWidth: 1.5 },
+          label: { show: true, color: COR.mt, fontSize: 11, formatter: function (q) { return (q.name === "max" ? "máx " : "mín ") + br(q.value, st.hist === "vol" ? 1 : 2); } },
+          data: [{ name: "max", coord: iMx, value: mx, label: { position: "top" } }, { name: "min", coord: iMn, value: mn, label: { position: "bottom" } }] } }]
+    });
+  }
+
+  // ---------- simulador de trava ----------
+  function sim() {
+    var S = base(), t0 = hojeUTC(), d = new Date(t0);
+    var t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + st.mes, 15, 12);
+    var F = interp(pontosDol(), t), pr = (F / S - 1) * 100, tx = (Math.pow(F / S, 252 / du(t)) - 1) * 100;
+    $("sLbl").textContent = "Dólar para " + rotMes(t);
+    $("sFut").textContent = "R$ " + br(F, 4);
+    $("sFutS").textContent = "contra R$ " + br(S, 4) + " à vista (" + spotFonte + ")";
+    $("sPrem").textContent = sinal((F - S) * 1000, 0) + " pts";
+    $("sPremS").textContent = sinal(pr, 2) + "% sobre o spot";
+    $("sTx").textContent = br(tx, 2) + "% a.a.";
+    $("sTxS").textContent = "DI no prazo: " + br(interp(pontosDI(), t), 2) + "% a.a.";
+    var usd = +String($("sUsd").value).replace(/\./g, "").replace(",", ".") || 0;
+    $("sHoje").textContent = "R$ " + br(usd * S, 0);
+    $("sTrava").textContent = "R$ " + br(usd * F, 0);
+    $("sDif").innerHTML = '<span class="' + (F >= S ? "up" : "dn") + '">' + sinal(usd * (F - S), 0) + "</span> a mais em " + rotMes(t);
+  }
+  function montarMeses() {
+    var d = new Date(hojeUTC()), h = "";
+    for (var k = 1; k <= 24; k++) { var t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + k, 15); h += '<button data-k="' + k + '" aria-pressed="' + (k === st.mes) + '">' + rotMes(t) + "</button>"; }
+    $("abdMeses").innerHTML = h;
+  }
+
+  // ---------- topo ----------
+  function kpis() {
+    var P = ptaxUlt(), ant = C.ptax.valores[C.ptax.valores.length - 2];
+    $("kPtax").innerHTML = br(P.v, 4);
+    $("kPtaxS").innerHTML = dBR(P.t) + ' · <span class="' + (P.v >= ant ? "up" : "dn") + '">' + sinal((P.v / ant - 1) * 100, 2) + "%</span>";
+    var f = C.dol[0];
+    $("kFutL").textContent = "Futuro " + rotMes(dt(f.vencimento));
+    $("kFut").innerHTML = br(f.preco, 4);
+    $("kFutS").innerHTML = (f.var_pct != null ? '<span class="' + (f.var_pct >= 0 ? "up" : "dn") + '">' + sinal(f.var_pct, 2) + "%</span> no dia · " : "") + f.contrato;
+    var t12 = hojeUTC() + 365 * DIA, F12 = interp(pontosDol(), t12);
+    $("k12").innerHTML = br(F12, 4);
+    $("k12S").textContent = sinal((F12 / base() - 1) * 100, 2) + "% sobre o spot";
+    $("kSel").innerHTML = C.selic ? br(C.selic.meta_aa, 2) + "<small>% a.a.</small>" : "-";
+    $("kSelS").textContent = "DI 1 ano: " + br(interp(pontosDI(), t12), 2) + "% a.a.";
+    $("abdMeta").textContent = "Fechamento B3 e PTAX de " + dBR(P.t) + (C.focus ? " · Focus de " + dBR(dt(C.focus.data)) : "");
+  }
+  function aoVivo() {
+    // dólar comercial em tempo quase real (mesma fonte do ticker do site); se falhar, fica a PTAX
+    fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) {
+      var q = j.USDBRL; if (!q) throw 0;
+      spot = +q.bid; spotFonte = "dólar comercial";
+      var pct = +q.pctChange, h = new Date(+q.timestamp * 1000);
+      $("abdSpot").textContent = "R$ " + br(spot, 4);
+      $("abdVar").innerHTML = '<span class="' + (pct >= 0 ? "up" : "dn") + '">' + (pct >= 0 ? "▲ " : "▼ ") + br(Math.abs(pct), 2) + "%</span>";
+      $("abdHora").innerHTML = '<i class="abd-dot"></i>dólar comercial · ' + ("0" + h.getHours()).slice(-2) + ":" + ("0" + h.getMinutes()).slice(-2);
+      render();
+    }).catch(function () {
+      var P = ptaxUlt(); $("abdSpot").textContent = "R$ " + br(P.v, 4); $("abdHora").textContent = "PTAX de " + dBR(P.t);
+    });
+  }
+
+  function render() { kpis(); sim(); charts[0].setOption(g0(), true); charts[1].setOption(g1(), true); charts[2].setOption(g2(), true); $("abdH2").textContent = st.hist === "vol" ? "Volatilidade do dólar (PTAX)" : "PTAX no histórico"; }
+
+  function baixar(i) {
+    var tit = ["Curva do dólar futuro · B3", "Juros futuros (DI) e carrego do dólar", st.hist === "vol" ? "Volatilidade do dólar · 21 pregões" : "PTAX no histórico"][i];
+    var opt = [g0, g1, g2][i](); opt.animation = false;
+    var sub = opt.title && opt.title.text;
+    opt.title = { text: tit, subtext: (sub ? sub + " · " : "") + "dados de " + dBR(ptaxUlt().t), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 54, left: 8 });
+    opt.grid = Object.assign({}, opt.grid, { top: opt.legend ? 86 : 64, bottom: 30 });
+    if (i === 0) opt.series.forEach(function (s) { if (s.name === "Curva hoje") s.label.show = true; });
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: B3 e Banco Central", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    charts[i].setOption(opt, true);
+    var url = charts[i].getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-dolar-" + ["curva", "juros-carrego", st.hist][i] + ".png"; document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  function grupo(id, attr, fn) { $(id).addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); fn(b.dataset[attr]); }); }
+
+  Promise.all([carregarLib(), json("dados/cambio.json"), json("dados/cambio_curvas.json").catch(function () { return null; })]).then(function (r) {
+    C = r[1]; H = r[2];
+    charts = [0, 1, 2].map(function (i) { return echarts.init($("abdG" + i), null, { renderer: "canvas" }); });
+    var P = ptaxUlt(); $("abdSpot").textContent = "R$ " + br(P.v, 4); $("abdHora").textContent = "PTAX de " + dBR(P.t);
+    montarMeses();
+    grupo("abdPrazo", "m", function (v) { st.prazo = +v; charts[0].setOption(g0(), true); });
+    grupo("abdHist", "v", function (v) { st.hist = v; $("abdH2").textContent = v === "vol" ? "Volatilidade do dólar (PTAX)" : "PTAX no histórico"; charts[2].setOption(g2(), true); });
+    grupo("abdPer", "d", function (v) { st.per = +v; charts[2].setOption(g2(), true); });
+    grupo("abdMeses", "k", function (v) { st.mes = +v; sim(); });
+    $("sUsd").addEventListener("input", function () { var n = this.value.replace(/\D/g, ""); this.value = n ? (+n).toLocaleString("pt-BR") : ""; sim(); });
+    document.querySelectorAll("#abd .abd-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    $("abdAtu").textContent = "Atualizado em " + C.atualizado_em;
+    render(); aoVivo(); setInterval(aoVivo, 60000);
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); render(); }, 150); });
+  }).catch(function () { $("abd").innerHTML = '<div class="abd-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>'; });
+})();
+</script>
