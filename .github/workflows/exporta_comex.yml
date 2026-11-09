@@ -1,0 +1,45 @@
+name: Exporta Comex Stat (dashboards HTML)
+
+on:
+  schedule:
+    # dias úteis às 09:37 e 16:37 de Brasília; o MDIC divulga o mês fechado nos primeiros dias úteis
+    - cron: '37 12 * * 1-5'
+    - cron: '37 19 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      forcar_tudo:
+        description: 'Reconsultar todos os anos (ignora o cache)'
+        type: boolean
+        default: false
+  push:
+    paths:
+      - exporta_comex.py
+      - .github/workflows/exporta_comex.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Exportar Comex Stat
+        env:
+          COMEX_FORCAR_TUDO: ${{ inputs.forcar_tudo && '1' || '0' }}
+        run: python exporta_comex.py
+      - name: Commit (só se os números mudaram)
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/comex
+          git diff --staged --quiet || (git commit -m "Atualiza Comex Stat" && git pull --rebase origin main && git push)
