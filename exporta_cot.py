@@ -80,22 +80,43 @@ DIAG = []
 HIST_PRECO = {}
 
 
-def precos_yahoo(simbolo, divisor):
-    """Fechamento diário do contrato contínuo (Yahoo Finance), desde 2010."""
-    import time
-    time.sleep(3)
-    p1 = int(datetime(ANO_INICIAL, 1, 1).timestamp())
-    for tentativa in range(4):
+YSESS = None
+
+
+def sessao_yahoo():
+    """Sessão com cookie e crumb, como um navegador: reduz o bloqueio 429 do Yahoo a servidores."""
+    global YSESS
+    if YSESS is None:
+        s = requests.Session()
+        s.headers.update({**UA, "Accept": "application/json,text/plain,*/*", "Accept-Language": "en-US,en;q=0.9"})
         try:
-            r = requests.get(f"https://query{1 + tentativa % 2}.finance.yahoo.com/v8/finance/chart/{simbolo}",
-                             params={"period1": p1, "period2": int(time.time()), "interval": "1d"}, headers=UA, timeout=60)
+            s.get("https://fc.yahoo.com", timeout=20)
+            crumb = s.get("https://query1.finance.yahoo.com/v1/test/getcrumb", timeout=20).text.strip()
+        except Exception:  # noqa: BLE001
+            crumb = ""
+        YSESS = (s, crumb if crumb and "<" not in crumb and len(crumb) < 40 else "")
+    return YSESS
+
+
+def precos_yahoo(simbolo, divisor):
+    """Fechamento semanal do contrato contínuo (Yahoo Finance), desde 2010."""
+    import time
+    s, crumb = sessao_yahoo()
+    err = ""
+    for tentativa in range(4):
+        time.sleep(4 + 6 * tentativa)
+        try:
+            params = {"range": "20y", "interval": "1d"}
+            if crumb:
+                params["crumb"] = crumb
+            r = s.get(f"https://query{1 + tentativa % 2}.finance.yahoo.com/v8/finance/chart/{simbolo}", params=params, timeout=60)
             r.raise_for_status()
             res = r.json()["chart"]["result"][0]
-            s = pd.Series(res["indicators"]["quote"][0]["close"], index=pd.to_datetime(res["timestamp"], unit="s").normalize(), dtype="float")
-            return (s.dropna() / divisor).sort_index()
+            serie = pd.Series(res["indicators"]["quote"][0]["close"], index=pd.to_datetime(res["timestamp"], unit="s").normalize(), dtype="float")
+            serie = serie[serie.index >= f"{ANO_INICIAL}-01-01"]
+            return (serie.dropna() / divisor).sort_index()
         except Exception as e:  # noqa: BLE001
-            err = f"{type(e).__name__} {str(e)[:160]}"
-            time.sleep(5 + 5 * tentativa)
+            err = f"{type(e).__name__} {str(e)[:120]}"
     DIAG.append(f"Yahoo {simbolo}: {err}")
     return None
 
