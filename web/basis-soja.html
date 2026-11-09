@@ -82,7 +82,7 @@
   </div>
 
   <div class="abb-kpis">
-    <div class="abb-k"><span>Basis atual</span><b id="kB">-</b><em id="kBs">&nbsp;</em></div>
+    <div class="abb-k"><span id="kBl">Último basis</span><b id="kB">-</b><em id="kBs">&nbsp;</em></div>
     <div class="abb-k"><span>Vs. média 5 anos</span><b id="kM">-</b><em id="kMs">&nbsp;</em></div>
     <div class="abb-k"><span>Percentil 5 anos</span><b id="kP">-</b><div class="abb-pc" title="0 = basis mais fraco, 100 = mais forte dos últimos 5 anos"><i id="kPi" style="left:50%"></i></div></div>
     <div class="abb-k"><span>Preço físico</span><b id="kF">-</b><em id="kFs">&nbsp;</em></div>
@@ -98,7 +98,7 @@
 
   <div class="abb-row">
     <div class="abb-card">
-      <div class="abb-ch"><h3>Basis nas praças hoje</h3><button class="abb-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abb-ch"><h3 id="abbH1">Basis nas praças</h3><button class="abb-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
       <div class="abb-chart sm" id="abbG1"></div>
     </div>
     <div class="abb-card">
@@ -210,7 +210,7 @@
       s.push({ name: String(a), type: "line", data: suavizar(P[p].filter(function (x) { return x.ano === a; })), symbol: "none", lineStyle: { width: k ? 1.3 : 1.8, color: cor }, itemStyle: { color: cor }, z: 2 });
     });
     if (st.anos.indexOf(anoBase) >= 0) s.push({ name: String(anoBase), type: "line", data: suavizar(P[p].filter(function (x) { return x.ano === anoBase; })), symbol: "none", lineStyle: { width: 2.8, color: COR.vd }, itemStyle: { color: COR.vd }, z: 6,
-      markPoint: { symbol: "circle", symbolSize: 9, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, label: { show: true, position: "top", distance: 8, formatter: br(u.v) + " hoje", color: COR.vd, fontWeight: 700, fontSize: 12.5 }, data: [{ coord: [u.d, (function (a) { return a[a.length - 1][1]; })(suavizar(P[p].filter(function (x) { return x.ano === anoBase; })))] }] } });
+      markPoint: { symbol: "circle", symbolSize: 9, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, label: { show: true, position: "top", distance: 8, formatter: br(u.v) + " em " + dataBR(u.t).slice(0, 5), color: COR.vd, fontWeight: 700, fontSize: 12.5 }, data: [{ coord: [u.d, (function (a) { return a[a.length - 1][1]; })(suavizar(P[p].filter(function (x) { return x.ano === anoBase; })))] }] } });
     var ini = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
     return Object.assign({}, base, {
       graphic: [marca()],
@@ -239,13 +239,13 @@
     }).filter(Boolean).sort(function (a, b) { return b.v - a.v; });
     return Object.assign({}, base, {
       graphic: [marca()],
-      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: [{ name: "Basis atual", icon: "rect" }, { name: "Média 5 anos", icon: "path://M0,0h3v16H0z" }] },
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: [{ name: "Último basis", icon: "rect" }, { name: "Média 5 anos", icon: "path://M0,0h3v16H0z" }] },
       grid: { left: 6, right: 52, top: 30, bottom: 6, containLabel: true },
       yAxis: { type: "category", inverse: true, data: lista.map(function (x) { return x.p; }), axisLabel: { color: COR.tx, fontSize: 12, width: mobile() ? 100 : 130, overflow: "truncate" }, axisLine: { show: false }, axisTick: { show: false } },
       xAxis: eixoY({ scale: false, splitNumber: 3, min: function (v) { return v.min < 0 ? v.min * 1.25 : 0; }, max: function (v) { return v.max > 0 ? v.max * 1.18 : 0; }, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: function (v) { return br(v, 0); } } }),
-      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) { var x = lista[ps[0].dataIndex]; return "<b>" + x.p + "</b>" + tipLinha("", "Basis atual", br(x.v) + " " + CFG.un) + (x.m != null ? tipLinha("", "Média 5 anos", br(x.m) + " " + CFG.un) : ""); } }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) { var x = lista[ps[0].dataIndex]; return "<b>" + x.p + "</b>" + tipLinha("", "Último basis", br(x.v) + " " + CFG.un) + (x.m != null ? tipLinha("", "Média 5 anos", br(x.m) + " " + CFG.un) : ""); } }),
       series: [
-        { name: "Basis atual", type: "bar", barWidth: "56%", itemStyle: { color: "#9DB58F" }, data: lista.map(function (x) { return { value: x.v, itemStyle: { color: x.p === st.praca ? COR.vd : "#9DB58F", borderRadius: x.v >= 0 ? [0, 4, 4, 0] : [4, 0, 0, 4] } }; }), emphasis: { disabled: true }, cursor: "pointer" },
+        { name: "Último basis", type: "bar", barWidth: "56%", itemStyle: { color: "#9DB58F" }, data: lista.map(function (x) { return { value: x.v, itemStyle: { color: x.p === st.praca ? COR.vd : "#9DB58F", borderRadius: x.v >= 0 ? [0, 4, 4, 0] : [4, 0, 0, 4] } }; }), emphasis: { disabled: true }, cursor: "pointer" },
         { name: "Média 5 anos", type: "scatter", symbol: "rect", symbolSize: [3, 16], itemStyle: { color: COR.mr }, data: lista.map(function (x) { return x.m; }), z: 5 },
         { name: "rotulo", type: "scatter", symbolSize: 0, silent: true, tooltip: { show: false }, data: lista.map(function (x) { var m = x.m == null ? x.v : x.m; return x.v >= 0 ? { value: Math.max(x.v, m), label: { position: "right" } } : { value: Math.min(x.v, m), label: { position: "left" } }; }),
           label: { show: true, distance: 6, color: COR.tx, fontSize: 11.5, fontWeight: 600, formatter: function (q) { return br(lista[q.dataIndex].v); } } }
@@ -304,7 +304,7 @@
         lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 },
         areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(84,147,27,.16)" }, { offset: 1, color: "rgba(84,147,27,0)" }] } },
         label: { show: !mobile(), position: "top", distance: 7, color: COR.tx, fontSize: 11, formatter: function (q) { return br(q.value, 0); } }, emphasis: { disabled: true },
-        markLine: u && u.f ? { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.4 }, label: { formatter: "físico hoje R$ " + br(u.f, 2), color: COR.mr, fontSize: 11, position: "insideEndBottom" }, data: [{ yAxis: u.f }] } : undefined }]
+        markLine: u && u.f ? { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.4 }, label: { formatter: "físico em " + dataBR(u.t).slice(0, 5) + ": R$ " + br(u.f, 2), color: COR.mr, fontSize: 11, position: "insideEndBottom" }, data: [{ yAxis: u.f }] } : undefined }]
     });
   }
 
@@ -313,6 +313,7 @@
     var p = st.praca, u = ultimo(p), R = referencia(p, u.ano), r = refNoDia(R, u.d);
     var hist = P[p].filter(function (x) { return x.ano >= u.ano - 5 && x.ano < u.ano; }).map(function (x) { return x.v; });
     var pct = hist.length ? hist.filter(function (v) { return v < u.v; }).length / hist.length * 100 : null;
+    $("kBl").textContent = "Basis em " + dataBR(u.t);
     $("kB").innerHTML = br(u.v) + "<small>" + CFG.un + "</small>";
     $("kBs").textContent = "contrato " + D.contrato_ref[u.i];
     var dm = r ? u.v - r.m : null;
@@ -328,6 +329,7 @@
     var u = ultimo(st.praca);
     $("abbTit").textContent = st.praca;
     $("abbMeta").textContent = "fechamento de " + dataBR(u.t) + " · basis em " + CFG.unLongo;
+    $("abbH1").textContent = "Basis nas praças em " + dataBR(u.t).slice(0, 5);
     $("abbH2").textContent = "Preço projetado em " + st.praca.replace(/ (RS|PR|MT|MS|GO|SP|MG|RO)$/, "");
     kpis();
     charts[0].setOption(g0(), true);
@@ -346,7 +348,7 @@
   }
 
   function baixar(i) {
-    var ch = charts[i], tit = ["Basis da " + CFG.produto.toLowerCase() + " · " + st.praca, "Basis da " + CFG.produto.toLowerCase() + " nas praças · " + dataBR(ultimo(st.praca).t), "Preço projetado da " + CFG.produto.toLowerCase() + " · " + st.praca];
+    var ch = charts[i], tit = ["Basis da " + CFG.produto.toLowerCase() + " · " + st.praca, "Basis da " + CFG.produto.toLowerCase() + " nas praças em " + dataBR(ultimo(st.praca).t), "Preço projetado da " + CFG.produto.toLowerCase() + " · " + st.praca];
     var opt = [g0, g1, g2][i](); delete opt._lista; opt.animation = false;
     opt.title = { text: tit[i], left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd } };
     if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 34, left: 8 });
