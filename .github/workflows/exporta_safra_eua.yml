@@ -1,0 +1,40 @@
+name: Exporta Condição e Progresso das Lavouras EUA (dashboard HTML)
+
+on:
+  schedule:
+    # o USDA publica o Crop Progress às segundas, 17h de Brasília (terça quando há feriado nos EUA)
+    - cron: '27 21 * * 1-2'
+    - cron: '47 12 * * 2-5'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_safra_eua.py
+      - .github/workflows/exporta_safra_eua.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Exportar Crop Progress
+        env:
+          NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
+        run: python exporta_safra_eua.py
+      - name: Commit (só se os números mudaram)
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/safra_eua.json
+          git diff --staged --quiet || (git commit -m "Atualiza Crop Progress EUA" && git pull --rebase origin main && git push)
