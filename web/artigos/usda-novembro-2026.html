@@ -1,0 +1,553 @@
+<!--
+============================================================
+AGROBASIS · ANÁLISE: RELATÓRIO USDA (WASDE) DE NOVEMBRO DE 2026
+============================================================
+URL: /analises/usda-novembro-2026-wasde-soja-milho/
+
+CONFIGURAÇÃO NO PLUGIN DE SEO:
+  Title (SEO): USDA novembro 2026: estoque de soja cai e Chicago dispara | AgroBasis
+  Meta description: WASDE de novembro/2026: estoque de soja dos EUA cai para 8,16 mi t, milho perde produtividade e a soja sobe 40 centavos. O que muda no preço em reais.
+  Slug: usda-novembro-2026-wasde-soja-milho
+  Frase-chave de foco: relatório USDA novembro 2026
+
+NOTA DE DADOS (todos os números conferidos em 10/11/2026):
+  USDA WASDE e Crop Production de 10/11/2026 e 09/10/2026: produtividade, produção, exportação,
+  esmagamento, estoques finais e preço médio (soja e milho EUA), estoques mundiais, Brasil e Argentina.
+  Estados (milho): Crop Production 10/11/2026 via DTN/Pro Farmer.
+  Expectativas pré-relatório: média das pesquisas de mercado (Reuters/Bloomberg via DTN, Walk-Squawk, UkrAgroConsult).
+  Estoque sobre uso: USDA PSD (download oficial, nov/2026), cálculo AgroBasis = estoque final / (consumo doméstico + exportação).
+  Fundos: CFTC Disaggregated COT, Managed Money, posição de 03/11/2026 (dashboard AgroBasis).
+  Colheita: USDA NASS Crop Progress, semana até 08/11/2026 (API Quick Stats); média 5 anos = 2021 a 2025.
+  Cotações: CBOT via TradingView, 10/11/2026 16h42 BRT (soja jan 12,28; milho dez 4,49; trigo dez 5,9275),
+  ajustes de 09/11/2026; dólar comercial 5,5845 (anterior 5,5074); PTAX 10/11 5,5840 (BCB).
+  Máximas de setembro: Pro Farmer, 10/09/2026 (soja nov 13,3225; milho dez 5,3375).
+  Plantio da soja no Brasil 64% em 05/11: levantamentos de mercado (TFM).
+  Paranaguá: basis histórico 2021 a 2025 da planilha AgroBasis, curvas CBOT (soja) e B3 (DOL) de 09/11
+  ajustadas pela variação de 10/11. Método igual ao dashboard de basis.
+  Conversões: soja 1 bu = 27,2155 kg; milho 1 bu = 25,4012 kg; 1 acre = 0,404686 ha; saca de 60 kg.
+
+NOTA DE ESTILO: sem travessão em H1/H2 e na prosa, tom sóbrio e direto.
+NOTA DE DESIGN: Design System AgroBasis, Geist + Sora, Lucide, gráficos em SVG puro.
+============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<style>
+  .abp-article {
+    font-family:'Geist', Arial, sans-serif;
+    color:#222222;
+    padding:36px 0 56px 0;
+    box-sizing:border-box;
+    background:#ffffff;
+  }
+  .abp-narrow { max-width:800px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+
+  .abp-breadcrumb { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+  .abp-breadcrumb a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-breadcrumb a:hover { text-decoration:underline; }
+
+  .abp-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Sora', Arial, sans-serif;
+    background:#EEF4E7; color:#1E4812; border:1px solid #d7e6c9;
+    border-radius:999px; padding:6px 14px 6px 10px;
+    font-size:12px; font-weight:700; letter-spacing:.2px;
+    margin-bottom:18px;
+  }
+  .abp-badge svg { width:13px; height:13px; stroke-width:2.2; }
+
+  .abp-h1 { font-size:35px; line-height:1.22; color:#222222; font-weight:800; margin:0 0 14px 0; }
+  .abp-lead { font-size:17px; line-height:1.7; color:#4a4a4a; margin:0 0 8px 0; }
+  .abp-meta { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#9a9a9a; margin:14px 0 30px 0; padding-bottom:20px; border-bottom:1px solid #eef1ed; }
+
+  .abp-h2 {
+    font-size:24px; color:#222222; font-weight:800;
+    margin:44px 0 14px 0; padding-left:12px; border-left:4px solid #1E4812;
+  }
+  .abp-h3 { font-size:17px; color:#222222; font-weight:700; margin:26px 0 10px 0; }
+  .abp-p { font-size:15.5px; line-height:1.8; color:#333333; margin:0 0 16px 0; }
+  .abp-p b { color:#1E4812; font-weight:700; }
+  .abp-list { margin:0 0 18px 0; padding-left:22px; }
+  .abp-list li { font-size:15.5px; line-height:1.8; color:#333333; margin-bottom:8px; }
+  .abp-list b { color:#222222; }
+
+  .abp-pullquote {
+    background:#fafbf9; border-left:3px solid #A17149; border-radius:0 14px 14px 0;
+    padding:18px 22px; margin:24px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:16px; line-height:1.6; color:#3f3f3f; font-style:italic;
+  }
+
+  .abp-note {
+    background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px;
+    padding:18px 20px; font-size:14px; line-height:1.65; color:#5b4636; margin:20px 0;
+  }
+  .abp-note b { color:#8a5a34; }
+
+  .abp-table {
+    width:100%; border-collapse:separate; border-spacing:0;
+    margin:14px 0 20px 0; font-size:14px;
+    border:1px solid #e5e7eb; border-radius:14px; overflow:hidden;
+  }
+  .abp-table th, .abp-table td {
+    padding:11px 14px; text-align:left; border-bottom:1px solid #eef1ed;
+  }
+  .abp-table tr:last-child td { border-bottom:none; }
+  .abp-table th {
+    background:#1E4812; color:#ffffff; font-weight:700;
+    font-family:'Sora', Arial, sans-serif; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .abp-table td { color:#3f3f3f; }
+  .abp-table tr:nth-child(even) td { background:#fafbf9; }
+
+  .abp-formula-box {
+    background:#fafbf9; border:1px solid #e5e7eb; border-left:3px solid #A17149;
+    border-radius:12px; padding:18px 20px; margin:18px 0 22px 0;
+  }
+  .abp-formula-code {
+    font-family:"Courier New", monospace; font-size:14.5px; color:#1E4812;
+    background:#EEF4E7; border-radius:8px; padding:12px 16px; display:block; margin-bottom:4px;
+    text-align:center; font-weight:600;
+  }
+
+  .abp-chart-card {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:18px;
+    padding:22px; margin:22px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05);
+  }
+  .abp-chart-title { font-family:'Geist', Arial, sans-serif; font-size:15px; font-weight:700; color:#222222; margin-bottom:2px; }
+  .abp-chart-sub { font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; margin-bottom:14px; }
+  .abp-chart-caption { font-family:'Sora', Arial, sans-serif; font-size:11px; color:#9a9a9a; text-align:right; margin-top:8px; }
+  .abp-legend { display:flex; gap:18px; flex-wrap:wrap; font-family:'Sora', Arial, sans-serif; font-size:12px; color:#5b5b5b; margin-bottom:10px; }
+  .abp-legend-item { display:flex; align-items:center; gap:6px; }
+  .abp-legend-dot { width:14px; height:3px; border-radius:2px; display:inline-block; }
+
+  .abp-toc {
+    background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px;
+    padding:18px 22px; margin:24px 0 8px 0;
+  }
+  .abp-toc-title { font-family:'Sora', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:10px; }
+  .abp-toc ol { margin:0; padding-left:20px; }
+  .abp-toc li { font-size:14px; line-height:1.9; }
+  .abp-toc a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-toc a:hover { text-decoration:underline; }
+
+  .abp-cta-box {
+    background:#1E4812; border-radius:20px; padding:32px 28px; margin:36px 0;
+    text-align:center;
+  }
+  .abp-cta-box h3 { color:#ffffff; font-size:20px; font-weight:800; margin:0 0 8px 0; }
+  .abp-cta-box p { color:#d7e6c9; font-size:14.5px; line-height:1.6; margin:0 0 20px 0; max-width:480px; margin-left:auto; margin-right:auto; }
+  .abp-cta-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#ffffff; color:#1E4812 !important; font-family:'Geist', Arial, sans-serif;
+    font-size:14.5px; font-weight:700; padding:13px 24px; border-radius:10px;
+    text-decoration:none !important; transition:background .15s ease;
+  }
+  .abp-cta-btn:hover { background:#EEF4E7; }
+  .abp-cta-btn svg { width:16px; height:16px; stroke-width:2.2; }
+
+  .abp-faq-item {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .abp-faq-item summary {
+    list-style:none; cursor:pointer; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:15px; font-weight:700; color:#222222;
+  }
+  .abp-faq-item summary::-webkit-details-marker { display:none; }
+  .abp-faq-item summary svg { width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+  .abp-faq-item[open] summary svg { transform:rotate(180deg); }
+  .abp-faq-a { padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+
+  .abp-sources {
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px;
+    padding:16px 20px; margin:30px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:12.5px; line-height:1.8; color:#7a7a7a;
+  }
+  .abp-sources b { color:#5b5b5b; }
+
+  .abp-disclaimer {
+    margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0;
+    font-family:'Sora', Arial, sans-serif;
+    font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6;
+  }
+
+  .abp-author-box {
+    display:flex; align-items:center; gap:12px; margin:30px 0;
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 18px;
+  }
+  .abp-author-icon { width:38px; height:38px; border-radius:50%; background:#EEF4E7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .abp-author-icon svg { width:19px; height:19px; color:#1E4812; }
+  .abp-author-text { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; line-height:1.5; }
+  .abp-author-text b { color:#222222; }
+
+  @media (max-width:768px) {
+    .abp-h1 { font-size:25px; }
+    .abp-lead { font-size:15px; }
+    .abp-h2 { font-size:20px; }
+    .abp-narrow { padding:0 14px; }
+    .abp-chart-card { padding:14px; }
+    .abp-cta-box { padding:24px 18px; }
+    .abp-table { font-size:12.5px; }
+    .abp-table th, .abp-table td { padding:8px 10px; }
+  }
+</style>
+
+<div class="abp-article">
+<div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/analises/">Análises</a> &nbsp;›&nbsp;
+    USDA de novembro de 2026
+  </div>
+
+  <div class="abp-badge"><i data-lucide="bar-chart-3"></i> WASDE · Soja e Milho</div>
+  <h1 class="abp-h1">Relatório USDA de novembro de 2026: estoque de soja dos EUA cai, milho perde produtividade e Chicago reage</h1>
+  <p class="abp-lead">O mercado esperava aumento no estoque final de soja americano e recebeu um corte. Somado à redução da produtividade do milho, o relatório interrompeu 9 pregões seguidos de queda da soja em Chicago. Veja os números, o que eles significam e quanto isso muda no preço em reais.</p>
+  <div class="abp-meta">Por Equipe AgroBasis · Publicado em 10 de novembro de 2026 · Leitura de 12 min</div>
+
+  <div class="abp-toc">
+    <div class="abp-toc-title">Neste artigo</div>
+    <ol>
+      <li><a href="#resumo">O relatório em 6 números</a></li>
+      <li><a href="#soja">Soja americana: safra recorde, estoque menor</a></li>
+      <li><a href="#milho">Milho americano: o corte veio na produtividade</a></li>
+      <li><a href="#mundo">Quadro mundial e América do Sul</a></li>
+      <li><a href="#reacao">A reação de Chicago e a posição dos fundos</a></li>
+      <li><a href="#reais">O que muda no preço em reais</a></li>
+      <li><a href="#sinais">Alta com fôlego ou repique? Os 3 sinais para acompanhar</a></li>
+      <li><a href="#faq">Perguntas frequentes</a></li>
+    </ol>
+  </div>
+
+  <h2 class="abp-h2" id="resumo">O relatório em 6 números</h2>
+  <p class="abp-p">O USDA publicou nesta terça-feira, 10 de novembro de 2026, o relatório mensal de oferta e demanda (WASDE) junto com a estimativa de safra (Crop Production). Foi o penúltimo levantamento de produção da safra americana 2026/27 e o primeiro, desde setembro, a trazer números mais apertados do que o mercado esperava tanto para a soja quanto para o milho.</p>
+  <p class="abp-p">Para facilitar a leitura do produtor brasileiro, convertemos todos os volumes de bushels para toneladas e as produtividades para sacas de 60 kg por hectare.</p>
+
+  <table class="abp-table">
+    <thead><tr><th>Indicador (EUA 2026/27)</th><th>Outubro</th><th>Novembro</th><th>Mercado esperava</th></tr></thead>
+    <tbody>
+      <tr><td>Soja: produtividade (sc/ha)</td><td>59,5</td><td><b>59,7</b></td><td>60,0</td></tr>
+      <tr><td>Soja: produção (mi t)</td><td>124,1</td><td><b>124,5</b></td><td>125,1</td></tr>
+      <tr><td>Soja: estoque final (mi t)</td><td>8,57</td><td><b>8,16</b></td><td>9,04</td></tr>
+      <tr><td>Milho: produtividade (sc/ha)</td><td>189,6</td><td><b>187,9</b></td><td>188,8</td></tr>
+      <tr><td>Milho: produção (mi t)</td><td>407,3</td><td><b>403,7</b></td><td>405,9</td></tr>
+      <tr><td>Milho: estoque final (mi t)</td><td>47,0</td><td><b>44,7</b></td><td>46,7</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">Nos dois produtos, o número de novembro ficou do lado mais apertado da expectativa. Na soja, a diferença entre o estoque esperado e o publicado é de quase 900 mil toneladas, o equivalente a <b>15 milhões de sacas</b>. Foi isso que pegou o mercado no contrapé.</p>
+
+  <h2 class="abp-h2" id="soja">Soja americana: safra recorde, estoque menor</h2>
+  <h3 class="abp-h3">Produção e demanda</h3>
+  <p class="abp-p">A produtividade da soja americana subiu de novo, de 59,5 para <b>59,7 sacas por hectare</b> (53,3 bushels por acre), um recorde. A produção foi para 124,5 milhões de toneladas, levemente acima de outubro, mas cerca de 600 mil toneladas abaixo do que o mercado projetava.</p>
+  <p class="abp-p">A mudança mais relevante veio na demanda: o USDA elevou a exportação americana em 680 mil toneladas, para <b>46,8 milhões de toneladas</b>. A revisão acompanha o ritmo real dos embarques: as inspeções de exportação acumuladas na temporada estão 58% acima do mesmo período do ano passado, com a China de volta às vendas diárias anunciadas pelo USDA.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja nos EUA: estoque final 2026/27</div>
+    <div class="abp-chart-sub">Milhões de toneladas · o mercado esperava aumento, o USDA cortou</div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Estoque final de soja dos EUA 2026/27"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="42" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">0</text><line x1="48" x2="624" y1="227.6" y2="227.6" stroke="#EEF1ED"/><text x="42" y="231.6" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">2</text><line x1="48" x2="624" y1="175.2" y2="175.2" stroke="#EEF1ED"/><text x="42" y="179.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">4</text><line x1="48" x2="624" y1="122.8" y2="122.8" stroke="#EEF1ED"/><text x="42" y="126.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">6</text><line x1="48" x2="624" y1="70.4" y2="70.4" stroke="#EEF1ED"/><text x="42" y="74.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">8</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="42" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">10</text><rect x="78.7" y="55.5" width="130.6" height="224.5" rx="3" fill="#8A8F87"/><text x="144.0" y="50.5" text-anchor="middle" font-size="16" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">8,57</text><text x="144.0" y="296" text-anchor="middle" font-size="13" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Outubro</text><rect x="270.7" y="43.2" width="130.6" height="236.8" rx="3" fill="#C9CFC6"/><text x="336.0" y="38.2" text-anchor="middle" font-size="16" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">9,04</text><text x="336.0" y="296" text-anchor="middle" font-size="13" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Mercado esperava</text><rect x="462.7" y="66.2" width="130.6" height="213.8" rx="3" fill="#1E4812"/><text x="528.0" y="61.2" text-anchor="middle" font-size="16" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">8,16</text><text x="528.0" y="296" text-anchor="middle" font-size="13" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Novembro</text></svg>
+    <div class="abp-chart-caption">Fonte: USDA WASDE (out e nov/2026); média das expectativas de mercado · Elaboração: AgroBasis</div>
+  </div>
+
+  <h3 class="abp-h3">Estoque sobre uso: o indicador que realmente importa</h3>
+  <p class="abp-p">Volume de estoque isolado diz pouco. O que o mercado precifica é quanto sobra no fim da temporada em relação a tudo o que é consumido e exportado. Para a soja americana 2026/27, essa relação ficou em <b>6,5%</b>: para cada 100 sacas usadas no ano, sobram 6,5. É o menor nível desde a safra 2022/23 e fica abaixo da média dos 5 anos anteriores, de 7,1%.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja nos EUA: estoque final sobre o uso</div>
+    <div class="abp-chart-sub">% · estoque final dividido por consumo doméstico mais exportação, safras 2014/15 a 2026/27</div>
+    <div class="abp-legend">
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;height:10px;"></span> Safra 2026/27</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#A17149;"></span> Média dos 5 anos anteriores: 7,1%</span>
+    </div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Estoque final sobre uso de soja nos EUA"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="42" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">0%</text><line x1="48" x2="624" y1="227.6" y2="227.6" stroke="#EEF1ED"/><text x="42" y="231.6" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">5%</text><line x1="48" x2="624" y1="175.2" y2="175.2" stroke="#EEF1ED"/><text x="42" y="179.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">10%</text><line x1="48" x2="624" y1="122.8" y2="122.8" stroke="#EEF1ED"/><text x="42" y="126.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">15%</text><line x1="48" x2="624" y1="70.4" y2="70.4" stroke="#EEF1ED"/><text x="42" y="74.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">20%</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="42" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">25%</text><rect x="55.1" y="228.3" width="30.1" height="51.7" rx="3" fill="#A9C79A"/><text x="70.2" y="223.3" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">4,9</text><text x="70.2" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">14/15</text><rect x="99.4" y="227.7" width="30.1" height="52.3" rx="3" fill="#A9C79A"/><text x="114.5" y="222.7" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">5,0</text><text x="114.5" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">15/16</text><rect x="143.7" y="205.0" width="30.1" height="75.0" rx="3" fill="#A9C79A"/><text x="158.8" y="200.0" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">7,2</text><text x="158.8" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">16/17</text><rect x="188.0" y="173.2" width="30.1" height="106.8" rx="3" fill="#A9C79A"/><text x="203.1" y="168.2" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">10,2</text><text x="203.1" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">17/18</text><rect x="232.3" y="34.9" width="30.1" height="245.1" rx="3" fill="#A9C79A"/><text x="247.4" y="29.9" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">23,4</text><text x="247.4" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">18/19</text><rect x="276.6" y="137.2" width="30.1" height="142.8" rx="3" fill="#A9C79A"/><text x="291.7" y="132.2" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">13,6</text><text x="291.7" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">19/20</text><rect x="320.9" y="220.4" width="30.1" height="59.6" rx="3" fill="#A9C79A"/><text x="336.0" y="215.4" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">5,7</text><text x="336.0" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">20/21</text><rect x="365.2" y="215.6" width="30.1" height="64.4" rx="3" fill="#A9C79A"/><text x="380.3" y="210.6" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">6,1</text><text x="380.3" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">21/22</text><rect x="409.6" y="215.7" width="30.1" height="64.3" rx="3" fill="#A9C79A"/><text x="424.6" y="210.7" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">6,1</text><text x="424.6" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">22/23</text><rect x="453.9" y="192.6" width="30.1" height="87.4" rx="3" fill="#A9C79A"/><text x="468.9" y="187.6" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">8,3</text><text x="468.9" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">23/24</text><rect x="498.2" y="203.0" width="30.1" height="77.0" rx="3" fill="#A9C79A"/><text x="513.2" y="198.0" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">7,3</text><text x="513.2" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">24/25</text><rect x="542.5" y="203.1" width="30.1" height="76.9" rx="3" fill="#A9C79A"/><text x="557.5" y="198.1" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">7,3</text><text x="557.5" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">25/26</text><rect x="586.8" y="211.8" width="30.1" height="68.2" rx="3" fill="#1E4812"/><text x="601.8" y="206.8" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">6,5</text><text x="601.8" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">26/27</text><line x1="48" x2="624" y1="206.0" y2="206.0" stroke="#A17149" stroke-dasharray="6 5" stroke-width="1.6"/></svg>
+    <div class="abp-chart-caption">Fonte: USDA PSD (novembro/2026) · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">É importante calibrar: não se trata de um aperto extremo como o de 2013/14, quando a relação chegou a 2,6%. Mas o balanço é mais justo do que o mercado vinha precificando quando derrubou a soja por 9 sessões seguidas. O próprio USDA elevou o preço médio projetado ao produtor americano para <b>US$ 12,10 por bushel</b>.</p>
+
+  <div class="abp-cta-box">
+    <h3>Oferta e demanda de soja em tempo real</h3>
+    <p>Produção, exportação, esmagamento e estoques de todos os países, atualizados automaticamente a cada relatório do USDA.</p>
+    <a href="/dashboards/usda-complexo-soja/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="milho">Milho americano: o corte veio na produtividade</h2>
+  <p class="abp-p">No milho, a história de novembro é de produtividade. O USDA cortou a estimativa de 189,6 para <b>187,9 sacas por hectare</b> (179,6 bushels por acre), uma redução maior do que a esperada. Ao longo de 2026, a estimativa oscilou bastante e hoje está 7,2 sacas por hectare abaixo do recorde de 2025.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Milho nos EUA: produtividade estimada a cada relatório</div>
+    <div class="abp-chart-sub">Sacas de 60 kg por hectare · estimativas do USDA em 2026</div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Produtividade do milho nos EUA por relatório em 2026"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="42" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">184</text><line x1="48" x2="624" y1="239.7" y2="239.7" stroke="#EEF1ED"/><text x="42" y="243.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">186</text><line x1="48" x2="624" y1="199.4" y2="199.4" stroke="#EEF1ED"/><text x="42" y="203.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">188</text><line x1="48" x2="624" y1="159.1" y2="159.1" stroke="#EEF1ED"/><text x="42" y="163.1" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">190</text><line x1="48" x2="624" y1="118.8" y2="118.8" stroke="#EEF1ED"/><text x="42" y="122.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">192</text><line x1="48" x2="624" y1="78.5" y2="78.5" stroke="#EEF1ED"/><text x="42" y="82.5" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">194</text><line x1="48" x2="624" y1="38.2" y2="38.2" stroke="#EEF1ED"/><text x="42" y="42.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">196</text><line x1="48" x2="624" y1="56.3" y2="56.3" stroke="#A17149" stroke-dasharray="6 5" stroke-width="1.6"/><text x="54" y="50.3" font-size="12" fill="#A17149" font-family="Sora, Arial, sans-serif">Recorde de 2025: 195,1 sc/ha</text><polyline fill="none" stroke="#1E4812" stroke-width="3" points="78.0,130.9 207.0,179.2 336.0,225.6 465.0,167.1 594.0,201.4"/><circle cx="78.0" cy="130.9" r="5" fill="#fff" stroke="#1E4812" stroke-width="2.5"/><text x="78.0" y="119.9" text-anchor="middle" font-size="13" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">191,4</text><text x="78.0" y="296" text-anchor="middle" font-size="12" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Jul/26</text><circle cx="207.0" cy="179.2" r="5" fill="#fff" stroke="#1E4812" stroke-width="2.5"/><text x="207.0" y="168.2" text-anchor="middle" font-size="13" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">189,0</text><text x="207.0" y="296" text-anchor="middle" font-size="12" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Ago/26</text><circle cx="336.0" cy="225.6" r="5" fill="#fff" stroke="#1E4812" stroke-width="2.5"/><text x="336.0" y="214.6" text-anchor="middle" font-size="13" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">186,7</text><text x="336.0" y="296" text-anchor="middle" font-size="12" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Set/26</text><circle cx="465.0" cy="167.1" r="5" fill="#fff" stroke="#1E4812" stroke-width="2.5"/><text x="465.0" y="156.1" text-anchor="middle" font-size="13" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">189,6</text><text x="465.0" y="296" text-anchor="middle" font-size="12" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Out/26</text><circle cx="594.0" cy="201.4" r="5" fill="#fff" stroke="#1E4812" stroke-width="2.5"/><text x="594.0" y="190.4" text-anchor="middle" font-size="13" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">187,9</text><text x="594.0" y="296" text-anchor="middle" font-size="12" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Nov/26</text></svg>
+    <div class="abp-chart-caption">Fonte: USDA WASDE / Crop Production 2026 · Conversão: 1 bu/acre = 1,046 sc/ha · Elaboração: AgroBasis</div>
+  </div>
+
+  <h3 class="abp-h3">Onde a lavoura perdeu</h3>
+  <ul class="abp-list">
+    <li><b>Illinois:</b> menos 8,4 sacas por hectare em relação a outubro.</li>
+    <li><b>Michigan:</b> menos 10,5 sc/ha.</li>
+    <li><b>Indiana e Missouri:</b> menos 5,2 sc/ha cada.</li>
+    <li><b>Nebraska:</b> menos 4,2 sc/ha.</li>
+    <li><b>Minnesota:</b> mais 9,4 sc/ha, na contramão.</li>
+    <li><b>Iowa:</b> estável, ainda o maior rendimento entre os grandes estados.</li>
+  </ul>
+  <p class="abp-p">Com isso, a produção caiu de 407,3 para <b>403,7 milhões de toneladas</b>, 27 milhões abaixo da safra de 2025 (430,9 milhões). O USDA também cortou 640 mil toneladas na exportação e outras 640 mil no consumo animal, mas, mesmo assim, o estoque final caiu de 47,0 para <b>44,7 milhões de toneladas</b>.</p>
+
+  <h3 class="abp-h3">O milho americano não está apertado</h3>
+  <p class="abp-p">Aqui está o contraponto que separa leitura técnica de euforia. A relação estoque sobre uso do milho americano ficou em <b>10,8%</b>, praticamente igual à média dos 5 anos anteriores (10,8%). O relatório retirou o excesso de pessimismo que levou o milho dezembro à mínima de 4 meses, mas não transforma o quadro em escassez.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Milho nos EUA: estoque final sobre o uso</div>
+    <div class="abp-chart-sub">% · estoque final dividido por consumo doméstico mais exportação, safras 2014/15 a 2026/27</div>
+    <div class="abp-legend">
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;height:10px;"></span> Safra 2026/27</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#A17149;"></span> Média dos 5 anos anteriores: 10,8%</span>
+    </div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Estoque final sobre uso de milho nos EUA"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="42" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">0%</text><line x1="48" x2="624" y1="236.3" y2="236.3" stroke="#EEF1ED"/><text x="42" y="240.3" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">3%</text><line x1="48" x2="624" y1="192.7" y2="192.7" stroke="#EEF1ED"/><text x="42" y="196.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">6%</text><line x1="48" x2="624" y1="149.0" y2="149.0" stroke="#EEF1ED"/><text x="42" y="153.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">9%</text><line x1="48" x2="624" y1="105.3" y2="105.3" stroke="#EEF1ED"/><text x="42" y="109.3" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">12%</text><line x1="48" x2="624" y1="61.7" y2="61.7" stroke="#EEF1ED"/><text x="42" y="65.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">15%</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="42" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">18%</text><rect x="55.1" y="96.7" width="30.1" height="183.3" rx="3" fill="#A9C79A"/><text x="70.2" y="91.7" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">12,6</text><text x="70.2" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">14/15</text><rect x="99.4" y="95.0" width="30.1" height="185.0" rx="3" fill="#A9C79A"/><text x="114.5" y="90.0" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">12,7</text><text x="114.5" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">15/16</text><rect x="143.7" y="52.1" width="30.1" height="227.9" rx="3" fill="#A9C79A"/><text x="158.8" y="47.1" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">15,7</text><text x="158.8" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">16/17</text><rect x="188.0" y="69.5" width="30.1" height="210.5" rx="3" fill="#A9C79A"/><text x="203.1" y="64.5" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">14,5</text><text x="203.1" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">17/18</text><rect x="232.3" y="51.5" width="30.1" height="228.5" rx="3" fill="#A9C79A"/><text x="247.4" y="46.5" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">15,7</text><text x="247.4" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">18/19</text><rect x="276.6" y="69.2" width="30.1" height="210.8" rx="3" fill="#A9C79A"/><text x="291.7" y="64.2" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">14,5</text><text x="291.7" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">19/20</text><rect x="320.9" y="159.2" width="30.1" height="120.8" rx="3" fill="#A9C79A"/><text x="336.0" y="154.2" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">8,3</text><text x="336.0" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">20/21</text><rect x="365.2" y="145.5" width="30.1" height="134.5" rx="3" fill="#A9C79A"/><text x="380.3" y="140.5" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">9,2</text><text x="380.3" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">21/22</text><rect x="409.6" y="135.5" width="30.1" height="144.5" rx="3" fill="#A9C79A"/><text x="424.6" y="130.5" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">9,9</text><text x="424.6" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">22/23</text><rect x="453.9" y="108.5" width="30.1" height="171.5" rx="3" fill="#A9C79A"/><text x="468.9" y="103.5" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">11,8</text><text x="468.9" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">23/24</text><rect x="498.2" y="130.7" width="30.1" height="149.3" rx="3" fill="#A9C79A"/><text x="513.2" y="125.7" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">10,3</text><text x="513.2" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">24/25</text><rect x="542.5" y="94.6" width="30.1" height="185.4" rx="3" fill="#A9C79A"/><text x="557.5" y="89.6" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">12,7</text><text x="557.5" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">25/26</text><rect x="586.8" y="122.5" width="30.1" height="157.5" rx="3" fill="#1E4812"/><text x="601.8" y="117.5" text-anchor="middle" font-size="10" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">10,8</text><text x="601.8" y="296" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">26/27</text><line x1="48" x2="624" y1="123.0" y2="123.0" stroke="#A17149" stroke-dasharray="6 5" stroke-width="1.6"/></svg>
+    <div class="abp-chart-caption">Fonte: USDA PSD (novembro/2026) · Elaboração: AgroBasis</div>
+  </div>
+
+  <h3 class="abp-h3">Colheita atrasada sustenta o curto prazo</h3>
+  <p class="abp-p">Até 8 de novembro, os Estados Unidos haviam colhido <b>81% da área de milho</b>, contra 86% da média de 5 anos. Em Iowa, maior estado produtor, a colheita estava em 72%, ante 89% da média. Menos milho chegando agora ao mercado reduz a pressão de venda típica do período e mantém risco sobre o que ainda está no campo. A soja, por outro lado, já tinha 92% da área colhida.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Colheita de milho nos EUA</div>
+    <div class="abp-chart-sub">% da área colhida por semana</div>
+    <div class="abp-legend">
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> 2026</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#8A8F87;"></span> 2025</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#A17149;"></span> Média 2021 a 2025</span>
+    </div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Colheita de milho nos EUA em 2026 contra 2025 e média de 5 anos"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="42" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">0%</text><line x1="48" x2="624" y1="227.6" y2="227.6" stroke="#EEF1ED"/><text x="42" y="231.6" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">20%</text><line x1="48" x2="624" y1="175.2" y2="175.2" stroke="#EEF1ED"/><text x="42" y="179.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">40%</text><line x1="48" x2="624" y1="122.8" y2="122.8" stroke="#EEF1ED"/><text x="42" y="126.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">60%</text><line x1="48" x2="624" y1="70.4" y2="70.4" stroke="#EEF1ED"/><text x="42" y="74.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">80%</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="42" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">100%</text><polyline fill="none" stroke="#A17149" stroke-width="2.2" stroke-dasharray="6 5" points="48.0,280.0 92.3,277.7 136.6,260.5 180.9,247.2 225.2,227.3 269.5,200.8 313.8,167.8 358.2,131.8 402.5,97.3 446.8,69.7 491.1,46.6 535.4,33.3 579.7,20.5 624.0,18.0"/><polyline fill="none" stroke="#8A8F87" stroke-width="2" points="86.0,269.5 130.3,261.7 174.6,251.2 218.9,232.8 529.1,41.6 573.4,28.5"/><polyline fill="none" stroke="#1E4812" stroke-width="3.2" points="79.6,266.9 124.0,259.0 168.3,245.9 212.6,232.8 256.9,219.7 301.2,193.5 345.5,164.7 389.8,122.8 434.1,86.1 478.4,67.8"/><circle cx="478.4" cy="67.8" r="5" fill="#1E4812"/><text x="486.4" y="83.8" font-size="14" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">81%</text><text x="48.0" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">01/09</text><text x="136.6" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">15/09</text><text x="237.9" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">01/10</text><text x="326.5" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">15/10</text><text x="434.1" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">01/11</text><text x="522.7" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">15/11</text><text x="624.0" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">01/12</text></svg>
+    <div class="abp-chart-caption">Fonte: USDA NASS Crop Progress, semana até 08/11/2026 · Elaboração: AgroBasis</div>
+  </div>
+
+  <div class="abp-cta-box">
+    <h3>Condição e avanço das lavouras americanas</h3>
+    <p>Plantio, colheita e condição de soja, milho e trigo nos EUA, toda semana, comparados com a média histórica.</p>
+    <a href="/dashboards/condicao-de-safra-eua/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="mundo">Quadro mundial e América do Sul</h2>
+  <p class="abp-p">Fora dos Estados Unidos, as mudanças foram pequenas, e isso também é informação. O USDA manteve a safra brasileira de soja 2026/27 em <b>186 milhões de toneladas</b> (180,5 milhões em 2025/26) e elevou o milho do Brasil para 141 milhões.</p>
+
+  <table class="abp-table">
+    <thead><tr><th>Estoques e safras (mi t)</th><th>Outubro</th><th>Novembro</th></tr></thead>
+    <tbody>
+      <tr><td>Estoque mundial de soja 2026/27</td><td>124,3</td><td><b>123,5</b></td></tr>
+      <tr><td>Estoque mundial de milho 2026/27</td><td>280,4</td><td><b>281,9</b></td></tr>
+      <tr><td>Estoque mundial de trigo 2026/27</td><td>276,0</td><td><b>280,8</b></td></tr>
+      <tr><td>Brasil: soja 2026/27</td><td>186,0</td><td><b>186,0</b></td></tr>
+      <tr><td>Brasil: milho 2026/27</td><td>139,0</td><td><b>141,0</b></td></tr>
+      <tr><td>Brasil: milho 2025/26</td><td>141,0</td><td><b>144,5</b></td></tr>
+      <tr><td>Argentina: milho 2026/27</td><td>55,0</td><td><b>57,0</b></td></tr>
+      <tr><td>Argentina: soja 2026/27</td><td>50,0</td><td><b>50,0</b></td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">No trigo, o estoque final americano ficou em 743 milhões de bushels (20,2 milhões de toneladas), praticamente estável, e o estoque mundial subiu. Leitura neutra a baixista para o cereal.</p>
+  <p class="abp-p">O ponto central é que o USDA já trabalha com safra cheia na América do Sul. O plantio da soja brasileira chegava a 64% da área em 5 de novembro, à frente dos 61% do ano passado. A partir de agora, o risco altista mais relevante deixa de estar nos Estados Unidos e passa a ser o clima no Brasil e na Argentina entre dezembro e fevereiro.</p>
+
+  <h2 class="abp-h2" id="reacao">A reação de Chicago e a posição dos fundos</h2>
+  <p class="abp-p">A soja janeiro, que havia fechado a segunda-feira em US$ 11,88 por bushel, terminou a terça perto de <b>US$ 12,28, alta de cerca de 40 centavos</b>. O milho dezembro subiu cerca de 10 centavos, para US$ 4,49, e o trigo dezembro ganhou perto de 5 centavos. Para dimensionar: em 10 de setembro, a soja novembro tinha batido US$ 13,32, máxima do contrato. A queda até a véspera do relatório foi de US$ 1,50 por bushel, e a alta de hoje recuperou cerca de um quarto disso.</p>
+  <p class="abp-p">A força do movimento tem relação direta com o posicionamento. Os fundos (managed money, segundo a CFTC) chegaram a carregar mais de 414 mil contratos comprados em milho em setembro e, na leitura de 3 de novembro, a posição líquida era de apenas 8.795 contratos. Relatos de mercado indicam que, nos dias seguintes, eles passaram a vendidos. Na soja, ainda restavam cerca de 143 mil contratos comprados.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Posição líquida dos fundos em Chicago</div>
+    <div class="abp-chart-sub">Contratos comprados menos vendidos (managed money), últimas 52 semanas</div>
+    <div class="abp-legend">
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> Soja</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#A17149;"></span> Milho</span>
+    </div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Posição líquida dos fundos em soja e milho na CBOT"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="42" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">-100 mil</text><line x1="48" x2="624" y1="232.4" y2="232.4" stroke="#EEF1ED"/><text x="42" y="236.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">0 mil</text><line x1="48" x2="624" y1="184.7" y2="184.7" stroke="#EEF1ED"/><text x="42" y="188.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">100 mil</text><line x1="48" x2="624" y1="137.1" y2="137.1" stroke="#EEF1ED"/><text x="42" y="141.1" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">200 mil</text><line x1="48" x2="624" y1="89.5" y2="89.5" stroke="#EEF1ED"/><text x="42" y="93.5" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">300 mil</text><line x1="48" x2="624" y1="41.8" y2="41.8" stroke="#EEF1ED"/><text x="42" y="45.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">400 mil</text><line x1="48" x2="624" y1="232.4" y2="232.4" stroke="#9a9a9a"/><polyline fill="none" stroke="#1E4812" stroke-width="2.6" points="48.0,135.4 59.3,121.1 69.2,125.0 79.1,124.1 89.0,141.8 98.9,158.5 108.8,178.9 118.7,189.5 128.6,201.0 138.5,222.8 148.4,225.4 158.2,222.9 168.1,218.5 178.0,177.2 187.9,156.6 197.8,150.7 207.7,143.0 217.6,131.6 227.5,139.4 237.4,141.2 247.3,135.2 257.2,146.0 267.1,152.3 277.0,143.0 286.9,148.1 296.8,130.7 306.7,133.3 316.5,138.0 326.4,144.6 336.3,158.2 346.2,185.7 356.1,206.4 366.0,214.7 375.9,214.2 385.8,199.2 395.7,196.5 405.6,170.2 415.5,155.9 425.4,169.2 435.3,180.4 445.2,160.1 455.1,136.8 465.0,120.5 474.8,109.8 484.7,117.3 494.6,106.1 504.5,114.9 514.4,109.4 524.3,113.4 534.2,126.9 544.1,140.1 554.0,164.4"/><text x="560.0" y="168.4" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">143 mil</text><polyline fill="none" stroke="#A17149" stroke-width="2.6" points="48.0,250.2 59.3,209.1 69.2,235.6 79.1,217.0 89.0,223.4 98.9,257.8 108.8,231.5 118.7,243.2 128.6,238.5 138.5,275.5 148.4,278.0 158.2,271.2 168.1,270.8 178.0,259.8 187.9,252.5 197.8,238.7 207.7,207.5 217.6,137.7 227.5,122.4 237.4,99.2 247.3,109.5 257.2,131.9 267.1,159.7 277.0,145.6 286.9,105.9 296.8,68.2 306.7,91.5 316.5,92.6 326.4,131.7 336.3,175.1 346.2,233.0 356.1,255.9 366.0,268.0 375.9,264.3 385.8,239.5 395.7,227.0 405.6,205.3 415.5,172.0 425.4,163.4 435.3,172.4 445.2,145.8 455.1,81.1 465.0,41.3 474.8,34.9 484.7,34.9 494.6,39.9 504.5,50.8 514.4,75.2 524.3,115.0 534.2,154.0 544.1,193.7 554.0,228.2"/><text x="560.0" y="232.2" font-size="12.5" font-weight="700" fill="#A17149" font-family="Sora, Arial, sans-serif">9 mil</text><text x="48.0" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">11/25</text><text x="138.5" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">01/26</text><text x="227.5" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">03/26</text><text x="316.5" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">05/26</text><text x="405.6" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">07/26</text><text x="494.6" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">09/26</text></svg>
+    <div class="abp-chart-caption">Fonte: CFTC Commitments of Traders, posição até 03/11/2026 · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">Essa assimetria importa. No milho, quem está vendido precisa recomprar se o mercado continuar subindo, o que funciona como combustível técnico para alta. Na soja, a posição comprada remanescente é um risco: se os fundos voltarem a vender, a alta perde tração.</p>
+
+  <div class="abp-cta-box">
+    <h3>Acompanhe a posição dos fundos toda semana</h3>
+    <p>Relatório COT da CFTC para soja, milho, trigo e derivados, com histórico desde 2006.</p>
+    <a href="/dashboards/posicao-fundos-cftc/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="reais">O que muda no preço em reais</h2>
+  <h3 class="abp-h3">Um dia em que as duas pernas andaram juntas</h3>
+  <p class="abp-p">O preço da soja no Brasil depende de Chicago, do basis e do câmbio. Nesta terça, Chicago e dólar subiram ao mesmo tempo: o dólar comercial foi de R$ 5,51 para cerca de R$ 5,58.</p>
+  <div class="abp-formula-box">
+    <span class="abp-formula-code">Preço (R$/sc) = (CBOT + basis) × 2,2046 × dólar</span>
+  </div>
+  <ul class="abp-list">
+    <li><b>Alta de Chicago (cerca de 40 centavos):</b> mais R$ 4,80 por saca.</li>
+    <li><b>Alta do dólar (cerca de 8 centavos):</b> mais R$ 2,20 por saca.</li>
+    <li><b>Efeito combinado:</b> a soja disponível melhora cerca de <b>R$ 7 por saca</b> em um único dia.</li>
+  </ul>
+
+  <h3 class="abp-h3">Preço de referência em Paranaguá</h3>
+  <p class="abp-p">Para trazer a conta ao porto, combinamos os contratos futuros de soja em Chicago e de dólar na B3, com as cotações desta terça, com o basis histórico de Paranaguá em cada mês do ano (média e faixa de 2021 a 2025). É o mesmo método usado no dashboard de basis do AgroBasis.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja em Paranaguá: preço de referência pelos próximos meses</div>
+    <div class="abp-chart-sub">R$/saca · futuros de Chicago e do dólar de 10/11 + basis histórico do mês</div>
+    <div class="abp-legend">
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> Basis médio</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#DCEBD2;height:10px;"></span> Basis baixo a alto (percentis 20 e 80)</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#A17149;height:8px;width:8px;border-radius:50%;"></span> Hoje, com o basis atual: R$ 168</span>
+    </div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Preço de referência da soja em Paranaguá pelos próximos meses"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="42" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">R$ 130</text><line x1="48" x2="624" y1="227.6" y2="227.6" stroke="#EEF1ED"/><text x="42" y="231.6" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">R$ 140</text><line x1="48" x2="624" y1="175.2" y2="175.2" stroke="#EEF1ED"/><text x="42" y="179.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">R$ 150</text><line x1="48" x2="624" y1="122.8" y2="122.8" stroke="#EEF1ED"/><text x="42" y="126.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">R$ 160</text><line x1="48" x2="624" y1="70.4" y2="70.4" stroke="#EEF1ED"/><text x="42" y="74.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">R$ 170</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="42" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">R$ 180</text><polygon fill="#DCEBD2" points="78.0,70.0 151.7,83.4 225.4,104.1 299.1,78.4 372.9,89.2 446.6,107.6 520.3,51.9 594.0,83.6 594.0,136.2 520.3,169.6 446.6,234.5 372.9,180.6 299.1,158.7 225.4,156.9 151.7,131.5 78.0,129.5"/><polyline fill="none" stroke="#1E4812" stroke-width="3" points="78.0,102.0 151.7,103.6 225.4,134.6 299.1,135.7 372.9,132.1 446.6,149.3 520.3,125.5 594.0,117.7"/><circle cx="78.0" cy="102.0" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="78.0" y="92.0" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">164</text><text x="78.0" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">nov/26</text><circle cx="151.7" cy="103.6" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="151.7" y="93.6" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">164</text><text x="151.7" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">dez/26</text><circle cx="225.4" cy="134.6" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="225.4" y="124.6" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">158</text><text x="225.4" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">jan/27</text><circle cx="299.1" cy="135.7" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="299.1" y="125.7" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">158</text><text x="299.1" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">fev/27</text><circle cx="372.9" cy="132.1" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="372.9" y="122.1" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">158</text><text x="372.9" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">mar/27</text><circle cx="446.6" cy="149.3" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="446.6" y="139.3" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">155</text><text x="446.6" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">abr/27</text><circle cx="520.3" cy="125.5" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="520.3" y="115.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">159</text><text x="520.3" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">mai/27</text><circle cx="594.0" cy="117.7" r="4.5" fill="#fff" stroke="#1E4812" stroke-width="2.4"/><text x="594.0" y="107.7" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">161</text><text x="594.0" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">jun/27</text><circle cx="78.0" cy="80.7" r="6" fill="#A17149"/></svg>
+    <div class="abp-chart-caption">Fonte: CBOT, B3 (DOL), basis Paranaguá 2021 a 2025 (AgroBasis) · Cálculo referencial · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">Com o basis atual de Paranaguá, perto de 136 centavos de dólar por bushel acima de Chicago, a soja no porto estaria em cerca de <b>R$ 168 por saca</b>. O basis está alto porque o Brasil atravessa a entressafra, com pouca soja disponível.</p>
+  <p class="abp-p">Quando a colheita chega, o quadro muda. Com o basis médio histórico, a referência cai para cerca de <b>R$ 158 em março</b> e <b>R$ 155 em abril</b>. Em abril, a faixa vai de R$ 139, com basis fraco como em anos de safra cheia, a R$ 163, com basis forte. Quase toda a diferença entre o preço de hoje e o da colheita vem do basis, não de Chicago.</p>
+  <div class="abp-note"><b>Atenção ao câmbio:</b> cada 10 centavos de variação no dólar mudam o preço da soja no porto em cerca de R$ 3 por saca. A alta do dólar ajudou nesta terça, mas pode devolver parte do ganho nos próximos dias.</div>
+  <p class="abp-p">No milho, o efeito em reais é menor: os 10 centavos de alta em Chicago valem cerca de R$ 1,20 por saca na paridade de exportação. O milho brasileiro segue mais dependente do mercado interno, do etanol de milho e da B3 do que de Chicago no dia a dia.</p>
+
+  <div class="abp-cta-box">
+    <h3>Qual é o preço de referência na sua região?</h3>
+    <p>Basis histórico de 10 praças, com projeção de preço em cenário de basis baixo, médio e alto.</p>
+    <a href="/dashboards/basis-soja-brasil/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="sinais">Alta com fôlego ou repique? Os 3 sinais para acompanhar</h2>
+  <p class="abp-p">Ninguém sabe se a alta continua. Mas é possível saber o que observar.</p>
+  <h3 class="abp-h3">1. Fundos</h3>
+  <p class="abp-p">Fundos vendidos em milho são combustível para alta; fundos ainda comprados em soja são risco de nova liquidação. O relatório COT sai toda sexta-feira e mostra se a recompra está acontecendo.</p>
+  <h3 class="abp-h3">2. Demanda americana</h3>
+  <p class="abp-p">O USDA elevou a exportação de soja apostando na continuidade das compras chinesas. Vendas semanais fortes até o próximo WASDE, em 10 de dezembro, podem reduzir ainda mais o estoque. Se a China desaparecer das vendas, o corte de novembro pode ser revertido.</p>
+  <h3 class="abp-h3">3. Clima na América do Sul</h3>
+  <p class="abp-p">Os 186 milhões de toneladas de soja brasileira já estão no preço. Problemas climáticos entre dezembro e fevereiro mexem mais no mercado do que qualquer revisão americana daqui para frente. Uma safra cheia confirmada, por outro lado, pressiona Chicago e principalmente o basis na colheita.</p>
+  <div class="abp-pullquote">Um repique que devolve um quarto da queda é uma janela para revisar o plano de comercialização, não para decidir no impulso.</div>
+  <p class="abp-p">Na prática, três perguntas ajudam a organizar a decisão: quanto da produção já tem preço definido; qual preço cobre o custo e a margem desejada; e qual seria o impacto no caixa se, na colheita, o basis repetir um ano fraco e a soja ficar perto de R$ 140 no porto. Entre vender tudo e esperar, existem alternativas intermediárias, como fixar parte do volume ou usar opções de venda (puts) para garantir um preço mínimo sem abrir mão de uma eventual alta.</p>
+
+  <div class="abp-cta-box">
+    <h3>Simule um preço mínimo em reais por saca</h3>
+    <p>Puts, collars e travas de alta para soja, milho e dólar, com o resultado em R$/saca em cada cenário.</p>
+    <a href="/simulador-de-opcoes-agricolas/" class="abp-cta-btn">Abrir o simulador <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <p class="abp-p">Para entender como o relatório é produzido e por que ele move os preços, veja o guia <a href="/analises/o-que-e-o-usda-e-como-funciona-o-relatorio-wasde-que-move-soja-milho-e-trigo/" style="color:#1E4812;font-weight:600;">O que é o USDA e como funciona o relatório WASDE</a>. Para os dados de milho, o <a href="/dashboards/usda-milho/" style="color:#1E4812;font-weight:600;">dashboard USDA Milho</a> traz o balanço de todos os países.</p>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item">
+    <summary>O que o relatório do USDA de novembro de 2026 mudou na soja? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">O USDA cortou o estoque final de soja dos EUA na safra 2026/27 de 8,57 para 8,16 milhões de toneladas, enquanto o mercado esperava cerca de 9,04 milhões. A produtividade subiu para um recorde de 59,7 sacas por hectare, mas a exportação foi elevada em 680 mil toneladas, para 46,8 milhões.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Por que a soja subiu em Chicago depois do relatório? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Porque o estoque veio quase 15 milhões de sacas abaixo do esperado, depois de 9 pregões seguidos de queda. Com o mercado posicionado para um número maior, o ajuste foi rápido: a soja janeiro subiu cerca de 40 centavos de dólar por bushel, para perto de US$ 12,28.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Quanto a alta de Chicago e do dólar vale na saca de soja? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Cerca de R$ 7 por saca no dia 10 de novembro de 2026: aproximadamente R$ 4,80 pela alta de 40 centavos em Chicago e R$ 2,20 pela alta do dólar, de R$ 5,51 para cerca de R$ 5,58.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Qual é o preço de referência da soja em Paranaguá para a colheita? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Com os futuros de Chicago e do dólar de 10/11/2026 e o basis médio histórico de Paranaguá (2021 a 2025), a referência fica em cerca de R$ 158 por saca em março e R$ 155 em abril de 2027. Com basis fraco, abril pode chegar perto de R$ 139; com basis forte, R$ 163. É um cálculo referencial, não uma previsão.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O milho americano está com oferta apertada? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Não. Apesar do corte de produtividade para 187,9 sacas por hectare e do estoque final menor, de 44,7 milhões de toneladas, a relação estoque sobre uso ficou em 10,8%, praticamente igual à média dos últimos 5 anos.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Quando sai o próximo relatório WASDE? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">O próximo WASDE e a última estimativa de produção da safra americana de 2026 saem em 10 de dezembro de 2026, às 14h no horário de Brasília.</p>
+  </details>
+
+  <div class="abp-sources">
+    <b>Fontes consultadas para este artigo:</b> USDA WASDE e Crop Production (10/11/2026 e 09/10/2026); USDA PSD Online; USDA NASS Crop Progress (semana até 08/11/2026); CFTC Commitments of Traders (03/11/2026); CME Group/CBOT; B3; Banco Central do Brasil (PTAX); DTN; Pro Farmer; levantamentos de mercado sobre o plantio no Brasil; basis histórico de Paranaguá (AgroBasis).
+  </div>
+
+  <div class="abp-author-box">
+    <div class="abp-author-icon"><i data-lucide="pen-line"></i></div>
+    <div class="abp-author-text"><b>Equipe AgroBasis</b><br>Inteligência de mercado para o agronegócio: dashboards, análises e conteúdo educacional com dados oficiais. Análise de Lucas Jesse · CNPI-P | CFP | Ancord Agro 100.</div>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fonte dos dados: USDA, CFTC, CME Group, B3 e Banco Central. Conteúdo referencial para acompanhamento de mercado, elaborado pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda.
+  </div>
+
+</div>
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); } else { window.addEventListener('load', () => lucide.createIcons()); }
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Relatório USDA de novembro de 2026: estoque de soja dos EUA cai, milho perde produtividade e Chicago reage",
+  "description": "WASDE de novembro/2026: estoque de soja dos EUA cai para 8,16 mi t, milho perde produtividade e a soja sobe 40 centavos. O que muda no preço em reais.",
+  "author": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "datePublished": "2026-11-10",
+  "dateModified": "2026-11-10",
+  "mainEntityOfPage": "https://agrobasis.com.br/analises/usda-novembro-2026-wasde-soja-milho/"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "O que o relatório do USDA de novembro de 2026 mudou na soja?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O USDA cortou o estoque final de soja dos EUA na safra 2026/27 de 8,57 para 8,16 milhões de toneladas, enquanto o mercado esperava cerca de 9,04 milhões. A produtividade subiu para um recorde de 59,7 sacas por hectare, mas a exportação foi elevada em 680 mil toneladas, para 46,8 milhões."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Por que a soja subiu em Chicago depois do relatório?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque o estoque veio quase 15 milhões de sacas abaixo do esperado, depois de 9 pregões seguidos de queda. Com o mercado posicionado para um número maior, o ajuste foi rápido: a soja janeiro subiu cerca de 40 centavos de dólar por bushel, para perto de US$ 12,28."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quanto a alta de Chicago e do dólar vale na saca de soja?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cerca de R$ 7 por saca no dia 10 de novembro de 2026: aproximadamente R$ 4,80 pela alta de 40 centavos em Chicago e R$ 2,20 pela alta do dólar, de R$ 5,51 para cerca de R$ 5,58."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Qual é o preço de referência da soja em Paranaguá para a colheita?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Com os futuros de Chicago e do dólar de 10/11/2026 e o basis médio histórico de Paranaguá (2021 a 2025), a referência fica em cerca de R$ 158 por saca em março e R$ 155 em abril de 2027. Com basis fraco, abril pode chegar perto de R$ 139; com basis forte, R$ 163. É um cálculo referencial, não uma previsão."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O milho americano está com oferta apertada?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Não. Apesar do corte de produtividade para 187,9 sacas por hectare e do estoque final menor, de 44,7 milhões de toneladas, a relação estoque sobre uso ficou em 10,8%, praticamente igual à média dos últimos 5 anos."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quando sai o próximo relatório WASDE?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O próximo WASDE e a última estimativa de produção da safra americana de 2026 saem em 10 de dezembro de 2026, às 14h no horário de Brasília."
+      }
+    }
+  ]
+}
+</script>
