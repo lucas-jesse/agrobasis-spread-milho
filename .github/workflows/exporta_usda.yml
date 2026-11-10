@@ -4,6 +4,8 @@ on:
   schedule:
     # todo dia útil às 17:17 de Brasília; o PSD muda no dia do WASDE e o commit só ocorre se houver mudança
     - cron: '17 20 * * 1-5'
+    # semana do WASDE (dias 8 a 12): de hora em hora das 14h37 às 18h37 de Brasília, para pegar o relatório logo após a divulgação
+    - cron: '37 17-21 8-12 * *'
   workflow_dispatch:
   push:
     paths:
