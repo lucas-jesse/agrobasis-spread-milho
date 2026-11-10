@@ -192,6 +192,22 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
 .sop-g em{ font-style:normal; font-size:11.5px; color:#7a7a7a; line-height:1.4; display:block; }
 .sop-foot{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; font-size:11.5px; color:#9a9a9a; margin-top:6px; }
 .sop-alerta{ display:none; font-size:12.5px; color:#8a5a34; background:#fdf8f4; border:1px solid #ecdccb; border-radius:10px; padding:9px 12px; margin-top:8px; line-height:1.45; }
+.sop-st-row{ display:flex; justify-content:space-between; align-items:center; }
+.sop-st-row em{ font-style:normal; text-transform:none; letter-spacing:0; font-weight:500; color:#9a9a9a; margin-left:4px; }
+.sop-sw{ position:relative; width:42px; height:24px; flex:none; cursor:pointer; }
+.sop-sw input{ opacity:0; width:0; height:0; position:absolute; }
+.sop-sw i{ position:absolute; inset:0; background:#d9dfda; border-radius:999px; transition:.2s; }
+.sop-sw i:before{ content:""; position:absolute; width:18px; height:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; box-shadow:0 1px 2px rgba(0,0,0,.2); }
+.sop-sw input:checked + i{ background:var(--verde-principal); }
+.sop-sw input:checked + i:before{ transform:translateX(18px); }
+.sop-dol-seg{ display:flex; margin:10px 0 14px; }
+.sop-dol-seg button{ flex:1; white-space:normal; padding:8px 8px; }
+.sop-ch h3 small{ font-size:12px; font-weight:500; color:#7a7a7a; margin-left:6px; }
+.sop-mat td,.sop-mat th{ text-align:center !important; }
+.sop-mat th:first-child,.sop-mat td:first-child{ text-align:left !important; }
+.sop-mat td b{ display:block; font-size:13.5px; }
+.sop-mat td span{ display:block; font-size:10.5px; color:#8a8a8a; margin-top:2px; }
+.sop-mat td.cel{ border:2px solid #fff; border-radius:8px; }
 @media (max-width:760px){
   .sop-grid3{ grid-template-columns:1fr 1fr; }
   .sop-estr{ grid-template-columns:1fr 1fr; }
@@ -203,6 +219,7 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
   .sop-leg .sop-out{ grid-column:2 / -1; padding-bottom:6px; order:3; }
 }
 @media (max-width:480px){
+  .sop-mat td b{ font-size:12px; } .sop-mat td span{ display:none; } .sop-mat td,.sop-mat th{ padding:7px 3px; }
   .sop-grid,.sop-grid3{ grid-template-columns:1fr 1fr; }
   .sop-k b{ font-size:18px; }
   .sop-chart{ height:330px; }
@@ -247,8 +264,26 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
       <div class="sop-legs-head"><span>Pernas</span><button type="button" class="sop-mini" id="sopAdd"><i data-lucide="plus"></i> Adicionar perna</button></div>
       <div id="sopLegs"></div>
       <p class="sop-hint" id="sopLegHint">&nbsp;</p>
-      <button type="button" class="sop-btn" id="sopVer"><i data-lucide="bar-chart-3"></i> Ver resultado</button>
     </div>
+
+    <div class="sop-box" id="sopDolBox" style="display:none;">
+      <div class="sop-st sop-st-row"><span>3. Proteger também o dólar <em>opcional</em></span>
+        <label class="sop-sw"><input type="checkbox" id="sopDolOn"><i></i></label></div>
+      <p class="sop-hint" id="sopDolIntro">A soja da CBOT é vendida em dólar. Com uma opção de dólar da B3 junto, o piso passa a valer em reais por saca, protegendo Chicago e o câmbio ao mesmo tempo.</p>
+      <div id="sopDolCampos" style="display:none;">
+        <div class="sop-seg sop-dol-seg" id="sopDolEstr"><button data-d="put" aria-pressed="true">Put de dólar · câmbio mínimo</button><button data-d="collar">Collar de dólar · mínimo e máximo</button></div>
+        <div class="sop-grid sop-grid3">
+          <div class="sop-f"><label for="sopDolCod">Vencimento do dólar</label><select id="sopDolCod"></select><span class="sop-hint" id="sopDolFh">&nbsp;</span></div>
+          <div class="sop-f"><label for="sopDolK1">Strike da put (R$/US$)</label><input id="sopDolK1" inputmode="decimal"><span class="sop-hint">câmbio mínimo antes do prêmio</span></div>
+          <div class="sop-f" id="sopDolK2box" style="display:none;"><label for="sopDolK2">Strike da call vendida</label><input id="sopDolK2" inputmode="decimal"><span class="sop-hint">acima disso, o câmbio fica com o comprador</span></div>
+          <div class="sop-f"><label for="sopDolVol">Volatilidade %</label><input id="sopDolVol" inputmode="decimal" value="13,0"><span class="sop-hint">&nbsp;</span></div>
+          <div class="sop-f"><label for="sopDolN">Minicontratos (US$ 10 mil)</label><input id="sopDolN" inputmode="numeric"><span class="sop-hint" id="sopDolNh">&nbsp;</span></div>
+          <div class="sop-f"><label for="sopDolPm">Prêmio de mercado da put</label><input id="sopDolPm" inputmode="decimal" placeholder="opcional, R$/US$"><span class="sop-hint" id="sopDolPmH">&nbsp;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="sop-btn" id="sopVer"><i data-lucide="bar-chart-3"></i> Ver resultado</button>
 
     <div class="sop-gate" id="sopGate" style="display:none;">
       <div class="sop-gate-ic"><i data-lucide="check-circle-2"></i></div>
@@ -282,6 +317,12 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
         <p class="sop-cap" id="sopCap1"></p>
       </div>
 
+      <div class="sop-card" id="sopComb" style="display:none;">
+        <div class="sop-ch"><h3>Soja e dólar juntos <small id="sopCombSub"></small></h3></div>
+        <div class="sop-tab-wrap"><table class="sop-tab sop-mat" id="sopMat"></table></div>
+        <p class="sop-cap" id="sopCombCap"></p>
+      </div>
+
       <div class="sop-card">
         <div class="sop-ch"><h3>Cenários no vencimento</h3></div>
         <div class="sop-tab-wrap"><table class="sop-tab" id="sopCen"></table></div>
@@ -300,6 +341,7 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
     <li>Escolha o ativo e o vencimento. Preço do futuro, data de vencimento da opção, dólar e juros já vêm preenchidos com o fechamento mais recente, e todos podem ser editados.</li>
     <li>Informe quantas sacas quer proteger. O simulador sugere o número de contratos: 5.000 bushels (cerca de 2.268 sacas de soja) na CBOT e 450 sacas no milho da B3.</li>
     <li>Escolha uma estratégia pronta ou monte até 4 pernas. Se tiver o prêmio de tela da corretora, digite no campo "prêmio de mercado": o simulador usa esse valor e calcula a volatilidade implícita.</li>
+    <li>Na soja, no milho e no trigo da CBOT, ligue "Proteger também o dólar" para somar uma opção de dólar da B3 e ver o piso em reais com Chicago e câmbio protegidos.</li>
     <li>Clique em "Ver resultado" para ver o custo em reais por saca, o preço mínimo (ou máximo) garantido, o gráfico no vencimento e os cenários.</li>
   </ol>
 
@@ -320,6 +362,7 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
   <details class="abp-faq-item"><summary>De onde vêm o preço do futuro, o vencimento e o dólar? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">São preenchidos com o fechamento mais recente coletado pelo AgroBasis: curva da soja na CBOT, milho e trigo da CBOT, milho da B3 e dólar futuro da B3. A data de vencimento da opção segue a regra de cada bolsa. Todos os campos podem ser editados.</p></details>
   <details class="abp-faq-item"><summary>Quando vence a opção de soja da CBOT? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">Na última sexta-feira que antecede, em pelo menos dois dias úteis, o último dia útil do mês anterior ao do contrato. A opção de janeiro, por exemplo, vence no fim de dezembro. Na B3, a opção de milho vence no dia 15 do mês do contrato. O simulador calcula a data, mas vale conferir no calendário da bolsa por causa dos feriados.</p></details>
   <details class="abp-faq-item"><summary>Como funciona a opção de dólar? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">É a opção da B3 sobre a taxa de câmbio (PTAX), com prêmio cotado em reais por US$ 1.000 e vencimento no primeiro dia útil do mês. O simulador usa o minicontrato, de US$ 10 mil, e precifica contra o dólar futuro do mesmo vencimento. Uma put de dólar garante um câmbio mínimo para quem vai receber em dólar, como o produtor que vendeu soja para exportação; uma call garante um câmbio máximo para quem vai pagar em dólar, como na compra de insumos.</p></details>
+  <details class="abp-faq-item"><summary>Dá para proteger a soja e o dólar ao mesmo tempo? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">Sim. Com soja, milho ou trigo da CBOT, ligue a opção Proteger também o dólar: o simulador soma uma put (ou um collar) de dólar da B3, sugere o número de minicontratos pela receita estimada em dólar e calcula o piso combinado em reais por saca. A tabela Soja e dólar juntos mostra o preço com e sem proteção para cada combinação de Chicago e câmbio.</p></details>
   <details class="abp-faq-item"><summary>Preciso informar a volatilidade? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">Ela já vem com um valor típico para cada produto. Se você tiver o prêmio de tela da corretora, digite no campo prêmio de mercado: o simulador passa a usar esse prêmio e calcula a volatilidade implícita, que é a forma mais fiel de refletir o mercado do dia.</p></details>
   <details class="abp-faq-item"><summary>O que é o preço mínimo garantido? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">É o menor preço que a combinação de futuro com opções entrega no vencimento. Numa put de proteção, é o strike menos o prêmio pago. No collar, existe também um preço máximo, porque a call vendida entrega a alta acima do strike dela. O valor não inclui o basis da sua praça nem custos de corretagem.</p></details>
   <details class="abp-faq-item"><summary>Qual a diferença entre o gráfico no vencimento e o de hoje? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">No vencimento, a opção vale só o que estiver dentro do dinheiro. Hoje, ela ainda tem valor de tempo, que depende do prazo e da volatilidade. A linha tracejada mostra quanto a posição valeria se o futuro mudasse agora.</p></details>
@@ -340,7 +383,7 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
   </div>
 
 </div></div>
-<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Por que as opções de soja aparecem em dólares por bushel?", "acceptedAnswer": {"@type": "Answer", "text": "Porque é assim que a CBOT negocia: futuro, strike e prêmio em dólares (ou centavos) por bushel, num contrato de 5.000 bushels. Usar a mesma unidade da tela da corretora evita erro na hora de comparar. O simulador converte o resultado para reais por saca de 60 kg com o dólar futuro da data de vencimento."}}, {"@type": "Question", "name": "De onde vêm o preço do futuro, o vencimento e o dólar?", "acceptedAnswer": {"@type": "Answer", "text": "São preenchidos com o fechamento mais recente coletado pelo AgroBasis: curva da soja na CBOT, milho e trigo da CBOT, milho da B3 e dólar futuro da B3. A data de vencimento da opção segue a regra de cada bolsa. Todos os campos podem ser editados."}}, {"@type": "Question", "name": "Quando vence a opção de soja da CBOT?", "acceptedAnswer": {"@type": "Answer", "text": "Na última sexta-feira que antecede, em pelo menos dois dias úteis, o último dia útil do mês anterior ao do contrato. A opção de janeiro, por exemplo, vence no fim de dezembro. Na B3, a opção de milho vence no dia 15 do mês do contrato. O simulador calcula a data, mas vale conferir no calendário da bolsa por causa dos feriados."}}, {"@type": "Question", "name": "Como funciona a opção de dólar?", "acceptedAnswer": {"@type": "Answer", "text": "É a opção da B3 sobre a taxa de câmbio (PTAX), com prêmio cotado em reais por US$ 1.000 e vencimento no primeiro dia útil do mês. O simulador usa o minicontrato, de US$ 10 mil, e precifica contra o dólar futuro do mesmo vencimento. Uma put de dólar garante um câmbio mínimo para quem vai receber em dólar, como o produtor que vendeu soja para exportação; uma call garante um câmbio máximo para quem vai pagar em dólar, como na compra de insumos."}}, {"@type": "Question", "name": "Preciso informar a volatilidade?", "acceptedAnswer": {"@type": "Answer", "text": "Ela já vem com um valor típico para cada produto. Se você tiver o prêmio de tela da corretora, digite no campo prêmio de mercado: o simulador passa a usar esse prêmio e calcula a volatilidade implícita, que é a forma mais fiel de refletir o mercado do dia."}}, {"@type": "Question", "name": "O que é o preço mínimo garantido?", "acceptedAnswer": {"@type": "Answer", "text": "É o menor preço que a combinação de futuro com opções entrega no vencimento. Numa put de proteção, é o strike menos o prêmio pago. No collar, existe também um preço máximo, porque a call vendida entrega a alta acima do strike dela. O valor não inclui o basis da sua praça nem custos de corretagem."}}, {"@type": "Question", "name": "Qual a diferença entre o gráfico no vencimento e o de hoje?", "acceptedAnswer": {"@type": "Answer", "text": "No vencimento, a opção vale só o que estiver dentro do dinheiro. Hoje, ela ainda tem valor de tempo, que depende do prazo e da volatilidade. A linha tracejada mostra quanto a posição valeria se o futuro mudasse agora."}}, {"@type": "Question", "name": "Por que preciso informar meus dados para ver o resultado?", "acceptedAnswer": {"@type": "Answer", "text": "O cadastro é pedido uma única vez por aparelho, na hora de ver o resultado. Ele permite que a equipe AgroBasis acompanhe quem usa as ferramentas do site e, quando fizer sentido, ofereça conteúdo e contato relevantes."}}, {"@type": "Question", "name": "O resultado é uma recomendação?", "acceptedAnswer": {"@type": "Answer", "text": "Não. É uma simulação educacional com base nos números informados e nos preços de fechamento. Não constitui recomendação de investimento, compra ou venda. Decisões de hedge devem considerar a operação completa e a orientação de um profissional qualificado."}}]}, {"@type": "SoftwareApplication", "name": "Simulador de Opções Agrícolas · AgroBasis", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/simulador-de-opcoes-agricolas/", "description": "Simulador de opções sobre futuros agrícolas da CBOT (soja, milho e trigo em US$/bushel) e da B3 (milho, boi gordo, café e dólar) pelo modelo Black-76, com preço mínimo garantido em R$ por saca, gráfico no vencimento, cenários e gregas.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Por que as opções de soja aparecem em dólares por bushel?", "acceptedAnswer": {"@type": "Answer", "text": "Porque é assim que a CBOT negocia: futuro, strike e prêmio em dólares (ou centavos) por bushel, num contrato de 5.000 bushels. Usar a mesma unidade da tela da corretora evita erro na hora de comparar. O simulador converte o resultado para reais por saca de 60 kg com o dólar futuro da data de vencimento."}}, {"@type": "Question", "name": "De onde vêm o preço do futuro, o vencimento e o dólar?", "acceptedAnswer": {"@type": "Answer", "text": "São preenchidos com o fechamento mais recente coletado pelo AgroBasis: curva da soja na CBOT, milho e trigo da CBOT, milho da B3 e dólar futuro da B3. A data de vencimento da opção segue a regra de cada bolsa. Todos os campos podem ser editados."}}, {"@type": "Question", "name": "Quando vence a opção de soja da CBOT?", "acceptedAnswer": {"@type": "Answer", "text": "Na última sexta-feira que antecede, em pelo menos dois dias úteis, o último dia útil do mês anterior ao do contrato. A opção de janeiro, por exemplo, vence no fim de dezembro. Na B3, a opção de milho vence no dia 15 do mês do contrato. O simulador calcula a data, mas vale conferir no calendário da bolsa por causa dos feriados."}}, {"@type": "Question", "name": "Como funciona a opção de dólar?", "acceptedAnswer": {"@type": "Answer", "text": "É a opção da B3 sobre a taxa de câmbio (PTAX), com prêmio cotado em reais por US$ 1.000 e vencimento no primeiro dia útil do mês. O simulador usa o minicontrato, de US$ 10 mil, e precifica contra o dólar futuro do mesmo vencimento. Uma put de dólar garante um câmbio mínimo para quem vai receber em dólar, como o produtor que vendeu soja para exportação; uma call garante um câmbio máximo para quem vai pagar em dólar, como na compra de insumos."}}, {"@type": "Question", "name": "Dá para proteger a soja e o dólar ao mesmo tempo?", "acceptedAnswer": {"@type": "Answer", "text": "Sim. Com soja, milho ou trigo da CBOT, ligue a opção Proteger também o dólar: o simulador soma uma put (ou um collar) de dólar da B3, sugere o número de minicontratos pela receita estimada em dólar e calcula o piso combinado em reais por saca. A tabela Soja e dólar juntos mostra o preço com e sem proteção para cada combinação de Chicago e câmbio."}}, {"@type": "Question", "name": "Preciso informar a volatilidade?", "acceptedAnswer": {"@type": "Answer", "text": "Ela já vem com um valor típico para cada produto. Se você tiver o prêmio de tela da corretora, digite no campo prêmio de mercado: o simulador passa a usar esse prêmio e calcula a volatilidade implícita, que é a forma mais fiel de refletir o mercado do dia."}}, {"@type": "Question", "name": "O que é o preço mínimo garantido?", "acceptedAnswer": {"@type": "Answer", "text": "É o menor preço que a combinação de futuro com opções entrega no vencimento. Numa put de proteção, é o strike menos o prêmio pago. No collar, existe também um preço máximo, porque a call vendida entrega a alta acima do strike dela. O valor não inclui o basis da sua praça nem custos de corretagem."}}, {"@type": "Question", "name": "Qual a diferença entre o gráfico no vencimento e o de hoje?", "acceptedAnswer": {"@type": "Answer", "text": "No vencimento, a opção vale só o que estiver dentro do dinheiro. Hoje, ela ainda tem valor de tempo, que depende do prazo e da volatilidade. A linha tracejada mostra quanto a posição valeria se o futuro mudasse agora."}}, {"@type": "Question", "name": "Por que preciso informar meus dados para ver o resultado?", "acceptedAnswer": {"@type": "Answer", "text": "O cadastro é pedido uma única vez por aparelho, na hora de ver o resultado. Ele permite que a equipe AgroBasis acompanhe quem usa as ferramentas do site e, quando fizer sentido, ofereça conteúdo e contato relevantes."}}, {"@type": "Question", "name": "O resultado é uma recomendação?", "acceptedAnswer": {"@type": "Answer", "text": "Não. É uma simulação educacional com base nos números informados e nos preços de fechamento. Não constitui recomendação de investimento, compra ou venda. Decisões de hedge devem considerar a operação completa e a orientação de um profissional qualificado."}}]}, {"@type": "SoftwareApplication", "name": "Simulador de Opções Agrícolas · AgroBasis", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/simulador-de-opcoes-agricolas/", "description": "Simulador de opções sobre futuros agrícolas da CBOT (soja, milho e trigo em US$/bushel) e da B3 (milho, boi gordo, café e dólar) pelo modelo Black-76, com preço mínimo garantido em R$ por saca, gráfico no vencimento, cenários e gregas.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
 <script>
 (function () {
   "use strict";
@@ -372,6 +415,7 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
   ];
   var GATE = { url: "https://docs.google.com/forms/d/e/1FAIpQLSdEFj2pbF7hSAq-DSDvFjIHa73OV7rh46ao84jJJCmX-nsqfw/formResponse", nome: "entry.761004068", cidade: "entry.721602119", tel: "entry.1189307774", prof: "entry.1630365227", chave: "agrobasis_simulador_opcoes_acesso_liberado" };
 
+  var DS = { on: false, estr: "put", lista: [] };
   var D = {}, A = ATIVOS[0], CONTRATOS = [], st = { estr: "put", un: "saca", legs: [], liberado: false, mostrar: false }, charts = [];
   var $ = function (id) { return document.getElementById(id); };
 
@@ -521,6 +565,44 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
       totalMoeda: custoU * nBase * A.tam, dl: dl, gm: gm, th: th, ve: ve, perdaMax: perdaIlim ? null : minP, ganhoIlim: ganhoIlim, sacas: nBase * A.tam / A.fator };
   }
 
+  // ---------------- proteção do dólar junto com a CBOT ----------------
+  function arredDol(x) { return +(Math.round(x / 0.05) * 0.05).toFixed(2); }
+  function dolLista() {
+    var hoje = Date.now(), out = [];
+    if (D.soja && D.soja.dolar) Object.keys(D.soja.dolar).forEach(function (k) { var x = D.soja.dolar[k], v = new Date(Date.parse(x.vencimento + "T00:00:00Z")), l = k.charAt(k.length - 3); if (v.getTime() > hoje) out.push({ cod: k, rot: rotulo(2000 + +k.slice(-2), LETRA[l]), F: x.brl, venc: v }); });
+    return out.sort(function (a, b) { return a.venc - b.venc; });
+  }
+  function exposicaoUSD() { var E = entradas(); return E.vol > 0 && E.F > 0 ? E.vol * A.fator * E.F : NaN; }
+  // escolhe o vencimento do dólar logo depois do vencimento da opção de soja e sugere strikes e contratos
+  function preencherDolar() {
+    if (A.bolsa !== "CBOT") return;
+    DS.lista = dolLista();
+    var sel = $("sopDolCod"); sel.innerHTML = "";
+    DS.lista.forEach(function (c, i) { sel.appendChild(new Option(c.rot + " · " + c.cod + " · vence " + dataBR(c.venc), i)); });
+    var vs = Date.parse($("sopVenc").value + "T00:00:00Z"), idx = 0;
+    for (var i = 0; i < DS.lista.length; i++) if (DS.lista[i].venc.getTime() >= vs) { idx = i; break; }
+    sel.value = idx; dolContrato();
+  }
+  function dolContrato() {
+    var c = DS.lista[+$("sopDolCod").value]; if (!c) return;
+    $("sopDolFh").textContent = "dólar futuro R$ " + br(c.F, 4);
+    $("sopDolK1").value = brIn(arredDol(c.F), 2); $("sopDolK2").value = brIn(arredDol(c.F * 1.07), 2);
+    dolQtd();
+  }
+  function dolQtd() { var u = exposicaoUSD(); if (isFinite(u)) $("sopDolN").value = Math.max(1, Math.round(u / 10000)); }
+  function calcDol() {
+    if (!DS.on || A.bolsa !== "CBOT") return null;
+    var c = DS.lista[+$("sopDolCod").value]; if (!c) return null;
+    var hoje = Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), T = Math.max(0, (c.venc - hoje) / DIA / 365);
+    var r = (D.cambio && D.cambio.selic && D.cambio.selic.meta_aa || 13.75) / 100, K1 = num($("sopDolK1").value), K2 = num($("sopDolK2").value), vol = num($("sopDolVol").value) / 100, n = Math.round(num($("sopDolN").value)), pm = num($("sopDolPm").value);
+    var collar = DS.estr === "collar";
+    if (!(K1 > 0) || !(vol > 0) || !(n > 0) || (collar && !(K2 > K1))) return null;
+    var iv = pm > 0 ? volImp(pm, c.F, K1, T, r, "p") : null;
+    var p1 = pm > 0 ? pm : b76(c.F, K1, vol, T, r, "p").v, p2 = collar ? b76(c.F, K2, vol, T, r, "c").v : 0, custo = p1 - p2;
+    return { c: c, F: c.F, K1: K1, K2: collar ? K2 : null, collar: collar, p1: p1, p2: p2, iv: iv, custo: custo, Q: n * 10000, n: n,
+      pd: function (X) { return Math.max(K1 - X, 0) - (collar ? Math.max(X - K2, 0) : 0) - custo; } };
+  }
+
   // ---------------- interface: atualização ----------------
   var DOL = function () { return A.id === "dolar"; };
   function qtd(v) { return A.fis === "US$" ? "US$ " + br(v, 0) : br(v, 0) + " " + (A.fis === "arroba" ? "arrobas" : "sacas"); }
@@ -535,6 +617,12 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
     $("sopVolHint").textContent = isFinite(E.vol) && E.vol > 0 ? "≈ " + br(E.vol / porC, 2) + " contrato(s) de " + qtd(porC) + (DOL() ? " (minicontrato)" : "") : " ";
     $("sopVhint").textContent = isFinite(E.dias) ? (E.dias >= 0 ? E.dias + " dias até o vencimento" : "data já passou") : " ";
     var R = calcular();
+    $("sopDolBox").style.display = A.bolsa === "CBOT" ? "" : "none";
+    if (A.bolsa === "CBOT" && DS.on) {
+      var u = exposicaoUSD(), Dl = calcDol();
+      $("sopDolNh").textContent = isFinite(u) ? "receita estimada de US$ " + br(u, 0) : " ";
+      $("sopDolPmH").textContent = Dl ? (Dl.iv ? "vol. implícita " + br(Dl.iv * 100, 1) + "% · " : "") + "put teórica R$ " + br(b76(Dl.F, Dl.K1, num($("sopDolVol").value) / 100, Math.max(0, (Dl.c.venc - Date.now()) / DIA / 365), (D.cambio && D.cambio.selic && D.cambio.selic.meta_aa || 13.75) / 100, "p").v * 1000, 2) + " por US$ 1.000" : " ";
+    }
     st.legs.forEach(function (l, i) {
       var o = $("sopOut" + i); if (!o) return;
       var x = R && R.legs[i];
@@ -566,6 +654,30 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
     else k.push(["Equilíbrio", R.be.length ? R.be.map(function (b) { return br(b, A.bolsa === "CBOT" ? 2 : A.dec); }).join(" e ") : "-", "futuro no vencimento, " + A.un]);
     if (R.lado === "vende" && R.teto != null) k.push([DOL() ? "Dólar máximo" : "Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", "a alta acima do strike vendido fica com o comprador"]);
     else k.push(["Perda máxima", R.perdaMax == null ? "ilimitada" : "R$ " + br(Math.abs(R.perdaMax * R.nBase * A.tam * (A.usd ? E.fx : 1)), 0), R.perdaMax == null ? "há venda de opção descoberta" : "no vencimento, na pior hipótese"]);
+    var Dl = calcDol(), comb = null;
+    if (Dl && R.lado === "vende") {
+      var sc = R.sacas, rec = function (F, X) { return R.efetivo(F) * A.fator * X + Dl.pd(X) * Dl.Q / sc; };
+      var piso = Infinity;
+      for (var a = 0; a <= 50; a++) for (var b = 0; b <= 50; b++) { var v = rec(E.F * (0.4 + 1.2 * a / 50), Dl.F * (0.6 + 0.9 * b / 50)); if (v < piso) piso = v; }
+      var cDol = Dl.custo * Dl.Q / sc;
+      comb = { rec: rec, piso: piso, cDol: cDol };
+      k[0] = ["Custo por saca", "R$ " + br(cfis + cDol, 2) + "<small>" + uf + "</small>", "soja R$ " + br(cfis, 2) + " + dólar R$ " + br(cDol, 2)];
+      k[1] = ["Custo total", "R$ " + br(tot + Dl.custo * Dl.Q, 0), "soja R$ " + br(tot, 0) + " · dólar R$ " + br(Dl.custo * Dl.Q, 0) + " (" + Dl.n + " mini)"];
+      if (k[2] && /Preço mínimo/.test(k[2][0])) k[2][2] = "se o dólar ficar em R$ " + br(E.fx, 4);
+      k[3] = ["Piso soja + dólar", "R$ " + br(piso, 2) + "<small>" + uf + "</small>", "com Chicago e câmbio protegidos"];
+      $("sopVeredito").innerHTML = '<i data-lucide="shield-check"></i><div><b>Piso de R$ ' + br(piso, 2) + uf + " protegendo Chicago e o dólar.</b> A put de soja garante US$ " + br(R.piso, 4) + "/bu e a " + (Dl.collar ? "trava" : "put") + " de dólar garante câmbio mínimo de R$ " + br(Dl.K1 - Dl.custo, 4) + (Dl.collar ? " (máximo de R$ " + br(Dl.K2 - Dl.custo, 4) + ")" : "") + ". Custo total de R$ " + br(cfis + cDol, 2) + uf + ".</div>";
+    }
+    $("sopComb").style.display = comb ? "" : "none";
+    if (comb) {
+      var pctS = [-20, -10, 0, 10, 20], pctD = [-10, -5, 0, 5, 10], vals = [];
+      pctS.forEach(function (ps) { pctD.forEach(function (pd) { vals.push(comb.rec(E.F * (1 + ps / 100), Dl.F * (1 + pd / 100))); }); });
+      var vmin = Math.min.apply(null, vals), vmax = Math.max.apply(null, vals);
+      $("sopCombSub").textContent = "R$/sc no vencimento";
+      $("sopMat").innerHTML = "<thead><tr><th>Soja \\ dólar</th>" + pctD.map(function (pd) { return "<th>" + (pd === 0 ? "R$ " + br(Dl.F, 2) : (pd > 0 ? "+" : "−") + Math.abs(pd) + "%<br><span style=\"font-weight:500\">R$ " + br(Dl.F * (1 + pd / 100), 2) + "</span>") + "</th>"; }).join("") + "</tr></thead><tbody>" +
+        pctS.map(function (ps) { var F = E.F * (1 + ps / 100); return "<tr" + (ps === 0 ? ' class="atual"' : "") + "><td>" + (ps === 0 ? "Hoje" : (ps > 0 ? "+" : "−") + Math.abs(ps) + "%") + "<br><span style=\"color:#8a8a8a;font-size:11px\">US$ " + br(F, 2) + "</span></td>" +
+          pctD.map(function (pd) { var X = Dl.F * (1 + pd / 100), v = comb.rec(F, X), sem = F * A.fator * X, al = vmax > vmin ? (v - vmin) / (vmax - vmin) : 0.5; return '<td class="cel" style="background:rgba(84,147,27,' + (0.06 + al * 0.3).toFixed(3) + ')"><b>' + br(v, 2) + "</b><span>sem: " + br(sem, 2) + "</span></td>"; }).join("") + "</tr>"; }).join("") + "</tbody>";
+      $("sopCombCap").textContent = "Cada célula mostra o preço em R$/saca com a put de soja e a " + (Dl.collar ? "trava" : "put") + " de dólar, já descontados os prêmios, e embaixo o valor sem proteção. Soja na CBOT no vencimento da opção; dólar no vencimento " + Dl.c.rot + ". Cobertura de US$ " + br(Dl.Q, 0) + " para " + br(R.sacas, 0) + " sacas. Não inclui basis e corretagem.";
+    }
     $("sopKpis").innerHTML = k.map(function (x) { return '<div class="sop-k"><span>' + x[0] + "</span><b>" + x[1] + "</b><em>" + x[2] + "</em></div>"; }).join("");
     // gregas
     var porC = A.tam / A.fator, mo = A.usd ? E.fx : 1;
@@ -589,6 +701,7 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
     charts[0].setOption(g0(R), true); charts[1].setOption(g1(R), true);
     $("sopCap0").textContent = R.lado ? (DOL() ? "Linha cinza: o dólar sem proteção. Linha verde: o dólar somado ao resultado das opções. Não inclui corretagem." : "Linha cinza: o preço acompanhando o futuro, sem proteção. Linha verde: o mesmo preço somado ao resultado das opções. Não inclui basis, corretagem e custos de margem.") + (A.usd ? " Conversão com dólar de R$ " + br(E.fx, 4) + "." : "") : "Estratégia sem lado de proteção definido: o gráfico mostra o resultado das opções.";
     $("sopCap1").textContent = "Resultado das opções por " + A.fis + ", já descontado o prêmio. Linha cheia: no vencimento. Tracejada: hoje, com o prazo e a volatilidade atuais.";
+    if (comb) $("sopCap0").textContent += " O gráfico considera o dólar fixo; a tabela Soja e dólar juntos mostra o efeito da proteção cambial.";
     if (window.lucide) lucide.createIcons();
   }
 
@@ -679,6 +792,7 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
       $("sopFx").value = brIn(fx, 4); $("sopFx").dataset.auto = "1";
       $("sopFxHint").textContent = "dólar futuro da B3 na data, pode editar";
     }
+    if (A.bolsa === "CBOT") preencherDolar();
     aplicarEstrategia(st.estr);
   }
 
@@ -713,13 +827,17 @@ Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total"
     $("sopContrato").addEventListener("change", escolherContrato);
     ["sopF", "sopVenc", "sopR", "sopFx", "sopVol"].forEach(function (id) { $(id).addEventListener("input", function () { this.dataset.auto = "0"; atualizar(); }); });
     $("sopVenc").addEventListener("change", function () { if (A.usd && $("sopFx").dataset.auto === "1") { $("sopFx").value = brIn(dolarEm(Date.parse(this.value + "T00:00:00Z")), 4); } atualizar(); });
-    $("sopVol").addEventListener("change", function () { var E = entradas(); if (E.vol > 0) { var n = contratosSugeridos(E.vol); st.legs.forEach(function (l) { l.n = n; }); desenharPernas(); atualizar(); } });
+    $("sopVol").addEventListener("change", function () { var E = entradas(); if (E.vol > 0) { var n = contratosSugeridos(E.vol); st.legs.forEach(function (l) { l.n = n; }); if (DS.on) dolQtd(); desenharPernas(); atualizar(); } });
     $("sopLegs").addEventListener("input", function (e) { var el = e.target, row = el.closest(".sop-leg"); if (!row) return; var l = st.legs[+row.dataset.i], k = el.dataset.k; l[k] = k === "tipo" ? el.value : k === "n" ? Math.max(0, Math.round(num(el.value))) : num(el.value); atualizar(); });
     $("sopLegs").addEventListener("change", function (e) { if (e.target.dataset.k === "tipo") { st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); atualizar(); } });
     $("sopLegs").addEventListener("click", function (e) { var b = e.target.closest("[data-del]"); if (!b) return; st.legs.splice(+b.dataset.del, 1); st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (x) { x.setAttribute("aria-pressed", "false"); }); desenharPernas(); atualizar(); });
     $("sopAdd").addEventListener("click", function () { if (st.legs.length >= 4) return; var E = entradas(); st.legs.push({ tipo: "cp", K: isFinite(E.F) ? arred(E.F) : NaN, vol: A.vol, n: st.legs[0] ? st.legs[0].n : 1, pm: NaN }); st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (x) { x.setAttribute("aria-pressed", "false"); }); desenharPernas(); atualizar(); });
     $("sopUn").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.un = b.dataset.u; atualizar(); });
     $("sopVer").addEventListener("click", verResultado);
+    $("sopDolOn").addEventListener("change", function () { DS.on = this.checked; $("sopDolCampos").style.display = DS.on ? "" : "none"; if (DS.on) { preencherDolar(); if (st.estr !== "put" && st.estr !== "collar" && st.estr !== "putspread") aplicarEstrategia("put"); } atualizar(); });
+    $("sopDolEstr").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; DS.estr = b.dataset.d; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); $("sopDolK2box").style.display = DS.estr === "collar" ? "" : "none"; atualizar(); });
+    $("sopDolCod").addEventListener("change", function () { dolContrato(); atualizar(); });
+    ["sopDolK1", "sopDolK2", "sopDolVol", "sopDolN", "sopDolPm"].forEach(function (id) { $(id).addEventListener("input", atualizar); });
     $("sopGBtn").addEventListener("click", enviarGate);
     document.querySelectorAll("#abp-ferramenta .sop-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
     var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (st.mostrar && st.liberado) atualizar(); }, 150); });

@@ -28,6 +28,7 @@
   ];
   var GATE = { url: "https://docs.google.com/forms/d/e/1FAIpQLSdEFj2pbF7hSAq-DSDvFjIHa73OV7rh46ao84jJJCmX-nsqfw/formResponse", nome: "entry.761004068", cidade: "entry.721602119", tel: "entry.1189307774", prof: "entry.1630365227", chave: "agrobasis_simulador_opcoes_acesso_liberado" };
 
+  var DS = { on: false, estr: "put", lista: [] };
   var D = {}, A = ATIVOS[0], CONTRATOS = [], st = { estr: "put", un: "saca", legs: [], liberado: false, mostrar: false }, charts = [];
   var $ = function (id) { return document.getElementById(id); };
 
@@ -177,6 +178,44 @@
       totalMoeda: custoU * nBase * A.tam, dl: dl, gm: gm, th: th, ve: ve, perdaMax: perdaIlim ? null : minP, ganhoIlim: ganhoIlim, sacas: nBase * A.tam / A.fator };
   }
 
+  // ---------------- proteção do dólar junto com a CBOT ----------------
+  function arredDol(x) { return +(Math.round(x / 0.05) * 0.05).toFixed(2); }
+  function dolLista() {
+    var hoje = Date.now(), out = [];
+    if (D.soja && D.soja.dolar) Object.keys(D.soja.dolar).forEach(function (k) { var x = D.soja.dolar[k], v = new Date(Date.parse(x.vencimento + "T00:00:00Z")), l = k.charAt(k.length - 3); if (v.getTime() > hoje) out.push({ cod: k, rot: rotulo(2000 + +k.slice(-2), LETRA[l]), F: x.brl, venc: v }); });
+    return out.sort(function (a, b) { return a.venc - b.venc; });
+  }
+  function exposicaoUSD() { var E = entradas(); return E.vol > 0 && E.F > 0 ? E.vol * A.fator * E.F : NaN; }
+  // escolhe o vencimento do dólar logo depois do vencimento da opção de soja e sugere strikes e contratos
+  function preencherDolar() {
+    if (A.bolsa !== "CBOT") return;
+    DS.lista = dolLista();
+    var sel = $("sopDolCod"); sel.innerHTML = "";
+    DS.lista.forEach(function (c, i) { sel.appendChild(new Option(c.rot + " · " + c.cod + " · vence " + dataBR(c.venc), i)); });
+    var vs = Date.parse($("sopVenc").value + "T00:00:00Z"), idx = 0;
+    for (var i = 0; i < DS.lista.length; i++) if (DS.lista[i].venc.getTime() >= vs) { idx = i; break; }
+    sel.value = idx; dolContrato();
+  }
+  function dolContrato() {
+    var c = DS.lista[+$("sopDolCod").value]; if (!c) return;
+    $("sopDolFh").textContent = "dólar futuro R$ " + br(c.F, 4);
+    $("sopDolK1").value = brIn(arredDol(c.F), 2); $("sopDolK2").value = brIn(arredDol(c.F * 1.07), 2);
+    dolQtd();
+  }
+  function dolQtd() { var u = exposicaoUSD(); if (isFinite(u)) $("sopDolN").value = Math.max(1, Math.round(u / 10000)); }
+  function calcDol() {
+    if (!DS.on || A.bolsa !== "CBOT") return null;
+    var c = DS.lista[+$("sopDolCod").value]; if (!c) return null;
+    var hoje = Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), T = Math.max(0, (c.venc - hoje) / DIA / 365);
+    var r = (D.cambio && D.cambio.selic && D.cambio.selic.meta_aa || 13.75) / 100, K1 = num($("sopDolK1").value), K2 = num($("sopDolK2").value), vol = num($("sopDolVol").value) / 100, n = Math.round(num($("sopDolN").value)), pm = num($("sopDolPm").value);
+    var collar = DS.estr === "collar";
+    if (!(K1 > 0) || !(vol > 0) || !(n > 0) || (collar && !(K2 > K1))) return null;
+    var iv = pm > 0 ? volImp(pm, c.F, K1, T, r, "p") : null;
+    var p1 = pm > 0 ? pm : b76(c.F, K1, vol, T, r, "p").v, p2 = collar ? b76(c.F, K2, vol, T, r, "c").v : 0, custo = p1 - p2;
+    return { c: c, F: c.F, K1: K1, K2: collar ? K2 : null, collar: collar, p1: p1, p2: p2, iv: iv, custo: custo, Q: n * 10000, n: n,
+      pd: function (X) { return Math.max(K1 - X, 0) - (collar ? Math.max(X - K2, 0) : 0) - custo; } };
+  }
+
   // ---------------- interface: atualização ----------------
   var DOL = function () { return A.id === "dolar"; };
   function qtd(v) { return A.fis === "US$" ? "US$ " + br(v, 0) : br(v, 0) + " " + (A.fis === "arroba" ? "arrobas" : "sacas"); }
@@ -191,6 +230,12 @@
     $("sopVolHint").textContent = isFinite(E.vol) && E.vol > 0 ? "≈ " + br(E.vol / porC, 2) + " contrato(s) de " + qtd(porC) + (DOL() ? " (minicontrato)" : "") : " ";
     $("sopVhint").textContent = isFinite(E.dias) ? (E.dias >= 0 ? E.dias + " dias até o vencimento" : "data já passou") : " ";
     var R = calcular();
+    $("sopDolBox").style.display = A.bolsa === "CBOT" ? "" : "none";
+    if (A.bolsa === "CBOT" && DS.on) {
+      var u = exposicaoUSD(), Dl = calcDol();
+      $("sopDolNh").textContent = isFinite(u) ? "receita estimada de US$ " + br(u, 0) : " ";
+      $("sopDolPmH").textContent = Dl ? (Dl.iv ? "vol. implícita " + br(Dl.iv * 100, 1) + "% · " : "") + "put teórica R$ " + br(b76(Dl.F, Dl.K1, num($("sopDolVol").value) / 100, Math.max(0, (Dl.c.venc - Date.now()) / DIA / 365), (D.cambio && D.cambio.selic && D.cambio.selic.meta_aa || 13.75) / 100, "p").v * 1000, 2) + " por US$ 1.000" : " ";
+    }
     st.legs.forEach(function (l, i) {
       var o = $("sopOut" + i); if (!o) return;
       var x = R && R.legs[i];
@@ -222,6 +267,30 @@
     else k.push(["Equilíbrio", R.be.length ? R.be.map(function (b) { return br(b, A.bolsa === "CBOT" ? 2 : A.dec); }).join(" e ") : "-", "futuro no vencimento, " + A.un]);
     if (R.lado === "vende" && R.teto != null) k.push([DOL() ? "Dólar máximo" : "Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", "a alta acima do strike vendido fica com o comprador"]);
     else k.push(["Perda máxima", R.perdaMax == null ? "ilimitada" : "R$ " + br(Math.abs(R.perdaMax * R.nBase * A.tam * (A.usd ? E.fx : 1)), 0), R.perdaMax == null ? "há venda de opção descoberta" : "no vencimento, na pior hipótese"]);
+    var Dl = calcDol(), comb = null;
+    if (Dl && R.lado === "vende") {
+      var sc = R.sacas, rec = function (F, X) { return R.efetivo(F) * A.fator * X + Dl.pd(X) * Dl.Q / sc; };
+      var piso = Infinity;
+      for (var a = 0; a <= 50; a++) for (var b = 0; b <= 50; b++) { var v = rec(E.F * (0.4 + 1.2 * a / 50), Dl.F * (0.6 + 0.9 * b / 50)); if (v < piso) piso = v; }
+      var cDol = Dl.custo * Dl.Q / sc;
+      comb = { rec: rec, piso: piso, cDol: cDol };
+      k[0] = ["Custo por saca", "R$ " + br(cfis + cDol, 2) + "<small>" + uf + "</small>", "soja R$ " + br(cfis, 2) + " + dólar R$ " + br(cDol, 2)];
+      k[1] = ["Custo total", "R$ " + br(tot + Dl.custo * Dl.Q, 0), "soja R$ " + br(tot, 0) + " · dólar R$ " + br(Dl.custo * Dl.Q, 0) + " (" + Dl.n + " mini)"];
+      if (k[2] && /Preço mínimo/.test(k[2][0])) k[2][2] = "se o dólar ficar em R$ " + br(E.fx, 4);
+      k[3] = ["Piso soja + dólar", "R$ " + br(piso, 2) + "<small>" + uf + "</small>", "com Chicago e câmbio protegidos"];
+      $("sopVeredito").innerHTML = '<i data-lucide="shield-check"></i><div><b>Piso de R$ ' + br(piso, 2) + uf + " protegendo Chicago e o dólar.</b> A put de soja garante US$ " + br(R.piso, 4) + "/bu e a " + (Dl.collar ? "trava" : "put") + " de dólar garante câmbio mínimo de R$ " + br(Dl.K1 - Dl.custo, 4) + (Dl.collar ? " (máximo de R$ " + br(Dl.K2 - Dl.custo, 4) + ")" : "") + ". Custo total de R$ " + br(cfis + cDol, 2) + uf + ".</div>";
+    }
+    $("sopComb").style.display = comb ? "" : "none";
+    if (comb) {
+      var pctS = [-20, -10, 0, 10, 20], pctD = [-10, -5, 0, 5, 10], vals = [];
+      pctS.forEach(function (ps) { pctD.forEach(function (pd) { vals.push(comb.rec(E.F * (1 + ps / 100), Dl.F * (1 + pd / 100))); }); });
+      var vmin = Math.min.apply(null, vals), vmax = Math.max.apply(null, vals);
+      $("sopCombSub").textContent = "R$/sc no vencimento";
+      $("sopMat").innerHTML = "<thead><tr><th>Soja \\ dólar</th>" + pctD.map(function (pd) { return "<th>" + (pd === 0 ? "R$ " + br(Dl.F, 2) : (pd > 0 ? "+" : "−") + Math.abs(pd) + "%<br><span style=\"font-weight:500\">R$ " + br(Dl.F * (1 + pd / 100), 2) + "</span>") + "</th>"; }).join("") + "</tr></thead><tbody>" +
+        pctS.map(function (ps) { var F = E.F * (1 + ps / 100); return "<tr" + (ps === 0 ? ' class="atual"' : "") + "><td>" + (ps === 0 ? "Hoje" : (ps > 0 ? "+" : "−") + Math.abs(ps) + "%") + "<br><span style=\"color:#8a8a8a;font-size:11px\">US$ " + br(F, 2) + "</span></td>" +
+          pctD.map(function (pd) { var X = Dl.F * (1 + pd / 100), v = comb.rec(F, X), sem = F * A.fator * X, al = vmax > vmin ? (v - vmin) / (vmax - vmin) : 0.5; return '<td class="cel" style="background:rgba(84,147,27,' + (0.06 + al * 0.3).toFixed(3) + ')"><b>' + br(v, 2) + "</b><span>sem: " + br(sem, 2) + "</span></td>"; }).join("") + "</tr>"; }).join("") + "</tbody>";
+      $("sopCombCap").textContent = "Cada célula mostra o preço em R$/saca com a put de soja e a " + (Dl.collar ? "trava" : "put") + " de dólar, já descontados os prêmios, e embaixo o valor sem proteção. Soja na CBOT no vencimento da opção; dólar no vencimento " + Dl.c.rot + ". Cobertura de US$ " + br(Dl.Q, 0) + " para " + br(R.sacas, 0) + " sacas. Não inclui basis e corretagem.";
+    }
     $("sopKpis").innerHTML = k.map(function (x) { return '<div class="sop-k"><span>' + x[0] + "</span><b>" + x[1] + "</b><em>" + x[2] + "</em></div>"; }).join("");
     // gregas
     var porC = A.tam / A.fator, mo = A.usd ? E.fx : 1;
@@ -245,6 +314,7 @@
     charts[0].setOption(g0(R), true); charts[1].setOption(g1(R), true);
     $("sopCap0").textContent = R.lado ? (DOL() ? "Linha cinza: o dólar sem proteção. Linha verde: o dólar somado ao resultado das opções. Não inclui corretagem." : "Linha cinza: o preço acompanhando o futuro, sem proteção. Linha verde: o mesmo preço somado ao resultado das opções. Não inclui basis, corretagem e custos de margem.") + (A.usd ? " Conversão com dólar de R$ " + br(E.fx, 4) + "." : "") : "Estratégia sem lado de proteção definido: o gráfico mostra o resultado das opções.";
     $("sopCap1").textContent = "Resultado das opções por " + A.fis + ", já descontado o prêmio. Linha cheia: no vencimento. Tracejada: hoje, com o prazo e a volatilidade atuais.";
+    if (comb) $("sopCap0").textContent += " O gráfico considera o dólar fixo; a tabela Soja e dólar juntos mostra o efeito da proteção cambial.";
     if (window.lucide) lucide.createIcons();
   }
 
@@ -335,6 +405,7 @@
       $("sopFx").value = brIn(fx, 4); $("sopFx").dataset.auto = "1";
       $("sopFxHint").textContent = "dólar futuro da B3 na data, pode editar";
     }
+    if (A.bolsa === "CBOT") preencherDolar();
     aplicarEstrategia(st.estr);
   }
 
@@ -369,13 +440,17 @@
     $("sopContrato").addEventListener("change", escolherContrato);
     ["sopF", "sopVenc", "sopR", "sopFx", "sopVol"].forEach(function (id) { $(id).addEventListener("input", function () { this.dataset.auto = "0"; atualizar(); }); });
     $("sopVenc").addEventListener("change", function () { if (A.usd && $("sopFx").dataset.auto === "1") { $("sopFx").value = brIn(dolarEm(Date.parse(this.value + "T00:00:00Z")), 4); } atualizar(); });
-    $("sopVol").addEventListener("change", function () { var E = entradas(); if (E.vol > 0) { var n = contratosSugeridos(E.vol); st.legs.forEach(function (l) { l.n = n; }); desenharPernas(); atualizar(); } });
+    $("sopVol").addEventListener("change", function () { var E = entradas(); if (E.vol > 0) { var n = contratosSugeridos(E.vol); st.legs.forEach(function (l) { l.n = n; }); if (DS.on) dolQtd(); desenharPernas(); atualizar(); } });
     $("sopLegs").addEventListener("input", function (e) { var el = e.target, row = el.closest(".sop-leg"); if (!row) return; var l = st.legs[+row.dataset.i], k = el.dataset.k; l[k] = k === "tipo" ? el.value : k === "n" ? Math.max(0, Math.round(num(el.value))) : num(el.value); atualizar(); });
     $("sopLegs").addEventListener("change", function (e) { if (e.target.dataset.k === "tipo") { st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); atualizar(); } });
     $("sopLegs").addEventListener("click", function (e) { var b = e.target.closest("[data-del]"); if (!b) return; st.legs.splice(+b.dataset.del, 1); st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (x) { x.setAttribute("aria-pressed", "false"); }); desenharPernas(); atualizar(); });
     $("sopAdd").addEventListener("click", function () { if (st.legs.length >= 4) return; var E = entradas(); st.legs.push({ tipo: "cp", K: isFinite(E.F) ? arred(E.F) : NaN, vol: A.vol, n: st.legs[0] ? st.legs[0].n : 1, pm: NaN }); st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (x) { x.setAttribute("aria-pressed", "false"); }); desenharPernas(); atualizar(); });
     $("sopUn").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.un = b.dataset.u; atualizar(); });
     $("sopVer").addEventListener("click", verResultado);
+    $("sopDolOn").addEventListener("change", function () { DS.on = this.checked; $("sopDolCampos").style.display = DS.on ? "" : "none"; if (DS.on) { preencherDolar(); if (st.estr !== "put" && st.estr !== "collar" && st.estr !== "putspread") aplicarEstrategia("put"); } atualizar(); });
+    $("sopDolEstr").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; DS.estr = b.dataset.d; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); $("sopDolK2box").style.display = DS.estr === "collar" ? "" : "none"; atualizar(); });
+    $("sopDolCod").addEventListener("change", function () { dolContrato(); atualizar(); });
+    ["sopDolK1", "sopDolK2", "sopDolVol", "sopDolN", "sopDolPm"].forEach(function (id) { $(id).addEventListener("input", atualizar); });
     $("sopGBtn").addEventListener("click", enviarGate);
     document.querySelectorAll("#abp-ferramenta .sop-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
     var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (st.mostrar && st.liberado) atualizar(); }, 150); });

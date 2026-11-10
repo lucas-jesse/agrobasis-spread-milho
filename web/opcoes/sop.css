@@ -80,6 +80,22 @@
 .sop-g em{ font-style:normal; font-size:11.5px; color:#7a7a7a; line-height:1.4; display:block; }
 .sop-foot{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; font-size:11.5px; color:#9a9a9a; margin-top:6px; }
 .sop-alerta{ display:none; font-size:12.5px; color:#8a5a34; background:#fdf8f4; border:1px solid #ecdccb; border-radius:10px; padding:9px 12px; margin-top:8px; line-height:1.45; }
+.sop-st-row{ display:flex; justify-content:space-between; align-items:center; }
+.sop-st-row em{ font-style:normal; text-transform:none; letter-spacing:0; font-weight:500; color:#9a9a9a; margin-left:4px; }
+.sop-sw{ position:relative; width:42px; height:24px; flex:none; cursor:pointer; }
+.sop-sw input{ opacity:0; width:0; height:0; position:absolute; }
+.sop-sw i{ position:absolute; inset:0; background:#d9dfda; border-radius:999px; transition:.2s; }
+.sop-sw i:before{ content:""; position:absolute; width:18px; height:18px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; box-shadow:0 1px 2px rgba(0,0,0,.2); }
+.sop-sw input:checked + i{ background:var(--verde-principal); }
+.sop-sw input:checked + i:before{ transform:translateX(18px); }
+.sop-dol-seg{ display:flex; margin:10px 0 14px; }
+.sop-dol-seg button{ flex:1; white-space:normal; padding:8px 8px; }
+.sop-ch h3 small{ font-size:12px; font-weight:500; color:#7a7a7a; margin-left:6px; }
+.sop-mat td,.sop-mat th{ text-align:center !important; }
+.sop-mat th:first-child,.sop-mat td:first-child{ text-align:left !important; }
+.sop-mat td b{ display:block; font-size:13.5px; }
+.sop-mat td span{ display:block; font-size:10.5px; color:#8a8a8a; margin-top:2px; }
+.sop-mat td.cel{ border:2px solid #fff; border-radius:8px; }
 @media (max-width:760px){
   .sop-grid3{ grid-template-columns:1fr 1fr; }
   .sop-estr{ grid-template-columns:1fr 1fr; }
@@ -91,6 +107,7 @@
   .sop-leg .sop-out{ grid-column:2 / -1; padding-bottom:6px; order:3; }
 }
 @media (max-width:480px){
+  .sop-mat td b{ font-size:12px; } .sop-mat td span{ display:none; } .sop-mat td,.sop-mat th{ padding:7px 3px; }
   .sop-grid,.sop-grid3{ grid-template-columns:1fr 1fr; }
   .sop-k b{ font-size:18px; }
   .sop-chart{ height:330px; }

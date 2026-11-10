@@ -35,8 +35,26 @@
       <div class="sop-legs-head"><span>Pernas</span><button type="button" class="sop-mini" id="sopAdd"><i data-lucide="plus"></i> Adicionar perna</button></div>
       <div id="sopLegs"></div>
       <p class="sop-hint" id="sopLegHint">&nbsp;</p>
-      <button type="button" class="sop-btn" id="sopVer"><i data-lucide="bar-chart-3"></i> Ver resultado</button>
     </div>
+
+    <div class="sop-box" id="sopDolBox" style="display:none;">
+      <div class="sop-st sop-st-row"><span>3. Proteger também o dólar <em>opcional</em></span>
+        <label class="sop-sw"><input type="checkbox" id="sopDolOn"><i></i></label></div>
+      <p class="sop-hint" id="sopDolIntro">A soja da CBOT é vendida em dólar. Com uma opção de dólar da B3 junto, o piso passa a valer em reais por saca, protegendo Chicago e o câmbio ao mesmo tempo.</p>
+      <div id="sopDolCampos" style="display:none;">
+        <div class="sop-seg sop-dol-seg" id="sopDolEstr"><button data-d="put" aria-pressed="true">Put de dólar · câmbio mínimo</button><button data-d="collar">Collar de dólar · mínimo e máximo</button></div>
+        <div class="sop-grid sop-grid3">
+          <div class="sop-f"><label for="sopDolCod">Vencimento do dólar</label><select id="sopDolCod"></select><span class="sop-hint" id="sopDolFh">&nbsp;</span></div>
+          <div class="sop-f"><label for="sopDolK1">Strike da put (R$/US$)</label><input id="sopDolK1" inputmode="decimal"><span class="sop-hint">câmbio mínimo antes do prêmio</span></div>
+          <div class="sop-f" id="sopDolK2box" style="display:none;"><label for="sopDolK2">Strike da call vendida</label><input id="sopDolK2" inputmode="decimal"><span class="sop-hint">acima disso, o câmbio fica com o comprador</span></div>
+          <div class="sop-f"><label for="sopDolVol">Volatilidade %</label><input id="sopDolVol" inputmode="decimal" value="13,0"><span class="sop-hint">&nbsp;</span></div>
+          <div class="sop-f"><label for="sopDolN">Minicontratos (US$ 10 mil)</label><input id="sopDolN" inputmode="numeric"><span class="sop-hint" id="sopDolNh">&nbsp;</span></div>
+          <div class="sop-f"><label for="sopDolPm">Prêmio de mercado da put</label><input id="sopDolPm" inputmode="decimal" placeholder="opcional, R$/US$"><span class="sop-hint" id="sopDolPmH">&nbsp;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="sop-btn" id="sopVer"><i data-lucide="bar-chart-3"></i> Ver resultado</button>
 
     <div class="sop-gate" id="sopGate" style="display:none;">
       <div class="sop-gate-ic"><i data-lucide="check-circle-2"></i></div>
@@ -70,6 +88,12 @@
         <p class="sop-cap" id="sopCap1"></p>
       </div>
 
+      <div class="sop-card" id="sopComb" style="display:none;">
+        <div class="sop-ch"><h3>Soja e dólar juntos <small id="sopCombSub"></small></h3></div>
+        <div class="sop-tab-wrap"><table class="sop-tab sop-mat" id="sopMat"></table></div>
+        <p class="sop-cap" id="sopCombCap"></p>
+      </div>
+
       <div class="sop-card">
         <div class="sop-ch"><h3>Cenários no vencimento</h3></div>
         <div class="sop-tab-wrap"><table class="sop-tab" id="sopCen"></table></div>
@@ -88,6 +112,7 @@
     <li>Escolha o ativo e o vencimento. Preço do futuro, data de vencimento da opção, dólar e juros já vêm preenchidos com o fechamento mais recente, e todos podem ser editados.</li>
     <li>Informe quantas sacas quer proteger. O simulador sugere o número de contratos: 5.000 bushels (cerca de 2.268 sacas de soja) na CBOT e 450 sacas no milho da B3.</li>
     <li>Escolha uma estratégia pronta ou monte até 4 pernas. Se tiver o prêmio de tela da corretora, digite no campo "prêmio de mercado": o simulador usa esse valor e calcula a volatilidade implícita.</li>
+    <li>Na soja, no milho e no trigo da CBOT, ligue "Proteger também o dólar" para somar uma opção de dólar da B3 e ver o piso em reais com Chicago e câmbio protegidos.</li>
     <li>Clique em "Ver resultado" para ver o custo em reais por saca, o preço mínimo (ou máximo) garantido, o gráfico no vencimento e os cenários.</li>
   </ol>
 
