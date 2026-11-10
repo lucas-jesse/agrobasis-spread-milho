@@ -13,7 +13,9 @@
     { id: "trigo", nome: "Trigo", sub: "CBOT · US$/bu", bolsa: "CBOT", usd: true, un: "US$/bu", fis: "saca", fator: 60 / 27.2155, tam: 5000, vol: 28, passo: 0.05, dec: 4, fonte: "trigo" },
     { id: "milho_b3", nome: "Milho", sub: "B3 · R$/saca", bolsa: "B3", usd: false, un: "R$/sc", fis: "saca", fator: 1, tam: 450, vol: 25, passo: 0.5, dec: 2, fonte: "ccm" },
     { id: "boi", nome: "Boi gordo", sub: "B3 · R$/@", bolsa: "B3", usd: false, un: "R$/@", fis: "arroba", fator: 1, tam: 330, vol: 15, passo: 1, dec: 2, fonte: null },
-    { id: "cafe", nome: "Café arábica", sub: "B3 · US$/saca", bolsa: "B3", usd: true, un: "US$/sc", fis: "saca", fator: 1, tam: 100, vol: 35, passo: 5, dec: 2, fonte: null }
+    { id: "cafe", nome: "Café arábica", sub: "B3 · US$/saca", bolsa: "B3", usd: true, un: "US$/sc", fis: "saca", fator: 1, tam: 100, vol: 35, passo: 5, dec: 2, fonte: null },
+    // opção de dólar da B3 sobre a PTAX (minicontrato de US$ 10 mil), precificada contra o dólar futuro do mesmo vencimento
+    { id: "dolar", nome: "Dólar", sub: "B3 · R$/US$", bolsa: "B3", usd: false, un: "R$/US$", fis: "US$", fator: 1, tam: 10000, vol: 13, passo: 0.05, dec: 4, fonte: "dol" }
   ];
   var TIPOS = { cp: ["Compra de put", 1, "p"], vp: ["Venda de put", -1, "p"], cc: ["Compra de call", 1, "c"], vc: ["Venda de call", -1, "c"] };
   var ESTR = [
@@ -65,6 +67,7 @@
     if (A.fonte === "soja" && D.soja) Object.keys(D.soja.cbot).forEach(function (k) { add(k, D.soja.cbot[k].cents_bu / 100); });
     if ((A.fonte === "milho" || A.fonte === "trigo") && D.manha) ((D.manha.cbot[A.fonte] || {}).contratos || []).forEach(function (c) { add(c.contrato, (c.preco || c.ajuste_anterior) / 100); });
     if (A.fonte === "ccm" && D.ccm) Object.keys(D.ccm.curva).forEach(function (k) { add(k, D.ccm.curva[k]); });
+    if (A.fonte === "dol" && D.soja && D.soja.dolar) Object.keys(D.soja.dolar).forEach(function (k) { var x = D.soja.dolar[k], v = new Date(Date.parse(x.vencimento + "T00:00:00Z")), l = k.charAt(k.length - 3); if (v.getTime() > hoje) out.push({ cod: k, rot: rotulo(2000 + +k.slice(-2), LETRA[l]), F: x.brl, venc: v }); });
     out.sort(function (a, b) { return a.venc - b.venc; });
     CONTRATOS = out;
     var sel = $("sopContrato"); sel.innerHTML = "";
@@ -175,14 +178,17 @@
   }
 
   // ---------------- interface: atualização ----------------
+  var DOL = function () { return A.id === "dolar"; };
+  function qtd(v) { return A.fis === "US$" ? "US$ " + br(v, 0) : br(v, 0) + " " + (A.fis === "arroba" ? "arrobas" : "sacas"); }
+  function qtdC(v) { return A.fis === "US$" ? "US$ " + br(v, 0) : br(v, 0) + " " + (A.fis === "arroba" ? "@" : "sc"); }
   function fmtCot(v) { return A.bolsa === "CBOT" ? "US$ " + br(v, 4) : (A.usd ? "US$ " : "R$ ") + br(v, A.dec); }
-  function fmtFis(v, c) { return "R$ " + br(v, c == null ? 2 : c); } // em reais por unidade física
-  function unFis() { return A.fis === "arroba" ? "/@" : "/sc"; }
-  function premTxt(v) { return A.bolsa === "CBOT" ? "US$ " + br(v, 4) + "/bu <span>(" + br(v * 100, 2) + " ¢)</span>" : (A.usd ? "US$ " : "R$ ") + br(v, A.dec) + "<span>" + A.un.replace(/^R\$|^US\$/, "") + "</span>"; }
+  function fmtFis(v, c) { return "R$ " + br(v, c == null ? (DOL() ? 4 : 2) : c); } // em reais por unidade física
+  function unFis() { return A.fis === "arroba" ? "/@" : A.fis === "US$" ? "/US$" : "/sc"; }
+  function premTxt(v) { if (DOL()) return "R$ " + br(v, 4) + "/US$ <span>(R$ " + br(v * 1000, 2) + " por US$ 1.000)</span>"; return A.bolsa === "CBOT" ? "US$ " + br(v, 4) + "/bu <span>(" + br(v * 100, 2) + " ¢)</span>" : (A.usd ? "US$ " : "R$ ") + br(v, A.dec) + "<span>" + A.un.replace(/^R\$|^US\$/, "") + "</span>"; }
 
   function atualizar() {
     var E = entradas(), porC = A.tam / A.fator;
-    $("sopVolHint").textContent = isFinite(E.vol) && E.vol > 0 ? "≈ " + br(E.vol / porC, 2) + " contrato(s) de " + br(porC, 0) + " " + (A.fis === "arroba" ? "arrobas" : "sacas") : " ";
+    $("sopVolHint").textContent = isFinite(E.vol) && E.vol > 0 ? "≈ " + br(E.vol / porC, 2) + " contrato(s) de " + qtd(porC) + (DOL() ? " (minicontrato)" : "") : " ";
     $("sopVhint").textContent = isFinite(E.dias) ? (E.dias >= 0 ? E.dias + " dias até o vencimento" : "data já passou") : " ";
     var R = calcular();
     st.legs.forEach(function (l, i) {
@@ -192,7 +198,7 @@
       o.innerHTML = "<b>" + premTxt(x.teor) + "</b><span>prêmio teórico" + (x.iv ? " · vol. implícita " + br(x.iv * 100, 1) + "%" : "") + "</span>";
     });
     var nLeg = st.legs.length ? Math.max.apply(null, st.legs.map(function (l) { return l.n || 0; })) : 0;
-    $("sopLegHint").textContent = nLeg && isFinite(E.vol) ? "As pernas cobrem " + br(nLeg * porC, 0) + " " + (A.fis === "arroba" ? "arrobas" : "sacas") + " (" + br(nLeg * porC / E.vol * 100, 0) + "% do volume informado)." : " ";
+    $("sopLegHint").textContent = nLeg && isFinite(E.vol) ? "As pernas cobrem " + qtd(nLeg * porC) + " (" + br(nLeg * porC / E.vol * 100, 0) + "% do volume informado)." : " ";
     if (st.mostrar && st.liberado) resultado(R);
   }
 
@@ -202,25 +208,25 @@
     var E = R.E, paga = R.custoU >= 0, cfis = R.custoU * R.conv, uf = unFis();
     // veredito em uma frase
     var est = ESTR.filter(function (x) { return x.id === st.estr; })[0], frase;
-    if (R.lado === "vende" && R.piso != null) frase = "<b>Preço mínimo garantido de " + fmtFis(R.piso * R.conv) + uf + "</b>" + (A.usd ? " (" + fmtCot(R.piso) + (A.bolsa === "CBOT" ? "/bu" : "/sc") + ")" : "") + " no vencimento" + (R.teto != null ? ", com preço máximo de " + fmtFis(R.teto * R.conv) + uf : ", mantendo o ganho se o mercado subir") + ". Custo de " + (paga ? fmtFis(cfis) : "crédito de " + fmtFis(-cfis)) + uf + ".";
-    else if (R.lado === "compra" && R.teto != null) frase = "<b>Preço máximo de compra de " + fmtFis(R.teto * R.conv) + uf + "</b> no vencimento, aproveitando se o mercado cair. Custo de " + fmtFis(cfis) + uf + ".";
+    if (R.lado === "vende" && R.piso != null) frase = "<b>" + (DOL() ? "Dólar mínimo garantido de " : "Preço mínimo garantido de ") + fmtFis(R.piso * R.conv) + uf + "</b>" + (A.usd ? " (" + fmtCot(R.piso) + (A.bolsa === "CBOT" ? "/bu" : "/sc") + ")" : "") + " no vencimento" + (R.teto != null ? (DOL() ? ", com dólar máximo de " : ", com preço máximo de ") + fmtFis(R.teto * R.conv) + uf : ", mantendo o ganho se o mercado subir") + ". Custo de " + (paga ? fmtFis(cfis) : "crédito de " + fmtFis(-cfis)) + uf + ".";
+    else if (R.lado === "compra" && R.teto != null) frase = "<b>" + (DOL() ? "Dólar máximo de compra de " : "Preço máximo de compra de ") + fmtFis(R.teto * R.conv) + uf + "</b> no vencimento, aproveitando se o mercado cair. Custo de " + fmtFis(cfis) + uf + ".";
     else frase = "<b>" + (est ? est.nome : "Estratégia") + "</b> com " + (paga ? "custo de " + fmtFis(cfis) : "crédito de " + fmtFis(-cfis)) + uf + (R.be.length ? " e ponto de equilíbrio em " + R.be.map(function (b) { return fmtCot(b); }).join(" e ") : "") + ".";
     $("sopVeredito").innerHTML = '<i data-lucide="shield-check"></i><div>' + frase + "</div>";
     // indicadores
     var k = [];
     k.push(["Custo por " + A.fis, (paga ? "" : "−") + fmtFis(Math.abs(cfis)) + "<small>" + uf + "</small>", A.bolsa === "CBOT" ? "US$ " + br(Math.abs(R.custoU), 4) + "/bu · " + br(Math.abs(R.custoU) * 100, 2) + " ¢" : (paga ? "prêmio líquido pago" : "crédito líquido recebido")]);
     var tot = R.totalMoeda * (A.usd ? E.fx : 1);
-    k.push(["Custo total", (paga ? "" : "−") + "R$ " + br(Math.abs(tot), 0), (A.usd ? "US$ " + br(Math.abs(R.totalMoeda), 0) + " · " : "") + R.nBase + " contrato(s), " + br(R.sacas, 0) + " " + (A.fis === "arroba" ? "@" : "sc")]);
-    if (R.lado === "vende" && R.piso != null) k.push(["Preço mínimo", fmtFis(R.piso * R.conv) + "<small>" + uf + "</small>", fmtCot(R.piso) + " no futuro, sem basis"]);
-    else if (R.lado === "compra" && R.teto != null) k.push(["Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", fmtCot(R.teto) + " no futuro, sem basis"]);
+    k.push(["Custo total", (paga ? "" : "−") + "R$ " + br(Math.abs(tot), 0), (A.usd ? "US$ " + br(Math.abs(R.totalMoeda), 0) + " · " : "") + R.nBase + " contrato(s), " + qtdC(R.sacas)]);
+    if (R.lado === "vende" && R.piso != null) k.push([DOL() ? "Dólar mínimo" : "Preço mínimo", fmtFis(R.piso * R.conv) + "<small>" + uf + "</small>", DOL() ? "na data de vencimento" : fmtCot(R.piso) + " no futuro, sem basis"]);
+    else if (R.lado === "compra" && R.teto != null) k.push([DOL() ? "Dólar máximo" : "Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", DOL() ? "na data de vencimento" : fmtCot(R.teto) + " no futuro, sem basis"]);
     else k.push(["Equilíbrio", R.be.length ? R.be.map(function (b) { return br(b, A.bolsa === "CBOT" ? 2 : A.dec); }).join(" e ") : "-", "futuro no vencimento, " + A.un]);
-    if (R.lado === "vende" && R.teto != null) k.push(["Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", "a alta acima do strike vendido fica com o comprador"]);
+    if (R.lado === "vende" && R.teto != null) k.push([DOL() ? "Dólar máximo" : "Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", "a alta acima do strike vendido fica com o comprador"]);
     else k.push(["Perda máxima", R.perdaMax == null ? "ilimitada" : "R$ " + br(Math.abs(R.perdaMax * R.nBase * A.tam * (A.usd ? E.fx : 1)), 0), R.perdaMax == null ? "há venda de opção descoberta" : "no vencimento, na pior hipótese"]);
     $("sopKpis").innerHTML = k.map(function (x) { return '<div class="sop-k"><span>' + x[0] + "</span><b>" + x[1] + "</b><em>" + x[2] + "</em></div>"; }).join("");
     // gregas
     var porC = A.tam / A.fator, mo = A.usd ? E.fx : 1;
     $("sopGregas").innerHTML = [
-      ["Delta", sinal(R.dl, 2) + " contr.", "equivale a " + sinal(R.dl * porC, 0) + " " + (A.fis === "arroba" ? "@" : "sc") + "; quanto a posição se move com o futuro"],
+      ["Delta", sinal(R.dl, 2) + " contr.", "equivale a " + (DOL() ? (R.dl < 0 ? "−" : "") + qtdC(Math.abs(R.dl * porC)) : sinal(R.dl * porC, 0) + " " + (A.fis === "arroba" ? "@" : "sc")) + "; quanto a posição se move com o futuro"],
       ["Gamma", sinal(R.gm, 4), "quanto o delta muda a cada 1 " + A.un.split("/")[0] + " no futuro"],
       ["Theta", (R.th < 0 ? "−" : "+") + "R$ " + br(Math.abs(R.th * mo), 0) + "/dia", "ganho ou perda por dia só pela passagem do tempo"],
       ["Vega", (R.ve < 0 ? "−" : "+") + "R$ " + br(Math.abs(R.ve * mo), 0), "por 1 ponto percentual de volatilidade"]
@@ -235,9 +241,9 @@
     var temNat = A.bolsa === "CBOT" || A.usd;
     $("sopUn").style.display = temNat ? "" : "none";
     $("sopUn").innerHTML = '<button data-u="saca" aria-pressed="' + (st.un === "saca") + '">R$' + uf + "</button><button data-u=\"nat\" aria-pressed=\"" + (st.un === "nat") + "\">" + A.un + "</button>";
-    $("sopH1").textContent = R.lado === "compra" ? "Seu custo de compra no vencimento" : R.lado === "vende" ? "Seu preço de venda no vencimento" : "Posição no vencimento";
+    $("sopH1").textContent = DOL() ? (R.lado === "compra" ? "Seu dólar de compra no vencimento" : R.lado === "vende" ? "Seu dólar de venda no vencimento" : "Posição no vencimento") : R.lado === "compra" ? "Seu custo de compra no vencimento" : R.lado === "vende" ? "Seu preço de venda no vencimento" : "Posição no vencimento";
     charts[0].setOption(g0(R), true); charts[1].setOption(g1(R), true);
-    $("sopCap0").textContent = R.lado ? "Linha cinza: o preço acompanhando o futuro, sem proteção. Linha verde: o mesmo preço somado ao resultado das opções. Não inclui basis, corretagem e custos de margem." + (A.usd ? " Conversão com dólar de R$ " + br(E.fx, 4) + "." : "") : "Estratégia sem lado de proteção definido: o gráfico mostra o resultado das opções.";
+    $("sopCap0").textContent = R.lado ? (DOL() ? "Linha cinza: o dólar sem proteção. Linha verde: o dólar somado ao resultado das opções. Não inclui corretagem." : "Linha cinza: o preço acompanhando o futuro, sem proteção. Linha verde: o mesmo preço somado ao resultado das opções. Não inclui basis, corretagem e custos de margem.") + (A.usd ? " Conversão com dólar de R$ " + br(E.fx, 4) + "." : "") : "Estratégia sem lado de proteção definido: o gráfico mostra o resultado das opções.";
     $("sopCap1").textContent = "Resultado das opções por " + A.fis + ", já descontado o prêmio. Linha cheia: no vencimento. Tracejada: hoje, com o prazo e a volatilidade atuais.";
     if (window.lucide) lucide.createIcons();
   }
@@ -250,8 +256,8 @@
   function fy(R) { return st.un === "saca" || !(A.bolsa === "CBOT" || A.usd) ? function (v) { return v * R.conv; } : function (v) { return v; }; }
   function decY() { return st.un === "saca" || !(A.bolsa === "CBOT" || A.usd) ? 2 : A.bolsa === "CBOT" ? 4 : A.dec; }
   function malha(R) { var lo = R.E.F * 0.7, hi = R.E.F * 1.3, out = []; for (var k = 0; k <= 120; k++) out.push(lo + (hi - lo) * k / 120); return out; }
-  function eixoX(R) { var c = A.bolsa === "CBOT" ? 2 : A.dec; return { type: "value", min: R.E.F * 0.7, max: R.E.F * 1.3, name: "futuro no vencimento (" + A.un + ")", nameLocation: "middle", nameGap: 28, nameTextStyle: { color: COR.mt, fontSize: 11 }, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return br(v, c); }, hideOverlap: true, showMinLabel: false, showMaxLabel: false }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } } }; }
-  function eixoY() { var d = decY(); return { type: "value", scale: true, splitNumber: 5, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return br(v, d > 2 ? 2 : 0); } }, splitLine: { lineStyle: { color: COR.grade } } }; }
+  function eixoX(R) { var c = A.bolsa === "CBOT" || DOL() ? 2 : A.dec; return { type: "value", min: R.E.F * 0.7, max: R.E.F * 1.3, name: "futuro no vencimento (" + A.un + ")", nameLocation: "middle", nameGap: 28, nameTextStyle: { color: COR.mt, fontSize: 11 }, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return br(v, c); }, hideOverlap: true, showMinLabel: false, showMaxLabel: false }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } } }; }
+  function eixoY() { var d = DOL() ? 2 : decY() > 2 ? 2 : 0; return { type: "value", scale: true, splitNumber: 5, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return br(v, d); } }, splitLine: { lineStyle: { color: COR.grade } } }; }
   function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
   function txY(v) { return st.un === "saca" || !(A.bolsa === "CBOT" || A.usd) ? "R$ " + br(v, 2) + unFis() : fmtCot(v); }
   function g0(R) {
@@ -302,12 +308,12 @@
     A = ATIVOS.filter(function (x) { return x.id === id; })[0];
     $("sopAtivos").querySelectorAll(".sop-chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.a === id)); });
     $("sopFlab").textContent = "Preço do futuro (" + A.un + ")";
-    $("sopVolUn").textContent = A.fis === "arroba" ? "arrobas" : "sacas";
+    $("sopVolUn").textContent = A.fis === "arroba" ? "arrobas" : A.fis === "US$" ? "US$" : "sacas";
     $("sopFxBox").style.display = A.usd ? "" : "none";
     $("sopRlab").textContent = A.usd ? "Juros em dólar ao ano" : "Juros em real ao ano";
     var r = $("sopR"); r.value = A.usd ? "4,0" : br(D.cambio && D.cambio.selic && D.cambio.selic.meta_aa || 13.75, 2); r.dataset.auto = "1";
     $("sopRhint").textContent = A.usd ? "taxa de referência em dólar (SOFR), ajuste se quiser" : "Selic meta do Banco Central";
-    $("sopVol").value = A.fis === "arroba" ? "1.000" : A.bolsa === "CBOT" ? brIn(Math.round(A.tam / A.fator * 2 / 100) * 100, 0) : "5.000";
+    $("sopVol").value = DOL() ? "100.000" : A.fis === "arroba" ? "1.000" : A.bolsa === "CBOT" ? brIn(Math.round(A.tam / A.fator * 2 / 100) * 100, 0) : "5.000";
     montarContratos(); escolherContrato();
   }
   function escolherContrato() {
@@ -316,7 +322,7 @@
     if (c) {
       $("sopF").value = brIn(c.F, dec); $("sopF").dataset.auto = "1";
       $("sopVenc").value = isoD(c.venc); $("sopVenc").dataset.auto = "1";
-      var fonte = A.fonte === "soja" ? D.soja && D.soja.atualizado_em : A.fonte === "ccm" ? D.ccm && D.ccm.atualizado_em : D.manha && D.manha.gerado_em_brt;
+      var fonte = A.fonte === "soja" || A.fonte === "dol" ? D.soja && D.soja.atualizado_em : A.fonte === "ccm" ? D.ccm && D.ccm.atualizado_em : D.manha && D.manha.gerado_em_brt;
       $("sopFhint").textContent = "fechamento" + (fonte ? " de " + String(fonte).slice(0, 10).replace(/(\d{4})-(\d\d)-(\d\d)/, "$3/$2/$1") : "") + ", pode editar";
       $("sopVhint").textContent = "";
     } else {
