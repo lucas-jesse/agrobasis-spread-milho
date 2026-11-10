@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "08/11/2026 16:23",
+  "atualizado_em": "10/11/2026 00:51",
   "fonte": "TradingView (CBOT-ZS1! e BMFBOVESPA-DOL1!), preços de fechamento do dia",
   "unidades": {
     "cbot": "cents de US$ por bushel",
@@ -9,67 +9,67 @@
   "cbot": {
     "ZSX26": {
       "vencimento": "2026-11-13",
-      "cents_bu": 1189.0
+      "cents_bu": 1187.0
     },
     "ZSF27": {
       "vencimento": "2027-01-14",
-      "cents_bu": 1193.75
+      "cents_bu": 1190.75
     },
     "ZSH27": {
       "vencimento": "2027-03-12",
-      "cents_bu": 1199.25
+      "cents_bu": 1197.5
     },
     "ZSK27": {
       "vencimento": "2027-05-14",
-      "cents_bu": 1208.25
+      "cents_bu": 1207.25
     },
     "ZSN27": {
       "vencimento": "2027-07-14",
-      "cents_bu": 1215.5
+      "cents_bu": 1214.75
     },
     "ZSQ27": {
       "vencimento": "2027-08-13",
-      "cents_bu": 1204.75
+      "cents_bu": 1203.0
     },
     "ZSU27": {
       "vencimento": "2027-09-14",
-      "cents_bu": 1179.75
+      "cents_bu": 1178.25
     },
     "ZSX27": {
       "vencimento": "2027-11-12",
-      "cents_bu": 1177.5
+      "cents_bu": 1176.75
     },
     "ZSF28": {
       "vencimento": "2028-01-14",
-      "cents_bu": 1189.5
+      "cents_bu": 1187.25
     },
     "ZSH28": {
       "vencimento": "2028-03-14",
-      "cents_bu": 1190.0
+      "cents_bu": 1187.75
     },
     "ZSK28": {
       "vencimento": "2028-05-12",
-      "cents_bu": 1194.0
+      "cents_bu": 1191.75
     },
     "ZSN28": {
       "vencimento": "2028-07-14",
-      "cents_bu": 1199.5
+      "cents_bu": 1197.25
     },
     "ZSQ28": {
       "vencimento": "2028-08-14",
-      "cents_bu": 1189.0
+      "cents_bu": 1186.75
     },
     "ZSU28": {
       "vencimento": "2028-09-14",
-      "cents_bu": 1163.0
+      "cents_bu": 1161.75
     },
     "ZSX28": {
       "vencimento": "2028-11-14",
-      "cents_bu": 1160.0
+      "cents_bu": 1158.25
     },
     "ZSN29": {
       "vencimento": "2029-07-13",
-      "cents_bu": 1176.75
+      "cents_bu": 1175.75
     },
     "ZSX29": {
       "vencimento": "2029-11-14",
@@ -79,83 +79,83 @@
   "dolar": {
     "DOLZ26": {
       "vencimento": "2026-12-01",
-      "brl": 5.524
+      "brl": 5.5331
     },
     "DOLF27": {
       "vencimento": "2027-01-04",
-      "brl": 5.5555
+      "brl": 5.5644
     },
     "DOLG27": {
       "vencimento": "2027-02-01",
-      "brl": 5.5888
+      "brl": 5.5976
     },
     "DOLH27": {
       "vencimento": "2027-03-01",
-      "brl": 5.6165
+      "brl": 5.6245
     },
     "DOLJ27": {
       "vencimento": "2027-04-01",
-      "brl": 5.6535
+      "brl": 5.6611
     },
     "DOLK27": {
       "vencimento": "2027-05-03",
-      "brl": 5.6872
+      "brl": 5.6938
     },
     "DOLM27": {
       "vencimento": "2027-06-01",
-      "brl": 5.721
+      "brl": 5.7268
     },
     "DOLN27": {
       "vencimento": "2027-07-01",
-      "brl": 5.7604
+      "brl": 5.7654
     },
     "DOLQ27": {
       "vencimento": "2027-08-02",
-      "brl": 5.7985
+      "brl": 5.8026
     },
     "DOLV27": {
       "vencimento": "2027-10-01",
-      "brl": 5.8753
+      "brl": 5.8776
     },
     "DOLF28": {
       "vencimento": "2028-01-03",
-      "brl": 5.9871
+      "brl": 5.9867
     },
     "DOLJ28": {
       "vencimento": "2028-04-03",
-      "brl": 6.1076
+      "brl": 6.1053
     },
     "DOLN28": {
       "vencimento": "2028-07-03",
-      "brl": 6.2268
+      "brl": 6.2226
     },
     "DOLV28": {
       "vencimento": "2028-10-02",
-      "brl": 6.3518
+      "brl": 6.3461
     },
     "DOLF29": {
       "vencimento": "2029-01-02",
-      "brl": 6.4712
+      "brl": 6.4643
     },
     "DOLJ29": {
       "vencimento": "2029-04-02",
-      "brl": 6.6034
+      "brl": 6.5966
     },
     "DOLN29": {
       "vencimento": "2029-07-02",
-      "brl": 6.7374
+      "brl": 6.7283
     },
     "DOLF30": {
       "vencimento": "2030-01-02",
-      "brl": 7.0111
+      "brl": 7.0021
     },
     "DOLN30": {
       "vencimento": "2030-07-01",
-      "brl": 7.2895
+      "brl": 7.2818
     },
     "DOLF31": {
       "vencimento": "2031-01-02",
-      "brl": 7.5947
+      "brl": 7.5876
     }
   }
 }
