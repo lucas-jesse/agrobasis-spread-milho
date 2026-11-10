@@ -1,0 +1,729 @@
+<!--
+AgroBasis · Simulador de Opções Agrícolas (Black-76), versão 2
+CBOT em US$/bushel (soja, milho, trigo) e B3 (milho, boi, café). Preços de fechamento, vencimentos e dólar
+vêm dos JSON do repositório agrobasis-spread-milho (dados/curva_soja.json, curva_ccm.json, manha.json, cambio.json).
+Cadastro pelo mesmo Google Forms dos simuladores de milho e soja, pedido só na hora do resultado.
+Publicar dentro de um widget HTML do Elementor, layout "Elementor largura total".
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js" defer=""></script>
+<style>
+:root{
+    --verde-principal:#1E4812;
+    --verde-secundario:#54931B;
+    --dourado:#A17149;
+    --marrom-escuro:#8A6A4F;
+    --texto:#222222;
+    --fundo:#F8FAF8;
+    --borda:#E7ECE8;
+  }
+*{box-sizing:border-box;}
+.abp-article{ padding:28px 0 56px 0; color:var(--texto); font-family:'Geist', Arial, sans-serif; }
+.abp-narrow{ max-width:820px; margin:0 auto; padding:0 16px; }
+.abp-badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Sora', Arial, sans-serif;
+    background:#EEF4E7; color:var(--verde-principal); border:1px solid #d7e6c9;
+    border-radius:999px; padding:6px 14px; font-size:12px; font-weight:700;
+    letter-spacing:.2px; margin-bottom:14px;
+  }
+.abp-badge svg{ width:14px; height:14px; stroke-width:2.4; }
+.abp-h1{ font-size:23px; line-height:1.25; color:var(--texto); font-weight:800; margin:0 0 10px 0; }
+.abp-lead{ font-size:14.5px; line-height:1.65; color:#4a4a4a; margin:0 0 22px 0; }
+.abp-h2{
+    font-size:18px; color:var(--texto); font-weight:800;
+    margin:30px 0 12px 0; padding-left:12px; border-left:4px solid var(--verde-principal);
+  }
+.abp-p{ font-size:14px; line-height:1.7; color:#333333; margin:0 0 14px 0; }
+.abp-note{
+    background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px;
+    padding:14px 16px; font-size:13px; line-height:1.6; color:#5b4636; margin:16px 0;
+  }
+.abp-note b{ color:#8a5a34; }
+.abp-formula-box{
+    background:#fafbf9; border:1px solid var(--borda); border-left:3px solid var(--dourado);
+    border-radius:12px; padding:16px 18px; margin:16px 0;
+  }
+.abp-formula-code{
+    font-family:"Courier New", monospace; font-size:11.5px; color:var(--verde-principal);
+    background:#EEF4E7; border-radius:8px; padding:10px 12px; display:block; margin-bottom:6px;
+  }
+.abp-chart-card{
+    background:#ffffff; border:1px solid var(--borda); border-radius:18px;
+    padding:18px; margin:16px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05);
+  }
+.abp-chart-title{ font-family:'Geist', Arial, sans-serif; font-size:14.5px; font-weight:700; color:var(--texto); margin-bottom:2px; }
+.abp-chart-sub{ font-family:'Sora', Arial, sans-serif; font-size:11.5px; color:#8a8a8a; margin-bottom:12px; line-height:1.5; }
+.abp-chart-caption{ font-family:'Sora', Arial, sans-serif; font-size:10.5px; color:#9a9a9a; text-align:right; margin-top:8px; }
+@media (max-width:600px){
+    .spc-grid{ grid-template-columns:1fr; }
+    .spc-venc-row .spc-venc-fields{ grid-template-columns:1fr 1fr; }
+    .abp-h1{ font-size:20px; }
+    .spc-toggle-btn{ font-size:12.5px; padding:12px 6px; }
+    .spc-duo, .spc-ledger{ grid-template-columns:1fr; }
+    .spc-verdict-title{ font-size:18px; }
+    .spc-opt-val{ font-size:24px; }
+  }
+/* ---- Blocos padrão de página de ferramenta ---- */
+  .abp-breadcrumb{ font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+.abp-breadcrumb a{ color:#1E4812; text-decoration:none; font-weight:600; }
+.abp-breadcrumb a:hover{ text-decoration:underline; }
+.abp-cta-row{ display:flex; gap:10px; flex-wrap:wrap; margin:0 0 26px 0; }
+.abp-cta-link{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Geist', Arial, sans-serif; font-size:13.5px; font-weight:700;
+    color:var(--verde-principal); background:#ffffff; border:1px solid var(--verde-principal);
+    border-radius:10px; padding:9px 16px; text-decoration:none; transition:background .15s ease, color .15s ease;
+  }
+.abp-cta-link:hover{ background:var(--verde-principal); color:#ffffff; }
+.abp-dash-box{ margin:20px 0 30px 0; }
+.abp-list{ margin:0 0 18px 0; padding-left:22px; }
+.abp-list li{ font-size:15px; line-height:1.8; color:#333333; margin-bottom:8px; }
+.abp-faq-item{
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+.abp-faq-item summary{
+    list-style:none; cursor:pointer; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:15px; font-weight:700; color:#222222;
+  }
+.abp-faq-item summary::-webkit-details-marker{ display:none; }
+.abp-faq-item summary svg{ width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+.abp-faq-item[open] summary svg{ transform:rotate(180deg); }
+.abp-faq-a{ padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+.abp-related-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:16px 0 24px 0; }
+.abp-related-card{
+    display:flex; flex-direction:column; gap:4px; background:#ffffff; border:1px solid var(--borda);
+    border-radius:14px; padding:16px 18px; text-decoration:none; transition:box-shadow .15s ease, border-color .15s ease;
+  }
+.abp-related-card:hover{ border-color:var(--verde-secundario); box-shadow:0 8px 20px rgba(30,72,18,0.08); }
+.abp-related-card-title{ font-family:'Geist', Arial, sans-serif; font-size:14px; font-weight:700; color:var(--texto); }
+.abp-related-card-sub{ font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; }
+.abp-disclaimer{
+    margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0;
+    font-family:'Sora', Arial, sans-serif;
+    font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6;
+  }
+@media (max-width:600px){
+    .abp-related-grid{ grid-template-columns:1fr; }
+  }
+.abp-dash-box{ font-variant-numeric:tabular-nums; }
+.abp-dash-box svg{ width:16px; height:16px; stroke-width:2.2; }
+.sop-box,.sop-card,.sop-gate{ background:#fff; border:1px solid var(--borda); border-radius:18px; padding:18px; margin:14px 0; box-shadow:0 8px 24px rgba(30,72,18,.05); min-width:0; }
+.sop-st{ font-family:'Sora',Arial,sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:12px; }
+.sop-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+.sop-chip{ font:600 13px Geist,Arial,sans-serif; border:1px solid var(--borda); background:#fff; color:#4a524c; border-radius:999px; padding:8px 13px; cursor:pointer; line-height:1.1; }
+.sop-chip small{ display:block; font-size:10.5px; font-weight:500; color:#8a938c; margin-top:2px; }
+.sop-chip[aria-pressed=true]{ background:var(--verde-principal); border-color:var(--verde-principal); color:#fff; }
+.sop-chip[aria-pressed=true] small{ color:#cfe3c2; }
+.sop-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; }
+.sop-grid3{ grid-template-columns:repeat(3,1fr); }
+.sop-f{ display:flex; flex-direction:column; gap:4px; min-width:0; }
+.sop-f label{ font-family:'Sora',Arial,sans-serif; font-size:11px; font-weight:600; color:var(--texto); text-transform:uppercase; letter-spacing:.03em; }
+.sop-f input,.sop-f select,.sop-leg input,.sop-leg select{ width:100%; min-width:0; font:500 14.5px Geist,Arial,sans-serif; color:var(--texto); border:1px solid #d9dfda; border-radius:10px; padding:9px 10px; background:#fff; }
+.sop-f input:focus,.sop-f select:focus,.sop-leg input:focus,.sop-leg select:focus{ outline:2px solid var(--verde-secundario); outline-offset:1px; }
+.sop-f input[data-auto="1"]{ border-color:#b9d6a4; background:#fafdf7; }
+.sop-in{ display:flex; align-items:center; border:1px solid #d9dfda; border-radius:10px; background:#fff; padding:0 10px; gap:6px; }
+.sop-in input{ border:0 !important; padding:9px 0 !important; outline:none !important; background:transparent !important; }
+.sop-in span{ font-size:12.5px; color:#7a7a7a; white-space:nowrap; }
+.sop-in:focus-within{ outline:2px solid var(--verde-secundario); outline-offset:1px; }
+.sop-hint{ font-size:11.5px; color:#8a8a8a; line-height:1.4; min-height:16px; }
+.sop-estr{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
+.sop-e{ text-align:left; border:1px solid var(--borda); background:#fafbf9; border-radius:12px; padding:10px 12px; cursor:pointer; font-family:Geist,Arial,sans-serif; }
+.sop-e b{ display:block; font-size:13.5px; color:var(--texto); }
+.sop-e span{ display:block; font-size:11.5px; color:#7a7a7a; margin-top:2px; line-height:1.35; }
+.sop-e[aria-pressed=true]{ border-color:var(--verde-principal); background:#EEF4E7; box-shadow:inset 0 0 0 1px var(--verde-principal); }
+.sop-legs-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-family:'Sora',Arial,sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; }
+.sop-mini{ display:inline-flex; align-items:center; gap:4px; font:600 12.5px Geist,Arial,sans-serif; color:var(--verde-principal); background:none; border:1px solid var(--borda); border-radius:8px; padding:6px 10px; cursor:pointer; text-transform:none; letter-spacing:0; }
+.sop-mini:disabled{ opacity:.4; cursor:default; }
+.sop-leg{ display:grid; grid-template-columns:1.25fr 1fr .8fr .7fr 1fr 1.05fr 30px; gap:8px; align-items:end; padding:10px 0; border-top:1px solid #eef1ee; }
+.sop-leg label{ display:block; font-size:10.5px; font-weight:600; color:#8a8a8a; text-transform:uppercase; letter-spacing:.03em; margin-bottom:3px; font-family:'Sora',Arial,sans-serif; }
+.sop-leg .sop-out{ font-size:13px; line-height:1.3; padding-bottom:6px; }
+.sop-leg .sop-out b{ display:block; font-size:14px; }
+.sop-leg .sop-out span{ color:#8a8a8a; font-size:11.5px; }
+.sop-del{ border:0; background:none; color:#a0a8a2; cursor:pointer; padding:8px 0; }
+.sop-del:hover{ color:#8a3434; }
+.sop-btn{ width:100%; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px; font:700 15px Geist,Arial,sans-serif; color:#fff; background:var(--verde-principal); border:0; border-radius:12px; padding:14px; cursor:pointer; }
+.sop-btn:hover{ background:var(--verde-secundario); }
+.sop-btn:disabled{ opacity:.6; cursor:wait; }
+.sop-gate{ border:1.5px solid var(--verde-principal); padding:24px 20px; box-shadow:0 10px 28px rgba(30,72,18,.10); }
+.sop-gate-ic{ width:48px; height:48px; border-radius:14px; background:#EEF4E7; display:flex; align-items:center; justify-content:center; margin-bottom:14px; color:var(--verde-principal); }
+.sop-gate-ic svg{ width:24px !important; height:24px !important; }
+.sop-gate-t{ font-size:20px; font-weight:800; margin:0 0 6px; }
+.sop-gate-s{ font-size:14px; line-height:1.6; color:#5b5b5b; margin:0 0 16px; }
+.sop-gate-err{ display:none; background:#fdf4f4; border:1px solid #f0d3d3; color:#8a3434; border-radius:10px; padding:10px 14px; font-size:13px; margin-bottom:12px; }
+.sop-gate-ok{ display:flex; gap:10px; align-items:flex-start; margin:12px 0 4px; }
+.sop-gate-ok input{ margin-top:3px; width:16px; height:16px; flex:none; accent-color:var(--verde-principal); }
+.sop-gate-ok label{ font-size:12px; line-height:1.6; color:#7a7a7a; }
+.sop-gate-st{ display:none; text-align:center; font-size:13px; color:#7a7a7a; margin:8px 0 0; }
+.sop-veredito{ display:flex; gap:12px; align-items:flex-start; background:#EEF4E7; border:1px solid #d7e6c9; border-radius:16px; padding:14px 16px; margin:14px 0; font-size:14.5px; line-height:1.55; color:#1d2a18; }
+.sop-veredito svg{ flex:none; width:20px !important; height:20px !important; color:var(--verde-principal); margin-top:2px; }
+.sop-veredito b{ font-weight:700; }
+.sop-kpis{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.sop-k{ background:#fff; border:1px solid var(--borda); border-radius:14px; padding:13px 14px; min-width:0; }
+.sop-k span{ display:block; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:#7a7a7a; font-weight:700; font-family:'Sora',Arial,sans-serif; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sop-k b{ display:block; font-family:'Sora',Arial,sans-serif; font-size:21px; font-weight:700; margin-top:6px; line-height:1.1; white-space:nowrap; }
+.sop-k b small{ font-size:12px; color:#7a7a7a; font-weight:500; font-family:Geist,Arial,sans-serif; margin-left:2px; }
+.sop-k em{ display:block; font-style:normal; font-size:12px; color:#7a7a7a; margin-top:6px; line-height:1.4; }
+.sop-ch{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px; }
+.sop-ch h3{ margin:0; font:700 15.5px Geist,Arial,sans-serif; color:var(--texto); flex:1; min-width:0; }
+.sop-tools{ display:flex; gap:6px; align-items:center; flex:none; }
+.sop-seg{ display:inline-flex; background:var(--fundo); border:1px solid var(--borda); border-radius:9px; padding:2px; }
+.sop-seg button{ font:500 12px Geist,Arial,sans-serif; border:0; background:none; color:#7a7a7a; padding:5px 9px; border-radius:7px; cursor:pointer; white-space:nowrap; }
+.sop-seg button[aria-pressed=true]{ background:#fff; color:var(--texto); box-shadow:0 1px 2px rgba(0,0,0,.08); }
+.sop-dl{ border:1px solid var(--borda); background:#fff; border-radius:8px; width:32px; height:30px; display:inline-grid; place-items:center; color:#7a7a7a; cursor:pointer; }
+.sop-dl:hover{ color:var(--verde-principal); border-color:var(--verde-secundario); }
+.sop-chart{ width:100%; height:380px; }
+.sop-cap{ font-size:12px; color:#7a7a7a; line-height:1.5; margin:4px 2px 0; }
+.sop-tab-wrap{ overflow-x:auto; }
+.sop-tab{ width:100%; border-collapse:collapse; font-size:13px; }
+.sop-tab th{ text-align:right; font:600 10.5px 'Sora',Arial,sans-serif; text-transform:uppercase; letter-spacing:.04em; color:#7a7a7a; padding:8px 8px; border-bottom:1px solid var(--borda); white-space:nowrap; }
+.sop-tab th:first-child,.sop-tab td:first-child{ text-align:left; }
+.sop-tab td{ text-align:right; padding:9px 8px; border-bottom:1px solid #f0f2f0; white-space:nowrap; }
+.sop-tab tr.atual td{ background:#f6f9f3; font-weight:600; }
+.sop-tab .pos{ color:#3F7A2A; } .sop-tab .neg{ color:#A8652F; }
+.sop-gregas{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.sop-g{ background:var(--fundo); border-radius:12px; padding:12px; }
+.sop-g span{ font:600 11px 'Sora',Arial,sans-serif; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; }
+.sop-g b{ display:block; font-size:17px; margin:5px 0 3px; }
+.sop-g em{ font-style:normal; font-size:11.5px; color:#7a7a7a; line-height:1.4; display:block; }
+.sop-foot{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; font-size:11.5px; color:#9a9a9a; margin-top:6px; }
+.sop-alerta{ display:none; font-size:12.5px; color:#8a5a34; background:#fdf8f4; border:1px solid #ecdccb; border-radius:10px; padding:9px 12px; margin-top:8px; line-height:1.45; }
+@media (max-width:760px){
+  .sop-grid3{ grid-template-columns:1fr 1fr; }
+  .sop-estr{ grid-template-columns:1fr 1fr; }
+  .sop-kpis,.sop-gregas{ grid-template-columns:1fr 1fr; }
+  .sop-leg{ grid-template-columns:1fr 1fr 1fr; }
+  .sop-leg > *{ order:2; }
+  .sop-leg .sop-tipo{ grid-column:1 / 3; order:0; }
+  .sop-leg .sop-del{ grid-column:3; justify-self:end; order:1; align-self:end; }
+  .sop-leg .sop-out{ grid-column:2 / -1; padding-bottom:6px; order:3; }
+}
+@media (max-width:480px){
+  .sop-grid,.sop-grid3{ grid-template-columns:1fr 1fr; }
+  .sop-k b{ font-size:18px; }
+  .sop-chart{ height:330px; }
+  .sop-ch{ flex-wrap:wrap; }
+  .sop-box,.sop-card,.sop-gate{ padding:14px 12px; }
+}
+</style>
+<div class="abp-article"><div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/ferramentas/">Ferramentas</a> &nbsp;›&nbsp;
+    Simulador de Opções Agrícolas
+  </div>
+
+  <div class="abp-badge"><i data-lucide="shield-check"></i> Black-76 · CBOT e B3 com preços de fechamento automáticos</div>
+  <h1 class="abp-h1">Simulador de Opções Agrícolas: put, collar e travas para soja, milho e trigo</h1>
+  <p class="abp-lead">Monte a proteção com opções sobre futuros da CBOT (soja, milho e trigo, em dólares por bushel) ou da B3 (milho, boi e café). O simulador busca o preço do futuro, o vencimento e o dólar, calcula o prêmio pelo modelo Black-76 e mostra o preço mínimo garantido em reais por saca.</p>
+  <div class="abp-cta-row">
+    <a href="#abp-ferramenta" class="abp-cta-link">Ir para o simulador</a>
+    <a href="#abp-formulas" class="abp-cta-link">Ver como calculamos</a>
+  </div>
+
+  <div class="abp-dash-box" id="abp-ferramenta">
+
+    <div class="sop-box">
+      <div class="sop-st">1. O que você quer proteger</div>
+      <div class="sop-chips" id="sopAtivos" role="tablist" aria-label="Ativo"></div>
+      <div class="sop-grid sop-grid3">
+        <div class="sop-f"><label for="sopContrato">Vencimento do futuro</label><select id="sopContrato"></select></div>
+        <div class="sop-f"><label for="sopF" id="sopFlab">Preço do futuro</label><input id="sopF" inputmode="decimal"><span class="sop-hint" id="sopFhint">&nbsp;</span></div>
+        <div class="sop-f"><label for="sopVenc">Vencimento da opção</label><input id="sopVenc" type="date"><span class="sop-hint" id="sopVhint">&nbsp;</span></div>
+        <div class="sop-f"><label for="sopVol">Quantidade a proteger</label><div class="sop-in"><input id="sopVol" inputmode="numeric" value="5.000"><span id="sopVolUn">sacas</span></div><span class="sop-hint" id="sopVolHint">&nbsp;</span></div>
+        <div class="sop-f" id="sopFxBox"><label for="sopFx">Dólar no vencimento</label><div class="sop-in"><span>R$</span><input id="sopFx" inputmode="decimal"></div><span class="sop-hint" id="sopFxHint">&nbsp;</span></div>
+        <div class="sop-f"><label for="sopR" id="sopRlab">Juros ao ano</label><div class="sop-in"><input id="sopR" inputmode="decimal"><span>%</span></div><span class="sop-hint" id="sopRhint">&nbsp;</span></div>
+      </div>
+    </div>
+
+    <div class="sop-box">
+      <div class="sop-st">2. A estratégia</div>
+      <div class="sop-estr" id="sopEstr"></div>
+      <div class="sop-legs-head"><span>Pernas</span><button type="button" class="sop-mini" id="sopAdd"><i data-lucide="plus"></i> Adicionar perna</button></div>
+      <div id="sopLegs"></div>
+      <p class="sop-hint" id="sopLegHint">&nbsp;</p>
+      <button type="button" class="sop-btn" id="sopVer"><i data-lucide="bar-chart-3"></i> Ver resultado</button>
+    </div>
+
+    <div class="sop-gate" id="sopGate" style="display:none;">
+      <div class="sop-gate-ic"><i data-lucide="check-circle-2"></i></div>
+      <div class="sop-gate-t">Seu resultado está pronto</div>
+      <p class="sop-gate-s">Informe seus dados para ver o resultado completo. É só uma vez neste aparelho.</p>
+      <div class="sop-gate-err" id="sopGateErr"></div>
+      <div class="sop-grid">
+        <div class="sop-f"><label for="sopGNome">Nome completo</label><input id="sopGNome" autocomplete="name" placeholder="Seu nome completo"></div>
+        <div class="sop-f"><label for="sopGTel">Telefone / WhatsApp</label><input id="sopGTel" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000"></div>
+        <div class="sop-f"><label for="sopGCid">Cidade</label><input id="sopGCid" placeholder="Sua cidade"></div>
+        <div class="sop-f"><label for="sopGProf">Profissão</label><input id="sopGProf" placeholder="Sua profissão"></div>
+      </div>
+      <div class="sop-gate-ok"><input type="checkbox" id="sopGOk"><label for="sopGOk">Concordo em fornecer meus dados para acesso a esta ferramenta e ser contatado pela AgroBasis.</label></div>
+      <button type="button" class="sop-btn" id="sopGBtn"><i data-lucide="unlock"></i> Ver meu resultado</button>
+      <p class="sop-gate-st" id="sopGSt">Enviando...</p>
+    </div>
+
+    <div id="sopRes" style="display:none;">
+      <div class="sop-veredito" id="sopVeredito"></div>
+      <div class="sop-kpis" id="sopKpis"></div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3 id="sopH1">Seu preço de venda no vencimento</h3><div class="sop-tools"><div class="sop-seg" id="sopUn"></div><button type="button" class="sop-dl" data-dl="0" aria-label="Baixar gráfico"><i data-lucide="download"></i></button></div></div>
+        <div class="sop-chart" id="sopG0"></div>
+        <p class="sop-cap" id="sopCap0"></p>
+      </div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3>Resultado da estratégia</h3><div class="sop-tools"><button type="button" class="sop-dl" data-dl="1" aria-label="Baixar gráfico"><i data-lucide="download"></i></button></div></div>
+        <div class="sop-chart" id="sopG1"></div>
+        <p class="sop-cap" id="sopCap1"></p>
+      </div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3>Cenários no vencimento</h3></div>
+        <div class="sop-tab-wrap"><table class="sop-tab" id="sopCen"></table></div>
+      </div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3>Sensibilidade da posição (gregas)</h3></div>
+        <div class="sop-gregas" id="sopGregas"></div>
+      </div>
+    </div>
+    <div class="sop-foot"><span>Modelo Black-76 · Elaboração: AgroBasis</span><span id="sopAtu"></span></div>
+  </div>
+
+  <h2 class="abp-h2">Como usar esta ferramenta</h2>
+  <ol class="abp-list">
+    <li>Escolha o ativo e o vencimento. Preço do futuro, data de vencimento da opção, dólar e juros já vêm preenchidos com o fechamento mais recente, e todos podem ser editados.</li>
+    <li>Informe quantas sacas quer proteger. O simulador sugere o número de contratos: 5.000 bushels (cerca de 2.268 sacas de soja) na CBOT e 450 sacas no milho da B3.</li>
+    <li>Escolha uma estratégia pronta ou monte até 4 pernas. Se tiver o prêmio de tela da corretora, digite no campo "prêmio de mercado": o simulador usa esse valor e calcula a volatilidade implícita.</li>
+    <li>Clique em "Ver resultado" para ver o custo em reais por saca, o preço mínimo (ou máximo) garantido, o gráfico no vencimento e os cenários.</li>
+  </ol>
+
+  <h2 class="abp-h2" id="abp-formulas">Como calculamos</h2>
+  <div class="abp-formula-box">
+    <span class="abp-formula-code">Call = e^(−rT) × [F·N(d1) − K·N(d2)] &nbsp;·&nbsp; Put = e^(−rT) × [K·N(−d2) − F·N(−d1)]</span>
+    <span class="abp-formula-code">d1 = [ln(F/K) + σ²T/2] / (σ√T) &nbsp;·&nbsp; d2 = d1 − σ√T</span>
+    <span class="abp-formula-code">R$/saca = US$/bushel × bushels por saca × dólar &nbsp;(soja e trigo: 2,2046 · milho: 2,3621)</span>
+  </div>
+  <p class="abp-p">Opção agrícola de bolsa é opção sobre o contrato futuro, por isso usamos o modelo Black-76, que parte do preço do futuro (F) e não do grão físico. K é o preço de exercício (strike), σ a volatilidade, r a taxa de juros da moeda do contrato e T o prazo até o vencimento da opção, em anos. Na CBOT, preços, strikes e prêmios estão em dólares por bushel, como na tela da corretora; o resultado é convertido para reais por saca de 60 kg com o dólar informado. O preço de venda mostrado considera o futuro no vencimento mais o resultado das opções, sem o basis da praça, a corretagem e os custos de margem.</p>
+
+  <div class="abp-note">
+    <b>Aviso:</b> simulação educacional. Os prêmios são teóricos, a não ser quando você informa o prêmio de mercado, e podem diferir da cotação real. Não é recomendação de compra, venda ou investimento.
+  </div>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item"><summary>Por que as opções de soja aparecem em dólares por bushel? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">Porque é assim que a CBOT negocia: futuro, strike e prêmio em dólares (ou centavos) por bushel, num contrato de 5.000 bushels. Usar a mesma unidade da tela da corretora evita erro na hora de comparar. O simulador converte o resultado para reais por saca de 60 kg com o dólar futuro da data de vencimento.</p></details>
+  <details class="abp-faq-item"><summary>De onde vêm o preço do futuro, o vencimento e o dólar? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">São preenchidos com o fechamento mais recente coletado pelo AgroBasis: curva da soja na CBOT, milho e trigo da CBOT, milho da B3 e dólar futuro da B3. A data de vencimento da opção segue a regra de cada bolsa. Todos os campos podem ser editados.</p></details>
+  <details class="abp-faq-item"><summary>Quando vence a opção de soja da CBOT? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">Na última sexta-feira que antecede, em pelo menos dois dias úteis, o último dia útil do mês anterior ao do contrato. A opção de janeiro, por exemplo, vence no fim de dezembro. Na B3, a opção de milho vence no dia 15 do mês do contrato. O simulador calcula a data, mas vale conferir no calendário da bolsa por causa dos feriados.</p></details>
+  <details class="abp-faq-item"><summary>Preciso informar a volatilidade? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">Ela já vem com um valor típico para cada produto. Se você tiver o prêmio de tela da corretora, digite no campo prêmio de mercado: o simulador passa a usar esse prêmio e calcula a volatilidade implícita, que é a forma mais fiel de refletir o mercado do dia.</p></details>
+  <details class="abp-faq-item"><summary>O que é o preço mínimo garantido? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">É o menor preço que a combinação de futuro com opções entrega no vencimento. Numa put de proteção, é o strike menos o prêmio pago. No collar, existe também um preço máximo, porque a call vendida entrega a alta acima do strike dela. O valor não inclui o basis da sua praça nem custos de corretagem.</p></details>
+  <details class="abp-faq-item"><summary>Qual a diferença entre o gráfico no vencimento e o de hoje? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">No vencimento, a opção vale só o que estiver dentro do dinheiro. Hoje, ela ainda tem valor de tempo, que depende do prazo e da volatilidade. A linha tracejada mostra quanto a posição valeria se o futuro mudasse agora.</p></details>
+  <details class="abp-faq-item"><summary>Por que preciso informar meus dados para ver o resultado? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">O cadastro é pedido uma única vez por aparelho, na hora de ver o resultado. Ele permite que a equipe AgroBasis acompanhe quem usa as ferramentas do site e, quando fizer sentido, ofereça conteúdo e contato relevantes.</p></details>
+  <details class="abp-faq-item"><summary>O resultado é uma recomendação? <i data-lucide="chevron-down"></i></summary><p class="abp-faq-a">Não. É uma simulação educacional com base nos números informados e nos preços de fechamento. Não constitui recomendação de investimento, compra ou venda. Decisões de hedge devem considerar a operação completa e a orientação de um profissional qualificado.</p></details>
+  
+
+  <h2 class="abp-h2">Continue explorando</h2>
+  <div class="abp-related-grid">
+    <a href="/simulador-de-soja/" class="abp-related-card"><span class="abp-related-card-title">Vender soja agora ou travar?</span><span class="abp-related-card-sub">Simulador por praça com basis histórico</span></a>
+    <a href="/simulador-de-milho/" class="abp-related-card"><span class="abp-related-card-title">Vender milho agora ou travar na B3?</span><span class="abp-related-card-sub">A mesma comparação para o milho</span></a>
+    <a href="/dashboards/basis-soja-brasil/" class="abp-related-card"><span class="abp-related-card-title">Basis Soja Brasil</span><span class="abp-related-card-sub">Físico contra a CBOT por praça</span></a>
+    <a href="/dashboards/posicao-fundos-cftc/" class="abp-related-card"><span class="abp-related-card-title">Posição dos Fundos</span><span class="abp-related-card-sub">O que os fundos estão fazendo na CBOT</span></a>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fontes: preços de fechamento da CBOT (CME Group) e da B3 e dólar futuro via pipeline AgroBasis; Selic meta do Banco Central; regras de vencimento das opções conforme especificações da CME e da B3. Volatilidade, quantidade e prêmios de mercado informados pelo usuário. Ferramenta educacional elaborada pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda.
+  </div>
+
+</div></div>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Por que as opções de soja aparecem em dólares por bushel?", "acceptedAnswer": {"@type": "Answer", "text": "Porque é assim que a CBOT negocia: futuro, strike e prêmio em dólares (ou centavos) por bushel, num contrato de 5.000 bushels. Usar a mesma unidade da tela da corretora evita erro na hora de comparar. O simulador converte o resultado para reais por saca de 60 kg com o dólar futuro da data de vencimento."}}, {"@type": "Question", "name": "De onde vêm o preço do futuro, o vencimento e o dólar?", "acceptedAnswer": {"@type": "Answer", "text": "São preenchidos com o fechamento mais recente coletado pelo AgroBasis: curva da soja na CBOT, milho e trigo da CBOT, milho da B3 e dólar futuro da B3. A data de vencimento da opção segue a regra de cada bolsa. Todos os campos podem ser editados."}}, {"@type": "Question", "name": "Quando vence a opção de soja da CBOT?", "acceptedAnswer": {"@type": "Answer", "text": "Na última sexta-feira que antecede, em pelo menos dois dias úteis, o último dia útil do mês anterior ao do contrato. A opção de janeiro, por exemplo, vence no fim de dezembro. Na B3, a opção de milho vence no dia 15 do mês do contrato. O simulador calcula a data, mas vale conferir no calendário da bolsa por causa dos feriados."}}, {"@type": "Question", "name": "Preciso informar a volatilidade?", "acceptedAnswer": {"@type": "Answer", "text": "Ela já vem com um valor típico para cada produto. Se você tiver o prêmio de tela da corretora, digite no campo prêmio de mercado: o simulador passa a usar esse prêmio e calcula a volatilidade implícita, que é a forma mais fiel de refletir o mercado do dia."}}, {"@type": "Question", "name": "O que é o preço mínimo garantido?", "acceptedAnswer": {"@type": "Answer", "text": "É o menor preço que a combinação de futuro com opções entrega no vencimento. Numa put de proteção, é o strike menos o prêmio pago. No collar, existe também um preço máximo, porque a call vendida entrega a alta acima do strike dela. O valor não inclui o basis da sua praça nem custos de corretagem."}}, {"@type": "Question", "name": "Qual a diferença entre o gráfico no vencimento e o de hoje?", "acceptedAnswer": {"@type": "Answer", "text": "No vencimento, a opção vale só o que estiver dentro do dinheiro. Hoje, ela ainda tem valor de tempo, que depende do prazo e da volatilidade. A linha tracejada mostra quanto a posição valeria se o futuro mudasse agora."}}, {"@type": "Question", "name": "Por que preciso informar meus dados para ver o resultado?", "acceptedAnswer": {"@type": "Answer", "text": "O cadastro é pedido uma única vez por aparelho, na hora de ver o resultado. Ele permite que a equipe AgroBasis acompanhe quem usa as ferramentas do site e, quando fizer sentido, ofereça conteúdo e contato relevantes."}}, {"@type": "Question", "name": "O resultado é uma recomendação?", "acceptedAnswer": {"@type": "Answer", "text": "Não. É uma simulação educacional com base nos números informados e nos preços de fechamento. Não constitui recomendação de investimento, compra ou venda. Decisões de hedge devem considerar a operação completa e a orientação de um profissional qualificado."}}]}, {"@type": "SoftwareApplication", "name": "Simulador de Opções Agrícolas · AgroBasis", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/simulador-de-opcoes-agricolas/", "description": "Simulador de opções sobre futuros agrícolas da CBOT (soja, milho e trigo em US$/bushel) e da B3 (milho, boi gordo e café) pelo modelo Black-76, com preço mínimo garantido em R$ por saca, gráfico no vencimento, cenários e gregas.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+<script>
+(function () {
+  "use strict";
+  // ---------------- dados e configuração ----------------
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var DIA = 864e5;
+  var LETRA = { F: 1, G: 2, H: 3, J: 4, K: 5, M: 6, N: 7, Q: 8, U: 9, V: 10, X: 11, Z: 12 };
+  var MES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  // fator = unidades de cotação por unidade física (saca ou arroba); tam = unidades de cotação por contrato
+  var ATIVOS = [
+    { id: "soja", nome: "Soja", sub: "CBOT · US$/bu", bolsa: "CBOT", usd: true, un: "US$/bu", fis: "saca", fator: 60 / 27.2155, tam: 5000, vol: 18, passo: 0.10, dec: 4, fonte: "soja" },
+    { id: "milho_cbot", nome: "Milho", sub: "CBOT · US$/bu", bolsa: "CBOT", usd: true, un: "US$/bu", fis: "saca", fator: 60 / 25.4012, tam: 5000, vol: 24, passo: 0.05, dec: 4, fonte: "milho" },
+    { id: "trigo", nome: "Trigo", sub: "CBOT · US$/bu", bolsa: "CBOT", usd: true, un: "US$/bu", fis: "saca", fator: 60 / 27.2155, tam: 5000, vol: 28, passo: 0.05, dec: 4, fonte: "trigo" },
+    { id: "milho_b3", nome: "Milho", sub: "B3 · R$/saca", bolsa: "B3", usd: false, un: "R$/sc", fis: "saca", fator: 1, tam: 450, vol: 25, passo: 0.5, dec: 2, fonte: "ccm" },
+    { id: "boi", nome: "Boi gordo", sub: "B3 · R$/@", bolsa: "B3", usd: false, un: "R$/@", fis: "arroba", fator: 1, tam: 330, vol: 15, passo: 1, dec: 2, fonte: null },
+    { id: "cafe", nome: "Café arábica", sub: "B3 · US$/saca", bolsa: "B3", usd: true, un: "US$/sc", fis: "saca", fator: 1, tam: 100, vol: 35, passo: 5, dec: 2, fonte: null }
+  ];
+  var TIPOS = { cp: ["Compra de put", 1, "p"], vp: ["Venda de put", -1, "p"], cc: ["Compra de call", 1, "c"], vc: ["Venda de call", -1, "c"] };
+  var ESTR = [
+    { id: "put", nome: "Put de proteção", d: "Garante um preço mínimo e mantém a alta", pernas: [["cp", 1]] },
+    { id: "collar", nome: "Collar", d: "Piso pago com a venda de uma call: custo menor, alta limitada", pernas: [["cp", 0.95], ["vc", 1.07]] },
+    { id: "putspread", nome: "Put spread", d: "Proteção mais barata, válida até um limite de queda", pernas: [["cp", 1], ["vp", 0.9]] },
+    { id: "call", nome: "Call de proteção", d: "Para quem compra: garante um preço máximo", pernas: [["cc", 1]] },
+    { id: "travaalta", nome: "Trava de alta", d: "Ganha com a alta até um limite, custo menor", pernas: [["cc", 1], ["vc", 1.1]] },
+    { id: "straddle", nome: "Straddle", d: "Aposta em movimento forte, para qualquer lado", pernas: [["cc", 1], ["cp", 1]] }
+  ];
+  var GATE = { url: "https://docs.google.com/forms/d/e/1FAIpQLSdEFj2pbF7hSAq-DSDvFjIHa73OV7rh46ao84jJJCmX-nsqfw/formResponse", nome: "entry.761004068", cidade: "entry.721602119", tel: "entry.1189307774", prof: "entry.1630365227", chave: "agrobasis_simulador_opcoes_acesso_liberado" };
+
+  var D = {}, A = ATIVOS[0], CONTRATOS = [], st = { estr: "put", un: "saca", legs: [], liberado: false, mostrar: false }, charts = [];
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---------------- formatação ----------------
+  function num(s) {
+    if (typeof s !== "string") return NaN; s = s.trim().replace(/\s|R\$|US\$|%/g, ""); if (!s) return NaN;
+    if (s.indexOf(",") >= 0) return parseFloat(s.replace(/\./g, "").replace(",", "."));
+    if (/^-?\d{1,3}(\.\d{3})+$/.test(s)) return parseFloat(s.replace(/\./g, ""));
+    return parseFloat(s);
+  }
+  function br(v, c) { return v == null || !isFinite(v) ? "-" : v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); }
+  function brIn(v, c) { return isFinite(v) ? br(v, c).replace(/\./g, "") : ""; }
+  function dataBR(d) { return ("0" + d.getUTCDate()).slice(-2) + "/" + ("0" + (d.getUTCMonth() + 1)).slice(-2) + "/" + d.getUTCFullYear(); }
+  function isoD(d) { return d.toISOString().slice(0, 10); }
+  function sinal(v, c) { return (v > 0 ? "+" : v < 0 ? "−" : "") + br(Math.abs(v), c); }
+  function mobile() { return window.innerWidth < 560; }
+
+  // ---------------- datas de vencimento ----------------
+  function feriadoUS(d) { var m = d.getUTCMonth() + 1, dd = d.getUTCDate(), wd = d.getUTCDay(); if ((m === 1 && dd === 1) || (m === 7 && dd === 4) || (m === 12 && dd === 25) || (m === 6 && dd === 19)) return true; if (m === 11 && wd === 4 && dd >= 22 && dd <= 28) return true; return false; }
+  function util(d, fer) { var wd = d.getUTCDay(); return wd !== 0 && wd !== 6 && !(fer && fer(d)); }
+  // CBOT (opções padrão): última sexta-feira que antecede, em pelo menos 2 dias úteis, o último dia útil do mês anterior ao do contrato
+  function vencOpcaoCBOT(ano, mes) {
+    var d = new Date(Date.UTC(ano, mes - 1, 0));
+    while (!util(d, feriadoUS)) d = new Date(d - DIA);
+    for (var k = 0; k < 2;) { d = new Date(d - DIA); if (util(d, feriadoUS)) k++; }
+    while (d.getUTCDay() !== 5) d = new Date(d - DIA);
+    while (!util(d, feriadoUS)) d = new Date(d - DIA);
+    return d;
+  }
+  // B3 (milho, boi): dia 15 do mês de vencimento, ou o dia útil seguinte
+  function vencB3(ano, mes) { var d = new Date(Date.UTC(ano, mes - 1, 15)); while (!util(d)) d = new Date(d.getTime() + DIA); return d; }
+  function rotulo(ano, mes) { return MES[mes - 1].replace(/^./, function (c) { return c.toUpperCase(); }) + "/" + String(ano).slice(-2); }
+
+  function montarContratos() {
+    var hoje = Date.now(), out = [];
+    function add(cod, F) { var l = cod.charAt(cod.length - 3), ano = 2000 + +cod.slice(-2), mes = LETRA[l]; var v = A.bolsa === "CBOT" ? vencOpcaoCBOT(ano, mes) : vencB3(ano, mes); if (v.getTime() > hoje) out.push({ cod: cod, rot: rotulo(ano, mes), F: F, venc: v }); }
+    if (A.fonte === "soja" && D.soja) Object.keys(D.soja.cbot).forEach(function (k) { add(k, D.soja.cbot[k].cents_bu / 100); });
+    if ((A.fonte === "milho" || A.fonte === "trigo") && D.manha) ((D.manha.cbot[A.fonte] || {}).contratos || []).forEach(function (c) { add(c.contrato, (c.preco || c.ajuste_anterior) / 100); });
+    if (A.fonte === "ccm" && D.ccm) Object.keys(D.ccm.curva).forEach(function (k) { add(k, D.ccm.curva[k]); });
+    out.sort(function (a, b) { return a.venc - b.venc; });
+    CONTRATOS = out;
+    var sel = $("sopContrato"); sel.innerHTML = "";
+    out.forEach(function (c, i) { sel.appendChild(new Option(c.rot + " · " + c.cod + " · opção vence " + dataBR(c.venc), i)); });
+    sel.appendChild(new Option("Outro vencimento (digitar)", "m"));
+    sel.value = out.length ? (out.length > 1 && (out[0].venc - hoje) < 20 * DIA ? 1 : 0) : "m";
+  }
+
+  function dolarEm(t) {
+    if (!D.soja || !D.soja.dolar) return ultimaPtax();
+    var p = Object.keys(D.soja.dolar).map(function (k) { return [Date.parse(D.soja.dolar[k].vencimento + "T00:00:00Z"), D.soja.dolar[k].brl]; }).sort(function (a, b) { return a[0] - b[0]; });
+    if (!p.length) return ultimaPtax();
+    if (t <= p[0][0]) return p[0][1];
+    for (var i = 1; i < p.length; i++) if (t <= p[i][0]) return p[i - 1][1] + (p[i][1] - p[i - 1][1]) * (t - p[i - 1][0]) / (p[i][0] - p[i - 1][0]);
+    return p[p.length - 1][1];
+  }
+  function ultimaPtax() { var v = D.cambio && D.cambio.ptax && D.cambio.ptax.valores; return v && v.length ? v[v.length - 1] : 5.5; }
+
+  // ---------------- Black-76 ----------------
+  function N(x) { var t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989422804014327 * Math.exp(-x * x / 2); var p = d * t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429)))); return x >= 0 ? 1 - p : p; }
+  function phi(x) { return 0.3989422804014327 * Math.exp(-x * x / 2); }
+  function b76(F, K, s, T, r, tipo) {
+    if (T <= 0 || s <= 0) { var iv = tipo === "c" ? Math.max(F - K, 0) : Math.max(K - F, 0); return { v: iv, d: tipo === "c" ? (F > K ? 1 : 0) : (F < K ? -1 : 0), g: 0, th: 0, ve: 0 }; }
+    var sq = Math.sqrt(T), d1 = (Math.log(F / K) + s * s * T / 2) / (s * sq), d2 = d1 - s * sq, df = Math.exp(-r * T);
+    var v = tipo === "c" ? df * (F * N(d1) - K * N(d2)) : df * (K * N(-d2) - F * N(-d1));
+    return { v: v, d: tipo === "c" ? df * N(d1) : -df * N(-d1), g: df * phi(d1) / (F * s * sq), ve: df * F * phi(d1) * sq / 100, th: (-F * df * phi(d1) * s / (2 * sq) + r * v) / 365 };
+  }
+  // volatilidade implícita por bisseção a partir do prêmio de mercado
+  function volImp(P, F, K, T, r, tipo) {
+    var lo = 0.005, hi = 3, intr = Math.exp(-r * T) * (tipo === "c" ? Math.max(F - K, 0) : Math.max(K - F, 0));
+    if (!(P > intr) || T <= 0) return null;
+    for (var i = 0; i < 80; i++) { var m = (lo + hi) / 2; if (b76(F, K, m, T, r, tipo).v > P) hi = m; else lo = m; }
+    return (lo + hi) / 2;
+  }
+
+  // ---------------- leitura das entradas ----------------
+  function entradas() {
+    var F = num($("sopF").value), v = $("sopVenc").value ? Date.parse($("sopVenc").value + "T00:00:00Z") : NaN;
+    var hoje = Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+    return { F: F, T: isFinite(v) ? Math.max(0, (v - hoje) / DIA / 365) : NaN, dias: isFinite(v) ? Math.round((v - hoje) / DIA) : NaN, r: num($("sopR").value) / 100, fx: A.usd ? num($("sopFx").value) : 1, vol: num($("sopVol").value) };
+  }
+  function contratosSugeridos(vol) { var porC = A.tam / A.fator; return Math.max(1, Math.round(vol / porC)); }
+  function arred(x) { var p = A.passo; return +(Math.round(x / p) * p).toFixed(4); }
+
+  // ---------------- pernas ----------------
+  function aplicarEstrategia(id) {
+    st.estr = id; var e = ESTR.filter(function (x) { return x.id === id; })[0], E = entradas();
+    var n = isFinite(E.vol) && E.vol > 0 ? contratosSugeridos(E.vol) : 1;
+    st.legs = e.pernas.map(function (p) { return { tipo: p[0], K: isFinite(E.F) ? arred(E.F * p[1]) : NaN, vol: A.vol, n: n, pm: NaN }; });
+    $("sopEstr").querySelectorAll(".sop-e").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.e === id)); });
+    desenharPernas(); atualizar();
+  }
+  function desenharPernas() {
+    var dec = A.usd && A.bolsa === "CBOT" ? 2 : A.dec;
+    $("sopLegs").innerHTML = st.legs.map(function (l, i) {
+      var opts = Object.keys(TIPOS).map(function (k) { return '<option value="' + k + '"' + (k === l.tipo ? " selected" : "") + ">" + TIPOS[k][0] + "</option>"; }).join("");
+      return '<div class="sop-leg" data-i="' + i + '">' +
+        '<div class="sop-tipo"><label>Operação</label><select data-k="tipo">' + opts + "</select></div>" +
+        '<div><label>Strike ' + A.un + '</label><input data-k="K" inputmode="decimal" value="' + brIn(l.K, dec) + '"></div>' +
+        '<div><label>Volatilidade %</label><input data-k="vol" inputmode="decimal" value="' + brIn(l.vol, 1) + '"></div>' +
+        '<div><label>Contratos</label><input data-k="n" inputmode="numeric" value="' + l.n + '"></div>' +
+        '<div><label>Prêmio de mercado</label><input data-k="pm" inputmode="decimal" placeholder="opcional" value="' + (isFinite(l.pm) ? brIn(l.pm, A.bolsa === "CBOT" ? 4 : A.dec) : "") + '"></div>' +
+        '<div class="sop-out" id="sopOut' + i + '"></div>' +
+        '<button type="button" class="sop-del" data-del="' + i + '" aria-label="Remover perna"><i data-lucide="x"></i></button></div>';
+    }).join("");
+    $("sopAdd").disabled = st.legs.length >= 4;
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // cálculo completo da posição
+  function calcular() {
+    var E = entradas();
+    if (!(E.F > 0) || !isFinite(E.T) || !isFinite(E.r) || !(E.fx > 0) || !st.legs.length) return null;
+    var nBase = 0, legs = [];
+    for (var i = 0; i < st.legs.length; i++) {
+      var l = st.legs[i], tp = TIPOS[l.tipo]; if (!(l.K > 0) || !(l.n > 0)) return null;
+      var iv = isFinite(l.pm) && l.pm > 0 ? volImp(l.pm, E.F, l.K, E.T, E.r, tp[2]) : null;
+      var s = iv || l.vol / 100, g = b76(E.F, l.K, s, E.T, E.r, tp[2]);
+      var prem = isFinite(l.pm) && l.pm > 0 ? l.pm : g.v;
+      legs.push({ tipo: l.tipo, c: tp[2], sg: tp[1], K: l.K, n: l.n, s: s, iv: iv, teor: b76(E.F, l.K, l.vol / 100, E.T, E.r, tp[2]).v, prem: prem, g: g });
+      nBase = Math.max(nBase, l.n);
+    }
+    var custoU = legs.reduce(function (a, l) { return a + l.sg * l.n * l.prem; }, 0) / nBase; // por unidade de cotação, positivo = paga
+    var conv = A.fator * E.fx; // unidade de cotação -> R$ por unidade física
+    function payoff(FT) { return legs.reduce(function (a, l) { return a + l.sg * l.n * (l.c === "c" ? Math.max(FT - l.K, 0) : Math.max(l.K - FT, 0)); }, 0) / nBase - custoU; }
+    function hoje(FT) { return legs.reduce(function (a, l) { return a + l.sg * l.n * b76(FT, l.K, l.s, E.T, E.r, l.c).v; }, 0) / nBase - custoU; }
+    var lado = legs.some(function (l) { return l.tipo === "cp"; }) ? "vende" : legs.some(function (l) { return l.tipo === "cc"; }) ? "compra" : null;
+    if (st.estr === "straddle" || st.estr === "travaalta") lado = null; // estratégias de posição, sem lado de proteção
+    function efetivo(FT) { return lado === "compra" ? FT - payoff(FT) : FT + payoff(FT); }
+    // malha de preços para pontos de equilíbrio, piso e teto
+    var lo = E.F * 0.4, hi = E.F * 1.8, pts = 400, grid = [];
+    for (var k = 0; k <= pts; k++) grid.push(lo + (hi - lo) * k / pts);
+    var be = [];
+    for (k = 1; k < grid.length; k++) { var a = payoff(grid[k - 1]), b = payoff(grid[k]); if ((a < 0 && b >= 0) || (a > 0 && b <= 0)) be.push(grid[k - 1] + (grid[k] - grid[k - 1]) * Math.abs(a) / (Math.abs(a) + Math.abs(b))); }
+    var piso = null, teto = null;
+    if (lado) {
+      var e0 = efetivo(grid[0]), e1 = efetivo(grid[1]), eN = efetivo(grid[pts]), eM = efetivo(grid[pts - 1]);
+      if (Math.abs(e1 - e0) < 1e-9 * E.F + 1e-9) piso = e0;
+      if (Math.abs(eN - eM) < 1e-9 * E.F + 1e-9) teto = eN;
+    }
+    var dl = 0, gm = 0, th = 0, ve = 0;
+    legs.forEach(function (l) { dl += l.sg * l.n * l.g.d; gm += l.sg * l.n * l.g.g; th += l.sg * l.n * l.g.th * A.tam; ve += l.sg * l.n * l.g.ve * A.tam; });
+    var maxP = Math.max(payoff(grid[0]), payoff(grid[pts])), ganhoIlim = payoff(grid[pts]) > payoff(grid[pts - 1]) + 1e-9 || payoff(grid[0]) > payoff(grid[1]) + 1e-9;
+    var perdaIlim = payoff(grid[pts]) < payoff(grid[pts - 1]) - 1e-9 || payoff(grid[0]) < payoff(grid[1]) - 1e-9;
+    var minP = Math.min.apply(null, grid.map(payoff));
+    return { E: E, legs: legs, nBase: nBase, custoU: custoU, conv: conv, payoff: payoff, hoje: hoje, efetivo: efetivo, lado: lado, be: be, piso: piso, teto: teto,
+      totalMoeda: custoU * nBase * A.tam, dl: dl, gm: gm, th: th, ve: ve, perdaMax: perdaIlim ? null : minP, ganhoIlim: ganhoIlim, sacas: nBase * A.tam / A.fator };
+  }
+
+  // ---------------- interface: atualização ----------------
+  function fmtCot(v) { return A.bolsa === "CBOT" ? "US$ " + br(v, 4) : (A.usd ? "US$ " : "R$ ") + br(v, A.dec); }
+  function fmtFis(v, c) { return "R$ " + br(v, c == null ? 2 : c); } // em reais por unidade física
+  function unFis() { return A.fis === "arroba" ? "/@" : "/sc"; }
+  function premTxt(v) { return A.bolsa === "CBOT" ? "US$ " + br(v, 4) + "/bu <span>(" + br(v * 100, 2) + " ¢)</span>" : (A.usd ? "US$ " : "R$ ") + br(v, A.dec) + "<span>" + A.un.replace(/^R\$|^US\$/, "") + "</span>"; }
+
+  function atualizar() {
+    var E = entradas(), porC = A.tam / A.fator;
+    $("sopVolHint").textContent = isFinite(E.vol) && E.vol > 0 ? "≈ " + br(E.vol / porC, 2) + " contrato(s) de " + br(porC, 0) + " " + (A.fis === "arroba" ? "arrobas" : "sacas") : " ";
+    $("sopVhint").textContent = isFinite(E.dias) ? (E.dias >= 0 ? E.dias + " dias até o vencimento" : "data já passou") : " ";
+    var R = calcular();
+    st.legs.forEach(function (l, i) {
+      var o = $("sopOut" + i); if (!o) return;
+      var x = R && R.legs[i];
+      if (!x) { o.innerHTML = '<span>preencha os campos</span>'; return; }
+      o.innerHTML = "<b>" + premTxt(x.teor) + "</b><span>prêmio teórico" + (x.iv ? " · vol. implícita " + br(x.iv * 100, 1) + "%" : "") + "</span>";
+    });
+    var nLeg = st.legs.length ? Math.max.apply(null, st.legs.map(function (l) { return l.n || 0; })) : 0;
+    $("sopLegHint").textContent = nLeg && isFinite(E.vol) ? "As pernas cobrem " + br(nLeg * porC, 0) + " " + (A.fis === "arroba" ? "arrobas" : "sacas") + " (" + br(nLeg * porC / E.vol * 100, 0) + "% do volume informado)." : " ";
+    if (st.mostrar && st.liberado) resultado(R);
+  }
+
+  function resultado(R) {
+    if (!R) { $("sopRes").style.display = "none"; return; }
+    $("sopRes").style.display = "";
+    var E = R.E, paga = R.custoU >= 0, cfis = R.custoU * R.conv, uf = unFis();
+    // veredito em uma frase
+    var est = ESTR.filter(function (x) { return x.id === st.estr; })[0], frase;
+    if (R.lado === "vende" && R.piso != null) frase = "<b>Preço mínimo garantido de " + fmtFis(R.piso * R.conv) + uf + "</b>" + (A.usd ? " (" + fmtCot(R.piso) + (A.bolsa === "CBOT" ? "/bu" : "/sc") + ")" : "") + " no vencimento" + (R.teto != null ? ", com preço máximo de " + fmtFis(R.teto * R.conv) + uf : ", mantendo o ganho se o mercado subir") + ". Custo de " + (paga ? fmtFis(cfis) : "crédito de " + fmtFis(-cfis)) + uf + ".";
+    else if (R.lado === "compra" && R.teto != null) frase = "<b>Preço máximo de compra de " + fmtFis(R.teto * R.conv) + uf + "</b> no vencimento, aproveitando se o mercado cair. Custo de " + fmtFis(cfis) + uf + ".";
+    else frase = "<b>" + (est ? est.nome : "Estratégia") + "</b> com " + (paga ? "custo de " + fmtFis(cfis) : "crédito de " + fmtFis(-cfis)) + uf + (R.be.length ? " e ponto de equilíbrio em " + R.be.map(function (b) { return fmtCot(b); }).join(" e ") : "") + ".";
+    $("sopVeredito").innerHTML = '<i data-lucide="shield-check"></i><div>' + frase + "</div>";
+    // indicadores
+    var k = [];
+    k.push(["Custo por " + A.fis, (paga ? "" : "−") + fmtFis(Math.abs(cfis)) + "<small>" + uf + "</small>", A.bolsa === "CBOT" ? "US$ " + br(Math.abs(R.custoU), 4) + "/bu · " + br(Math.abs(R.custoU) * 100, 2) + " ¢" : (paga ? "prêmio líquido pago" : "crédito líquido recebido")]);
+    var tot = R.totalMoeda * (A.usd ? E.fx : 1);
+    k.push(["Custo total", (paga ? "" : "−") + "R$ " + br(Math.abs(tot), 0), (A.usd ? "US$ " + br(Math.abs(R.totalMoeda), 0) + " · " : "") + R.nBase + " contrato(s), " + br(R.sacas, 0) + " " + (A.fis === "arroba" ? "@" : "sc")]);
+    if (R.lado === "vende" && R.piso != null) k.push(["Preço mínimo", fmtFis(R.piso * R.conv) + "<small>" + uf + "</small>", fmtCot(R.piso) + " no futuro, sem basis"]);
+    else if (R.lado === "compra" && R.teto != null) k.push(["Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", fmtCot(R.teto) + " no futuro, sem basis"]);
+    else k.push(["Equilíbrio", R.be.length ? R.be.map(function (b) { return br(b, A.bolsa === "CBOT" ? 2 : A.dec); }).join(" e ") : "-", "futuro no vencimento, " + A.un]);
+    if (R.lado === "vende" && R.teto != null) k.push(["Preço máximo", fmtFis(R.teto * R.conv) + "<small>" + uf + "</small>", "a alta acima do strike vendido fica com o comprador"]);
+    else k.push(["Perda máxima", R.perdaMax == null ? "ilimitada" : "R$ " + br(Math.abs(R.perdaMax * R.nBase * A.tam * (A.usd ? E.fx : 1)), 0), R.perdaMax == null ? "há venda de opção descoberta" : "no vencimento, na pior hipótese"]);
+    $("sopKpis").innerHTML = k.map(function (x) { return '<div class="sop-k"><span>' + x[0] + "</span><b>" + x[1] + "</b><em>" + x[2] + "</em></div>"; }).join("");
+    // gregas
+    var porC = A.tam / A.fator, mo = A.usd ? E.fx : 1;
+    $("sopGregas").innerHTML = [
+      ["Delta", sinal(R.dl, 2) + " contr.", "equivale a " + sinal(R.dl * porC, 0) + " " + (A.fis === "arroba" ? "@" : "sc") + "; quanto a posição se move com o futuro"],
+      ["Gamma", sinal(R.gm, 4), "quanto o delta muda a cada 1 " + A.un.split("/")[0] + " no futuro"],
+      ["Theta", (R.th < 0 ? "−" : "+") + "R$ " + br(Math.abs(R.th * mo), 0) + "/dia", "ganho ou perda por dia só pela passagem do tempo"],
+      ["Vega", (R.ve < 0 ? "−" : "+") + "R$ " + br(Math.abs(R.ve * mo), 0), "por 1 ponto percentual de volatilidade"]
+    ].map(function (g) { return '<div class="sop-g"><span>' + g[0] + "</span><b>" + g[1] + "</b><em>" + g[2] + "</em></div>"; }).join("");
+    // cenários
+    var lin = [-20, -10, -5, 0, 5, 10, 20].map(function (p) {
+      var FT = E.F * (1 + p / 100), po = R.payoff(FT), ef = R.efetivo(FT);
+      return "<tr" + (p === 0 ? ' class="atual"' : "") + "><td>" + (p === 0 ? "Sem mudança" : (p > 0 ? "Alta de " : "Queda de ") + Math.abs(p) + "%") + "</td><td>" + fmtCot(FT) + "</td><td class=\"" + (po >= 0 ? "pos" : "neg") + "\">" + sinal(po * R.conv, 2) + "</td><td class=\"" + (po >= 0 ? "pos" : "neg") + "\">" + sinal(po * R.nBase * A.tam * mo, 0) + "</td>" + (R.lado ? "<td>" + fmtFis(FT * R.conv) + "</td><td><b>" + fmtFis(ef * R.conv) + "</b></td>" : "") + "</tr>";
+    }).join("");
+    $("sopCen").innerHTML = "<thead><tr><th>Futuro no vencimento</th><th>" + A.un + "</th><th>Opções R$" + uf + "</th><th>Opções total R$</th>" + (R.lado ? "<th>Sem proteção R$" + uf + "</th><th>" + (R.lado === "compra" ? "Custo final" : "Com proteção") + " R$" + uf + "</th>" : "") + "</tr></thead><tbody>" + lin + "</tbody>";
+    // unidades do gráfico
+    var temNat = A.bolsa === "CBOT" || A.usd;
+    $("sopUn").style.display = temNat ? "" : "none";
+    $("sopUn").innerHTML = '<button data-u="saca" aria-pressed="' + (st.un === "saca") + '">R$' + uf + "</button><button data-u=\"nat\" aria-pressed=\"" + (st.un === "nat") + "\">" + A.un + "</button>";
+    $("sopH1").textContent = R.lado === "compra" ? "Seu custo de compra no vencimento" : R.lado === "vende" ? "Seu preço de venda no vencimento" : "Posição no vencimento";
+    charts[0].setOption(g0(R), true); charts[1].setOption(g1(R), true);
+    $("sopCap0").textContent = R.lado ? "Linha cinza: o preço acompanhando o futuro, sem proteção. Linha verde: o mesmo preço somado ao resultado das opções. Não inclui basis, corretagem e custos de margem." + (A.usd ? " Conversão com dólar de R$ " + br(E.fx, 4) + "." : "") : "Estratégia sem lado de proteção definido: o gráfico mostra o resultado das opções.";
+    $("sopCap1").textContent = "Resultado das opções por " + A.fis + ", já descontado o prêmio. Linha cheia: no vencimento. Tracejada: hoje, com o prazo e a volatilidade atuais.";
+    if (window.lucide) lucide.createIcons();
+  }
+
+  // ---------------- gráficos ----------------
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)" };
+  var base = { textStyle: { fontFamily: "Geist, Arial, sans-serif", color: COR.tx }, animationDuration: 350,
+    tooltip: { trigger: "axis", confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" } };
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 64) + "px Sora, Geist, sans-serif" } }; }
+  function fy(R) { return st.un === "saca" || !(A.bolsa === "CBOT" || A.usd) ? function (v) { return v * R.conv; } : function (v) { return v; }; }
+  function decY() { return st.un === "saca" || !(A.bolsa === "CBOT" || A.usd) ? 2 : A.bolsa === "CBOT" ? 4 : A.dec; }
+  function malha(R) { var lo = R.E.F * 0.7, hi = R.E.F * 1.3, out = []; for (var k = 0; k <= 120; k++) out.push(lo + (hi - lo) * k / 120); return out; }
+  function eixoX(R) { var c = A.bolsa === "CBOT" ? 2 : A.dec; return { type: "value", min: R.E.F * 0.7, max: R.E.F * 1.3, name: "futuro no vencimento (" + A.un + ")", nameLocation: "middle", nameGap: 28, nameTextStyle: { color: COR.mt, fontSize: 11 }, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return br(v, c); }, hideOverlap: true, showMinLabel: false, showMaxLabel: false }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } } }; }
+  function eixoY() { var d = decY(); return { type: "value", scale: true, splitNumber: 5, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return br(v, d > 2 ? 2 : 0); } }, splitLine: { lineStyle: { color: COR.grade } } }; }
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+  function txY(v) { return st.un === "saca" || !(A.bolsa === "CBOT" || A.usd) ? "R$ " + br(v, 2) + unFis() : fmtCot(v); }
+  function g0(R) {
+    var f = fy(R), xs = malha(R), sem = xs.map(function (x) { return [x, f(x)]; }), com = xs.map(function (x) { return [x, f(R.lado ? R.efetivo(x) : R.payoff(x))]; });
+    var ml = [{ xAxis: R.E.F, lineStyle: { color: COR.cz, type: [4, 4] }, label: { formatter: "hoje " + br(R.E.F, A.bolsa === "CBOT" ? 2 : A.dec), position: "insideEndTop", color: COR.mt, fontSize: 10.5 } }];
+    if (R.piso != null) ml.push({ yAxis: f(R.piso), lineStyle: { color: COR.vd, type: [6, 4] }, label: { formatter: "mínimo " + txY(f(R.piso)), position: "insideStartTop", color: COR.vd, fontWeight: 700, fontSize: 11 } });
+    if (R.teto != null) ml.push({ yAxis: f(R.teto), lineStyle: { color: COR.mr, type: [6, 4] }, label: { formatter: "máximo " + txY(f(R.teto)), position: "insideStartBottom", color: COR.mr, fontWeight: 700, fontSize: 11 } });
+    var series = [];
+    if (R.lado) series.push({ name: "Sem proteção", type: "line", data: sem, symbol: "none", lineStyle: { width: 1.6, color: "#A9B2AB" }, itemStyle: { color: "#A9B2AB" } });
+    series.push({ name: R.lado ? "Com a estratégia" : "Resultado", type: "line", data: com, symbol: "none", lineStyle: { width: 3, color: COR.vd }, itemStyle: { color: COR.vd }, z: 5, markLine: { silent: true, symbol: "none", data: ml } });
+    return Object.assign({}, base, { graphic: [marca()], legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 14, top: 32, bottom: 34, containLabel: true }, xAxis: eixoX(R), yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { formatter: function (ps) { var h = "<b>Futuro a " + fmtCot(ps[0].value[0]) + "</b>"; ps.forEach(function (q) { h += tl(q.marker, q.seriesName, txY(q.value[1])); }); return h; } }),
+      series: series });
+  }
+  function g1(R) {
+    var f = fy(R), xs = malha(R), ven = xs.map(function (x) { return [x, f(R.payoff(x))]; }), hj = xs.map(function (x) { return [x, f(R.hoje(x))]; });
+    var pos = ven.map(function (p) { return [p[0], Math.max(p[1], 0)]; }), neg = ven.map(function (p) { return [p[0], Math.min(p[1], 0)]; });
+    var bes = R.be.filter(function (b) { return b >= R.E.F * 0.7 && b <= R.E.F * 1.3; }).map(function (b) { return { coord: [b, 0], value: br(b, A.bolsa === "CBOT" ? 2 : A.dec) }; });
+    return Object.assign({}, base, { graphic: [marca()], legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: ["No vencimento", { name: "Hoje", icon: "path://M0,3h6v2H0z M9,3h6v2H9z" }] },
+      grid: { left: 6, right: 14, top: 32, bottom: 34, containLabel: true }, xAxis: eixoX(R), yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { formatter: function (ps) { var h = "<b>Futuro a " + fmtCot(ps[0].value[0]) + "</b>"; ps.forEach(function (q) { if (q.seriesName.charAt(0) !== "_") h += tl(q.marker, q.seriesName, txY(q.value[1])); }); return h; } }),
+      series: [
+        { name: "_pos", type: "line", data: pos, symbol: "none", lineStyle: { width: 0 }, areaStyle: { color: "rgba(84,147,27,.16)" }, silent: true, tooltip: { show: false } },
+        { name: "_neg", type: "line", data: neg, symbol: "none", lineStyle: { width: 0 }, areaStyle: { color: "rgba(192,120,47,.14)" }, silent: true, tooltip: { show: false } },
+        { name: "Hoje", type: "line", data: hj, symbol: "none", lineStyle: { width: 1.6, color: COR.cz, type: [6, 4] }, itemStyle: { color: COR.cz } },
+        { name: "No vencimento", type: "line", data: ven, symbol: "none", lineStyle: { width: 2.8, color: COR.vd }, itemStyle: { color: COR.vd }, z: 5,
+          markPoint: bes.length ? { symbol: "circle", symbolSize: 9, itemStyle: { color: "#fff", borderColor: COR.vd, borderWidth: 2 }, label: { show: true, position: "top", distance: 6, color: COR.vd, fontSize: 11, fontWeight: 700, formatter: function (q) { return "equilíbrio " + q.value; } }, data: bes } : undefined,
+          markLine: { silent: true, symbol: "none", data: [{ yAxis: 0, lineStyle: { color: "#b9c0bb", type: "solid", width: 1 }, label: { show: false } }, { xAxis: R.E.F, lineStyle: { color: COR.cz, type: [4, 4] }, label: { formatter: "hoje", position: "insideEndTop", color: COR.mt, fontSize: 10.5 } }] } }
+      ] });
+  }
+  function baixar(i) {
+    var R = calcular(); if (!R) return;
+    var opt = [g0, g1][i](R), tit = [$("sopH1").textContent, "Resultado da estratégia"][i];
+    var est = ESTR.filter(function (x) { return x.id === st.estr; })[0];
+    opt.animation = false;
+    opt.title = { text: tit + " · " + A.nome + " " + A.bolsa, subtext: (est ? est.nome + " · " : "") + R.legs.map(function (l) { return TIPOS[l.tipo][0].toLowerCase() + " " + br(l.K, A.bolsa === "CBOT" ? 2 : A.dec); }).join(", "), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { color: COR.mt, fontSize: 12 } };
+    opt.legend = Object.assign({}, opt.legend, { top: 54, left: 8 }); opt.grid = Object.assign({}, opt.grid, { top: 84, bottom: 50 });
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Simulador de Opções (Black-76)", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    charts[i].setOption(opt, true);
+    var url = charts[i].getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    resultado(R);
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-opcoes-" + A.id + "-" + ["preco", "resultado"][i] + ".png"; document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  // ---------------- troca de ativo e contrato ----------------
+  function escolherAtivo(id) {
+    A = ATIVOS.filter(function (x) { return x.id === id; })[0];
+    $("sopAtivos").querySelectorAll(".sop-chip").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.a === id)); });
+    $("sopFlab").textContent = "Preço do futuro (" + A.un + ")";
+    $("sopVolUn").textContent = A.fis === "arroba" ? "arrobas" : "sacas";
+    $("sopFxBox").style.display = A.usd ? "" : "none";
+    $("sopRlab").textContent = A.usd ? "Juros em dólar ao ano" : "Juros em real ao ano";
+    var r = $("sopR"); r.value = A.usd ? "4,0" : br(D.cambio && D.cambio.selic && D.cambio.selic.meta_aa || 13.75, 2); r.dataset.auto = "1";
+    $("sopRhint").textContent = A.usd ? "taxa de referência em dólar (SOFR), ajuste se quiser" : "Selic meta do Banco Central";
+    $("sopVol").value = A.fis === "arroba" ? "1.000" : A.bolsa === "CBOT" ? brIn(Math.round(A.tam / A.fator * 2 / 100) * 100, 0) : "5.000";
+    montarContratos(); escolherContrato();
+  }
+  function escolherContrato() {
+    var v = $("sopContrato").value, c = v === "m" ? null : CONTRATOS[+v];
+    var dec = A.bolsa === "CBOT" ? 4 : A.dec;
+    if (c) {
+      $("sopF").value = brIn(c.F, dec); $("sopF").dataset.auto = "1";
+      $("sopVenc").value = isoD(c.venc); $("sopVenc").dataset.auto = "1";
+      var fonte = A.fonte === "soja" ? D.soja && D.soja.atualizado_em : A.fonte === "ccm" ? D.ccm && D.ccm.atualizado_em : D.manha && D.manha.gerado_em_brt;
+      $("sopFhint").textContent = "fechamento" + (fonte ? " de " + String(fonte).slice(0, 10).replace(/(\d{4})-(\d\d)-(\d\d)/, "$3/$2/$1") : "") + ", pode editar";
+      $("sopVhint").textContent = "";
+    } else {
+      $("sopF").dataset.auto = "0"; $("sopVenc").dataset.auto = "0";
+      if (!$("sopVenc").value) $("sopVenc").value = isoD(new Date(Date.now() + 90 * DIA));
+      $("sopFhint").textContent = "digite o preço do futuro";
+    }
+    if (A.usd) {
+      var t = Date.parse($("sopVenc").value + "T00:00:00Z"), fx = A.bolsa === "CBOT" || A.id === "cafe" ? dolarEm(t) : ultimaPtax();
+      $("sopFx").value = brIn(fx, 4); $("sopFx").dataset.auto = "1";
+      $("sopFxHint").textContent = "dólar futuro da B3 na data, pode editar";
+    }
+    aplicarEstrategia(st.estr);
+  }
+
+  // ---------------- cadastro ----------------
+  function liberar() { st.liberado = true; st.mostrar = true; $("sopGate").style.display = "none"; atualizar(); charts.forEach(function (c) { c.resize(); }); atualizar(); $("sopRes").scrollIntoView({ behavior: "smooth", block: "start" }); }
+  function enviarGate() {
+    var n = $("sopGNome").value.trim(), c = $("sopGCid").value.trim(), t = $("sopGTel").value.trim(), p = $("sopGProf").value.trim(), ok = $("sopGOk").checked, er = $("sopGateErr");
+    if (!n || !c || !t || !p || !ok) { er.textContent = !ok && n && c && t && p ? "É necessário aceitar o uso dos dados para continuar." : "Preencha todos os campos e aceite o uso dos dados para continuar."; er.style.display = "block"; return; }
+    er.style.display = "none"; $("sopGBtn").disabled = true; $("sopGSt").style.display = "block";
+    var b = new URLSearchParams(); b.append(GATE.nome, n); b.append(GATE.cidade, c); b.append(GATE.tel, t); b.append(GATE.prof, p);
+    fetch(GATE.url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: b.toString() })
+      .then(function () { try { localStorage.setItem(GATE.chave, "1"); } catch (e) {} $("sopGSt").textContent = "Pronto!"; setTimeout(liberar, 300); })
+      .catch(function () { $("sopGBtn").disabled = false; $("sopGSt").style.display = "none"; er.textContent = "Não foi possível enviar seus dados agora. Tente novamente em instantes."; er.style.display = "block"; });
+  }
+  function verResultado() {
+    if (!calcular()) { $("sopLegHint").textContent = "Preencha o preço do futuro, o vencimento e as pernas para ver o resultado."; return; }
+    if (st.liberado) { liberar(); return; }
+    $("sopGate").style.display = ""; $("sopGate").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  // ---------------- carga ----------------
+  function json(c, i) { i = i || 0; return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).catch(function () { return i + 1 < REPO.length ? json(c, i + 1) : null; }); }
+  function lib(i) { i = i || 0; return new Promise(function (ok, nok) { if (window.echarts) return ok(); var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok; s.onerror = function () { i + 1 < LIBS.length ? lib(i + 1).then(ok, nok) : nok(); }; document.head.appendChild(s); }); }
+
+  function iniciar() {
+    try { st.liberado = localStorage.getItem(GATE.chave) === "1"; } catch (e) {}
+    $("sopAtivos").innerHTML = ATIVOS.map(function (a) { return '<button type="button" class="sop-chip" data-a="' + a.id + '">' + a.nome + "<small>" + a.sub + "</small></button>"; }).join("");
+    $("sopEstr").innerHTML = ESTR.map(function (e) { return '<button type="button" class="sop-e" data-e="' + e.id + '"><b>' + e.nome + "</b><span>" + e.d + "</span></button>"; }).join("");
+    charts = [echarts.init($("sopG0")), echarts.init($("sopG1"))];
+    $("sopAtivos").addEventListener("click", function (e) { var b = e.target.closest(".sop-chip"); if (b) escolherAtivo(b.dataset.a); });
+    $("sopEstr").addEventListener("click", function (e) { var b = e.target.closest(".sop-e"); if (b) aplicarEstrategia(b.dataset.e); });
+    $("sopContrato").addEventListener("change", escolherContrato);
+    ["sopF", "sopVenc", "sopR", "sopFx", "sopVol"].forEach(function (id) { $(id).addEventListener("input", function () { this.dataset.auto = "0"; atualizar(); }); });
+    $("sopVenc").addEventListener("change", function () { if (A.usd && $("sopFx").dataset.auto === "1") { $("sopFx").value = brIn(dolarEm(Date.parse(this.value + "T00:00:00Z")), 4); } atualizar(); });
+    $("sopVol").addEventListener("change", function () { var E = entradas(); if (E.vol > 0) { var n = contratosSugeridos(E.vol); st.legs.forEach(function (l) { l.n = n; }); desenharPernas(); atualizar(); } });
+    $("sopLegs").addEventListener("input", function (e) { var el = e.target, row = el.closest(".sop-leg"); if (!row) return; var l = st.legs[+row.dataset.i], k = el.dataset.k; l[k] = k === "tipo" ? el.value : k === "n" ? Math.max(0, Math.round(num(el.value))) : num(el.value); atualizar(); });
+    $("sopLegs").addEventListener("change", function (e) { if (e.target.dataset.k === "tipo") { st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (b) { b.setAttribute("aria-pressed", "false"); }); atualizar(); } });
+    $("sopLegs").addEventListener("click", function (e) { var b = e.target.closest("[data-del]"); if (!b) return; st.legs.splice(+b.dataset.del, 1); st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (x) { x.setAttribute("aria-pressed", "false"); }); desenharPernas(); atualizar(); });
+    $("sopAdd").addEventListener("click", function () { if (st.legs.length >= 4) return; var E = entradas(); st.legs.push({ tipo: "cp", K: isFinite(E.F) ? arred(E.F) : NaN, vol: A.vol, n: st.legs[0] ? st.legs[0].n : 1, pm: NaN }); st.estr = "livre"; $("sopEstr").querySelectorAll(".sop-e").forEach(function (x) { x.setAttribute("aria-pressed", "false"); }); desenharPernas(); atualizar(); });
+    $("sopUn").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.un = b.dataset.u; atualizar(); });
+    $("sopVer").addEventListener("click", verResultado);
+    $("sopGBtn").addEventListener("click", enviarGate);
+    document.querySelectorAll("#abp-ferramenta .sop-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (st.mostrar && st.liberado) atualizar(); }, 150); });
+    var datas = [D.soja && D.soja.atualizado_em, D.ccm && D.ccm.atualizado_em].filter(Boolean);
+    $("sopAtu").textContent = datas.length ? "Preços de fechamento: CBOT " + (D.soja ? D.soja.atualizado_em.slice(0, 10) : "-") + " · B3 " + (D.ccm ? D.ccm.atualizado_em.slice(0, 10) : "-") : "";
+    escolherAtivo("soja");
+    if (window.lucide) lucide.createIcons(); else window.addEventListener("load", function () { window.lucide && lucide.createIcons(); });
+  }
+
+  Promise.all([lib(), json("dados/curva_soja.json"), json("dados/curva_ccm.json"), json("dados/manha.json"), json("dados/cambio.json")]).then(function (r) {
+    D = { soja: r[1], ccm: r[2], manha: r[3], cambio: r[4] }; iniciar();
+  }).catch(function () { D = {}; if (window.echarts) iniciar(); else $("abp-ferramenta").insertAdjacentHTML("afterbegin", '<p class="sop-hint">Não foi possível carregar os gráficos agora. Recarregue a página.</p>'); });
+})();
+</script>

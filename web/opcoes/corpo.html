@@ -1,0 +1,121 @@
+<div class="abp-article"><div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/ferramentas/">Ferramentas</a> &nbsp;›&nbsp;
+    Simulador de Opções Agrícolas
+  </div>
+
+  <div class="abp-badge"><i data-lucide="shield-check"></i> Black-76 · CBOT e B3 com preços de fechamento automáticos</div>
+  <h1 class="abp-h1">Simulador de Opções Agrícolas: put, collar e travas para soja, milho e trigo</h1>
+  <p class="abp-lead">Monte a proteção com opções sobre futuros da CBOT (soja, milho e trigo, em dólares por bushel) ou da B3 (milho, boi e café). O simulador busca o preço do futuro, o vencimento e o dólar, calcula o prêmio pelo modelo Black-76 e mostra o preço mínimo garantido em reais por saca.</p>
+  <div class="abp-cta-row">
+    <a href="#abp-ferramenta" class="abp-cta-link">Ir para o simulador</a>
+    <a href="#abp-formulas" class="abp-cta-link">Ver como calculamos</a>
+  </div>
+
+  <div class="abp-dash-box" id="abp-ferramenta">
+
+    <div class="sop-box">
+      <div class="sop-st">1. O que você quer proteger</div>
+      <div class="sop-chips" id="sopAtivos" role="tablist" aria-label="Ativo"></div>
+      <div class="sop-grid sop-grid3">
+        <div class="sop-f"><label for="sopContrato">Vencimento do futuro</label><select id="sopContrato"></select></div>
+        <div class="sop-f"><label for="sopF" id="sopFlab">Preço do futuro</label><input id="sopF" inputmode="decimal"><span class="sop-hint" id="sopFhint">&nbsp;</span></div>
+        <div class="sop-f"><label for="sopVenc">Vencimento da opção</label><input id="sopVenc" type="date"><span class="sop-hint" id="sopVhint">&nbsp;</span></div>
+        <div class="sop-f"><label for="sopVol">Quantidade a proteger</label><div class="sop-in"><input id="sopVol" inputmode="numeric" value="5.000"><span id="sopVolUn">sacas</span></div><span class="sop-hint" id="sopVolHint">&nbsp;</span></div>
+        <div class="sop-f" id="sopFxBox"><label for="sopFx">Dólar no vencimento</label><div class="sop-in"><span>R$</span><input id="sopFx" inputmode="decimal"></div><span class="sop-hint" id="sopFxHint">&nbsp;</span></div>
+        <div class="sop-f"><label for="sopR" id="sopRlab">Juros ao ano</label><div class="sop-in"><input id="sopR" inputmode="decimal"><span>%</span></div><span class="sop-hint" id="sopRhint">&nbsp;</span></div>
+      </div>
+    </div>
+
+    <div class="sop-box">
+      <div class="sop-st">2. A estratégia</div>
+      <div class="sop-estr" id="sopEstr"></div>
+      <div class="sop-legs-head"><span>Pernas</span><button type="button" class="sop-mini" id="sopAdd"><i data-lucide="plus"></i> Adicionar perna</button></div>
+      <div id="sopLegs"></div>
+      <p class="sop-hint" id="sopLegHint">&nbsp;</p>
+      <button type="button" class="sop-btn" id="sopVer"><i data-lucide="bar-chart-3"></i> Ver resultado</button>
+    </div>
+
+    <div class="sop-gate" id="sopGate" style="display:none;">
+      <div class="sop-gate-ic"><i data-lucide="check-circle-2"></i></div>
+      <div class="sop-gate-t">Seu resultado está pronto</div>
+      <p class="sop-gate-s">Informe seus dados para ver o resultado completo. É só uma vez neste aparelho.</p>
+      <div class="sop-gate-err" id="sopGateErr"></div>
+      <div class="sop-grid">
+        <div class="sop-f"><label for="sopGNome">Nome completo</label><input id="sopGNome" autocomplete="name" placeholder="Seu nome completo"></div>
+        <div class="sop-f"><label for="sopGTel">Telefone / WhatsApp</label><input id="sopGTel" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000"></div>
+        <div class="sop-f"><label for="sopGCid">Cidade</label><input id="sopGCid" placeholder="Sua cidade"></div>
+        <div class="sop-f"><label for="sopGProf">Profissão</label><input id="sopGProf" placeholder="Sua profissão"></div>
+      </div>
+      <div class="sop-gate-ok"><input type="checkbox" id="sopGOk"><label for="sopGOk">Concordo em fornecer meus dados para acesso a esta ferramenta e ser contatado pela AgroBasis.</label></div>
+      <button type="button" class="sop-btn" id="sopGBtn"><i data-lucide="unlock"></i> Ver meu resultado</button>
+      <p class="sop-gate-st" id="sopGSt">Enviando...</p>
+    </div>
+
+    <div id="sopRes" style="display:none;">
+      <div class="sop-veredito" id="sopVeredito"></div>
+      <div class="sop-kpis" id="sopKpis"></div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3 id="sopH1">Seu preço de venda no vencimento</h3><div class="sop-tools"><div class="sop-seg" id="sopUn"></div><button type="button" class="sop-dl" data-dl="0" aria-label="Baixar gráfico"><i data-lucide="download"></i></button></div></div>
+        <div class="sop-chart" id="sopG0"></div>
+        <p class="sop-cap" id="sopCap0"></p>
+      </div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3>Resultado da estratégia</h3><div class="sop-tools"><button type="button" class="sop-dl" data-dl="1" aria-label="Baixar gráfico"><i data-lucide="download"></i></button></div></div>
+        <div class="sop-chart" id="sopG1"></div>
+        <p class="sop-cap" id="sopCap1"></p>
+      </div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3>Cenários no vencimento</h3></div>
+        <div class="sop-tab-wrap"><table class="sop-tab" id="sopCen"></table></div>
+      </div>
+
+      <div class="sop-card">
+        <div class="sop-ch"><h3>Sensibilidade da posição (gregas)</h3></div>
+        <div class="sop-gregas" id="sopGregas"></div>
+      </div>
+    </div>
+    <div class="sop-foot"><span>Modelo Black-76 · Elaboração: AgroBasis</span><span id="sopAtu"></span></div>
+  </div>
+
+  <h2 class="abp-h2">Como usar esta ferramenta</h2>
+  <ol class="abp-list">
+    <li>Escolha o ativo e o vencimento. Preço do futuro, data de vencimento da opção, dólar e juros já vêm preenchidos com o fechamento mais recente, e todos podem ser editados.</li>
+    <li>Informe quantas sacas quer proteger. O simulador sugere o número de contratos: 5.000 bushels (cerca de 2.268 sacas de soja) na CBOT e 450 sacas no milho da B3.</li>
+    <li>Escolha uma estratégia pronta ou monte até 4 pernas. Se tiver o prêmio de tela da corretora, digite no campo "prêmio de mercado": o simulador usa esse valor e calcula a volatilidade implícita.</li>
+    <li>Clique em "Ver resultado" para ver o custo em reais por saca, o preço mínimo (ou máximo) garantido, o gráfico no vencimento e os cenários.</li>
+  </ol>
+
+  <h2 class="abp-h2" id="abp-formulas">Como calculamos</h2>
+  <div class="abp-formula-box">
+    <span class="abp-formula-code">Call = e^(−rT) × [F·N(d1) − K·N(d2)] &nbsp;·&nbsp; Put = e^(−rT) × [K·N(−d2) − F·N(−d1)]</span>
+    <span class="abp-formula-code">d1 = [ln(F/K) + σ²T/2] / (σ√T) &nbsp;·&nbsp; d2 = d1 − σ√T</span>
+    <span class="abp-formula-code">R$/saca = US$/bushel × bushels por saca × dólar &nbsp;(soja e trigo: 2,2046 · milho: 2,3621)</span>
+  </div>
+  <p class="abp-p">Opção agrícola de bolsa é opção sobre o contrato futuro, por isso usamos o modelo Black-76, que parte do preço do futuro (F) e não do grão físico. K é o preço de exercício (strike), σ a volatilidade, r a taxa de juros da moeda do contrato e T o prazo até o vencimento da opção, em anos. Na CBOT, preços, strikes e prêmios estão em dólares por bushel, como na tela da corretora; o resultado é convertido para reais por saca de 60 kg com o dólar informado. O preço de venda mostrado considera o futuro no vencimento mais o resultado das opções, sem o basis da praça, a corretagem e os custos de margem.</p>
+
+  <div class="abp-note">
+    <b>Aviso:</b> simulação educacional. Os prêmios são teóricos, a não ser quando você informa o prêmio de mercado, e podem diferir da cotação real. Não é recomendação de compra, venda ou investimento.
+  </div>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  __FAQ__
+
+  <h2 class="abp-h2">Continue explorando</h2>
+  <div class="abp-related-grid">
+    <a href="/simulador-de-soja/" class="abp-related-card"><span class="abp-related-card-title">Vender soja agora ou travar?</span><span class="abp-related-card-sub">Simulador por praça com basis histórico</span></a>
+    <a href="/simulador-de-milho/" class="abp-related-card"><span class="abp-related-card-title">Vender milho agora ou travar na B3?</span><span class="abp-related-card-sub">A mesma comparação para o milho</span></a>
+    <a href="/dashboards/basis-soja-brasil/" class="abp-related-card"><span class="abp-related-card-title">Basis Soja Brasil</span><span class="abp-related-card-sub">Físico contra a CBOT por praça</span></a>
+    <a href="/dashboards/posicao-fundos-cftc/" class="abp-related-card"><span class="abp-related-card-title">Posição dos Fundos</span><span class="abp-related-card-sub">O que os fundos estão fazendo na CBOT</span></a>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fontes: preços de fechamento da CBOT (CME Group) e da B3 e dólar futuro via pipeline AgroBasis; Selic meta do Banco Central; regras de vencimento das opções conforme especificações da CME e da B3. Volatilidade, quantidade e prêmios de mercado informados pelo usuário. Ferramenta educacional elaborada pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda.
+  </div>
+
+</div></div>
