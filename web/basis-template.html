@@ -299,9 +299,9 @@
       renderItem: function (p, api) { var pts = hi.map(function (q) { return api.coord(q); }).concat(lo.slice().reverse().map(function (q) { return api.coord(q); })); return { type: "polygon", shape: { points: pts }, style: { fill: "rgba(84,147,27,.10)" } }; } };
   }
   function g2() {
-    var m = projecao(), u = ultimo(st.praca);
-    // limites do eixo calculados da faixa e do físico (a série da faixa não entra na escala automática)
-    var vs = []; m.forEach(function (x) { ["baixo", "medio", "alto"].forEach(function (c) { if (x.pr[c] != null) vs.push(x.pr[c]); }); }); if (u && u.f) vs.push(u.f);
+    var m = projecao();
+    // limites do eixo calculados da faixa (a série da faixa não entra na escala automática)
+    var vs = []; m.forEach(function (x) { ["baixo", "medio", "alto"].forEach(function (c) { if (x.pr[c] != null) vs.push(x.pr[c]); }); });
     var yMin = Math.floor(Math.min.apply(null, vs) / 5) * 5 - 5, yMax = Math.ceil(Math.max.apply(null, vs) / 5) * 5 + 5;
     return Object.assign({}, base, {
       graphic: [marca()],
@@ -316,8 +316,7 @@
             : tipLinha("", "B3", "R$ " + br(x.f, 2) + "/sc") + tipLinha("", "Basis (" + nomes[st.cen].slice(6) + ")", "R$ " + br(x.bs, 2) + "/sc")); } }),
       series: [faixaCen(m), { type: "line", data: m.map(function (x) { return x.preco; }), z: 5, symbol: "circle", symbolSize: 8, showSymbol: true,
         lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 },
-        label: { show: !mobile(), position: "top", distance: 7, color: COR.tx, fontSize: 11, formatter: function (q) { return br(q.value, 0); } }, emphasis: { disabled: true },
-        markLine: u && u.f ? { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.4 }, label: { formatter: "físico em " + dataBR(u.t).slice(0, 5) + ": R$ " + br(u.f, 2), color: COR.mr, fontSize: 11, position: "insideEndBottom" }, data: [{ yAxis: u.f }] } : undefined }]
+        label: { show: !mobile(), position: "top", distance: 7, color: COR.tx, fontSize: 11, formatter: function (q) { return br(q.value, 0); } }, emphasis: { disabled: true } }]
     });
   }
 
