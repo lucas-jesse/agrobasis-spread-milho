@@ -1,101 +1,101 @@
 {
- "data": "2026-11-11",
- "gerado_em_brt": "2026-11-12 13:10",
- "fonte": "coleta AgroBasis (amostra)",
+ "data": "2026-11-12",
+ "gerado_em_brt": "2026-11-12 13:08",
+ "fonte": "TradingView (CBOT, B3, câmbio e índices)",
  "cbot": [
   {
-   "chave": "soja",
    "nome": "Soja",
    "compl": "jan/27",
-   "preco": 1230.75,
-   "anterior": 1228.0,
+   "preco": 1220.75,
+   "anterior": 1230.75,
    "formato": "usbu",
-   "var_pct": 0.2239
+   "var_pct": -0.8125,
+   "chave": "soja"
   },
   {
-   "chave": "milho",
    "nome": "Milho",
    "compl": "dez/26",
-   "preco": 448,
-   "anterior": 449,
+   "preco": 445.75,
+   "anterior": 448.0,
    "formato": "usbu",
-   "var_pct": -0.2227
+   "var_pct": -0.5022,
+   "chave": "milho"
   },
   {
-   "chave": "trigo",
    "nome": "Trigo",
    "compl": "dez/26",
-   "preco": 599.5,
-   "anterior": 592.75,
+   "preco": 591.5,
+   "anterior": 599.5,
    "formato": "usbu",
-   "var_pct": 1.1388
+   "var_pct": -1.3344,
+   "chave": "trigo"
   },
   {
-   "chave": "farelo",
    "nome": "Farelo de soja",
    "compl": "dez/26",
-   "preco": 329.7,
-   "anterior": 326.5,
+   "preco": 327.2,
+   "anterior": 329.7,
    "formato": "ust",
-   "var_pct": 0.9801
+   "var_pct": -0.7583,
+   "chave": "farelo"
   },
   {
-   "chave": "oleo",
    "nome": "Óleo de soja",
    "compl": "dez/26",
-   "preco": 63.88,
-   "anterior": 62.77,
+   "preco": 63.29,
+   "anterior": 63.88,
    "formato": "uslb",
-   "var_pct": 1.7684
+   "var_pct": -0.9236,
+   "chave": "oleo"
   }
  ],
  "brasil": [
   {
-   "chave": "milho_b3",
    "nome": "Milho B3",
    "compl": "jan/27",
-   "preco": 70.75,
-   "anterior": 71.57,
+   "preco": 71.0,
+   "anterior": 70.81,
    "formato": "rssc",
-   "var_pct": -1.1457
+   "var_pct": 0.2683,
+   "chave": "milho_b3"
   },
   {
-   "chave": "usdbrl",
    "nome": "Dólar comercial",
    "compl": "venda",
-   "preco": 5.5822,
-   "anterior": 5.5829,
+   "preco": 5.6234,
+   "anterior": 5.5822,
    "formato": "rs4",
-   "var_pct": -0.0125
+   "var_pct": 0.7381,
+   "chave": "usdbrl"
   },
   {
-   "chave": "ibov",
    "nome": "Ibovespa",
    "compl": "pontos",
-   "preco": 172060.43,
-   "anterior": 171336.99,
+   "preco": 171116.75,
+   "anterior": 172060.43,
    "formato": "pts",
-   "var_pct": 0.4222
+   "var_pct": -0.5485,
+   "chave": "ibov"
   }
  ],
  "exterior": [
   {
-   "chave": "dxy",
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 102.844,
-   "anterior": 102.217,
+   "preco": 103.166,
+   "anterior": 102.844,
    "formato": "pts2",
-   "var_pct": 0.6134
+   "var_pct": 0.3131,
+   "chave": "dxy"
   },
   {
-   "chave": "brent",
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 92.76,
-   "anterior": 91.49,
+   "preco": 93.52,
+   "anterior": 92.76,
    "formato": "usd",
-   "var_pct": 1.3881
+   "var_pct": 0.8193,
+   "chave": "brent"
   }
  ]
 }
