@@ -5,11 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          for u in "https://api.fas.usda.gov/api/esr/regions?api_key=DEMO_KEY" \
-                   "https://api.fas.usda.gov/api/esr/datareleasedates?api_key=DEMO_KEY" \
-                   "https://apps.fas.usda.gov/OpenData/api/esr/regions" \
-                   "https://apps.fas.usda.gov/export-sales/h801.htm" \
-                   "https://apps.fas.usda.gov/export-sales/esrd1.html" \
-                   "https://apps.fas.usda.gov/export-sales/highlite.htm" \
-                   "https://www.fas.usda.gov/programs/export-sales-reporting-program"; do
-            echo "=== $u"; curl -sS -m 30 -A "Mozilla/5.0" -o r.txt -w "HTTP %{http_code} %{size_download}\n" "$u"; head -c 600 r.txt | tr '\n' ' '; echo; done
+          K=DEMO_KEY; B=https://api.fas.usda.gov/api/esr
+          mkdir out
+          curl -sS -m 60 "$B/commodities?api_key=$K" -o out/commodities.json
+          curl -sS -m 60 "$B/countries?api_key=$K" -o out/countries.json
+          curl -sS -m 60 "$B/unitsOfMeasure?api_key=$K" -o out/units.json
+          curl -sS -m 60 "$B/datareleasedates?api_key=$K" -o out/release.json
+          curl -sS -m 120 "$B/exports/commodityCode/801/allCountries/marketYear/2026?api_key=$K" -o out/soja_2026.json
+          curl -sS -m 120 "$B/exports/commodityCode/801/allCountries/marketYear/2027?api_key=$K" -o out/soja_2027.json -D out/h.txt
+          ls -la out; cat out/h.txt | grep -i ratelimit
+      - uses: actions/upload-artifact@v4
+        with: { name: fas, path: out }
