@@ -1,0 +1,220 @@
+<!-- AgroBasis · página /dashboards/ com o número do dia em cada cartão.
+     Dados: dados/painel.json no GitHub (exporta_painel.py), um resumo leve dos arquivos de cada dashboard.
+     Sem dados, cada cartão mostra a descrição fixa. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<style>
+.agb{--vd:#1E4812;--vc:#54931B;--mr:#8A6A4F;--tx:#222;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;--cl:#EEF4EA;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;padding:28px 24px 56px;box-sizing:border-box;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.agb *{box-sizing:border-box}
+.agb-intro{max-width:760px;margin:0 0 26px;font-size:15.5px;line-height:1.7;color:#3f3f3f}
+/* faixa do mercado */
+.agb-hoje{border:1px solid var(--ln);border-radius:18px;background:var(--bg);padding:16px 18px 18px;margin:0 0 40px}
+.agb-hoje-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.agb-hoje-top h2{margin:0;font:600 13px Geist,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--vc)}
+.agb-hoje-top span{font-size:12.5px;color:var(--mt)}
+.agb-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.agb-tile{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:12px 14px}
+.agb-tile .n{font-size:12.5px;color:var(--mt);font-weight:500}
+.agb-tile .n small{color:#98a29a;font-weight:400;margin-left:4px}
+.agb-tile .v{font:700 23px Sora,sans-serif;margin-top:5px;line-height:1.1;white-space:nowrap}
+.agb-tile .v small{font:500 12px Geist,sans-serif;color:var(--mt);margin-left:3px}
+.agb-tile .d{font-size:12.5px;font-weight:600;margin-top:5px}
+.up{color:var(--vd)}.dn{color:var(--mr)}.nt{color:var(--mt)}
+/* seções */
+.agb-sec{margin:0 0 40px}
+.agb-sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.agb-sec-h h2{margin:0;font:700 21px Sora,sans-serif;color:var(--tx);letter-spacing:-.01em}
+.agb-sec-h p{margin:0;font-size:14px;color:var(--mt)}
+.agb-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+/* cartão */
+.agb-card{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--ln);border-radius:18px;padding:18px 20px 16px;text-decoration:none;color:inherit;transition:border-color .15s,box-shadow .15s,transform .15s;min-width:0}
+.agb-card:hover{border-color:#cdd8cf;box-shadow:0 8px 24px rgba(30,72,18,.07);transform:translateY(-1px)}
+.agb-card-top{display:flex;align-items:center;gap:10px}
+.agb-ic{width:36px;height:36px;border-radius:10px;background:var(--cl);display:grid;place-items:center;color:var(--vd);flex:none}
+.agb-ic svg{width:18px;height:18px;stroke-width:1.8}
+.agb-cat{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mt)}
+.agb-selo{margin-left:auto;font-size:11px;font-weight:600;color:var(--vc);white-space:nowrap;display:flex;align-items:center;gap:5px}
+.agb-selo:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--vc)}
+.agb-selo.novo{color:#fff;background:var(--vd);padding:3px 9px;border-radius:999px}
+.agb-selo.novo:before{display:none}
+.agb-card h3{font:600 17px Geist,sans-serif;margin:14px 0 0;color:var(--tx)}
+.agb-desc{font-size:13.5px;line-height:1.55;color:#5b625d;margin:6px 0 0}
+.agb-vivo{display:none;margin-top:12px}
+.agb-card.ok .agb-vivo{display:block}
+.agb-card.ok .agb-desc{display:none}
+.agb-num{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.agb-num b{font:700 26px Sora,sans-serif;line-height:1.05;letter-spacing:-.01em}
+.agb-num b small{font:500 12.5px Geist,sans-serif;color:var(--mt);margin-left:4px;letter-spacing:0}
+.agb-delta{font-size:12.5px;font-weight:600}
+.agb-delta i{font-style:normal;font-weight:400;color:var(--mt)}
+.agb-spark{display:block;width:100%;height:38px;margin:10px 0 2px}
+.agb-ctx{font-size:12.5px;color:var(--mt);margin-top:4px;line-height:1.45}
+.agb-cta{margin-top:auto;padding-top:14px;font-size:13.5px;font-weight:600;color:var(--vd);display:flex;align-items:center;gap:6px}
+.agb-cta svg{width:15px;height:15px;transition:transform .15s}
+.agb-card:hover .agb-cta svg{transform:translateX(3px)}
+/* cartão em destaque: duas colunas, número e linha lado a lado */
+.agb-grid.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.agb-card[hidden]{display:none}
+.agb-card.dest{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:32px;align-items:stretch;padding:22px 24px 20px;background:linear-gradient(180deg,#fff 0,#fbfcfa 100%)}
+.agb-dest-esq{display:flex;flex-direction:column;min-width:0}
+.agb-card.dest h3{font-size:21px}
+.agb-card.dest .agb-num b{font-size:34px}
+.agb-card.ok .agb-desc.agb-sempre{display:block}
+.agb-dest-graf{display:flex;flex-direction:column;justify-content:flex-end;min-width:0}
+.agb-dest-graf .agb-spark{height:130px;margin:0}
+.agb-dest-graf .rot{font-size:12px;color:var(--mt);margin-top:6px;display:flex;justify-content:space-between}
+@media (max-width:1080px){.agb-grid.g4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:980px){.agb-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.agb-tiles{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:620px){
+  .agb{padding:20px 14px 40px}
+  .agb-grid,.agb-grid.g4{grid-template-columns:1fr}.agb-card.dest{grid-template-columns:1fr;gap:6px}.agb-dest-graf .agb-spark{height:70px}
+  .agb-tile .v{font-size:20px}
+  .agb-sec-h h2{font-size:19px}
+}
+</style>
+
+<div class="agb" id="agb">
+  <p class="agb-intro">Dados de mercado agrícola em ferramentas interativas, atualizadas automaticamente a partir de fontes oficiais. Os números de cada cartão são os mais recentes de cada painel.</p>
+
+  <section class="agb-hoje" id="agbHoje" hidden aria-label="Fechamento do mercado">
+    <div class="agb-hoje-top"><h2 id="agbHojeT">Fechamento do mercado</h2><span>Variação sobre o fechamento anterior</span></div>
+    <div class="agb-tiles" id="agbTiles"></div>
+  </section>
+
+  <section class="agb-sec">
+    <div class="agb-sec-h"><h2>Hora de vender?</h2><p>Preço físico, basis e câmbio para decidir a comercialização.</p></div>
+    <div class="agb-grid g4">
+      <a class="agb-card" data-k="basis-soja-brasil" href="/dashboards/basis-soja-brasil/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="line-chart"></i></div><span class="agb-cat">Basis</span></div>
+        <h3>Basis Soja Brasil</h3><p class="agb-desc">Físico contra a CBOT, em cents por bushel, nas principais praças e portos.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+      <a class="agb-card" data-k="basis-milho-brasil" href="/dashboards/basis-milho-brasil/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="map-pinned"></i></div><span class="agb-cat">Basis</span></div>
+        <h3>Basis Milho Brasil</h3><p class="agb-desc">Físico contra a B3 em diferentes praças brasileiras.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+      <a class="agb-card" data-k="curva-do-dolar" href="/dashboards/curva-do-dolar/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="dollar-sign"></i></div><span class="agb-cat">Câmbio</span></div>
+        <h3>Curva do Dólar</h3><p class="agb-desc">Dólar futuro da B3, PTAX, juros e expectativas do Focus.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+      <a class="agb-card" data-k="spread-milho-b3" href="/dashboards/spread-milho-b3/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="trending-up"></i></div><span class="agb-cat">Derivativos</span></div>
+        <h3>Spread Milho B3</h3><p class="agb-desc">Estrutura a termo dos contratos de milho, média histórica e Z-Score.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+    </div>
+  </section>
+
+  <section class="agb-sec">
+    <div class="agb-sec-h"><h2>O que está movendo o preço</h2><p>Fundos, demanda externa e safra americana.</p></div>
+    <div class="agb-grid">
+      <a class="agb-card dest" data-k="exportacoes-eua-usda" data-novo="1" data-requer="1" hidden href="/dashboards/exportacoes-eua-usda/">
+        <div class="agb-dest-esq">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="ship"></i></div><span class="agb-cat">USDA · semanal</span></div>
+        <h3>Vendas de Exportação dos EUA</h3><p class="agb-desc agb-sempre">Vendas semanais de soja, milho, trigo, farelo e óleo, por destino, contra os últimos 5 anos e a projeção do USDA.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span>
+        </div>
+        <div class="agb-dest-graf"></div></a>
+      <a class="agb-card" data-k="posicao-fundos-cftc" href="/dashboards/posicao-fundos-cftc/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="activity"></i></div><span class="agb-cat">Fundos CFTC</span></div>
+        <h3>Posição dos Fundos</h3><p class="agb-desc">Posicionamento semanal dos fundos em soja, milho, trigo e outras commodities.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+      <a class="agb-card" data-k="condicao-de-safra-eua" href="/dashboards/condicao-de-safra-eua/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="gauge"></i></div><span class="agb-cat">USDA · semanal</span></div>
+        <h3>Condição de Safra EUA</h3><p class="agb-desc">Milho e soja nos EUA, semana a semana desde 2010, contra a média de 5 anos.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+      <a class="agb-card" data-k="exportacao-e-importacao-de-graos" href="/dashboards/exportacao-e-importacao-de-graos/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="container"></i></div><span class="agb-cat">Comércio exterior</span></div>
+        <h3>Exportação e Importação do Brasil</h3><p class="agb-desc">Soja, milho e trigo com sazonalidade, ranking de países e estados e preço FOB, direto do Comex Stat/MDIC.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+    </div>
+  </section>
+
+  <section class="agb-sec">
+    <div class="agb-sec-h"><h2>Oferta e demanda mundial</h2><p>Os relatórios mensais do USDA, por país e por safra.</p></div>
+    <div class="agb-grid">
+      <a class="agb-card" data-k="usda-complexo-soja" href="/dashboards/usda-complexo-soja/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="globe"></i></div><span class="agb-cat">USDA · mensal</span></div>
+        <h3>Complexo Soja</h3><p class="agb-desc">Produção, estoques, esmagamento e comércio mundial da soja, farelo e óleo.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+      <a class="agb-card" data-k="usda-milho" href="/dashboards/usda-milho/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="sprout"></i></div><span class="agb-cat">USDA · mensal</span></div>
+        <h3>Milho</h3><p class="agb-desc">Oferta, demanda, estoques e consumo global do milho.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+      <a class="agb-card" data-k="usda-trigo" href="/dashboards/usda-trigo/">
+        <div class="agb-card-top"><div class="agb-ic"><i data-lucide="wheat"></i></div><span class="agb-cat">USDA · mensal</span></div>
+        <h3>Trigo</h3><p class="agb-desc">Balanço mundial do trigo, com produção, consumo, estoques e exportações.</p>
+        <div class="agb-vivo"></div><span class="agb-cta">Abrir painel <i data-lucide="arrow-right"></i></span></a>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  // como colorir a variação: 1 = alta em verde, 0 = neutro (cinza)
+  var COR_DELTA = { "basis-soja-brasil": 1, "basis-milho-brasil": 1, "posicao-fundos-cftc": 1, "exportacoes-eua-usda": 1, "condicao-de-safra-eua": 1, "exportacao-e-importacao-de-graos": 1 };
+  var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  function br(v, c) { return v == null ? "-" : v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); }
+  function sinal(v, c) { return (v > 0 ? "+" : v < 0 ? "−" : "") + br(Math.abs(v), c); }
+  function casas(v, un) { return un === "R$" ? 4 : un === "R$/sc" ? 2 : Math.abs(v) >= 100 ? 1 : 1; }
+  function hojeBRT() { var d = new Date(Date.now() - 3 * 36e5); return d.toISOString().slice(0, 10); }
+  function dias(a, b) { return Math.round((Date.parse(b) - Date.parse(a)) / 864e5); }
+
+  function spark(v) {
+    if (!v || v.length < 3) return "";
+    var mn = Math.min.apply(null, v), mx = Math.max.apply(null, v), r = mx - mn || 1, w = 300, h = 40;
+    var pts = v.map(function (a, i) { return [2 + i / (v.length - 1) * (w - 8), h - 4 - (a - mn) / r * (h - 10)]; });
+    var linha = pts.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" ");
+    var ult = pts[pts.length - 1];
+    return '<svg class="agb-spark" viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none" aria-hidden="true">' +
+      '<polygon points="' + pts[0][0] + "," + h + " " + linha + " " + ult[0] + "," + h + '" fill="rgba(84,147,27,.08)"/>' +
+      '<polyline points="' + linha + '" fill="none" stroke="#1E4812" stroke-width="1.8" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>' +
+      '<polyline points="' + ult[0] + "," + ult[1] + " " + ult[0] + "," + ult[1] + '" stroke="#1E4812" stroke-width="7" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>';
+  }
+
+  function cartao(el, c) {
+    var hoje = hojeBRT(), idade = c.data ? dias(c.data, hoje) : 99, selo = "";
+    if (el.dataset.novo) selo = '<span class="agb-selo novo">Novo</span>';
+    else if (idade <= 0) selo = '<span class="agb-selo">Atualizado hoje</span>';
+    else if (idade <= 6) selo = '<span class="agb-selo">Nesta semana</span>';
+    if (selo) el.querySelector(".agb-card-top").insertAdjacentHTML("beforeend", selo);
+    var cd = casas(c.valor, c.un), dt = "";
+    if (c.delta != null) {
+      var cls = COR_DELTA[el.dataset.k] ? (c.delta > 0 ? "up" : c.delta < 0 ? "dn" : "nt") : "nt";
+      dt = '<span class="agb-delta ' + cls + '">' + sinal(c.delta, c.delta_pct ? 0 : Math.min(cd, 2)) + (c.delta_pct ? "%" : "") + " <i>" + c.delta_txt + "</i></span>";
+    }
+    var graf = el.querySelector(".agb-dest-graf");
+    el.querySelector(".agb-vivo").innerHTML = '<div class="agb-num"><b>' + br(c.valor, cd) + "<small>" + c.un + "</small></b>" + dt + "</div>" +
+      (graf ? "" : spark(c.spark)) + '<div class="agb-ctx">' + c.contexto + "</div>";
+    if (graf) graf.innerHTML = spark(c.spark) + (c.spark_rot ? '<div class="rot"><span>' + c.spark_rot[0] + "</span><span>" + c.spark_rot[1] + "</span></div>" : "");
+    el.classList.add("ok");
+  }
+
+  function mercado(m) {
+    if (!m || !m.itens || !m.itens.length) return;
+    var d = new Date(m.data + "T12:00:00Z");
+    document.getElementById("agbHojeT").textContent = "Fechamento de " + ("0" + d.getUTCDate()).slice(-2) + " " + MESES[d.getUTCMonth()];
+    document.getElementById("agbTiles").innerHTML = m.itens.map(function (x) {
+      var c = x.un === "R$" ? 4 : 2, cls = x.var_pct > 0.005 ? "up" : x.var_pct < -0.005 ? "dn" : "nt";
+      return '<div class="agb-tile"><div class="n">' + x.nome + (x.compl && x.compl !== "venda" ? "<small>" + x.compl + "</small>" : "") + '</div><div class="v">' + br(x.valor, c) + "<small>" + x.un + '</small></div><div class="d ' + cls + '">' + (x.var_pct > 0.005 ? "▲ " : x.var_pct < -0.005 ? "▼ " : "") + br(Math.abs(x.var_pct), 2) + "%</div></div>";
+    }).join("");
+    document.getElementById("agbHoje").hidden = false;
+  }
+
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 6e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+
+  function icones() { if (window.lucide) window.lucide.createIcons(); }
+  icones(); if (!window.lucide) window.addEventListener("load", icones);
+  json("dados/painel.json").then(function (p) {
+    mercado(p.mercado);
+    document.querySelectorAll("#agb .agb-card").forEach(function (el) { var c = p.cartoes[el.dataset.k]; if (c && c.valor != null) { cartao(el, c); el.hidden = false; } });
+  }).catch(function () { /* sem dados: os cartões ficam com a descrição fixa */ });
+})();
+</script>

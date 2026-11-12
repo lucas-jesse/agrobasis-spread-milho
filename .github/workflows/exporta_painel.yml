@@ -1,0 +1,36 @@
+name: Resumo da página de dashboards
+
+on:
+  schedule:
+    # 09h20, 12h20, 15h20, 18h20 e 20h20 de Brasília: depois das coletas da manhã, do basis, do fechamento e da CFTC.
+    - cron: '20 12,15,18,21,23 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_painel.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  painel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Gerar resumo
+        run: python exporta_painel.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/painel.json
+          git diff --staged --quiet || git commit -m "Resumo da página de dashboards"
+          git pull --rebase origin main
+          git push
