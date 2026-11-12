@@ -1,0 +1,44 @@
+name: Exporta vendas semanais de exportação dos EUA (USDA FAS)
+
+on:
+  schedule:
+    # O USDA publica às quintas, 8h30 de Washington (10h30 de Brasília; 9h30 no horário de verão dos EUA).
+    # Quinta 14h17 UTC e sexta 14h17 UTC (atraso de feriado ou falha da API).
+    - cron: '17 14 * * 4'
+    - cron: '17 14 * * 5'
+  workflow_dispatch:
+    inputs:
+      max_consultas:
+        description: 'Máximo de consultas à API nesta execução'
+        default: '60'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    # com a DEMO_KEY (10 consultas por hora) a primeira carga do histórico leva cerca de 3 horas
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Baixar e agregar
+        env:
+          FAS_API_KEY: ${{ secrets.FAS_API_KEY }}
+        run: python exporta_export_sales.py --max-consultas ${{ github.event.inputs.max_consultas || '60' }}
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/export_sales
+          git diff --staged --quiet || git commit -m "Vendas de exportação dos EUA (USDA FAS)"
+          git pull --rebase origin main
+          git push
