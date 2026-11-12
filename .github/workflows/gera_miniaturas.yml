@@ -1,0 +1,41 @@
+name: Miniaturas da página de dashboards
+
+on:
+  schedule:
+    # sábado 11h17 UTC (8h17 de Brasília): depois da CFTC de sexta e das coletas da semana
+    - cron: '17 11 * * 6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  miniaturas:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Dependências
+        run: |
+          pip install playwright pillow
+          python -m playwright install --with-deps chromium
+          npm install --no-save echarts@5.5.1
+      - name: Gerar miniaturas
+        run: python gera_miniaturas.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add web/miniaturas
+          git diff --staged --quiet || git commit -m "Miniaturas da página de dashboards"
+          git pull --rebase origin main
+          git push
