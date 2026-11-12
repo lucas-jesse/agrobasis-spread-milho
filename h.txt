@@ -1,0 +1,19 @@
+HTTP/2 200 
+date: Thu, 12 Nov 2026 16:22:01 GMT
+content-type: application/json; charset=utf-8
+content-length: 95391
+vary: Accept-Encoding
+access-control-allow-headers: X-Api-Key
+access-control-allow-origin: *
+age: 0
+strict-transport-security: max-age=31536000; includeSubDomains; preload
+vary: Accept-Encoding
+via: https/1.1 api-umbrella (ApacheTrafficServer [cMsSf ])
+x-api-umbrella-request-id: d1q28erivin7f4envhtg
+x-cache: MISS
+x-content-type-options: nosniff
+x-ratelimit-limit: 10
+x-ratelimit-remaining: 5
+x-vcap-request-id: b4d1c2ef-f933-4fe2-49bf-224b2f22178f
+x-frame-options: DENY
+
