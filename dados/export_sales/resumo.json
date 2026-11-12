@@ -1,0 +1,75 @@
+{
+ "atualizado_em": "12/11/2026 17:29",
+ "produtos": {
+  "soja": {
+   "produto": "Soja em grão",
+   "semana_ate": "2026-10-29",
+   "net": 1456.1,
+   "emb": 2530.9,
+   "comp": 30233.8,
+   "comp_ano_anterior": 17196.4,
+   "projecao_usda": 46811.0
+  },
+  "milho": {
+   "produto": "Milho",
+   "semana_ate": "2026-10-29",
+   "net": 1294.6,
+   "emb": 1029.0,
+   "comp": 24791.2,
+   "comp_ano_anterior": 37360.5,
+   "projecao_usda": 83189.0
+  },
+  "trigo": {
+   "produto": "Trigo (todas as classes)",
+   "semana_ate": "2026-10-29",
+   "net": 538.0,
+   "emb": 149.2,
+   "comp": 12056.6,
+   "comp_ano_anterior": null,
+   "projecao_usda": 20412.0
+  },
+  "farelo": {
+   "produto": "Farelo de soja",
+   "semana_ate": "2026-10-29",
+   "net": 390.4,
+   "emb": 244.8,
+   "comp": 6451.1,
+   "comp_ano_anterior": null,
+   "projecao_usda": 20593.0
+  },
+  "oleo": {
+   "produto": "Óleo de soja",
+   "semana_ate": "2026-10-29",
+   "net": 1.5,
+   "emb": 2.7,
+   "comp": 38.0,
+   "comp_ano_anterior": null,
+   "projecao_usda": 181.0
+  }
+ },
+ "pendentes": [
+  "trigo 2026",
+  "farelo 2026",
+  "oleo 2026",
+  "soja 2025",
+  "milho 2025",
+  "trigo 2025",
+  "farelo 2025",
+  "oleo 2025",
+  "soja 2024",
+  "milho 2024",
+  "trigo 2024",
+  "farelo 2024",
+  "oleo 2024",
+  "soja 2023",
+  "milho 2023",
+  "trigo 2023",
+  "farelo 2023",
+  "oleo 2023",
+  "soja 2022",
+  "milho 2022",
+  "trigo 2022",
+  "farelo 2022",
+  "oleo 2022"
+ ]
+}
