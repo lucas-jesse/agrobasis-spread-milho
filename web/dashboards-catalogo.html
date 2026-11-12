@@ -57,7 +57,7 @@
 .agb-card:hover .agb-cta svg{transform:translateX(3px)}
 /* cartão em destaque: duas colunas, número e linha lado a lado */
 .agb-grid.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
-.agb-card[hidden]{display:none}
+.agb-card[hidden],.agb-card.dest[hidden]{display:none!important}
 .agb-card.dest{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:32px;align-items:stretch;padding:22px 24px 20px;background:linear-gradient(180deg,#fff 0,#fbfcfa 100%)}
 .agb-dest-esq{display:flex;flex-direction:column;min-width:0}
 .agb-card.dest h3{font-size:21px}
