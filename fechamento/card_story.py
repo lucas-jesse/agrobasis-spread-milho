@@ -50,6 +50,11 @@ def manchete(D):
     if alta["var_pct"] > 0.5 and baixa["var_pct"] < -0.5:
         return (f"{nome(alta)} sobe {br(alta['var_pct'], 1)}% {onde(alta)};\n"
                 f"{nome(baixa).lower()} cai {br(-baixa['var_pct'], 1)}% {onde(baixa)}")
+    cbot = [x for x in D["cbot"] if x["chave"] in GRAOS]
+    for sinal, verbo in ((1, "sobem"), (-1, "caem")):  # dia de movimento em bloco em Chicago
+        if sum(x["var_pct"] * sinal > 0.3 for x in cbot) >= 4:
+            lider = max(cbot, key=lambda x: x["var_pct"] * sinal)
+            return f"Grãos {verbo} em Chicago;\n{nome(lider).lower()} lidera com {br(lider['var_pct'], 1)}%"
     x = alta if abs(alta["var_pct"]) >= abs(baixa["var_pct"]) else baixa
     if abs(x["var_pct"]) < 0.3:
         return "Grãos de lado\nem Chicago e na B3"
