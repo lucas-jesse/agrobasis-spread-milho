@@ -1,51 +1,51 @@
 {
  "data": "2026-11-12",
- "gerado_em_brt": "2026-11-12 13:08",
+ "gerado_em_brt": "2026-11-12 18:12",
  "fonte": "TradingView (CBOT, B3, câmbio e índices)",
  "cbot": [
   {
    "nome": "Soja",
    "compl": "jan/27",
-   "preco": 1220.75,
+   "preco": 1219.0,
    "anterior": 1230.75,
    "formato": "usbu",
-   "var_pct": -0.8125,
+   "var_pct": -0.9547,
    "chave": "soja"
   },
   {
    "nome": "Milho",
    "compl": "dez/26",
-   "preco": 445.75,
+   "preco": 442.5,
    "anterior": 448.0,
    "formato": "usbu",
-   "var_pct": -0.5022,
+   "var_pct": -1.2277,
    "chave": "milho"
   },
   {
    "nome": "Trigo",
    "compl": "dez/26",
-   "preco": 591.5,
+   "preco": 584.25,
    "anterior": 599.5,
    "formato": "usbu",
-   "var_pct": -1.3344,
+   "var_pct": -2.5438,
    "chave": "trigo"
   },
   {
    "nome": "Farelo de soja",
    "compl": "dez/26",
-   "preco": 327.2,
+   "preco": 325.4,
    "anterior": 329.7,
    "formato": "ust",
-   "var_pct": -0.7583,
+   "var_pct": -1.3042,
    "chave": "farelo"
   },
   {
    "nome": "Óleo de soja",
    "compl": "dez/26",
-   "preco": 63.29,
+   "preco": 63.42,
    "anterior": 63.88,
    "formato": "uslb",
-   "var_pct": -0.9236,
+   "var_pct": -0.7201,
    "chave": "oleo"
   }
  ],
@@ -53,28 +53,28 @@
   {
    "nome": "Milho B3",
    "compl": "jan/27",
-   "preco": 71.0,
-   "anterior": 70.81,
+   "preco": 70.9,
+   "anterior": 70.89,
    "formato": "rssc",
-   "var_pct": 0.2683,
+   "var_pct": 0.0141,
    "chave": "milho_b3"
   },
   {
    "nome": "Dólar comercial",
    "compl": "venda",
-   "preco": 5.6234,
+   "preco": 5.6412,
    "anterior": 5.5822,
    "formato": "rs4",
-   "var_pct": 0.7381,
+   "var_pct": 1.0569,
    "chave": "usdbrl"
   },
   {
    "nome": "Ibovespa",
    "compl": "pontos",
-   "preco": 171116.75,
+   "preco": 171035.56,
    "anterior": 172060.43,
    "formato": "pts",
-   "var_pct": -0.5485,
+   "var_pct": -0.5956,
    "chave": "ibov"
   }
  ],
@@ -82,19 +82,19 @@
   {
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 103.166,
+   "preco": 103.175,
    "anterior": 102.844,
    "formato": "pts2",
-   "var_pct": 0.3131,
+   "var_pct": 0.3218,
    "chave": "dxy"
   },
   {
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 93.52,
+   "preco": 95.82,
    "anterior": 92.76,
    "formato": "usd",
-   "var_pct": 0.8193,
+   "var_pct": 3.2988,
    "chave": "brent"
   }
  ]
