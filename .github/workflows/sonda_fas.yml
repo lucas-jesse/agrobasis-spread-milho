@@ -1,5 +1,7 @@
 name: Sonda FAS (temporário)
 on: workflow_dispatch
+permissions:
+  contents: write
 jobs:
   sonda:
     runs-on: ubuntu-latest
@@ -14,5 +16,6 @@ jobs:
           curl -sS -m 120 "$B/exports/commodityCode/801/allCountries/marketYear/2026?api_key=$K" -o out/soja_2026.json
           curl -sS -m 120 "$B/exports/commodityCode/801/allCountries/marketYear/2027?api_key=$K" -o out/soja_2027.json -D out/h.txt
           ls -la out; cat out/h.txt | grep -i ratelimit
-      - uses: actions/upload-artifact@v4
-        with: { name: fas, path: out }
+      - run: |
+          cd out && git init -q -b sonda-fas && git config user.name bot && git config user.email bot@x
+          git add . && git commit -qm sonda && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" sonda-fas
