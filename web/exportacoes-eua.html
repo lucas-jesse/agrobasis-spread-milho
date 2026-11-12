@@ -1,0 +1,400 @@
+<!-- AgroBasis · Vendas semanais de exportação dos EUA (USDA FAS Export Sales) · dashboard em HTML
+     Dados: dados/export_sales/*.json no GitHub, gerados por exporta_export_sales.py às quintas, após a divulgação do USDA. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abc{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--mr2:#8A6A4F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abc *{box-sizing:border-box}
+.abc-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abc-bc a{color:var(--mt);text-decoration:none}.abc-bc a:hover{color:var(--vd)}
+.abc-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abc-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 20px;margin-bottom:14px}
+.abc-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abc-meta{font-size:13px;color:var(--mt)}
+.abc-prox{font-size:12.5px;color:var(--mt);text-align:right;line-height:1.5}
+.abc-prox b{color:var(--tx);font-weight:600}
+/* termômetro: um cartão por commodity */
+.abc-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.abc-c{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:11px 12px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .15s,box-shadow .15s;min-width:0}
+.abc-c:hover{border-color:#cfd9d1}
+.abc-c[aria-pressed=true]{border-color:var(--vd);box-shadow:0 0 0 1px var(--vd) inset}
+.abc-c .n{font-size:12px;font-weight:600;color:var(--mt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-c .v{font-family:Sora,sans-serif;font-weight:700;font-size:18px;margin-top:4px;line-height:1.1;white-space:nowrap}
+.abc-c .d{font-size:11.5px;font-weight:600;margin-top:3px;white-space:nowrap}
+.abc-c .g{position:relative;height:5px;border-radius:3px;margin-top:9px;background:linear-gradient(90deg,#e9d3bd,#eef1ef 50%,#c9dcb3)}
+.abc-c .g i{position:absolute;top:-3px;width:3px;height:11px;border-radius:2px;background:var(--tx);transform:translateX(-50%)}
+.abc-c .p{display:flex;justify-content:space-between;font-size:10.5px;color:#98a29a;margin-top:4px}
+.abc-c svg{display:block;width:100%;height:26px;margin-top:6px}
+.pos{color:var(--vd)}.neg{color:var(--mr2)}
+/* frase-resumo */
+.abc-lead{display:flex;gap:10px;align-items:flex-start;background:#f6f8f4;border:1px solid var(--ln);border-radius:12px;padding:11px 14px;font-size:14px;line-height:1.5;margin-bottom:14px}
+.abc-lead svg{flex:none;margin-top:3px;color:var(--vc)}
+.abc-lead b{font-weight:600}
+.abc-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.abc-seg::-webkit-scrollbar{display:none}
+.abc-seg button{flex:none;font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.abc-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abc-cats{margin-bottom:12px}
+.abc-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abc-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abc-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-k b{display:block;font-family:Sora,sans-serif;font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+.abc-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abc-k em{display:block;font-style:normal;font-size:12.5px;color:var(--mt);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abc-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.abc-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:0}
+.abc-ch h3 small{font-size:12px;font-weight:500;color:var(--mt);margin-left:6px}
+.abc-tools{display:flex;gap:6px;align-items:center;flex:none}
+.abc-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abc-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abc-chart{width:100%;height:520px}
+.abc-chart.md{height:380px}
+.abc-chart.sm{height:340px}
+.abc-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abc-nota{margin:0 4px 8px;font-size:12px;line-height:1.5;color:var(--mt)}
+.abc-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abc-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abc-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abc-faq details{border-bottom:1px solid var(--ln)}
+.abc-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abc-faq summary::-webkit-details-marker{display:none}
+.abc-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abc-faq details[open] summary:after{content:"−"}
+.abc-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abc-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abc-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abc-mais a:hover{border-color:var(--vc)}
+.abc-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:1020px){.abc-board{display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.abc-board::-webkit-scrollbar{display:none}.abc-c{flex:0 0 150px}}
+@media (max-width:820px){.abc-row{grid-template-columns:1fr}.abc-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .abc-tit{font-size:24px}.abc-prox{text-align:left}
+  .abc-k{padding:12px}.abc-k b{font-size:21px}
+  .abc-card{padding:12px 10px 4px;border-radius:14px}
+  .abc-chart{height:440px}.abc-chart.md{height:330px}.abc-chart.sm{height:310px}
+  .abc-ch{flex-wrap:wrap}.abc-ch .abc-tools{order:3;width:100%}.abc-ch .abc-tools .abc-seg{flex:1;display:flex}.abc-ch .abc-tools .abc-seg button{flex:1}
+  .abc-k b{font-size:19px;white-space:nowrap}
+  .abc-lead{font-size:13.5px}
+}
+@media (max-width:560px){.abc-k em{white-space:normal}}
+</style>
+
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Vendas de exportação dos EUA · USDA</h1>
+      <div class="abc-tit" id="abcTit">Carregando</div>
+      <div class="abc-meta" id="abcMeta">&nbsp;</div>
+    </div>
+    <div class="abc-prox" id="abcProx"></div>
+  </div>
+
+  <div class="abc-board" id="abcBoard" aria-label="Vendas da semana em cada produto"></div>
+
+  <p class="abc-lead" id="abcLead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>&nbsp;</span></p>
+
+  <div class="abc-kpis">
+    <div class="abc-k"><span>Vendas na semana</span><b id="kN">-</b><em id="kNs">&nbsp;</em></div>
+    <div class="abc-k"><span>Embarques</span><b id="kE">-</b><em id="kEs">&nbsp;</em></div>
+    <div class="abc-k"><span>Compromisso</span><b id="kC">-</b><em id="kCs">&nbsp;</em></div>
+    <div class="abc-k"><span>Projeção USDA</span><b id="kP">-</b><em id="kPs">&nbsp;</em></div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH0">Compromisso acumulado no ano-safra</h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcVis"><button data-v="comp" aria-pressed="true">Vendido</button><button data-v="acum">Embarcado</button><button data-v="pct">% da projeção</button></div>
+      <button class="abc-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart md" id="abcG0"></div>
+    <p class="abc-nota" id="abcN0"></p>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Para onde vai <small id="abcH1s"></small></h3><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart" id="abcG1"></div>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Quem comprou na semana <small id="abcH2s"></small></h3><button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart" id="abcG2"></div>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Vendas líquidas e embarques semanais <small id="abcH3s"></small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="abc-chart md" id="abcG3"></div>
+  </div>
+
+  <div class="abc-foot"><span>Fonte: USDA FAS, Export Sales Reporting · projeção: USDA WASDE · Elaboração: AgroBasis</span><span id="abcAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>O que é o relatório de vendas semanais de exportação do USDA?</summary><p>É o Export Sales Report, publicado toda quinta-feira pelo Serviço Agrícola Estrangeiro (FAS) do USDA. Os exportadores dos EUA são obrigados a informar as vendas e os embarques da semana anterior, por país de destino. É o termômetro mais rápido da demanda externa pelos grãos americanos.</p></details><details><summary>Qual a diferença entre vendas líquidas, embarques e compromisso?</summary><p>Vendas líquidas são os novos negócios da semana menos os cancelamentos. Embarques são o que efetivamente saiu dos portos. Compromisso é a soma do que já foi embarcado com o que está vendido e ainda falta embarcar no ano-safra.</p></details><details><summary>Por que comparar com a projeção do USDA?</summary><p>O relatório de oferta e demanda (WASDE) projeta quanto os EUA vão exportar no ano-safra. Comparar o volume já vendido com essa projeção, e com o que era normal na mesma semana dos anos anteriores, mostra se a demanda está adiantada ou atrasada. Ritmo fraco aumenta a chance de corte na exportação e de estoques maiores.</p></details><details><summary>O que é o destino a definir?</summary><p>São vendas cujo país de destino ainda não foi declarado pelo comprador, registradas como Unknown. Na prática, boa parte costuma ir para a China, que muitas vezes compra por meio de tradings sem informar o destino final na hora da venda.</p></details><details><summary>Quando começa o ano-safra nos EUA?</summary><p>Para soja e milho, em 1º de setembro; para o trigo, em 1º de junho; para farelo e óleo de soja, em 1º de outubro. Cada linha do gráfico acumulado começa do zero no início do ano-safra.</p></details><details><summary>Quando o painel é atualizado?</summary><p>O USDA divulga às quintas, às 8h30 de Washington (10h30 de Brasília, 9h30 no horário de verão dos EUA), com a semana encerrada na quinta anterior. O painel atualiza sozinho logo depois. Em semanas com feriado nos EUA, a divulgação passa para sexta.</p></details>
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/usda-complexo-soja/">USDA Soja</a><a href="/dashboards/usda-milho/">USDA Milho</a><a href="/dashboards/posicao-fundos-cftc/">Posição dos Fundos</a><a href="/dashboards/condicao-de-safra-eua/">Safra dos EUA</a><a href="/dashboards/exportacao-e-importacao-de-graos/">Exportações do Brasil</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+</div>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "O que é o relatório de vendas semanais de exportação do USDA?", "acceptedAnswer": {"@type": "Answer", "text": "É o Export Sales Report, publicado toda quinta-feira pelo Serviço Agrícola Estrangeiro (FAS) do USDA. Os exportadores dos EUA são obrigados a informar as vendas e os embarques da semana anterior, por país de destino. É o termômetro mais rápido da demanda externa pelos grãos americanos."}}, {"@type": "Question", "name": "Qual a diferença entre vendas líquidas, embarques e compromisso?", "acceptedAnswer": {"@type": "Answer", "text": "Vendas líquidas são os novos negócios da semana menos os cancelamentos. Embarques são o que efetivamente saiu dos portos. Compromisso é a soma do que já foi embarcado com o que está vendido e ainda falta embarcar no ano-safra."}}, {"@type": "Question", "name": "Por que comparar com a projeção do USDA?", "acceptedAnswer": {"@type": "Answer", "text": "O relatório de oferta e demanda (WASDE) projeta quanto os EUA vão exportar no ano-safra. Comparar o volume já vendido com essa projeção, e com o que era normal na mesma semana dos anos anteriores, mostra se a demanda está adiantada ou atrasada. Ritmo fraco aumenta a chance de corte na exportação e de estoques maiores."}}, {"@type": "Question", "name": "O que é o destino a definir?", "acceptedAnswer": {"@type": "Answer", "text": "São vendas cujo país de destino ainda não foi declarado pelo comprador, registradas como Unknown. Na prática, boa parte costuma ir para a China, que muitas vezes compra por meio de tradings sem informar o destino final na hora da venda."}}, {"@type": "Question", "name": "Quando começa o ano-safra nos EUA?", "acceptedAnswer": {"@type": "Answer", "text": "Para soja e milho, em 1º de setembro; para o trigo, em 1º de junho; para farelo e óleo de soja, em 1º de outubro. Cada linha do gráfico acumulado começa do zero no início do ano-safra."}}, {"@type": "Question", "name": "Quando o painel é atualizado?", "acceptedAnswer": {"@type": "Answer", "text": "O USDA divulga às quintas, às 8h30 de Washington (10h30 de Brasília, 9h30 no horário de verão dos EUA), com a semana encerrada na quinta anterior. O painel atualiza sozinho logo depois. Em semanas com feriado nos EUA, a divulgação passa para sexta."}}]}, {"@type": "WebApplication", "name": "Vendas de Exportação dos EUA · AgroBasis", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/dashboards/exportacoes-eua-usda/", "description": "Vendas semanais de exportação dos EUA de soja, milho, trigo, farelo e óleo de soja (USDA Export Sales): ritmo contra os últimos 5 anos, % da projeção do USDA, destinos e compradores da semana.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", mr2: "#8A6A4F", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)", pos: "#3F7A2A", neg: "#B9773F" };
+  var CINZAS = ["#8E9A91", "#A9B3AB", "#BFC7C1", "#D0D6D2", "#DDE2DE"];
+  var ORDEM = ["soja", "milho", "trigo", "farelo", "oleo"];
+  var CURTO = { soja: "Soja", milho: "Milho", trigo: "Trigo", farelo: "Farelo de soja", oleo: "Óleo de soja" };
+  var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var DIA = 864e5;
+  var $ = function (id) { return document.getElementById(id); };
+  var RES, CACHE = {}, D, st = { prod: "soja", vis: "comp" }, charts = [];
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function mi(v, c) { return v == null ? "-" : br(v / 1000, c == null ? 1 : c); }          // mil t -> milhões de t
+  function sinal(v, c) { return v == null ? "-" : (v > 0 ? "+" : v < 0 ? "−" : "") + br(Math.abs(v), c); }
+  function pct(a, b) { return a == null || !b ? null : (a / b - 1) * 100; }
+  function media(a) { var s = 0, n = 0; a.forEach(function (x) { if (x != null) { s += x; n++; } }); return n ? s / n : null; }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function ts(s) { return Date.parse(s + "T00:00:00Z"); }
+  function dataBR(t, ano) { var d = new Date(t); return ("0" + d.getUTCDate()).slice(-2) + " " + MESES[d.getUTCMonth()] + (ano === false ? "" : " " + d.getUTCFullYear()); }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  function produto(slug) {
+    if (CACHE[slug]) return Promise.resolve(CACHE[slug]);
+    return json("dados/export_sales/" + slug + ".json").then(function (d) { CACHE[slug] = d; return d; });
+  }
+  // valor de um ano-safra na semana w (ou a última semana anterior a w)
+  function naSemana(a, campo, w) { var v = null; for (var i = 0; i < a.semana.length; i++) { if (a.semana[i] <= w) v = a[campo][i]; else break; } return v; }
+  function atual() { return D.anos[D.anos.length - 1]; }
+  function anteriores() { return D.anos.slice(0, -1); }
+  function semUlt() { var a = atual(); return a.semana[a.semana.length - 1]; }
+  // rótulo de mês para a semana w do ano-safra
+  function rotSemana(w) { var t = ts(atual().inicio) + (w * 7 + 6) * DIA, d = new Date(t); return MESES[d.getUTCMonth()]; }
+  function dataSemana(w) { return ts(atual().inicio) + (w * 7 + 6) * DIA; }
+
+  // ---------- painel de produtos ----------
+  function board() {
+    $("abcBoard").innerHTML = ORDEM.filter(function (k) { return RES.produtos[k]; }).map(function (k) {
+      var p = RES.produtos[k], dv = pct(p.comp, p.comp_ano_anterior);
+      return '<button class="abc-c" data-p="' + k + '" aria-pressed="' + (k === st.prod) + '"><div class="n">' + CURTO[k] + "</div>" +
+        '<div class="v ' + (p.net >= 0 ? "pos" : "neg") + '">' + sinal(p.net, 0) + ' <small style="font:500 11px Geist,sans-serif;color:#6b756d">mil t</small></div>' +
+        '<div class="d" style="color:#6b756d">vendas na semana</div>' +
+        '<div class="d ' + (dv == null ? "" : dv >= 0 ? "pos" : "neg") + '" style="margin-top:8px">' + (dv == null ? "-" : (dv >= 0 ? "▲ " : "▼ ") + br(Math.abs(dv), 0) + "%") + " no ano</div>" +
+        '<div class="p" style="margin-top:2px"><span>compromisso x ano anterior</span></div></button>';
+    }).join("");
+  }
+
+  // ---------- estilo ----------
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function eixoV(fmt, extra) { return Object.assign({ type: "value", splitNumber: 4, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+  function eixoSemanas() {
+    var n = 53, cats = []; for (var w = 0; w < n; w++) cats.push(w);
+    return { type: "category", data: cats, boundaryGap: false, axisLabel: { color: COR.mt, fontSize: 11, interval: function (i) { var a = new Date(dataSemana(i)), b = new Date(dataSemana(i - 1)); return i === 0 || a.getUTCMonth() !== b.getUTCMonth(); }, formatter: function (w) { return rotSemana(+w); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } };
+  }
+
+  // 0) acumulado no ano-safra: atual x anos anteriores x média, com a projeção do USDA
+  function serie(a, campo) {
+    return a.semana.map(function (w, i) {
+      var v = campo === "pct" ? (a.projecao_usda ? a.comp[i] / a.projecao_usda * 100 : null) : a[campo][i];
+      return [w, v == null ? null : +(campo === "pct" ? v.toFixed(1) : (v / 1000).toFixed(2))];
+    });
+  }
+  function g0() {
+    var c = st.vis, ant = anteriores(), at = atual(), s = [], ult = semUlt();
+    ant.slice().reverse().forEach(function (a, k) {
+      s.push({ name: a.safra, type: "line", data: serie(a, c), symbol: "none", lineStyle: { width: k ? 1.2 : 1.8, color: CINZAS[Math.min(k, 4)] }, itemStyle: { color: CINZAS[Math.min(k, 4)] }, z: 2, emphasis: { disabled: true } });
+    });
+    var med = []; for (var w = 0; w <= 52; w++) { var v = media(ant.map(function (a) { var x = c === "pct" ? (a.projecao_usda ? (function () { var y = naSemana(a, "comp", w); return y == null ? null : y / a.projecao_usda * 100; })() : null) : naSemana(a, c, w); return a.semana[a.semana.length - 1] >= w ? x : null; })); med.push([w, v == null ? null : +(c === "pct" ? v.toFixed(1) : (v / 1000).toFixed(2))]); }
+    s.push({ name: "Média " + ant.length + " anos", type: "line", data: med, symbol: "none", lineStyle: { width: 2, type: [6, 4], color: COR.mr }, itemStyle: { color: COR.mr }, z: 3 });
+    var ml = null;
+    if (c !== "pct" && at.projecao_usda) ml = { silent: true, symbol: "none", lineStyle: { color: COR.vc, type: "dotted", width: 1.5 }, label: { formatter: "Projeção USDA " + mi(at.projecao_usda) + " mi t", position: "insideEndTop", color: COR.vc, fontSize: 11.5, fontWeight: 600 }, data: [{ yAxis: +(at.projecao_usda / 1000).toFixed(2) }] };
+    if (c === "pct") ml = { silent: true, symbol: "none", lineStyle: { color: COR.vc, type: "dotted", width: 1.5 }, label: { formatter: "100% da projeção", position: "insideEndTop", color: COR.vc, fontSize: 11.5, fontWeight: 600 }, data: [{ yAxis: 100 }] };
+    var sa = serie(at, c);
+    s.push({ name: at.safra, type: "line", data: sa, symbol: "none", lineStyle: { width: 3, color: COR.vd }, itemStyle: { color: COR.vd }, z: 6, markLine: ml || undefined,
+      markPoint: { symbol: "circle", symbolSize: 9, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, label: { show: true, position: "top", distance: 8, color: COR.vd, fontWeight: 700, fontSize: 12.5, formatter: function () { var v = sa[sa.length - 1][1]; return c === "pct" ? br(v, 0) + "%" : br(v, 1) + " mi t"; } }, data: [{ coord: sa[sa.length - 1] }] } });
+    var un = c === "pct" ? "%" : " mi t";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: mobile() ? 10 : 18, top: mobile() ? 56 : 34, bottom: 6, containLabel: true },
+      xAxis: eixoSemanas(), yAxis: eixoV(function (v) { return br(v) + (c === "pct" ? "%" : ""); }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var w = +ps[0].axisValue, h = '<div style="font-weight:600;margin-bottom:4px">Semana ' + (w + 1) + " do ano-safra · " + dataBR(dataSemana(w), false) + "</div>";
+        ps.slice().reverse().forEach(function (q) { if (q.value && q.value[1] != null) h += tl(q.marker, q.seriesName, br(q.value[1], c === "pct" ? 0 : 1) + un); }); return h; } }),
+      series: s
+    });
+  }
+
+  // 1) destinos: compromisso no ano-safra atual x mesma semana do ano anterior
+  function listaDestinos() {
+    var l = D.destinos.slice(0, 12), china = D.destinos.filter(function (x) { return x.pais === "China"; })[0];
+    if (china && l.indexOf(china) < 0) l.push(china);
+    return l.sort(function (a, b) { return Math.max(b.comp, b.comp_ant) - Math.max(a.comp, a.comp_ant); }).slice(0, mobile() ? 10 : 12);
+  }
+  function g1() {
+    var l = listaDestinos(), at = atual().safra, ant = anteriores().length ? anteriores()[anteriores().length - 1].safra : "ano anterior";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 44, top: 30, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: l.map(function (x) { return x.pais; }), axisLabel: { color: COR.tx, fontSize: 12, width: mobile() ? 96 : 130, overflow: "truncate" }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoV(function (v) { return br(v); }, { splitNumber: 3 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) { var x = l[ps[0].dataIndex], dv = pct(x.comp, x.comp_ant);
+        return "<b>" + x.pais + "</b>" + tl("", "Compromisso " + at, br(x.comp / 1000, 2) + " mi t") + tl("", "Já embarcado", br(x.acum / 1000, 2) + " mi t") + tl("", "Mesma semana " + ant, br(x.comp_ant / 1000, 2) + " mi t") + (dv == null ? "" : tl("", "Variação", sinal(dv, 0) + "%")); } }),
+      series: [
+        { name: at, type: "bar", barGap: "12%", barWidth: "34%", itemStyle: { color: COR.vd, borderRadius: [0, 4, 4, 0] }, data: l.map(function (x) { return +(x.comp / 1000).toFixed(2); }),
+          label: { show: true, position: "right", color: COR.tx, fontSize: 11, fontWeight: 600, formatter: function (q) { return br(q.value, 1); } } },
+        { name: "Mesma semana " + ant, type: "bar", barWidth: "34%", itemStyle: { color: "#C9D1CB", borderRadius: [0, 4, 4, 0] }, data: l.map(function (x) { return +(x.comp_ant / 1000).toFixed(2); }) }
+      ]
+    });
+  }
+
+  // 2) vendas líquidas da semana por comprador (cancelamentos em marrom)
+  function g2() {
+    var l = D.semana_destinos.slice(0, mobile() ? 9 : 12);
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: 52, top: 10, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: l.map(function (x) { return x.pais; }), axisLabel: { color: COR.tx, fontSize: 12, width: mobile() ? 96 : 130, overflow: "truncate" }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoV(function (v) { return br(v); }, { splitNumber: 3 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) { var x = l[ps[0].dataIndex]; return "<b>" + x.pais + "</b>" + tl("", "Vendas líquidas", sinal(x.net, 1) + " mil t") + tl("", "Embarques", br(x.emb, 1) + " mil t"); } }),
+      series: [{ type: "bar", barWidth: "56%", data: l.map(function (x) { return { value: x.net, itemStyle: { color: x.net >= 0 ? COR.vd : "#D7B99A", borderRadius: x.net >= 0 ? [0, 4, 4, 0] : [4, 0, 0, 4] } }; }),
+        label: { show: true, position: "right", color: COR.tx, fontSize: 11, fontWeight: 600, formatter: function (q) { return sinal(q.value, 0); } } }]
+    });
+  }
+
+  // 3) semanal: vendas líquidas (barras) e embarques (linha) no ano-safra atual, com a média dos anos anteriores
+  function g3() {
+    var at = atual(), ant = anteriores(), n = semUlt(), cats = [], net = [], emb = [], mnet = [];
+    for (var w = 0; w <= n; w++) {
+      var i = at.semana.indexOf(w); cats.push(w);
+      net.push(i < 0 ? null : at.net[i]); emb.push(i < 0 ? null : at.emb[i]);
+      mnet.push(+(media(ant.map(function (a) { var j = a.semana.indexOf(w); return j < 0 ? null : a.net[j]; })) || 0).toFixed(1));
+    }
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: mobile() ? 10 : 18, top: 34, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: cats, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (w) { var i = at.semana.indexOf(+w); return i < 0 ? "" : dataBR(ts(at.datas[i]), false); }, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoV(function (v) { return br(v); }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var w = +ps[0].axisValue, j = at.semana.indexOf(w), h = '<div style="font-weight:600;margin-bottom:4px">Semana até ' + (j < 0 ? "-" : dataBR(ts(at.datas[j]))) + "</div>"; ps.forEach(function (q) { if (q.value != null) h += tl(q.marker, q.seriesName, br(q.value, 0) + " mil t"); }); return h; } }),
+      series: [
+        { name: "Vendas líquidas " + at.safra, type: "bar", barWidth: "60%", itemStyle: { color: "#9DB58F" }, data: net.map(function (v) { return { value: v, itemStyle: { color: v >= 0 ? "#9DB58F" : "#D7B99A", borderRadius: 3 } }; }) },
+        { name: "Embarques", type: "line", data: emb, symbol: "circle", symbolSize: 5, lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd } },
+        { name: "Média de vendas " + ant.length + " anos", type: "line", data: mnet, symbol: "none", lineStyle: { width: 2, type: [6, 4], color: COR.mr }, itemStyle: { color: COR.mr } }
+      ]
+    });
+  }
+
+  // ---------- indicadores e texto ----------
+  function kpis() {
+    var at = atual(), i = at.net.length - 1, ult = semUlt(), ant = anteriores(), ap = ant[ant.length - 1];
+    var m4 = media(at.net.slice(Math.max(0, i - 4), i));
+    $("kN").innerHTML = sinal(at.net[i], 0) + "<small>mil t</small>";
+    $("kNs").textContent = m4 == null ? " " : "média das 4 semanas anteriores: " + br(m4, 0);
+    var e4 = media(at.emb.slice(Math.max(0, i - 4), i));
+    $("kE").innerHTML = br(at.emb[i], 0) + "<small>mil t</small>";
+    $("kEs").textContent = e4 == null ? " " : "média das 4 semanas anteriores: " + br(e4, 0);
+    var ca = ap ? naSemana(ap, "comp", ult) : null, dv = pct(at.comp[i], ca);
+    $("kC").innerHTML = mi(at.comp[i]) + "<small>mi t</small>";
+    $("kCs").innerHTML = dv == null ? " " : '<i style="font-style:normal;font-weight:600" class="' + (dv >= 0 ? "pos" : "neg") + '">' + sinal(dv, 0) + "%</i> sobre a mesma semana de " + ap.safra;
+    var p = at.projecao_usda ? at.comp[i] / at.projecao_usda * 100 : null;
+    var pm = media(ant.map(function (a) { var y = naSemana(a, "comp", ult); return a.projecao_usda && y != null ? y / a.projecao_usda * 100 : null; }));
+    $("kP").innerHTML = p == null ? "-" : br(p, 0) + "<small>%</small>";
+    $("kPs").textContent = p == null ? " " : "projeção de " + mi(at.projecao_usda) + " mi t · média " + br(pm, 0) + "% nesta época";
+  }
+  function lead() {
+    var at = atual(), i = at.net.length - 1, ult = semUlt(), ap = anteriores()[anteriores().length - 1];
+    var ca = ap ? naSemana(ap, "comp", ult) : null, dv = pct(at.comp[i], ca), tot = D.destinos.reduce(function (s, x) { return s + x.comp; }, 0);
+    var top = D.destinos.filter(function (x) { return x.pais !== "Destino a definir"; })[0];
+    var t = "Os EUA já venderam <b>" + mi(at.comp[i]) + " milhões de t</b> de " + CURTO[st.prod].toLowerCase() + " da safra " + at.safra;
+    if (dv != null) t += ", <b>" + (dv >= 0 ? br(dv, 0) + "% acima" : br(-dv, 0) + "% abaixo") + "</b> do mesmo ponto de " + ap.safra;
+    if (at.projecao_usda) t += ", o equivalente a " + br(at.comp[i] / at.projecao_usda * 100, 0) + "% da exportação projetada pelo USDA";
+    t += ".";
+    if (top && tot) t += " " + top.pais + " responde por " + br(top.comp / tot * 100, 0) + "% do volume vendido.";
+    $("abcLead").querySelector("span").innerHTML = t;
+    // ritmo necessário para cumprir a projeção
+    var nota = "";
+    if (at.projecao_usda) {
+      var falta = at.projecao_usda - at.acum[i], sem = Math.max(1, 52 - ult - 1), e4 = media(at.emb.slice(Math.max(0, i - 3), i + 1));
+      nota = "Para cumprir a projeção do USDA, os EUA precisam embarcar " + mi(falta) + " milhões de t nas " + sem + " semanas restantes do ano-safra: " + br(falta / sem, 0) + " mil t por semana, contra " + br(e4, 0) + " mil t por semana nas últimas 4 semanas.";
+    }
+    $("abcN0").textContent = nota + " Compromisso = vendas já embarcadas + vendas a embarcar no ano-safra.";
+  }
+  function proxima() {
+    var hoje = new Date(), d = new Date(hoje), dif = (4 - hoje.getDay() + 7) % 7;
+    d.setDate(hoje.getDate() + (dif === 0 && hoje.getHours() >= 11 ? 7 : dif));
+    $("abcProx").innerHTML = "Semana encerrada em " + dataBR(ts(D.semana_ate)) + "<br>Próximo relatório: <b>quinta, " + ("0" + d.getDate()).slice(-2) + " " + MESES[d.getMonth()] + ", 10h30</b>";
+  }
+
+  function render() {
+    var at = atual(), ini = new Date(ts(at.inicio));
+    $("abcTit").textContent = D.produto;
+    $("abcMeta").textContent = "Ano-safra " + at.safra + " dos EUA, de " + MESES[ini.getUTCMonth()] + "/" + String(ini.getUTCFullYear()).slice(-2) + " a " + MESES[(ini.getUTCMonth() + 11) % 12] + "/" + String(ini.getUTCFullYear() + 1).slice(-2) + " · em mil toneladas métricas";
+    $("abcH0").textContent = { comp: "Vendido no ano-safra (compromisso acumulado)", acum: "Embarcado no ano-safra (exportação acumulada)", pct: "Compromisso como % da projeção do USDA" }[st.vis];
+    $("abcH1s").textContent = "compromisso em mi t";
+    $("abcH2s").textContent = "vendas líquidas em mil t";
+    $("abcH3s").textContent = "ano-safra " + at.safra;
+    proxima(); kpis(); lead();
+    charts[0].setOption(g0(), true); charts[1].setOption(g1(), true); charts[2].setOption(g2(), true); charts[3].setOption(g3(), true);
+    $("abcAtu").textContent = "Atualizado em " + D.atualizado_em;
+  }
+  function trocar(slug) {
+    st.prod = slug;
+    document.querySelectorAll("#abcBoard .abc-c").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.p === slug)); });
+    return produto(slug).then(function (d) { D = d; render(); });
+  }
+  function baixar(i) {
+    var ch = charts[i], t = [$("abcH0").textContent, "Para onde vai · compromisso por destino", "Quem comprou na semana", "Vendas líquidas e embarques semanais"][i] + " · " + D.produto;
+    var opt = [g0, g1, g2, g3][i](); opt.animation = false;
+    opt.title = { text: t, subtext: "USDA FAS · semana encerrada em " + dataBR(ts(D.semana_ate)), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    var dy = 48;
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 6 + dy, left: 8 });
+    opt.grid = Object.assign({}, opt.grid, { top: (opt.legend ? 34 : 14) + dy, bottom: 30 });
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: USDA FAS", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    ch.setOption(opt, true);
+    var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-exportacoes-eua-" + st.prod + "-" + ["acumulado", "destinos", "semana", "semanal"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  Promise.all([carregarLib(), json("dados/export_sales/resumo.json")]).then(function (r) {
+    RES = r[1];
+    var q = (location.hash || "").replace("#", ""); if (RES.produtos[q]) st.prod = q;
+    board();
+    charts = [0, 1, 2, 3].map(function (i) { return echarts.init($("abcG" + i), null, { renderer: "canvas" }); });
+    $("abcVis").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.vis = b.dataset.v; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); render(); });
+    $("abcBoard").addEventListener("click", function (e) { var b = e.target.closest(".abc-c"); if (b) { trocar(b.dataset.p); history.replaceState(null, "", "#" + b.dataset.p); } });
+    document.querySelectorAll("#abc .abc-dl").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (D) render(); }, 150); });
+    return trocar(st.prod);
+  }).catch(function (e) {
+    if (window.console) console.error("AgroBasis Export Sales:", e);
+    $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
