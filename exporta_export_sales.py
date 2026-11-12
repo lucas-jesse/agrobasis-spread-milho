@@ -103,7 +103,7 @@ def agregar(linhas, my, mes, paises):
         q[0] += x.get("currentMYNetSales") or 0; q[1] += x.get("weeklyExports") or 0
         q[2] += x.get("currentMYTotalCommitment") or 0; q[3] += x.get("accumulatedExports") or 0
     datas = sorted(sem)
-    return {"ano": my, "inicio": ini.isoformat(), "datas": datas,
+    return {"ano": my, "inicio": ini.isoformat(), "baixado_em": date.today().isoformat(), "datas": datas,
             "semana": [(date.fromisoformat(d) - ini).days // 7 for d in datas],
             **{k: [sem[d][k] for d in datas] for k in ("net", "emb", "acum", "comp", "saldo", "prox")},
             "pais": {d: sem[d]["pais"] for d in datas}}
@@ -182,13 +182,17 @@ def main():
     for slug, (cod, nome, mes, psd) in PRODUTOS.items():
         r = next(x for x in rel if x["commodityCode"] == cod)
         my = r["marketYear"]
-        fila.append((0, slug, my, True))
+        c_at = CACHE / f"{slug}_{my}.json"
+        # o ano-safra atual é baixado de novo, a não ser que já tenha sido baixado hoje (execuções em lotes)
+        if not (c_at.exists() and json.loads(c_at.read_text()).get("baixado_em") == date.today().isoformat()):
+            fila.append((0, slug, my, True))
         for a in range(my - ANOS + 1, my):
             c = CACHE / f"{slug}_{a}.json"
             fechado = c.exists() and json.loads(c.read_text())["datas"][-1] >= (inicio_safra(a + 1, mes) - timedelta(days=7)).isoformat()
             if not fechado:
                 fila.append((1 if a == my - 1 else 2, slug, a, False))
     fila.sort(key=lambda x: (x[0], -x[2]))
+    print("na fila:", [(f[1], f[2]) for f in fila])
     for _, slug, a, atual in fila:
         cod, nome, mes, psd = PRODUTOS[slug]
         try:

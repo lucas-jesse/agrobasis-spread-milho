@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: commit-dados
+  group: export-sales
   cancel-in-progress: false
 
 jobs:
@@ -30,15 +30,24 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install requests
-      - name: Baixar e agregar
+      - name: Baixar, agregar e salvar em lotes
         env:
           FAS_API_KEY: ${{ secrets.FAS_API_KEY }}
-        run: python exporta_export_sales.py --max-consultas ${{ github.event.inputs.max_consultas || '60' }}
-      - name: Commit
         run: |
           git config user.name "AgroBasis Bot"
           git config user.email "bot@agrobasis.com.br"
-          git add dados/export_sales
-          git diff --staged --quiet || git commit -m "Vendas de exportação dos EUA (USDA FAS)"
-          git pull --rebase origin main
-          git push
+          # Com a DEMO_KEY (cerca de 10 consultas por hora) a carga do histórico é feita em lotes;
+          # cada lote é salvo no repositório, então uma falha não perde o que já foi baixado.
+          LOTE=${{ github.event.inputs.max_consultas || '60' }}
+          [ -z "$FAS_API_KEY" ] && LOTE=9
+          for i in 1 2 3 4 5; do
+            python exporta_export_sales.py --max-consultas $LOTE || echo "lote $i com erro"
+            git add dados/export_sales
+            git diff --staged --quiet || git commit -q -m "Vendas de exportação dos EUA (USDA FAS), lote $i"
+            git pull -q --rebase origin main && git push -q
+            if python -c "import json,sys; sys.exit(0 if json.load(open('dados/export_sales/resumo.json'))['pendentes'] else 1)"; then
+              echo "faltam anos: aguardando a próxima janela da API"; sleep 3300
+            else
+              echo "carga completa"; break
+            fi
+          done
