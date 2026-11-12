@@ -1,0 +1,101 @@
+{
+ "data": "2026-11-11",
+ "gerado_em_brt": "2026-11-12 13:10",
+ "fonte": "coleta AgroBasis (amostra)",
+ "cbot": [
+  {
+   "chave": "soja",
+   "nome": "Soja",
+   "compl": "jan/27",
+   "preco": 1230.75,
+   "anterior": 1228.0,
+   "formato": "usbu",
+   "var_pct": 0.2239
+  },
+  {
+   "chave": "milho",
+   "nome": "Milho",
+   "compl": "dez/26",
+   "preco": 448,
+   "anterior": 449,
+   "formato": "usbu",
+   "var_pct": -0.2227
+  },
+  {
+   "chave": "trigo",
+   "nome": "Trigo",
+   "compl": "dez/26",
+   "preco": 599.5,
+   "anterior": 592.75,
+   "formato": "usbu",
+   "var_pct": 1.1388
+  },
+  {
+   "chave": "farelo",
+   "nome": "Farelo de soja",
+   "compl": "dez/26",
+   "preco": 329.7,
+   "anterior": 326.5,
+   "formato": "ust",
+   "var_pct": 0.9801
+  },
+  {
+   "chave": "oleo",
+   "nome": "Óleo de soja",
+   "compl": "dez/26",
+   "preco": 63.88,
+   "anterior": 62.77,
+   "formato": "uslb",
+   "var_pct": 1.7684
+  }
+ ],
+ "brasil": [
+  {
+   "chave": "milho_b3",
+   "nome": "Milho B3",
+   "compl": "jan/27",
+   "preco": 70.75,
+   "anterior": 71.57,
+   "formato": "rssc",
+   "var_pct": -1.1457
+  },
+  {
+   "chave": "usdbrl",
+   "nome": "Dólar comercial",
+   "compl": "venda",
+   "preco": 5.5822,
+   "anterior": 5.5829,
+   "formato": "rs4",
+   "var_pct": -0.0125
+  },
+  {
+   "chave": "ibov",
+   "nome": "Ibovespa",
+   "compl": "pontos",
+   "preco": 172060.43,
+   "anterior": 171336.99,
+   "formato": "pts",
+   "var_pct": 0.4222
+  }
+ ],
+ "exterior": [
+  {
+   "chave": "dxy",
+   "nome": "Índice dólar (DXY)",
+   "compl": "",
+   "preco": 102.844,
+   "anterior": 102.217,
+   "formato": "pts2",
+   "var_pct": 0.6134
+  },
+  {
+   "chave": "brent",
+   "nome": "Petróleo Brent",
+   "compl": "US$/barril",
+   "preco": 92.76,
+   "anterior": 91.49,
+   "formato": "usd",
+   "var_pct": 1.3881
+  }
+ ]
+}
