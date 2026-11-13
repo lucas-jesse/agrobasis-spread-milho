@@ -1,5 +1,5 @@
 {
- "atualizado_em": "12/11/2026 17:29",
+ "atualizado_em": "13/11/2026 08:09",
  "produtos": {
   "soja": {
    "produto": "Soja em grão",
@@ -25,7 +25,7 @@
    "net": 538.0,
    "emb": 149.2,
    "comp": 12056.6,
-   "comp_ano_anterior": null,
+   "comp_ano_anterior": 16804.5,
    "projecao_usda": 20412.0
   },
   "farelo": {
@@ -34,7 +34,7 @@
    "net": 390.4,
    "emb": 244.8,
    "comp": 6451.1,
-   "comp_ano_anterior": null,
+   "comp_ano_anterior": 6554.5,
    "projecao_usda": 20593.0
   },
   "oleo": {
@@ -43,14 +43,11 @@
    "net": 1.5,
    "emb": 2.7,
    "comp": 38.0,
-   "comp_ano_anterior": null,
+   "comp_ano_anterior": 166.4,
    "projecao_usda": 181.0
   }
  },
  "pendentes": [
-  "trigo 2026",
-  "farelo 2026",
-  "oleo 2026",
   "soja 2025",
   "milho 2025",
   "trigo 2025",
