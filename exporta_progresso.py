@@ -139,12 +139,22 @@ def cultura_de(titulo):
     return slug, titulo.split("-")[0].strip()
 
 
+def abas(conteudo):
+    """Linhas de cada aba. Algumas planilhas da Conab têm estilos que o openpyxl recusa; aí usa o calamine."""
+    try:
+        wb = openpyxl.load_workbook(BytesIO(conteudo), data_only=True, read_only=True)
+        return [[list(r) for r in ws.iter_rows(values_only=True)] for ws in wb.worksheets]
+    except Exception as e:
+        print(f"  openpyxl falhou ({e}); lendo com calamine")
+        from python_calamine import CalamineWorkbook
+        wb = CalamineWorkbook.from_filelike(BytesIO(conteudo))
+        return [[[None if v == "" else v for v in r] for r in wb.get_sheet_by_name(n).to_python()] for n in wb.sheet_names]
+
+
 def ler_planilha(conteudo):
     """Lista de tabelas: {cultura, nome, safra, op, cobertura, d, d_ant, d_aa, linhas: {UF: [aa, ant, atual, m5]}, br: [...]}"""
-    wb = openpyxl.load_workbook(BytesIO(conteudo), data_only=True, read_only=True)
     tabelas = []
-    for ws in wb.worksheets:
-        linhas = [list(r) for r in ws.iter_rows(values_only=True)]
+    for linhas in abas(conteudo):
         cult = None; cobertura = None; op = None; i = 0
         while i < len(linhas):
             textos = [str(v).strip() for v in linhas[i] if isinstance(v, str) and v.strip()]
