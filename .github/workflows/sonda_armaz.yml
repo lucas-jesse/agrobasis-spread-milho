@@ -13,15 +13,8 @@ jobs:
         run: |
           mkdir -p out && cd out
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-          curl -sS "https://servicodados.ibge.gov.br/api/v3/agregados" -o agregados.json -w "agregados %{http_code} %{size_download}\n" >> status.txt || true
-          python3 - <<'PY' >> status.txt
-          import json
-          d=json.load(open('agregados.json'))
-          for p in d:
-              if 'stoque' in p['nome'] or 'rmazen' in p['nome']:
-                  print('PESQ', p['id'], p['nome'])
-                  for a in p['agregados']: print('   ', a['id'], a['nome'])
-          PY
+          curl -sS -m 40 "https://apisidra.ibge.gov.br/values/t/254/n1/all/v/all/p/last%201" -o sidra254.json -w "sidra254 %{http_code} %{size_download}\n" >> status.txt || echo "sidra falhou" >> status.txt
+          curl -sS -m 40 "https://servicodados.ibge.gov.br/api/v3/agregados/254/metadados" -o meta254.json -w "meta254 %{http_code}\n" >> status.txt || echo "servicodados falhou" >> status.txt
           P=https://portaldeinformacoes.conab.gov.br
           for f in Armazenagem.txt ArmazenagemUF.txt CapacidadeEstatica.txt SicarmUnidades.txt UnidadesArmazenadoras.txt armazenagem.txt; do
             curl -sSL -A "$UA" -r 0-3000 -o "c_$f" -w "$f %{http_code} %{size_download}\n" "$P/downloads/arquivos/$f" >> status.txt || true
