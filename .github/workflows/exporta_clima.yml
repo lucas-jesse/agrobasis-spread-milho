@@ -1,0 +1,39 @@
+name: Exporta clima e El Niño nas regiões produtoras (dashboard HTML)
+
+on:
+  schedule:
+    # ECMWF 00 UTC disponível de manhã; a rodada da noite pega a análise do dia
+    - cron: '47 10,22 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_clima.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: clima
+  cancel-in-progress: false
+
+jobs:
+  clima:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests openpyxl
+      - name: Baixar e montar
+        run: python exporta_clima.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/clima
+          git diff --staged --quiet && exit 0
+          git commit -m "Clima e El Niño nas regiões produtoras"
+          for i in 1 2 3 4 5; do git pull --rebase origin main && git push && exit 0; sleep 15; done
+          exit 1
