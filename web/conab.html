@@ -426,6 +426,7 @@
     if (top) t += " " + NOME_UF[top] + " lidera, com " + br(D.ufs[top].producao[1] / b.producao[1] * 100, 0) + "% do total.";
     if (sobe.length > 1) {
       var mais = sobe[0], menos = sobe[sobe.length - 1];
+      if (mais[1] < 50) mais = [mais[0], 0]; if (menos[1] > -50) menos = [menos[0], 0];
       if (mais[1] > 0) t += " Maior ganho: " + NOME_UF[mais[0]] + " (" + sinal(mais[1] / 1000, 1) + " mi t)";
       if (menos[1] < 0) t += (mais[1] > 0 ? "; maior perda: " : " Maior perda: ") + NOME_UF[menos[0]] + " (" + sinal(menos[1] / 1000, 1) + " mi t)";
       if (mais[1] > 0 || menos[1] < 0) t += ".";
