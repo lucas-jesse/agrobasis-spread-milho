@@ -1,0 +1,39 @@
+name: Exporta relação de troca grãos x fertilizantes (dashboard HTML)
+
+on:
+  schedule:
+    # Cepea atualiza no fim da tarde; o Comex Stat publica o mês fechado na primeira semana do mês seguinte.
+    - cron: '13 21 * * 1-5'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_troca.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: troca
+  cancel-in-progress: false
+
+jobs:
+  troca:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests python-calamine
+      - name: Baixar e montar
+        run: python exporta_troca.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/troca
+          git diff --staged --quiet && exit 0
+          git commit -m "Relação de troca grãos x fertilizantes"
+          for i in 1 2 3 4 5; do git pull --rebase origin main && git push && exit 0; sleep 15; done
+          exit 1
