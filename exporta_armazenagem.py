@@ -34,7 +34,16 @@ def sidra(caminho, n=4):
             r = requests.get(f"{SIDRA}/{caminho}", headers=UA, timeout=180)
             r.raise_for_status()
             d = r.json()
-            return d[1:]  # a primeira linha é o cabeçalho
+            cab = d[0]
+            # a ordem das dimensões D4, D5... segue a ordem das classificações no pedido: renomeia pelo nome
+            nomes = {k[:-1]: v.replace(" (Código)", "") for k, v in cab.items() if k.startswith("D") and k.endswith("C")}
+            out = []
+            for x in d[1:]:
+                y = dict(x)
+                for dk, nome in nomes.items():
+                    y[nome] = x.get(dk + "C")
+                out.append(y)
+            return out
         except (requests.RequestException, ValueError) as e:
             if i == n - 1:
                 raise
@@ -60,7 +69,7 @@ def capacidade():
     linhas = sidra("t/5459/n1/all/n3/all/v/152,153/p/all/c166/all/c11278/39324")
     cap = defaultdict(lambda: defaultdict(dict))  # local -> tipo -> periodo -> [estab, t]
     for x in linhas:
-        t = TIPOS.get(x["D4C"])
+        t = TIPOS.get(x["Tipo de unidade armazenadora"])
         if not t:
             continue
         reg = cap[local(x)][t].setdefault(periodo(x["D3C"]), [None, None])
@@ -94,14 +103,14 @@ def estoques():
     linhas = sidra(f"t/254/n1/all/n3/all/v/150/p/all/c162/{produtos}/c161/0/c163/0")
     out = defaultdict(lambda: defaultdict(dict))
     for x in linhas:
-        p = PRODUTOS.get(x["D5C"])
+        p = PRODUTOS.get(x["Produtos"])
         if p:
             out[local(x)][p][periodo(x["D3C"])] = num(x["V"])
     time.sleep(3)
     linhas = sidra("t/254/n1/all/v/150/p/all/c162/118423/c161/allxt/c163/0")
     prop = defaultdict(dict)
     for x in linhas:
-        k = PROPRIEDADE.get(x["D4C"])
+        k = PROPRIEDADE.get(x["Tipo de propriedade da empresa"])
         if k:
             prop[k][periodo(x["D3C"])] = num(x["V"])
     return out, prop
