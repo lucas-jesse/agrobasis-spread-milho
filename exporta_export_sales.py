@@ -60,15 +60,21 @@ sessao = requests.Session(); sessao.headers["User-Agent"] = "AgroBasis/1.0 (agro
 consultas = 0
 
 
+class CotaEsgotada(RuntimeError):
+    """a API recusou de novo depois da espera: a cota da chave acabou por agora"""
+
+
 def get(caminho, max_consultas):
-    """GET na API respeitando o limite da chave; espera e tenta de novo quando recebe 429."""
+    """GET na API respeitando o limite da chave. Com 429 espera 10 min uma vez; se repetir, encerra a execução."""
     global consultas
     if consultas >= max_consultas:
         raise RuntimeError("limite de consultas desta execução")
-    for tentativa in range(8):
+    for tentativa in range(2):
         r = sessao.get(f"{API}/{caminho}", params={"api_key": CHAVE}, timeout=180)
         if r.status_code == 429:
-            print("limite da API: aguardando 10 min"); time.sleep(600); continue
+            if tentativa == 0:
+                print("limite da API: aguardando 10 min"); time.sleep(600); continue
+            raise CotaEsgotada("cota da API esgotada")
         r.raise_for_status()
         consultas += 1
         resta = int(r.headers.get("x-ratelimit-remaining", "99"))
@@ -193,10 +199,15 @@ def main():
                 fila.append((1 if a == my - 1 else 2, slug, a, False))
     fila.sort(key=lambda x: (x[0], -x[2]))
     print("na fila:", [(f[1], f[2]) for f in fila])
+    esgotada = False
     for _, slug, a, atual in fila:
         cod, nome, mes, psd = PRODUTOS[slug]
+        if esgotada:
+            resumo["pendentes"].append(f"{slug} {a}"); continue
         try:
             linhas = get(f"exports/commodityCode/{cod}/allCountries/marketYear/{a}", args.max_consultas)
+        except CotaEsgotada as e:
+            print(slug, a, e); esgotada = True; resumo["pendentes"].append(f"{slug} {a}"); continue
         except RuntimeError as e:
             print(slug, a, e); resumo["pendentes"].append(f"{slug} {a}"); continue
         if not linhas:

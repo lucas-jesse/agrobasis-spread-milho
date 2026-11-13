@@ -6,6 +6,8 @@ on:
     # Quinta 14h17 UTC e sexta 14h17 UTC (atraso de feriado ou falha da API).
     - cron: '17 14 * * 4'
     - cron: '17 14 * * 5'
+    # enquanto faltar histórico (chave DEMO_KEY), um lote por dia completa a carga aos poucos
+    - cron: '47 3 * * *'
   workflow_dispatch:
     inputs:
       max_consultas:
@@ -23,7 +25,7 @@ jobs:
   exportar:
     runs-on: ubuntu-latest
     # com a DEMO_KEY (10 consultas por hora) a primeira carga do histórico leva cerca de 3 horas
-    timeout-minutes: 340
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -40,14 +42,7 @@ jobs:
           # cada lote é salvo no repositório, então uma falha não perde o que já foi baixado.
           LOTE=${{ github.event.inputs.max_consultas || '60' }}
           [ -z "$FAS_API_KEY" ] && LOTE=9
-          for i in 1 2 3 4 5; do
-            python exporta_export_sales.py --max-consultas $LOTE || echo "lote $i com erro"
-            git add dados/export_sales
-            git diff --staged --quiet || git commit -q -m "Vendas de exportação dos EUA (USDA FAS), lote $i"
-            git pull -q --rebase origin main && git push -q
-            if python -c "import json,sys; sys.exit(0 if json.load(open('dados/export_sales/resumo.json'))['pendentes'] else 1)"; then
-              echo "faltam anos: aguardando a próxima janela da API"; sleep 3300
-            else
-              echo "carga completa"; break
-            fi
-          done
+          python exporta_export_sales.py --max-consultas $LOTE || echo "execução com erro"
+          git add dados/export_sales
+          git diff --staged --quiet || git commit -q -m "Vendas de exportação dos EUA (USDA FAS)"
+          git pull -q --rebase origin main && git push -q
