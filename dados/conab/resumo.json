@@ -1,19 +1,19 @@
 {
  "safra": "2026/27",
  "levantamento": {
-  "n": 1,
-  "mes": 10,
+  "n": 2,
+  "mes": 11,
   "ano": 2026
  },
  "produtos": {
   "graos": {
    "produto": "Total de grãos",
    "safra": "2026/27",
-   "producao": 367140.1,
-   "producao_ant": 362236.4,
-   "area": 85405.8,
-   "prod": 4299.0,
-   "producao_lev_ant": null
+   "producao": 366128.5,
+   "producao_ant": 361495.5,
+   "area": 85344.6,
+   "prod": 4290.0,
+   "producao_lev_ant": 367140.1
   },
   "soja": {
    "produto": "Soja",
@@ -22,7 +22,7 @@
    "producao_ant": 180406.6,
    "area": 49305.8,
    "prod": 3683.0,
-   "producao_lev_ant": null
+   "producao_lev_ant": 181616.6
   },
   "milho": {
    "produto": "Milho total",
@@ -31,7 +31,7 @@
    "producao_ant": 144499.0,
    "area": 23704.7,
    "prod": 6244.0,
-   "producao_lev_ant": null
+   "producao_lev_ant": 148015.9
   },
   "milho1": {
    "produto": "Milho 1ª safra",
@@ -40,7 +40,7 @@
    "producao_ant": 29487.8,
    "area": 4540.2,
    "prod": 7071.0,
-   "producao_lev_ant": null
+   "producao_lev_ant": 32102.5
   },
   "milho2": {
    "produto": "Milho 2ª safra",
@@ -49,16 +49,16 @@
    "producao_ant": 112769.0,
    "area": 18486.6,
    "prod": 6126.0,
-   "producao_lev_ant": null
+   "producao_lev_ant": 113254.5
   },
   "trigo": {
    "produto": "Trigo",
    "safra": "2026",
-   "producao": 5734.9,
+   "producao": 5260.5,
    "producao_ant": 7873.4,
-   "area": 1928.8,
-   "prod": 2973.0,
-   "producao_lev_ant": null
+   "area": 1914.3,
+   "prod": 2748.0,
+   "producao_lev_ant": 5734.9
   },
   "algodao": {
    "produto": "Algodão em pluma",
@@ -67,25 +67,25 @@
    "producao_ant": 4145.3,
    "area": 2093.0,
    "prod": 1986.0,
-   "producao_lev_ant": null
+   "producao_lev_ant": 4157.5
   },
   "arroz": {
    "produto": "Arroz",
    "safra": "2026/27",
-   "producao": 10752.1,
+   "producao": 10552.4,
    "producao_ant": 11076.2,
-   "area": 1529.3,
-   "prod": 7031.0,
-   "producao_lev_ant": null
+   "area": 1504.5,
+   "prod": 7014.0,
+   "producao_lev_ant": 10752.1
   },
   "feijao": {
    "produto": "Feijão total",
    "safra": "2026/27",
-   "producao": 2930.2,
-   "producao_ant": 2950.0,
-   "area": 2546.1,
-   "prod": 1151.0,
-   "producao_lev_ant": null
+   "producao": 2898.6,
+   "producao_ant": 2952.6,
+   "area": 2533.0,
+   "prod": 1144.0,
+   "producao_lev_ant": 2930.2
   },
   "sorgo": {
    "produto": "Sorgo",
@@ -94,7 +94,7 @@
    "producao_ant": 7368.7,
    "area": 2215.2,
    "prod": 3625.0,
-   "producao_lev_ant": null
+   "producao_lev_ant": 8031.0
   }
  }
 }
