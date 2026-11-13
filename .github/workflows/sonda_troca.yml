@@ -13,19 +13,10 @@ jobs:
         run: |
           mkdir -p out && cd out
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-          P=https://portaldeinformacoes.conab.gov.br
-          curl -sSL -A "$UA" "$P/download-arquivos.html" -o portal_dl.html || true
-          grep -oE 'arquivos/[A-Za-z0-9_.-]+' portal_dl.html | sort -u > portal_arquivos.txt || true
-          curl -sSL -A "$UA" "$P/downloads/arquivos/" -o portal_idx.html || true
-          for f in PrecosSemanalUF.txt PrecosMensalUF.txt PrecosSemanalMunicipio.txt PrecosMensalMunicipio.txt PrecosInsumos.txt CustoProducao.txt; do
-            curl -sSL -A "$UA" -r 0-4000 -o "head_$f" -w "$f %{http_code} %{size_download}\n" "$P/downloads/arquivos/$f" >> status.txt || true
+          for u in "soja.aspx?id=92" "soja.aspx?id=12" "milho.aspx?id=77" "trigo.aspx?id=178"; do
+            n=$(echo $u | tr '?=' '__'); curl -sSL -A "$UA" -e "https://www.cepea.org.br/br/indicador/soja.aspx" "https://www.cepea.org.br/br/indicador/series/$u" -o "cepea_$n" -w "$u %{http_code} %{size_download} %{content_type}\n" >> status.txt || true
           done
-          # Comex Stat: importação de ureia (31021010) em 2025, mensal
-          curl -sS -X POST https://api-comexstat.mdic.gov.br/general -H 'Content-Type: application/json' \
-            -d '{"flow":"import","monthDetail":true,"period":{"from":"2025-01","to":"2025-12"},"filters":[{"filter":"ncm","values":["31021010"]}],"details":["ncm"],"metrics":["metricFOB","metricKG","metricCIF"]}' -o comex.json -w "comex %{http_code}\n" >> status.txt || true
-          curl -sSL -A "$UA" "https://www.cepea.org.br/br/indicador/soja.aspx" -o cepea.html -w "cepea %{http_code} %{size_download}\n" >> status.txt || true
-          curl -sSL -A "$UA" "https://api.bcb.gov.br/dados/serie/bcdata.sgs.3698/dados/ultimos/3?formato=json" -o bcb.json -w "bcb %{http_code}\n" >> status.txt || true
-          cat status.txt; head -50 portal_arquivos.txt
+          file cepea_* >> status.txt; cat status.txt
       - name: publicar
         run: |
           cd out && git init -q && git checkout -q -b sonda-troca
