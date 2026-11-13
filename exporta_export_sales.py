@@ -109,7 +109,8 @@ def agregar(linhas, my, mes, paises):
         q[0] += x.get("currentMYNetSales") or 0; q[1] += x.get("weeklyExports") or 0
         q[2] += x.get("currentMYTotalCommitment") or 0; q[3] += x.get("accumulatedExports") or 0
     datas = sorted(sem)
-    return {"ano": my, "inicio": ini.isoformat(), "baixado_em": date.today().isoformat(), "datas": datas,
+    return {"ano": my, "inicio": ini.isoformat(), "baixado_em": date.today().isoformat(),
+            "baixado_ts": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"), "datas": datas,
             "semana": [(date.fromisoformat(d) - ini).days // 7 for d in datas],
             **{k: [sem[d][k] for d in datas] for k in ("net", "emb", "acum", "comp", "saldo", "prox")},
             "pais": {d: sem[d]["pais"] for d in datas}}
@@ -172,6 +173,20 @@ def publicar(slug, cod, nome, mes, psd, cacheados, release):
             "comp_ano_anterior": comp_ant, "projecao_usda": a["projecao_usda"]}
 
 
+def pub_utc(v):
+    """releaseTimeStamp do FAS em UTC ('AAAA-MM-DDTHH:MM:SS'); sem fuso, é horário de Washington."""
+    if not v:
+        return ""
+    try:
+        d = datetime.fromisoformat(str(v).replace("Z", "+00:00"))
+    except ValueError:
+        return ""
+    if d.tzinfo is None:
+        from zoneinfo import ZoneInfo
+        d = d.replace(tzinfo=ZoneInfo("America/New_York"))
+    return d.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--max-consultas", type=int, default=60); args = ap.parse_args()
     CACHE.mkdir(parents=True, exist_ok=True)
@@ -189,11 +204,18 @@ def main():
         r = next(x for x in rel if x["commodityCode"] == cod)
         my = r["marketYear"]
         c_at = CACHE / f"{slug}_{my}.json"
-        # o ano-safra atual é baixado de novo, a não ser que já tenha sido baixado hoje (execuções em lotes)
-        # (com a DEMO_KEY, fora de quinta e sexta, só se a cópia tiver mais de 6 dias: sobra cota para o histórico)
-        baixado = json.loads(c_at.read_text()).get("baixado_em", "2000-01-01") if c_at.exists() else "2000-01-01"
+        # o ano-safra atual é baixado de novo quando o USDA publica um relatório depois da última cópia
+        # (releaseTimeStamp de datareleasedates); sem essa informação, vale a regra antiga por idade da cópia
+        info = json.loads(c_at.read_text()) if c_at.exists() else {}
+        baixado = info.get("baixado_em", "2000-01-01")
         idade = (date.today() - date.fromisoformat(baixado)).days
-        if idade >= 1 and (CHAVE != "DEMO_KEY" or date.today().weekday() in (3, 4) or idade > 6):
+        pub = pub_utc(r.get("releaseTimeStamp"))
+        if pub:
+            novo = pub > info.get("baixado_ts", baixado + "T00:00:00") or idade > 6
+        else:
+            novo = idade >= 1 and (CHAVE != "DEMO_KEY" or date.today().weekday() in (3, 4) or idade > 6)
+        print(slug, my, "publicado (UTC):", pub, "| cópia:", info.get("baixado_ts", baixado), "| baixar:", not c_at.exists() or novo)
+        if not c_at.exists() or novo:
             fila.append((0, slug, my, True))
         for a in range(my - ANOS + 1, my):
             c = CACHE / f"{slug}_{a}.json"

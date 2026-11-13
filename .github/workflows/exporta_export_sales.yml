@@ -6,6 +6,7 @@ on:
     # Quinta 14h17 UTC e sexta 14h17 UTC (atraso de feriado ou falha da API).
     - cron: '17 14 * * 4'
     - cron: '17 14 * * 5'
+    - cron: '47 15 * * 4,5'
     # enquanto faltar histórico (chave DEMO_KEY), um lote por dia completa a carga aos poucos
     - cron: '47 3 * * *'
   workflow_dispatch:
