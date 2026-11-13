@@ -1,0 +1,84 @@
+<!-- AgroBasis · página inicial: bloco "Últimas análises" (substitui o slider e a lista do JetEngine).
+     Lê os 5 posts mais recentes pela API do WordPress; sem JS, mostra o link para /analises/. -->
+<style>
+.hla{font-family:'Geist',Arial,sans-serif;color:#1d2420;max-width:1180px;margin:0 auto;padding:44px 24px 36px;box-sizing:border-box}
+.hla *{box-sizing:border-box}
+.hla-top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:0 0 20px}
+.hla-top h2{font-family:'Sora',Arial,sans-serif;font-size:26px;font-weight:700;margin:0;color:#1d2420;letter-spacing:-.01em}
+.hla-top h2:before{content:"";display:block;width:32px;height:3px;border-radius:2px;background:#54931B;margin:0 0 12px}
+.hla-top a{font-size:14px;font-weight:600;color:#1E4812;text-decoration:none;white-space:nowrap}
+.hla-top a:hover{text-decoration:underline}
+.hla-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:start}
+.hla a.hla-it{text-decoration:none;color:inherit;display:block}
+.hla-img{position:relative;overflow:hidden;border-radius:12px;background:#EEF1EF;aspect-ratio:1200/630}
+.hla-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+.hla-it:hover .hla-img img{transform:scale(1.03)}
+.hla-cat{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#3d7a14}
+.hla-dt{font-size:12.5px;color:#7a847c}
+.hla-meta{display:flex;gap:10px;align-items:center;margin:0 0 6px}
+.hla-meta .hla-dt:before{content:"·";margin-right:10px;color:#b5beb7}
+.hla-lead .hla-txt{padding:16px 2px 0}
+.hla-lead h3{font-family:'Sora',Arial,sans-serif;font-size:24px;line-height:1.28;font-weight:700;margin:0 0 8px;color:#1d2420}
+.hla-lead p{font-size:15px;line-height:1.6;color:#4a544c;margin:0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hla-it:hover h3,.hla-it:hover h4{color:#1E4812}
+.hla-list{display:flex;flex-direction:column}
+.hla-row{display:grid !important;grid-template-columns:1fr 132px;gap:16px;align-items:start;padding:16px 0;border-top:1px solid #E7ECE8}
+.hla-row:first-child{border-top:0;padding-top:0}
+.hla-row h4{font-family:'Sora',Arial,sans-serif;font-size:16.5px;line-height:1.35;font-weight:600;margin:0;color:#1d2420;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.hla-row .hla-img{border-radius:9px}
+.hla-sk{background:linear-gradient(90deg,#EEF1EF,#F6F8F4,#EEF1EF);background-size:200% 100%;animation:hlaSk 1.2s infinite;border-radius:10px}
+@keyframes hlaSk{to{background-position:-200% 0}}
+@media (max-width:860px){.hla-grid{grid-template-columns:1fr;gap:22px}}
+@media (max-width:560px){
+  .hla{padding:30px 16px 24px}.hla-top h2{font-size:21px}.hla-top a{font-size:13px}
+  .hla-lead h3{font-size:19px}.hla-lead p{font-size:14.5px;-webkit-line-clamp:2}
+  .hla-row{grid-template-columns:96px 1fr;gap:12px;padding:14px 0}.hla-row .hla-img{order:-1}
+  .hla-row h4{font-size:15px}
+}
+</style>
+<section class="hla" id="hla" aria-labelledby="hlaT">
+  <div class="hla-top"><h2 id="hlaT">Últimas análises</h2><a href="/analises/">Ver todas →</a></div>
+  <div class="hla-grid" id="hlaG">
+    <div class="hla-sk" style="aspect-ratio:1200/630"></div>
+    <div><div class="hla-sk" style="height:84px;margin-bottom:14px"></div><div class="hla-sk" style="height:84px;margin-bottom:14px"></div><div class="hla-sk" style="height:84px"></div></div>
+  </div>
+  <noscript><p><a href="/analises/">Ver as análises mais recentes</a></p></noscript>
+</section>
+<script>
+(function () {
+  "use strict";
+  var G = document.getElementById("hlaG");
+  // rótulo: o tema mais específico entre tags e categorias, nunca a lista inteira
+  var PRIO = ["conab", "usda", "wasde", "cot", "basis", "hedge", "câmbio", "cambio", "clima", "bushel", "mercado", "soja", "milho", "trigo", "economia"];
+  var FORA = ["análises", "analises", "destaque análises", "destaque dados", "dados", "uncategorized", "análise", "analise"];
+  var MES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+  function txt(h) { var d = document.createElement("div"); d.innerHTML = h || ""; return (d.textContent || "").replace(/\s+/g, " ").trim(); }
+  function rotulo(p) {
+    var termos = [].concat.apply([], (p._embedded && p._embedded["wp:term"]) || []).map(function (t) { return t.name; });
+    var ok = termos.filter(function (n) { return FORA.indexOf(n.toLowerCase()) < 0; });
+    ok.sort(function (a, b) { var ia = PRIO.indexOf(a.toLowerCase()), ib = PRIO.indexOf(b.toLowerCase()); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
+    var r = ok[0] || "Análise"; return r.length <= 4 ? r.toUpperCase() : r.charAt(0).toUpperCase() + r.slice(1);
+  }
+  function data(s) { var d = new Date(s); return d.getDate() + " " + MES[d.getMonth()] + " " + d.getFullYear(); }
+  function img(p, tam) {
+    var m = p._embedded && p._embedded["wp:featuredmedia"] && p._embedded["wp:featuredmedia"][0];
+    if (!m || !m.source_url) return "";
+    var s = (m.media_details && m.media_details.sizes) || {}, u = (s[tam] || s.large || s.medium_large || {}).source_url || m.source_url;
+    return '<div class="hla-img"><img src="' + u + '" alt="' + esc(m.alt_text || txt(p.title.rendered)) + '" loading="lazy" decoding="async"></div>';
+  }
+  function meta(p) { return '<div class="hla-meta"><span class="hla-cat">' + esc(rotulo(p)) + '</span><span class="hla-dt">' + data(p.date) + "</span></div>"; }
+  fetch("/wp-json/wp/v2/posts?per_page=5&_embed=wp:featuredmedia,wp:term")
+    .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+    .then(function (ps) {
+      if (!ps.length) throw 0;
+      var a = ps[0], resto = ps.slice(1);
+      G.innerHTML = '<a class="hla-it hla-lead" href="' + a.link + '">' + img(a, "large") + '<div class="hla-txt">' + meta(a) +
+        "<h3>" + txt(a.title.rendered) + "</h3><p>" + esc(txt(a.excerpt.rendered)) + "</p></div></a>" +
+        '<div class="hla-list">' + resto.map(function (p) {
+          return '<a class="hla-it hla-row" href="' + p.link + '"><div>' + meta(p) + "<h4>" + txt(p.title.rendered) + "</h4></div>" + img(p, "medium") + "</a>";
+        }).join("") + "</div>";
+    })
+    .catch(function () { G.innerHTML = '<p><a href="/analises/" style="color:#1E4812;font-weight:600">Ver as análises mais recentes →</a></p>'; });
+})();
+</script>
