@@ -39,6 +39,7 @@ ALVOS = {
     "basis-soja-brasil": ("basis-soja.html", "#abbG2", PRACA.format("Paranaguá")),
     "posicao-fundos-cftc": ("cot.html", "#abcG0", ""),
     "curva-do-dolar": ("curva-dolar.html", "#abdG0", ""),
+    "safra-brasil-conab": ("conab.html", "#abcG0", ""),
 }
 
 
