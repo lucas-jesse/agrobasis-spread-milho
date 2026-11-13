@@ -136,7 +136,7 @@ def main():
     periodos = sorted({p for l in cap.values() for t in l.values() for p in t})
     ufs = ["BR"] + sorted(k for k in cap if k != "BR")
     saida = {"fonte": "IBGE, Pesquisa de Estoques (SIDRA 5459, 5470, 254) e Conab", "periodos": periodos, "ultimo": periodos[-1],
-             "locais": {}, "municipios": mun[:60], "n_municipios": len(mun), "propriedade": {k: [v.get(p) for p in periodos] for k, v in prop.items()},
+             "locais": {}, "municipios": mun[:300], "n_municipios": len(mun), "propriedade": {k: [v.get(p) for p in periodos] for k, v in prop.items()},
              "producao": prod}
     for u in ufs:
         reg = {"cap": {}, "estab": {}, "conv_m3": [conv.get(u, {}).get(p, [None, None])[1] for p in periodos],
