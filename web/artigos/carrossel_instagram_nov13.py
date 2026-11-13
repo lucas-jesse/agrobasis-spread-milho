@@ -1,4 +1,4 @@
-"""Carrosséis LinkedIn (1080x1350, PDF) de 13/11/2026: Conab 2º levantamento 2026/27 e USDA Export Sales (semana até 05/11).
+"""Carrosséis Instagram (1080x1350, PNG; PDF também) de 13/11/2026: Conab 2º levantamento 2026/27 e USDA Export Sales (semana até 05/11).
 
 Mesma identidade dos carrosséis do Instagram (claude/instagram/carrossel_usda_v2.py): fundo branco, logo, contador,
 assinatura com credenciais. Renderiza em 2x e reduz.
@@ -11,7 +11,7 @@ W, H = 1080 * S, 1350 * S
 M = 90 * S
 VERDE, VERDE2, MARROM, TEXTO, TEXTO2, LINHA, FAIXA = "#1E4812", "#54931B", "#A17149", "#222222", "#6B716D", "#E3E7E4", "#F6F8F6"
 FD = Path("/home/claude/instagram/fonts")
-OUT = Path("/home/claude/agrobasis-spread-milho/web/artigos/img/linkedin-nov13"); OUT.mkdir(parents=True, exist_ok=True)
+OUT = Path("/home/claude/agrobasis-spread-milho/web/artigos/img/instagram-nov13"); OUT.mkdir(parents=True, exist_ok=True)
 LOGO_PNG = "/tmp/claude-tool-results/fa480465-bbb1-558a-82f8-98335ae36660/project-file-cf879452-5de7-4cca-a210-857a33f4fba0-Logo_Agrobasis-f1ee6bb5.png"
 ASSINATURA = "Lucas Jesse  ·  CNPI-P | CFP® | Ancord Agro 100"
 
@@ -222,7 +222,7 @@ fechamento(c, "O que muda no mercado", "Três leituras do relatório", [
     ("Trigo", "Com 5,3 milhões de t e estoque curto, a dependência de importação aumenta. O trigo de qualidade panificável tende a ganhar prêmio sobre o lote de ração."),
     ("Milho", "Menos exportação e estoque de 19 milhões de t pesam nos preços do interior durante o plantio da safrinha."),
     ("Soja", "Nada mudou no número, mas o clima de dezembro e janeiro decide os próximos levantamentos.")],
-    "agrobasis.com.br/dashboards", "Safra por estado, atualizada a cada levantamento")
+    "agrobasis.com.br  ·  link na bio", "Painel de safra por estado, atualizado a cada levantamento")
 c.pdf()
 
 # =====================================================================================
@@ -278,6 +278,6 @@ fechamento(e, "O que isso significa para o Brasil", "Três leituras do relatóri
     ("Soja", "A China compra nos EUA justamente na janela em que o Brasil tem pouca soja para vender. O efeito aparece mais no prêmio nos portos do que em Chicago. A partir de fevereiro, com a nossa colheita, o Brasil volta a ser a origem mais competitiva."),
     ("Milho", "Os EUA voltaram a vender forte, e o México é o maior comprador. A concorrência com o milho brasileiro no mercado externo fica mais dura."),
     ("Risco", "Com tanta dependência de um comprador só, qualquer ruído entre Washington e Pequim mexe direto no mercado.")],
-    "agrobasis.com.br/dashboards", "Vendas semanais dos EUA, atualizadas a cada relatório")
+    "agrobasis.com.br  ·  link na bio", "Painel de vendas dos EUA, atualizado a cada relatório")
 e.pdf()
 print("ok")
