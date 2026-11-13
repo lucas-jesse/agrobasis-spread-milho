@@ -9,8 +9,9 @@ jobs:
       - run: |
           mkdir out && cd out
           B=https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos
-          for p in "" "/1o-levantamento-safra-2026-27" "/2o-levantamento-safra-2026-27" "/2o-levantamento-safra-2025-26"; do
-            n=$(echo "idx$p" | tr '/' '_'); curl -sSL -m 60 -A "Mozilla/5.0" -o "$n.html" -w "$p HTTP %{http_code} %{size_download}\n" "$B$p" || true; done
-          for f in *.html; do echo "== $f"; grep -o 'href="[^"]*\(xls\|xlsx\|pdf\|csv\)[^"]*"' "$f" | sort -u | head -30; done
+          curl -sSL -m 120 -A "Mozilla/5.0" -o out26.xlsx -w "out26 %{http_code} %{size_download}\n" "$B/1o-levantamento-safra-2026-27/site_previsao_de_safra-por_produto-out-2026.xlsx"
+          curl -sSL -m 120 -A "Mozilla/5.0" -o set26.xlsx -w "set26 %{http_code} %{size_download}\n" "$B/12o-levantamento-safra-2025-26/site_previsao_de_safra-por_produto-set-2026.xlsx"
+          curl -sSL -m 60 -A "Mozilla/5.0" -o lev2.html -w "lev2 %{http_code} %{size_download}\n" "$B/2o-levantamento-safra-2026-27"
+          grep -o '<title>[^<]*' lev2.html; grep -io 'previs[^"<]*\|em breve[^<]*\|novembro[^<]*' lev2.html | head
           git init -q -b sonda-conab && git config user.name bot && git config user.email bot@x
           git add . && git commit -qm sonda && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" sonda-conab
