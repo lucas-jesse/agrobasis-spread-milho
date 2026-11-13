@@ -1,0 +1,430 @@
+<!--
+============================================================
+AGROBASIS · ANÁLISE: CONAB, 2º LEVANTAMENTO DA SAFRA 2026/27 (NOVEMBRO DE 2026)
+============================================================
+URL: /analises/conab-novembro-2026-safra-graos-2026-27/
+
+CONFIGURAÇÃO NO PLUGIN DE SEO:
+  Title (SEO): Conab novembro 2026: safra 2026/27 em 366,1 mi t | AgroBasis
+  Meta description: 2º levantamento da Conab: safra 2026/27 em 366,1 mi t, trigo cai para 5,3 mi t e soja segue em 181,6 mi t. Números por estado e o que muda no mercado.
+  Slug: conab-novembro-2026-safra-graos-2026-27
+  Frase-chave de foco: levantamento Conab novembro 2026
+
+NOTA DE DADOS (conferidos em 13/11/2026):
+  Produção, área e produtividade por cultura e por UF: planilha oficial da Conab
+  "site_previsao_de_safra-por_produto" do 1º (out/2026) e do 2º (nov/2026) levantamentos da safra 2026/27,
+  convertida pelo coletor AgroBasis (dados/conab/lev/2026-27_01.json e 2026-27_02.json).
+  Exportação de milho (40,9 mi t em 2025/26, cerca de 43 mi t em 2026/27), estoques de passagem de milho
+  (19 mi t em jan/2027, 20,9 mi t em jan/2028), estoques de trigo e motivos das revisões: comunicado
+  da Conab de 13/11/2026, reproduzido por Mais Soja e Canal Rural.
+  Andamento do plantio e da colheita: Conab, Progresso de Safra, semana até 06/11/2026 (dados/progresso).
+  Conversão: saca de 60 kg.
+
+NOTA DE ESTILO: sem travessão em H1/H2 e na prosa, tom sóbrio e direto.
+NOTA DE DESIGN: Design System AgroBasis, Geist + Sora, Lucide, gráficos em SVG puro.
+============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<style>
+  .abp-article {
+    font-family:'Geist', Arial, sans-serif;
+    color:#222222;
+    padding:36px 0 56px 0;
+    box-sizing:border-box;
+    background:#ffffff;
+  }
+  .abp-narrow { max-width:800px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+
+  .abp-breadcrumb { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+  .abp-breadcrumb a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-breadcrumb a:hover { text-decoration:underline; }
+
+  .abp-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Sora', Arial, sans-serif;
+    background:#EEF4E7; color:#1E4812; border:1px solid #d7e6c9;
+    border-radius:999px; padding:6px 14px 6px 10px;
+    font-size:12px; font-weight:700; letter-spacing:.2px;
+    margin-bottom:18px;
+  }
+  .abp-badge svg { width:13px; height:13px; stroke-width:2.2; }
+
+  .abp-h1 { font-size:35px; line-height:1.22; color:#222222; font-weight:800; margin:0 0 14px 0; }
+  .abp-lead { font-size:17px; line-height:1.7; color:#4a4a4a; margin:0 0 8px 0; }
+  .abp-meta { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#9a9a9a; margin:14px 0 30px 0; padding-bottom:20px; border-bottom:1px solid #eef1ed; }
+
+  .abp-h2 {
+    font-size:24px; color:#222222; font-weight:800;
+    margin:44px 0 14px 0; padding-left:12px; border-left:4px solid #1E4812;
+  }
+  .abp-h3 { font-size:17px; color:#222222; font-weight:700; margin:26px 0 10px 0; }
+  .abp-p { font-size:15.5px; line-height:1.8; color:#333333; margin:0 0 16px 0; }
+  .abp-p b { color:#1E4812; font-weight:700; }
+  .abp-list { margin:0 0 18px 0; padding-left:22px; }
+  .abp-list li { font-size:15.5px; line-height:1.8; color:#333333; margin-bottom:8px; }
+  .abp-list b { color:#222222; }
+
+  .abp-pullquote {
+    background:#fafbf9; border-left:3px solid #A17149; border-radius:0 14px 14px 0;
+    padding:18px 22px; margin:24px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:16px; line-height:1.6; color:#3f3f3f; font-style:italic;
+  }
+
+  .abp-note {
+    background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px;
+    padding:18px 20px; font-size:14px; line-height:1.65; color:#5b4636; margin:20px 0;
+  }
+  .abp-note b { color:#8a5a34; }
+
+  .abp-table {
+    width:100%; border-collapse:separate; border-spacing:0;
+    margin:14px 0 20px 0; font-size:14px;
+    border:1px solid #e5e7eb; border-radius:14px; overflow:hidden;
+  }
+  .abp-table th, .abp-table td {
+    padding:11px 14px; text-align:left; border-bottom:1px solid #eef1ed;
+  }
+  .abp-table tr:last-child td { border-bottom:none; }
+  .abp-table th {
+    background:#1E4812; color:#ffffff; font-weight:700;
+    font-family:'Sora', Arial, sans-serif; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .abp-table td { color:#3f3f3f; }
+  .abp-table tr:nth-child(even) td { background:#fafbf9; }
+
+  .abp-formula-box {
+    background:#fafbf9; border:1px solid #e5e7eb; border-left:3px solid #A17149;
+    border-radius:12px; padding:18px 20px; margin:18px 0 22px 0;
+  }
+  .abp-formula-code {
+    font-family:"Courier New", monospace; font-size:14.5px; color:#1E4812;
+    background:#EEF4E7; border-radius:8px; padding:12px 16px; display:block; margin-bottom:4px;
+    text-align:center; font-weight:600;
+  }
+
+  .abp-chart-card {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:18px;
+    padding:22px; margin:22px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05);
+  }
+  .abp-chart-title { font-family:'Geist', Arial, sans-serif; font-size:15px; font-weight:700; color:#222222; margin-bottom:2px; }
+  .abp-chart-sub { font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; margin-bottom:14px; }
+  .abp-chart-caption { font-family:'Sora', Arial, sans-serif; font-size:11px; color:#9a9a9a; text-align:right; margin-top:8px; }
+  .abp-legend { display:flex; gap:18px; flex-wrap:wrap; font-family:'Sora', Arial, sans-serif; font-size:12px; color:#5b5b5b; margin-bottom:10px; }
+  .abp-legend-item { display:flex; align-items:center; gap:6px; }
+  .abp-legend-dot { width:14px; height:3px; border-radius:2px; display:inline-block; }
+
+  .abp-toc {
+    background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px;
+    padding:18px 22px; margin:24px 0 8px 0;
+  }
+  .abp-toc-title { font-family:'Sora', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:10px; }
+  .abp-toc ol { margin:0; padding-left:20px; }
+  .abp-toc li { font-size:14px; line-height:1.9; }
+  .abp-toc a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-toc a:hover { text-decoration:underline; }
+
+  .abp-cta-box {
+    background:#1E4812; border-radius:20px; padding:32px 28px; margin:36px 0;
+    text-align:center;
+  }
+  .abp-cta-box h3 { color:#ffffff; font-size:20px; font-weight:800; margin:0 0 8px 0; }
+  .abp-cta-box p { color:#d7e6c9; font-size:14.5px; line-height:1.6; margin:0 0 20px 0; max-width:480px; margin-left:auto; margin-right:auto; }
+  .abp-cta-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#ffffff; color:#1E4812 !important; font-family:'Geist', Arial, sans-serif;
+    font-size:14.5px; font-weight:700; padding:13px 24px; border-radius:10px;
+    text-decoration:none !important; transition:background .15s ease;
+  }
+  .abp-cta-btn:hover { background:#EEF4E7; }
+  .abp-cta-btn svg { width:16px; height:16px; stroke-width:2.2; }
+
+  .abp-faq-item {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .abp-faq-item summary {
+    list-style:none; cursor:pointer; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:15px; font-weight:700; color:#222222;
+  }
+  .abp-faq-item summary::-webkit-details-marker { display:none; }
+  .abp-faq-item summary svg { width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+  .abp-faq-item[open] summary svg { transform:rotate(180deg); }
+  .abp-faq-a { padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+
+  .abp-sources {
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px;
+    padding:16px 20px; margin:30px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:12.5px; line-height:1.8; color:#7a7a7a;
+  }
+  .abp-sources b { color:#5b5b5b; }
+
+  .abp-disclaimer {
+    margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0;
+    font-family:'Sora', Arial, sans-serif;
+    font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6;
+  }
+
+  .abp-author-box {
+    display:flex; align-items:center; gap:12px; margin:30px 0;
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 18px;
+  }
+  .abp-author-icon { width:38px; height:38px; border-radius:50%; background:#EEF4E7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .abp-author-icon svg { width:19px; height:19px; color:#1E4812; }
+  .abp-author-text { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; line-height:1.5; }
+  .abp-author-text b { color:#222222; }
+
+  @media (max-width:768px) {
+    .abp-h1 { font-size:25px; }
+    .abp-lead { font-size:15px; }
+    .abp-h2 { font-size:20px; }
+    .abp-narrow { padding:0 14px; }
+    .abp-chart-card { padding:14px; }
+    .abp-cta-box { padding:24px 18px; }
+    .abp-table { font-size:12.5px; }
+    .abp-table th, .abp-table td { padding:8px 10px; }
+  }
+</style>
+
+<div class="abp-article">
+<div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/analises/">Análises</a> &nbsp;›&nbsp;
+    Conab novembro 2026
+  </div>
+
+  <div class="abp-badge"><i data-lucide="sprout"></i> Análise · Safra Brasil</div>
+  <h1 class="abp-h1">Conab novembro 2026: safra de grãos vai a 366,1 milhões de toneladas com corte no trigo</h1>
+  <p class="abp-lead">O 2º levantamento da safra 2026/27 tirou 1,0 milhão de toneladas da estimativa de outubro. Quase todo o corte veio do trigo, que perdeu produtividade no Paraná e no Rio Grande do Sul. Soja e milho ficaram onde estavam, e a atenção agora se volta para o clima de dezembro e janeiro.</p>
+  <div class="abp-meta">Por Equipe AgroBasis · Atualizado em 13 de novembro de 2026 · Leitura de 7 min</div>
+
+  <div class="abp-toc">
+    <div class="abp-toc-title">Neste artigo</div>
+    <ol>
+      <li><a href="#resumo">Os números do 2º levantamento</a></li>
+      <li><a href="#trigo">Trigo: o maior corte do mês</a></li>
+      <li><a href="#soja">Soja mantida em 181,6 milhões de toneladas</a></li>
+      <li><a href="#milho">Milho: produção estável e exportação menor</a></li>
+      <li><a href="#arroz-feijao">Arroz e feijão encolhem</a></li>
+      <li><a href="#plantio">Como está o plantio</a></li>
+      <li><a href="#mercado">O que o relatório muda no mercado</a></li>
+      <li><a href="#faq">Perguntas frequentes</a></li>
+    </ol>
+  </div>
+
+  <h2 class="abp-h2" id="resumo">Os números do 2º levantamento</h2>
+  <p class="abp-p">A Companhia Nacional de Abastecimento (Conab) divulgou nesta sexta-feira, 13 de novembro, a segunda estimativa para a safra brasileira de grãos 2026/27: <b>366,1 milhões de toneladas</b>. O número é 1,0 milhão de toneladas menor que o de outubro (367,1 milhões), mas ainda 1,3% maior que a safra 2025/26, que a Conab também revisou, para 361,5 milhões.</p>
+  <p class="abp-p">O crescimento continua apoiado na área. A Conab projeta 85,3 milhões de hectares, 1,9 milhão a mais que no ciclo anterior, enquanto a produtividade média recua de 4.332 para 4.290 kg por hectare. Em outras palavras, o Brasil planta mais, mas a estatal já embute um rendimento médio menor, coerente com um ano de El Niño.</p>
+  <table class="abp-table">
+    <thead><tr><th>Produção (mi t)</th><th>2025/26</th><th>1º lev. (out)</th><th>2º lev. (nov)</th><th>Revisão no mês</th><th>Sobre 2025/26</th></tr></thead>
+    <tbody>
+      <tr><td><b>Total de grãos</b></td><td>361,5</td><td>367,1</td><td><b>366,1</b></td><td>−1,01</td><td>+1,3%</td></tr>
+      <tr><td>Soja</td><td>180,4</td><td>181,6</td><td><b>181,6</b></td><td>sem mudança</td><td>+0,7%</td></tr>
+      <tr><td>Milho total</td><td>144,5</td><td>148,0</td><td><b>148,0</b></td><td>sem mudança</td><td>+2,4%</td></tr>
+      <tr><td>Milho 1ª safra</td><td>29,5</td><td>32,1</td><td><b>32,1</b></td><td>sem mudança</td><td>+8,9%</td></tr>
+      <tr><td>Milho 2ª safra</td><td>112,8</td><td>113,3</td><td><b>113,3</b></td><td>sem mudança</td><td>+0,4%</td></tr>
+      <tr><td>Trigo (safra 2026 x 2025)</td><td>7,9</td><td>5,7</td><td><b>5,3</b></td><td>−0,47</td><td>−33,2%</td></tr>
+      <tr><td>Arroz</td><td>11,1</td><td>10,8</td><td><b>10,6</b></td><td>−0,20</td><td>−4,7%</td></tr>
+      <tr><td>Feijão</td><td>3,0</td><td>2,9</td><td><b>2,9</b></td><td>−0,03</td><td>−1,8%</td></tr>
+      <tr><td>Algodão em pluma</td><td>4,1</td><td>4,2</td><td><b>4,2</b></td><td>sem mudança</td><td>+0,3%</td></tr>
+      <tr><td>Sorgo</td><td>7,4</td><td>8,0</td><td><b>8,0</b></td><td>sem mudança</td><td>+9,0%</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">A revisão do mês se concentrou nas culturas de inverno e nas de menor peso. Soja, milho, algodão e sorgo repetiram os números de outubro, algo comum em novembro: com o plantio de verão em andamento, a Conab só costuma mexer na produtividade das culturas principais quando o clima já deixou marcas claras nas lavouras.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Safra 2026/27: o que cresce e o que encolhe</div>
+    <div class="abp-chart-sub">Produção estimada no 2º levantamento contra a safra 2025/26, por cultura</div>
+    <svg viewBox="0 0 640 324" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Variação da produção por cultura"><line x1="300" x2="300" y1="8" y2="302" stroke="#cfd6cf" stroke-width="1"/><text x="290" y="33" font-family="Geist,Arial" font-size="13" font-weight="600" fill="#222222" text-anchor="end">Sorgo</text><rect x="300.0" y="18" width="57.5" height="22" rx="4" fill="#1E4812"/><text x="365.5" y="33" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812" text-anchor="start">+9,0%</text><text x="290" y="73" font-family="Geist,Arial" font-size="13" font-weight="600" fill="#222222" text-anchor="end">Milho total</text><rect x="300.0" y="58" width="15.6" height="22" rx="4" fill="#1E4812"/><text x="323.6" y="73" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812" text-anchor="start">+2,4%</text><text x="290" y="113" font-family="Geist,Arial" font-size="13" font-weight="600" fill="#222222" text-anchor="end">Soja</text><rect x="300.0" y="98" width="4.3" height="22" rx="4" fill="#1E4812"/><text x="312.3" y="113" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812" text-anchor="start">+0,7%</text><text x="290" y="153" font-family="Geist,Arial" font-size="13" font-weight="600" fill="#222222" text-anchor="end">Algodão (pluma)</text><rect x="300.0" y="138" width="1.9" height="22" rx="4" fill="#1E4812"/><text x="309.9" y="153" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812" text-anchor="start">+0,3%</text><text x="310" y="193" font-family="Geist,Arial" font-size="13" font-weight="600" fill="#222222" text-anchor="start">Feijão</text><rect x="288.3" y="178" width="11.7" height="22" rx="4" fill="#A17149"/><text x="280.3" y="193" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#A17149" text-anchor="end">−1,8%</text><text x="310" y="233" font-family="Geist,Arial" font-size="13" font-weight="600" fill="#222222" text-anchor="start">Arroz</text><rect x="269.7" y="218" width="30.3" height="22" rx="4" fill="#A17149"/><text x="261.7" y="233" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#A17149" text-anchor="end">−4,7%</text><text x="310" y="273" font-family="Geist,Arial" font-size="13" font-weight="600" fill="#222222" text-anchor="start">Trigo</text><rect x="87.6" y="258" width="212.4" height="22" rx="4" fill="#A17149"/><text x="79.6" y="273" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#A17149" text-anchor="end">−33,2%</text><text x="300" y="318" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">variação da produção sobre 2025/26</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab, 2º levantamento da safra de grãos 2026/27 (13/11/2026) · Elaboração: AgroBasis</div>
+  </div>
+
+  <h2 class="abp-h2" id="trigo">Trigo: o maior corte do mês</h2>
+  <p class="abp-p">O trigo respondeu por quase toda a redução do levantamento. A produção estimada caiu de 5,73 para <b>5,26 milhões de toneladas</b>, um corte de 474 mil toneladas em um mês. Frente aos 7,87 milhões colhidos em 2025, a queda chega a 33,2%.</p>
+  <p class="abp-p">A área foi levemente ajustada, de 1.929 para 1.914 mil hectares, mas o peso maior veio da produtividade, que passou de 2.973 para 2.748 kg por hectare (de 49,5 para 45,8 sacas). Segundo a Conab, o clima desfavorável no Paraná e no Rio Grande do Sul derrubou o rendimento e também a qualidade, o que deve desviar uma parcela maior do trigo para a ração animal.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Trigo: produção por estado</div>
+    <div class="abp-chart-sub">Mil toneladas · safra 2025 e as duas estimativas para 2026</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#C9D1CB;"></span> Safra 2025</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#8FB27A;"></span> 2026, 1º levantamento (out)</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> 2026, 2º levantamento (nov)</span></div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Produção de trigo por estado"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="40" y="284.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0</text><line x1="48" x2="624" y1="214.5" y2="214.5" stroke="#EEF1ED"/><text x="40" y="218.5" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">1.000</text><line x1="48" x2="624" y1="149.0" y2="149.0" stroke="#EEF1ED"/><text x="40" y="153.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">2.000</text><line x1="48" x2="624" y1="83.5" y2="83.5" stroke="#EEF1ED"/><text x="40" y="87.5" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">3.000</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="40" y="22.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">4.000</text><rect x="60.1" y="45.3" width="27.6" height="234.7" rx="3" fill="#C9D1CB"/><rect x="91.8" y="131.8" width="27.6" height="148.2" rx="3" fill="#8FB27A"/><rect x="123.4" y="142.6" width="27.6" height="137.4" rx="3" fill="#1E4812"/><text x="137.2" y="136.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">2.098</text><text x="105.6" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">RS</text><rect x="175.3" y="98.5" width="27.6" height="181.5" rx="3" fill="#C9D1CB"/><rect x="207.0" y="138.3" width="27.6" height="141.7" rx="3" fill="#8FB27A"/><rect x="238.6" y="157.5" width="27.6" height="122.5" rx="3" fill="#1E4812"/><text x="252.4" y="151.5" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">1.870</text><text x="220.8" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">PR</text><rect x="290.5" y="252.2" width="27.6" height="27.8" rx="3" fill="#C9D1CB"/><rect x="322.2" y="249.6" width="27.6" height="30.4" rx="3" fill="#8FB27A"/><rect x="353.8" y="249.6" width="27.6" height="30.4" rx="3" fill="#1E4812"/><text x="367.6" y="243.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">464</text><text x="336.0" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">MG</text><rect x="405.7" y="256.8" width="27.6" height="23.2" rx="3" fill="#C9D1CB"/><rect x="437.4" y="257.6" width="27.6" height="22.4" rx="3" fill="#8FB27A"/><rect x="469.0" y="257.6" width="27.6" height="22.4" rx="3" fill="#1E4812"/><text x="482.8" y="251.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">342</text><text x="451.2" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">SP</text><rect x="520.9" y="253.3" width="27.6" height="26.7" rx="3" fill="#C9D1CB"/><rect x="552.6" y="262.5" width="27.6" height="17.5" rx="3" fill="#8FB27A"/><rect x="584.2" y="263.5" width="27.6" height="16.5" rx="3" fill="#1E4812"/><text x="598.0" y="257.5" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">251</text><text x="566.4" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">SC</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab, 1º e 2º levantamentos da safra 2026/27 · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">O Paraná perdeu 293 mil toneladas no mês e deve colher 1,87 milhões de toneladas, com produtividade de 2.600 kg/ha, ante 3.383 kg/ha em 2025. No Rio Grande do Sul, o corte foi de 165 mil toneladas, para 2,10 milhões. Somados, os dois estados que lideram a produção nacional devem entregar 3,97 milhões de toneladas, contra 6,35 milhões em 2025.</p>
+  <div class="abp-note">Com produção de 5,3 milhões de toneladas, bem abaixo do que os moinhos e a ração consomem no país, a dependência de importação aumenta. A Conab estima estoque de passagem de trigo de apenas 436,5 mil toneladas ao fim da safra 2026, ante 955,5 mil toneladas da safra 2025.</div>
+
+  <h2 class="abp-h2" id="soja">Soja mantida em 181,6 milhões de toneladas</h2>
+  <p class="abp-p">A Conab manteve a estimativa de soja em <b>181,6 milhões de toneladas</b>, 0,7% acima da safra 2025/26. A área cresce para 49,3 milhões de hectares e a produtividade projetada é de 3.683 kg por hectare, ou 61,4 sacas, abaixo dos 61,9 sacas da safra passada.</p>
+  <p class="abp-p">A estatal descreve realidades distintas entre as regiões produtoras. Chuvas irregulares, temperaturas elevadas e os primeiros efeitos do El Niño mantêm o potencial produtivo em aberto, sobretudo nas áreas plantadas mais cedo no Centro-Oeste e no Matopiba.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja: produção nos principais estados</div>
+    <div class="abp-chart-sub">Milhões de toneladas · safra 2025/26 contra a estimativa para 2026/27</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#C9D1CB;"></span> Safra 2025/26</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> Safra 2026/27 (estimativa)</span></div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Produção de soja por estado"><line x1="48" x2="624" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="40" y="284.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0</text><line x1="48" x2="624" y1="192.7" y2="192.7" stroke="#EEF1ED"/><text x="40" y="196.7" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">20</text><line x1="48" x2="624" y1="105.3" y2="105.3" stroke="#EEF1ED"/><text x="40" y="109.3" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">40</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="40" y="22.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">60</text><rect x="57.5" y="54.6" width="29.6" height="225.4" rx="3" fill="#C9D1CB"/><rect x="91.1" y="57.8" width="29.6" height="222.2" rx="3" fill="#1E4812"/><text x="106.0" y="51.8" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">50,9</text><text x="89.1" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">MT</text><rect x="139.8" y="184.1" width="29.6" height="95.9" rx="3" fill="#C9D1CB"/><rect x="173.4" y="184.6" width="29.6" height="95.4" rx="3" fill="#1E4812"/><text x="188.2" y="178.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">21,8</text><text x="171.4" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">PR</text><rect x="222.1" y="192.0" width="29.6" height="88.0" rx="3" fill="#C9D1CB"/><rect x="255.7" y="191.3" width="29.6" height="88.7" rx="3" fill="#1E4812"/><text x="270.5" y="185.3" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">20,3</text><text x="253.7" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">GO</text><rect x="304.4" y="198.6" width="29.6" height="81.4" rx="3" fill="#C9D1CB"/><rect x="338.0" y="191.9" width="29.6" height="88.1" rx="3" fill="#1E4812"/><text x="352.8" y="185.9" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">20,2</text><text x="336.0" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">RS</text><rect x="386.7" y="211.2" width="29.6" height="68.8" rx="3" fill="#C9D1CB"/><rect x="420.3" y="210.5" width="29.6" height="69.5" rx="3" fill="#1E4812"/><text x="435.1" y="204.5" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">15,9</text><text x="418.3" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">MS</text><rect x="468.9" y="238.7" width="29.6" height="41.3" rx="3" fill="#C9D1CB"/><rect x="502.6" y="239.8" width="29.6" height="40.2" rx="3" fill="#1E4812"/><text x="517.4" y="233.8" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">9,2</text><text x="500.6" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">BA</text><rect x="551.2" y="240.0" width="29.6" height="40.0" rx="3" fill="#C9D1CB"/><rect x="584.9" y="239.4" width="29.6" height="40.6" rx="3" fill="#1E4812"/><text x="599.7" y="233.4" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">9,3</text><text x="582.9" y="300" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">MG</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab, 2º levantamento da safra de grãos 2026/27 · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">A distribuição por estado mostra o efeito esperado do El Niño, que costuma favorecer o Sul e penalizar o Norte e o Nordeste. O Rio Grande do Sul é o destaque positivo: depois de uma safra 2025/26 de 18,6 milhões de toneladas, a Conab projeta 20,2 milhões, com produtividade de 49,9 sacas por hectare. Mato Grosso, maior produtor, deve colher 50,9 milhões, 1,4% abaixo do ciclo anterior, com produtividade estimada de 64,8 sacas contra 66,2. Bahia e Tocantins também têm produtividade projetada menor.</p>
+
+  <div class="abp-cta-box">
+    <h3>Safra Brasil por estado, atualizada a cada levantamento</h3>
+    <p>Mapa, ranking, série histórica e a revisão mês a mês de soja, milho, trigo, algodão, arroz, feijão e sorgo em cada estado.</p>
+    <a href="/dashboards/safra-brasil-conab/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="milho">Milho: produção estável e exportação menor</h2>
+  <p class="abp-p">A produção total de milho foi mantida em <b>148,0 milhões de toneladas</b>, 2,4% acima de 2025/26. A 1ª safra deve render 32,1 milhões de toneladas, com área 10,7% maior, para 4,54 milhões de hectares. A 2ª safra, que ainda nem foi plantada, segue estimada em 113,3 milhões de toneladas.</p>
+  <p class="abp-p">A mudança relevante veio no balanço de oferta e demanda. A Conab reduziu a exportação de milho da safra 2025/26 para 40,9 milhões de toneladas, 6,8% abaixo da estimativa anterior, e projeta cerca de 43 milhões para 2026/27. O ritmo mais lento é atribuído à colheita americana, ao avanço da Argentina no mercado externo e à menor demanda chinesa. Com menos milho saindo pelos portos, o estoque de passagem previsto para o fim de janeiro de 2027 subiu para 19 milhões de toneladas, e o de janeiro de 2028 para 20,9 milhões.</p>
+  <table class="abp-table">
+    <thead><tr><th>Milho por estado (mi t)</th><th>2025/26</th><th>2026/27</th><th>Variação</th></tr></thead>
+    <tbody>
+      <tr><td>Mato Grosso, 2ª safra</td><td>58,0</td><td><b>57,0</b></td><td>−1,6%</td></tr>
+      <tr><td>Paraná, 2ª safra</td><td>17,3</td><td><b>17,1</b></td><td>−1,1%</td></tr>
+      <tr><td>Mato Grosso do Sul, 2ª safra</td><td>14,0</td><td><b>12,9</b></td><td>−7,7%</td></tr>
+      <tr><td>Goiás, 2ª safra</td><td>8,8</td><td><b>10,4</b></td><td>+18,4%</td></tr>
+      <tr><td>Rio Grande do Sul, 1ª safra</td><td>6,0</td><td><b>6,6</b></td><td>+10,2%</td></tr>
+      <tr><td>Minas Gerais, 1ª safra</td><td>4,7</td><td><b>4,9</b></td><td>+3,0%</td></tr>
+      <tr><td>Paraná, 1ª safra</td><td>4,1</td><td><b>4,5</b></td><td>+8,7%</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">No Sul, o milho de verão ganha espaço: a área do Rio Grande do Sul sobe de 817 para 914 mil hectares, e a produção gaúcha da 1ª safra deve passar de 6,0 para 6,6 milhões de toneladas.</p>
+
+  <h2 class="abp-h2" id="arroz-feijao">Arroz e feijão encolhem</h2>
+  <p class="abp-p">No arroz, a estimativa caiu de 10,75 para <b>10,55 milhões de toneladas</b>, 4,7% abaixo de 2025/26. A área irrigada recua 2,4% depois de um ciclo de margens apertadas, e só o arroz de sequeiro cresce. O Rio Grande do Sul, responsável por 69% da produção nacional, teve a estimativa reduzida de 7,44 para 7,26 milhões de toneladas, com área de 874 mil hectares.</p>
+  <p class="abp-p">O feijão foi ajustado para 2,90 milhões de toneladas, 1,8% abaixo da safra anterior, com pequena redução de área e de produtividade.</p>
+
+  <h2 class="abp-h2" id="plantio">Como está o plantio</h2>
+  <p class="abp-p">O levantamento chega com o plantio de verão adiantado. Até 06/11, segundo o Progresso de Safra da Conab, <b>66,8% da área de soja</b> estava semeada, contra 59,0% no mesmo período do ano passado e 62,7% na média de cinco anos. Mato Grosso praticamente encerrou a semeadura, com 95,6%, enquanto o Rio Grande do Sul estava em 23,0%.</p>
+  <p class="abp-p">O milho de 1ª safra tinha 51,2% da área plantada (47,2% um ano antes), e a colheita do trigo chegava a 78,4%, com o Rio Grande do Sul em 60,0%. Plantio rápido da soja abre uma janela melhor para a safrinha de milho em 2027, o que ajuda a sustentar a estimativa de 113,3 milhões de toneladas da 2ª safra.</p>
+
+  <div class="abp-cta-box">
+    <h3>Plantio e colheita semana a semana</h3>
+    <p>Curvas da safra atual contra o ano passado e a média de 5 anos, mapa e ranking por estado, com os dados da Conab.</p>
+    <a href="/dashboards/plantio-e-colheita-brasil/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="mercado">O que o relatório muda no mercado</h2>
+  <h3 class="abp-h3">Soja: neutro, com o clima no comando</h3>
+  <p class="abp-p">Sem mudança nos números, o relatório não altera a leitura de oferta da soja brasileira. Uma safra de 181,6 milhões de toneladas segue no radar do mercado internacional como a maior da história, e é ela que limita a alta de Chicago no primeiro semestre de 2027. O risco está na produtividade: cada saca por hectare a menos na média nacional representa cerca de 3,0 milhões de toneladas. Os próximos levantamentos vão depender do comportamento das chuvas no Centro-Oeste e no Matopiba entre dezembro e janeiro.</p>
+  <h3 class="abp-h3">Milho: estoque maior pesa nos preços internos</h3>
+  <p class="abp-p">Para o milho, o dado mais importante não foi a produção, e sim a exportação. Menos embarques significam mais milho disponível no mercado interno e estoque de passagem de 19 milhões de toneladas em janeiro de 2027. Esse quadro tende a limitar a valorização do milho no físico durante a entressafra, mesmo com a demanda crescente das usinas de etanol de milho.</p>
+  <h3 class="abp-h3">Trigo: mais importação e prêmio para o trigo de qualidade</h3>
+  <p class="abp-p">No trigo, o efeito é o oposto. Com produção de 5,3 milhões de toneladas e parte dela com qualidade inferior, o moinho brasileiro deve depender mais do trigo argentino e de outras origens em 2027. O trigo de padrão panificável tende a ganhar prêmio sobre o lote de menor qualidade, e o preço interno passa a acompanhar mais de perto a paridade de importação.</p>
+
+  <div class="abp-pullquote">Em resumo: o 2º levantamento corta o trigo, não mexe na soja e no milho e reforça um ano de oferta folgada de milho no Brasil. O clima de dezembro e janeiro decide os próximos números.</div>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item">
+    <summary>Quanto a Conab estima para a safra de grãos 2026/27? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">No 2º levantamento, divulgado em 13 de novembro de 2026, a Conab estima 366,1 milhões de toneladas, 1,0 milhão abaixo do levantamento de outubro e 1,3% acima da safra 2025/26. A área deve chegar a 85,3 milhões de hectares.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Por que a Conab cortou a estimativa de trigo? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Por área menor e clima desfavorável, principalmente no Paraná e no Rio Grande do Sul. A produtividade média caiu de 2.973 para 2.748 kg/ha e a produção foi para 5,26 milhões de toneladas, 33,2% abaixo de 2025. Parte do trigo colhido tem qualidade menor e deve ir para ração.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>A Conab mudou a estimativa de soja em novembro? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Não. A soja segue em 181,6 milhões de toneladas, com área de 49,3 milhões de hectares e produtividade de 3.683 kg/ha (61,4 sacas por hectare). A Conab cita chuvas irregulares, calor e os primeiros efeitos do El Niño como fatores de incerteza.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Quanto de milho o Brasil deve colher em 2026/27? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">148,0 milhões de toneladas, 2,4% acima de 2025/26: 32,1 milhões na 1ª safra, 113,3 milhões na 2ª e o restante na 3ª. A exportação de 2026/27 está estimada em cerca de 43 milhões de toneladas.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Quando sai o próximo levantamento da Conab? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">O 3º levantamento da safra 2026/27 deve sair em dezembro de 2026. O calendário oficial fica no site da Conab, e o painel Safra Brasil por Estado do AgroBasis atualiza sozinho no dia da divulgação.</p>
+  </details>
+
+  <div class="abp-sources">
+    <b>Fontes consultadas para este artigo:</b> Conab, Acompanhamento da Safra Brasileira de Grãos, 1º e 2º levantamentos da safra 2026/27 (planilhas por produto e comunicado de 13/11/2026); Conab, Progresso de Safra, semana até 06/11/2026.
+  </div>
+
+  <div class="abp-author-box">
+    <div class="abp-author-icon"><i data-lucide="pen-line"></i></div>
+    <div class="abp-author-text"><b>Equipe AgroBasis</b><br>Inteligência de mercado para o agronegócio: dashboards, análises e conteúdo educacional com dados oficiais.</div>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fonte dos dados: Conab. Conteúdo referencial para acompanhamento de mercado, elaborado pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda.
+  </div>
+
+</div>
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); } else { window.addEventListener('load', () => lucide.createIcons()); }
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Conab novembro 2026: safra de grãos vai a 366,1 milhões de toneladas com corte no trigo",
+  "description": "2º levantamento da Conab: safra 2026/27 em 366,1 mi t, trigo cai para 5,3 mi t e soja segue em 181,6 mi t. Números por estado e o que muda no mercado.",
+  "author": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "datePublished": "2026-11-13",
+  "dateModified": "2026-11-13",
+  "mainEntityOfPage": "https://agrobasis.com.br/analises/conab-novembro-2026-safra-graos-2026-27/"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quanto a Conab estima para a safra de grãos 2026/27?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No 2º levantamento, divulgado em 13 de novembro de 2026, a Conab estima 366,1 milhões de toneladas, 1,0 milhão abaixo do levantamento de outubro e 1,3% acima da safra 2025/26. A área deve chegar a 85,3 milhões de hectares."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Por que a Conab cortou a estimativa de trigo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Por área menor e clima desfavorável, principalmente no Paraná e no Rio Grande do Sul. A produtividade média caiu de 2.973 para 2.748 kg/ha e a produção foi para 5,26 milhões de toneladas, 33,2% abaixo de 2025. Parte do trigo colhido tem qualidade menor e deve ir para ração."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "A Conab mudou a estimativa de soja em novembro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Não. A soja segue em 181,6 milhões de toneladas, com área de 49,3 milhões de hectares e produtividade de 3.683 kg/ha (61,4 sacas por hectare). A Conab cita chuvas irregulares, calor e os primeiros efeitos do El Niño como fatores de incerteza."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quanto de milho o Brasil deve colher em 2026/27?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "148,0 milhões de toneladas, 2,4% acima de 2025/26: 32,1 milhões na 1ª safra, 113,3 milhões na 2ª e o restante na 3ª. A exportação de 2026/27 está estimada em cerca de 43 milhões de toneladas."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quando sai o próximo levantamento da Conab?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O 3º levantamento da safra 2026/27 deve sair em dezembro de 2026. O calendário oficial fica no site da Conab, e o painel Safra Brasil por Estado do AgroBasis atualiza sozinho no dia da divulgação."
+      }
+    }
+  ]
+}
+</script>
