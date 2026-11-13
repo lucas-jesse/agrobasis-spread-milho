@@ -270,7 +270,7 @@
         label: { show: true, fontSize: mobile() ? 8.5 : 10, color: "#1d2420", formatter: function (p) { return p.name; } },
         itemStyle: { borderColor: "#fff", borderWidth: 0.8, areaColor: "#F3F5F3" }, emphasis: { label: { show: true, fontWeight: 700 }, itemStyle: { areaColor: "#FFD87A" } },
         select: { label: { show: true, fontWeight: 700, color: "#000" }, itemStyle: { areaColor: "#FFC94A", borderColor: COR.tx, borderWidth: 1.5 } },
-        data: dados.map(function (d) { return Object.assign(d, { selected: d.name === st.uf }); }) }],
+        data: dados.map(function (d) { var esc = m !== "var" && d.value !== "-" && d.value > vm.max * 0.55; return Object.assign(d, { selected: d.name === st.uf, label: esc ? { color: "#fff" } : undefined }); }) }],
       graphic: mobile() ? [] : [{ type: "text", right: 6, bottom: 4, style: { text: "agrobasis.com.br", fill: "#b6beb8", font: "11px Geist, sans-serif" } }]
     });
   }
