@@ -190,7 +190,10 @@ def main():
         my = r["marketYear"]
         c_at = CACHE / f"{slug}_{my}.json"
         # o ano-safra atual é baixado de novo, a não ser que já tenha sido baixado hoje (execuções em lotes)
-        if not (c_at.exists() and json.loads(c_at.read_text()).get("baixado_em") == date.today().isoformat()):
+        # (com a DEMO_KEY, fora de quinta e sexta, só se a cópia tiver mais de 6 dias: sobra cota para o histórico)
+        baixado = json.loads(c_at.read_text()).get("baixado_em", "2000-01-01") if c_at.exists() else "2000-01-01"
+        idade = (date.today() - date.fromisoformat(baixado)).days
+        if idade >= 1 and (CHAVE != "DEMO_KEY" or date.today().weekday() in (3, 4) or idade > 6):
             fila.append((0, slug, my, True))
         for a in range(my - ANOS + 1, my):
             c = CACHE / f"{slug}_{a}.json"
