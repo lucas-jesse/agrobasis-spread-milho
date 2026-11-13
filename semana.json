@@ -1,0 +1,86 @@
+{
+ "CBOT:ZSF2027": {
+  "close": 1231.5,
+  "Perf.W": 3.5744322960470982,
+  "Perf.1M": -5.196304849884527,
+  "change": 1.0254306808859721,
+  "description": "Soybean Futures (Jan 2027)"
+ },
+ "CBOT:ZCZ2026": {
+  "close": 445.5,
+  "Perf.W": 1.192504258943782,
+  "Perf.1M": -7.620528771384137,
+  "change": 0.6779661016949152,
+  "description": "Corn Futures (Dec 2026)"
+ },
+ "CBOT:ZWZ2026": {
+  "close": 593.25,
+  "Perf.W": -1.125,
+  "Perf.1M": -11.22334455667789,
+  "change": 1.540436456996149,
+  "description": "Chicago SRW Wheat Futures (Dec 2026)"
+ },
+ "CBOT:ZMZ2026": {
+  "close": 329.8,
+  "Perf.W": 3.8740157480315,
+  "Perf.1M": -9.14600550964187,
+  "change": 1.3521819299324014,
+  "description": "Soybean Meal Futures (Dec 2026)"
+ },
+ "CBOT:ZLZ2026": {
+  "close": 63.77,
+  "Perf.W": 1.9504396482813846,
+  "Perf.1M": -6.440727699530507,
+  "change": 0.5518763796909515,
+  "description": "Soybean Oil Futures (Dec 2026)"
+ },
+ "BMFBOVESPA:CCMF2027": {
+  "close": 70.71,
+  "Perf.W": -0.5065428450823125,
+  "Perf.1M": -0.8691994953035252,
+  "change": -0.09889799378356512,
+  "description": "Cash Settled Corn (Jan 2027)"
+ },
+ "FX_IDC:USDBRL": {
+  "close": 5.6666,
+  "Perf.W": 2.9392530155500562,
+  "Perf.1M": 12.238794145027425,
+  "change": 0.4627249357326401,
+  "description": "U.S. DOLLAR / BRAZILIAN REAL"
+ },
+ "TVC:DXY": {
+  "close": 103.41,
+  "Perf.W": 1.8877963229353427,
+  "Perf.1M": 1.1720737291120351,
+  "change": 0.23262576330328089,
+  "description": "U.S. Dollar Currency Index"
+ },
+ "ICEEUR:BRN1!": {
+  "close": 95.84,
+  "Perf.W": -3.0646303226458995,
+  "Perf.1M": -9.797647058823525,
+  "change": 0.02087246921311859,
+  "description": "Brent Crude Futures"
+ },
+ "BMFBOVESPA:IBOV": {
+  "close": 172457.76,
+  "Perf.W": 3.770536931954079,
+  "Perf.1M": -16.639150042778212,
+  "change": 0.6615815350431072,
+  "description": "Bovespa Index"
+ },
+ "CBOT:ZS1!": {
+  "close": 1231.5,
+  "Perf.W": 3.5744322960470982,
+  "Perf.1M": -3.9953225492106803,
+  "change": 1.0254306808859721,
+  "description": "Soybean Futures"
+ },
+ "CBOT:ZC1!": {
+  "close": 445.5,
+  "Perf.W": 1.192504258943782,
+  "Perf.1M": -7.620528771384137,
+  "change": 0.6779661016949152,
+  "description": "Corn Futures"
+ }
+}
