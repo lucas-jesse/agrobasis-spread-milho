@@ -1,0 +1,394 @@
+<!--
+============================================================
+AGROBASIS · ANÁLISE: VENDAS SEMANAIS DE EXPORTAÇÃO DOS EUA, SEMANA ATÉ 05/11/2026
+============================================================
+URL: /analises/vendas-exportacao-eua-semana-05-novembro-2026/
+
+CONFIGURAÇÃO NO PLUGIN DE SEO:
+  Title (SEO): Vendas de exportação EUA: milho forte e China na soja | AgroBasis
+  Meta description: USDA, semana até 05/11: milho tem a maior venda da safra, puxada pelo México, e a soja chega a 67% da meta com a China. Os números e o que mudam.
+  Slug: vendas-exportacao-eua-semana-05-novembro-2026
+  Frase-chave de foco: vendas de exportação dos EUA
+
+NOTA DE DADOS (conferidos em 13/11/2026):
+  USDA FAS, Export Sales Reporting (API oficial api.fas.usda.gov/api/esr), relatório divulgado em 13/11/2026 às 8h30 de Washington,
+  semana encerrada em 05/11/2026: vendas líquidas, embarques, compromisso (embarcado + a embarcar) e destinos, por produto.
+  Mesma semana das 5 safras anteriores: mesma fonte. Projeção de exportação 2026/27: USDA WASDE de novembro/2026; das safras
+  anteriores: exportação final registrada no USDA. Ritmo necessário = (projeção - embarcado) / semanas restantes do ano-safra.
+  Corte da exportação de milho do Brasil: Conab, 2º levantamento da safra 2026/27 (13/11/2026).
+  Base de cálculo: dados/export_sales/*.json do repositório AgroBasis.
+
+NOTA DE ESTILO: sem travessão em H1/H2 e na prosa, tom sóbrio e direto.
+NOTA DE DESIGN: Design System AgroBasis, Geist + Sora, Lucide, gráficos em SVG puro.
+============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<style>
+  .abp-article {
+    font-family:'Geist', Arial, sans-serif;
+    color:#222222;
+    padding:36px 0 56px 0;
+    box-sizing:border-box;
+    background:#ffffff;
+  }
+  .abp-narrow { max-width:800px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+
+  .abp-breadcrumb { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+  .abp-breadcrumb a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-breadcrumb a:hover { text-decoration:underline; }
+
+  .abp-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Sora', Arial, sans-serif;
+    background:#EEF4E7; color:#1E4812; border:1px solid #d7e6c9;
+    border-radius:999px; padding:6px 14px 6px 10px;
+    font-size:12px; font-weight:700; letter-spacing:.2px;
+    margin-bottom:18px;
+  }
+  .abp-badge svg { width:13px; height:13px; stroke-width:2.2; }
+
+  .abp-h1 { font-size:35px; line-height:1.22; color:#222222; font-weight:800; margin:0 0 14px 0; }
+  .abp-lead { font-size:17px; line-height:1.7; color:#4a4a4a; margin:0 0 8px 0; }
+  .abp-meta { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#9a9a9a; margin:14px 0 30px 0; padding-bottom:20px; border-bottom:1px solid #eef1ed; }
+
+  .abp-h2 {
+    font-size:24px; color:#222222; font-weight:800;
+    margin:44px 0 14px 0; padding-left:12px; border-left:4px solid #1E4812;
+  }
+  .abp-h3 { font-size:17px; color:#222222; font-weight:700; margin:26px 0 10px 0; }
+  .abp-p { font-size:15.5px; line-height:1.8; color:#333333; margin:0 0 16px 0; }
+  .abp-p b { color:#1E4812; font-weight:700; }
+  .abp-list { margin:0 0 18px 0; padding-left:22px; }
+  .abp-list li { font-size:15.5px; line-height:1.8; color:#333333; margin-bottom:8px; }
+  .abp-list b { color:#222222; }
+
+  .abp-pullquote {
+    background:#fafbf9; border-left:3px solid #A17149; border-radius:0 14px 14px 0;
+    padding:18px 22px; margin:24px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:16px; line-height:1.6; color:#3f3f3f; font-style:italic;
+  }
+
+  .abp-note {
+    background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px;
+    padding:18px 20px; font-size:14px; line-height:1.65; color:#5b4636; margin:20px 0;
+  }
+  .abp-note b { color:#8a5a34; }
+
+  .abp-table {
+    width:100%; border-collapse:separate; border-spacing:0;
+    margin:14px 0 20px 0; font-size:14px;
+    border:1px solid #e5e7eb; border-radius:14px; overflow:hidden;
+  }
+  .abp-table th, .abp-table td {
+    padding:11px 14px; text-align:left; border-bottom:1px solid #eef1ed;
+  }
+  .abp-table tr:last-child td { border-bottom:none; }
+  .abp-table th {
+    background:#1E4812; color:#ffffff; font-weight:700;
+    font-family:'Sora', Arial, sans-serif; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .abp-table td { color:#3f3f3f; }
+  .abp-table tr:nth-child(even) td { background:#fafbf9; }
+
+  .abp-formula-box {
+    background:#fafbf9; border:1px solid #e5e7eb; border-left:3px solid #A17149;
+    border-radius:12px; padding:18px 20px; margin:18px 0 22px 0;
+  }
+  .abp-formula-code {
+    font-family:"Courier New", monospace; font-size:14.5px; color:#1E4812;
+    background:#EEF4E7; border-radius:8px; padding:12px 16px; display:block; margin-bottom:4px;
+    text-align:center; font-weight:600;
+  }
+
+  .abp-chart-card {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:18px;
+    padding:22px; margin:22px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05);
+  }
+  .abp-chart-title { font-family:'Geist', Arial, sans-serif; font-size:15px; font-weight:700; color:#222222; margin-bottom:2px; }
+  .abp-chart-sub { font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; margin-bottom:14px; }
+  .abp-chart-caption { font-family:'Sora', Arial, sans-serif; font-size:11px; color:#9a9a9a; text-align:right; margin-top:8px; }
+  .abp-legend { display:flex; gap:18px; flex-wrap:wrap; font-family:'Sora', Arial, sans-serif; font-size:12px; color:#5b5b5b; margin-bottom:10px; }
+  .abp-legend-item { display:flex; align-items:center; gap:6px; }
+  .abp-legend-dot { width:14px; height:3px; border-radius:2px; display:inline-block; }
+
+  .abp-toc {
+    background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px;
+    padding:18px 22px; margin:24px 0 8px 0;
+  }
+  .abp-toc-title { font-family:'Sora', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:10px; }
+  .abp-toc ol { margin:0; padding-left:20px; }
+  .abp-toc li { font-size:14px; line-height:1.9; }
+  .abp-toc a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-toc a:hover { text-decoration:underline; }
+
+  .abp-cta-box {
+    background:#1E4812; border-radius:20px; padding:32px 28px; margin:36px 0;
+    text-align:center;
+  }
+  .abp-cta-box h3 { color:#ffffff; font-size:20px; font-weight:800; margin:0 0 8px 0; }
+  .abp-cta-box p { color:#d7e6c9; font-size:14.5px; line-height:1.6; margin:0 0 20px 0; max-width:480px; margin-left:auto; margin-right:auto; }
+  .abp-cta-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#ffffff; color:#1E4812 !important; font-family:'Geist', Arial, sans-serif;
+    font-size:14.5px; font-weight:700; padding:13px 24px; border-radius:10px;
+    text-decoration:none !important; transition:background .15s ease;
+  }
+  .abp-cta-btn:hover { background:#EEF4E7; }
+  .abp-cta-btn svg { width:16px; height:16px; stroke-width:2.2; }
+
+  .abp-faq-item {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .abp-faq-item summary {
+    list-style:none; cursor:pointer; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:15px; font-weight:700; color:#222222;
+  }
+  .abp-faq-item summary::-webkit-details-marker { display:none; }
+  .abp-faq-item summary svg { width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+  .abp-faq-item[open] summary svg { transform:rotate(180deg); }
+  .abp-faq-a { padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+
+  .abp-sources {
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px;
+    padding:16px 20px; margin:30px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:12.5px; line-height:1.8; color:#7a7a7a;
+  }
+  .abp-sources b { color:#5b5b5b; }
+
+  .abp-disclaimer {
+    margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0;
+    font-family:'Sora', Arial, sans-serif;
+    font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6;
+  }
+
+  .abp-author-box {
+    display:flex; align-items:center; gap:12px; margin:30px 0;
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 18px;
+  }
+  .abp-author-icon { width:38px; height:38px; border-radius:50%; background:#EEF4E7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .abp-author-icon svg { width:19px; height:19px; color:#1E4812; }
+  .abp-author-text { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; line-height:1.5; }
+  .abp-author-text b { color:#222222; }
+
+  @media (max-width:768px) {
+    .abp-h1 { font-size:25px; }
+    .abp-lead { font-size:15px; }
+    .abp-h2 { font-size:20px; }
+    .abp-narrow { padding:0 14px; }
+    .abp-chart-card { padding:14px; }
+    .abp-cta-box { padding:24px 18px; }
+    .abp-table { font-size:12.5px; }
+    .abp-table th, .abp-table td { padding:8px 10px; }
+  }
+</style>
+
+<div class="abp-article">
+<div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/analises/">Análises</a> &nbsp;›&nbsp;
+    Vendas de exportação dos EUA
+  </div>
+
+  <div class="abp-badge"><i data-lucide="ship"></i> Análise · USDA Export Sales</div>
+  <h1 class="abp-h1">Vendas de exportação dos EUA: milho vende 2,9 milhões de t na semana e China sustenta a soja</h1>
+  <p class="abp-lead">O relatório do USDA da semana encerrada em 05/11 trouxe a maior venda semanal de milho da safra americana 2026/27, quase toda para o México. Na soja, o ritmo diminuiu, mas o volume acumulado segue 78% acima do ano passado graças às compras da China.</p>
+  <div class="abp-meta">Por Equipe AgroBasis · Atualizado em 13 de novembro de 2026 · Leitura de 6 min</div>
+
+  <div class="abp-toc">
+    <div class="abp-toc-title">Neste artigo</div>
+    <ol>
+      <li><a href="#resumo">Os números da semana</a></li>
+      <li><a href="#milho">Milho: a maior venda da safra, puxada pelo México</a></li>
+      <li><a href="#soja">Soja: a China sustenta o ritmo</a></li>
+      <li><a href="#trigo-farelo">Trigo, farelo e óleo</a></li>
+      <li><a href="#brasil">O que isso significa para o Brasil</a></li>
+      <li><a href="#faq">Perguntas frequentes</a></li>
+    </ol>
+  </div>
+
+  <h2 class="abp-h2" id="resumo">Os números da semana</h2>
+  <p class="abp-p">O Departamento de Agricultura dos EUA (USDA) divulgou nesta sexta-feira, 13 de novembro, o relatório de vendas semanais de exportação referente à semana encerrada em 05/11. A divulgação, que normalmente acontece na quinta, foi adiada em um dia. O quadro geral mostra uma soja adiantada, um milho atrasado mas reagindo e um trigo abaixo da média.</p>
+  <table class="abp-table">
+    <thead><tr><th>Produto</th><th>Vendas na semana (mil t)</th><th>Embarques (mil t)</th><th>Compromisso (mi t)</th><th>vs ano anterior</th><th>% da projeção (média 5 anos)</th></tr></thead>
+    <tbody>
+      <tr><td>Soja</td><td><b>1.155</b></td><td>1.882</td><td>31,4</td><td>+78%</td><td>67% <span style="color:#9a9a9a">(56%)</span></td></tr>
+      <tr><td>Milho</td><td><b>2.881</b></td><td>869</td><td>27,7</td><td>−28%</td><td>33% <span style="color:#9a9a9a">(42%)</span></td></tr>
+      <tr><td>Trigo</td><td><b>183</b></td><td>240</td><td>12,2</td><td>−29%</td><td>60% <span style="color:#9a9a9a">(63%)</span></td></tr>
+      <tr><td>Farelo de soja</td><td><b>361</b></td><td>387</td><td>6,8</td><td>+2%</td><td>33% <span style="color:#9a9a9a">(38%)</span></td></tr>
+      <tr><td>Óleo de soja</td><td><b>2</b></td><td>2</td><td>0,0</td><td>−78%</td><td>22% <span style="color:#9a9a9a">(24%)</span></td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">A comparação mais útil é a última coluna. Ela mostra quanto da exportação projetada pelo USDA para o ano-safra já está contratado, ao lado da média das cinco safras anteriores na mesma semana. A soja está 11 pontos acima do padrão histórico; milho, trigo e farelo estão abaixo.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Quanto da exportação projetada já foi vendido</div>
+    <div class="abp-chart-sub">Compromisso de exportação em % da projeção do USDA, na mesma semana do ano-safra</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#C9D1CB;"></span> Média das 5 safras anteriores</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> Safra atual</span></div>
+    <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Compromisso em percentual da projeção"><line x1="48" x2="624" y1="260.0" y2="260.0" stroke="#EEF1ED"/><text x="40" y="264.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0%</text><line x1="48" x2="624" y1="199.5" y2="199.5" stroke="#EEF1ED"/><text x="40" y="203.5" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">20%</text><line x1="48" x2="624" y1="139.0" y2="139.0" stroke="#EEF1ED"/><text x="40" y="143.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">40%</text><line x1="48" x2="624" y1="78.5" y2="78.5" stroke="#EEF1ED"/><text x="40" y="82.5" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">60%</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="40" y="22.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">80%</text><rect x="84.0" y="91.6" width="34.0" height="168.4" rx="3" fill="#C9D1CB"/><text x="101.0" y="85.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#7a7a7a" text-anchor="middle">56%</text><rect x="122.0" y="57.2" width="34.0" height="202.8" rx="3" fill="#1E4812"/><text x="139.0" y="51.2" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">67%</text><text x="120.0" y="280" font-family="Geist,Arial" font-size="12" font-weight="600" fill="#222222" text-anchor="middle">Soja</text><rect x="228.0" y="134.3" width="34.0" height="125.7" rx="3" fill="#C9D1CB"/><text x="245.0" y="128.3" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#7a7a7a" text-anchor="middle">42%</text><rect x="266.0" y="159.4" width="34.0" height="100.6" rx="3" fill="#1E4812"/><text x="283.0" y="153.4" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">33%</text><text x="264.0" y="280" font-family="Geist,Arial" font-size="12" font-weight="600" fill="#222222" text-anchor="middle">Milho</text><rect x="372.0" y="69.4" width="34.0" height="190.6" rx="3" fill="#C9D1CB"/><text x="389.0" y="63.4" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#7a7a7a" text-anchor="middle">63%</text><rect x="410.0" y="78.6" width="34.0" height="181.4" rx="3" fill="#1E4812"/><text x="427.0" y="72.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">60%</text><text x="408.0" y="280" font-family="Geist,Arial" font-size="12" font-weight="600" fill="#222222" text-anchor="middle">Trigo</text><rect x="516.0" y="145.0" width="34.0" height="115.0" rx="3" fill="#C9D1CB"/><text x="533.0" y="139.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#7a7a7a" text-anchor="middle">38%</text><rect x="554.0" y="159.9" width="34.0" height="100.1" rx="3" fill="#1E4812"/><text x="571.0" y="153.9" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">33%</text><text x="552.0" y="280" font-family="Geist,Arial" font-size="12" font-weight="600" fill="#222222" text-anchor="middle">Farelo</text></svg>
+    <div class="abp-chart-caption">Fonte: USDA FAS, Export Sales Reporting (semana até 05/11/2026); projeções: USDA WASDE · Elaboração: AgroBasis</div>
+  </div>
+
+  <h2 class="abp-h2" id="milho">Milho: a maior venda da safra, puxada pelo México</h2>
+  <p class="abp-p">Os EUA venderam <b>2.881 mil toneladas de milho</b> na semana, mais que o dobro das 1.295 mil toneladas da semana anterior e bem acima da média das quatro semanas anteriores (1.312 mil t). É a maior venda semanal desde o início do ano-safra, em setembro, e supera a média de 1.087 mil toneladas das cinco safras anteriores na mesma semana.</p>
+  <p class="abp-p">O México respondeu por 1.955 mil toneladas, cerca de 68% do total. Colômbia (307 mil t) e Coreia do Sul (202 mil t) completam a lista dos principais compradores.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Milho: vendas líquidas semanais na safra 2026/27</div>
+    <div class="abp-chart-sub">Mil toneladas por semana, de setembro até a semana encerrada em 05/11</div>
+    <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Vendas semanais de milho"><line x1="48" x2="624" y1="260.0" y2="260.0" stroke="#EEF1ED"/><text x="40" y="264.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0</text><line x1="48" x2="624" y1="180.7" y2="180.7" stroke="#EEF1ED"/><text x="40" y="184.7" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">1.000</text><line x1="48" x2="624" y1="101.3" y2="101.3" stroke="#EEF1ED"/><text x="40" y="105.3" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">2.000</text><line x1="48" x2="624" y1="22.0" y2="22.0" stroke="#EEF1ED"/><text x="40" y="26.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">3.000</text><rect x="58.9" y="107.0" width="35.7" height="153.0" rx="3" fill="#A9C29A"/><text x="76.8" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">03/09</text><rect x="116.5" y="178.5" width="35.7" height="81.5" rx="3" fill="#A9C29A"/><text x="134.4" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">10/09</text><rect x="174.1" y="193.5" width="35.7" height="66.5" rx="3" fill="#A9C29A"/><text x="192.0" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">17/09</text><rect x="231.7" y="217.5" width="35.7" height="42.5" rx="3" fill="#A9C29A"/><text x="249.6" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">24/09</text><rect x="289.3" y="199.0" width="35.7" height="61.0" rx="3" fill="#A9C29A"/><text x="307.2" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">01/10</text><rect x="346.9" y="171.0" width="35.7" height="89.0" rx="3" fill="#A9C29A"/><text x="364.8" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">08/10</text><rect x="404.5" y="138.9" width="35.7" height="121.1" rx="3" fill="#A9C29A"/><text x="422.4" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">15/10</text><rect x="462.1" y="156.6" width="35.7" height="103.4" rx="3" fill="#A9C29A"/><text x="480.0" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">22/10</text><rect x="519.7" y="157.3" width="35.7" height="102.7" rx="3" fill="#A9C29A"/><text x="537.6" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">29/10</text><rect x="577.3" y="31.4" width="35.7" height="228.6" rx="3" fill="#1E4812"/><text x="595.2" y="25.4" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">2.881</text><text x="595.2" y="278" font-family="Geist,Arial" font-size="10.5" fill="#7a7a7a" text-anchor="middle">05/11</text></svg>
+    <div class="abp-chart-caption">Fonte: USDA FAS, Export Sales Reporting (semana até 05/11/2026); projeções: USDA WASDE · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">Apesar da semana forte, o retrato acumulado continua mais fraco que o do ano passado. O compromisso de milho soma 27,7 milhões de toneladas, 28% abaixo de 2025/26, quando os EUA exportaram 87,1 milhões de toneladas no ano-safra. Isso representa 33% da projeção do USDA (83,2 milhões), contra 42% na média histórica.</p>
+  <p class="abp-p">Os embarques são o ponto fraco. Nas últimas quatro semanas, a média foi de 808 mil toneladas por semana. Para cumprir a projeção, os EUA precisam embarcar 1.695 mil toneladas por semana até o fim de agosto. É uma diferença grande. Parte dela é sazonal, porque os embarques de milho dos EUA costumam ganhar ritmo no primeiro semestre, mas o número precisa melhorar nas próximas semanas para sustentar a projeção.</p>
+
+  <div class="abp-cta-box">
+    <h3>Vendas semanais dos EUA, atualizadas a cada relatório</h3>
+    <p>Compromisso acumulado contra as últimas 5 safras, destinos, compradores da semana e ritmo necessário para cumprir a projeção do USDA.</p>
+    <a href="/dashboards/exportacoes-eua-usda/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="soja">Soja: a China sustenta o ritmo</h2>
+  <p class="abp-p">A venda semanal de soja foi de <b>1.155 mil toneladas</b>, abaixo das 1.456 mil t da semana anterior e da média de 1.547 mil t das cinco safras anteriores na mesma semana. Os embarques somaram 1.882 mil toneladas. É um ritmo de desaceleração, depois de duas semanas em outubro com vendas acima de 2,5 milhões de toneladas.</p>
+  <p class="abp-p">O acumulado, porém, é o melhor dos últimos anos em relação à meta. O compromisso chega a <b>31,4 milhões de toneladas</b>, 67% da exportação projetada pelo USDA (46,8 milhões), contra 56% na média das cinco safras anteriores. Para cumprir a projeção, bastam embarques de 784 mil toneladas por semana até o fim de agosto, bem abaixo dos 2.204 mil t por semana das últimas quatro semanas.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja: a China explica toda a diferença</div>
+    <div class="abp-chart-sub">Compromisso de exportação de soja dos EUA na mesma semana do ano-safra, mil t</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#C9D1CB;"></span> 2025/26</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> 2026/27</span></div>
+    <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Compromisso de soja com e sem a China"><line x1="48" x2="624" y1="260.0" y2="260.0" stroke="#EEF1ED"/><text x="40" y="264.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0</text><line x1="48" x2="624" y1="225.4" y2="225.4" stroke="#EEF1ED"/><text x="40" y="229.4" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">5.000</text><line x1="48" x2="624" y1="190.9" y2="190.9" stroke="#EEF1ED"/><text x="40" y="194.9" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">10.000</text><line x1="48" x2="624" y1="156.3" y2="156.3" stroke="#EEF1ED"/><text x="40" y="160.3" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">15.000</text><line x1="48" x2="624" y1="121.7" y2="121.7" stroke="#EEF1ED"/><text x="40" y="125.7" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">20.000</text><line x1="48" x2="624" y1="87.1" y2="87.1" stroke="#EEF1ED"/><text x="40" y="91.1" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">25.000</text><line x1="48" x2="624" y1="52.6" y2="52.6" stroke="#EEF1ED"/><text x="40" y="56.6" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">30.000</text><line x1="48" x2="624" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="40" y="22.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">35.000</text><rect x="108.0" y="256.8" width="34.0" height="3.2" rx="3" fill="#C9D1CB"/><text x="125.0" y="250.8" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#7a7a7a" text-anchor="middle">464</text><rect x="146.0" y="145.0" width="34.0" height="115.0" rx="3" fill="#1E4812"/><text x="163.0" y="139.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">16.637</text><text x="144.0" y="280" font-family="Geist,Arial" font-size="12" font-weight="600" fill="#222222" text-anchor="middle">China</text><rect x="300.0" y="141.2" width="34.0" height="118.8" rx="3" fill="#C9D1CB"/><text x="317.0" y="135.2" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#7a7a7a" text-anchor="middle">17.184</text><rect x="338.0" y="158.0" width="34.0" height="102.0" rx="3" fill="#1E4812"/><text x="355.0" y="152.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">14.751</text><text x="336.0" y="280" font-family="Geist,Arial" font-size="12" font-weight="600" fill="#222222" text-anchor="middle">Demais destinos</text><rect x="492.0" y="138.0" width="34.0" height="122.0" rx="3" fill="#C9D1CB"/><text x="509.0" y="132.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#7a7a7a" text-anchor="middle">17.648</text><rect x="530.0" y="43.0" width="34.0" height="217.0" rx="3" fill="#1E4812"/><text x="547.0" y="37.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">31.389</text><text x="528.0" y="280" font-family="Geist,Arial" font-size="12" font-weight="600" fill="#222222" text-anchor="middle">Total</text></svg>
+    <div class="abp-chart-caption">Fonte: USDA FAS, Export Sales Reporting (semana até 05/11/2026); projeções: USDA WASDE · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">A explicação está na China. O país tem 16,6 milhões de toneladas de soja americana contratadas, contra apenas 464 mil toneladas no mesmo ponto da safra passada, quando ficou praticamente fora do mercado dos EUA. Só nesta semana, foram 689 mil toneladas vendidas e 1.266 mil embarcadas para o destino chinês. A China responde por 53% de todo o compromisso.</p>
+  <p class="abp-p">Fora da China, o quadro é outro. Os demais destinos somam 14,8 milhões de toneladas, 14% abaixo do ano passado. México e Egito, por exemplo, compraram menos que em 2025/26. A demanda pela soja americana está concentrada em um único comprador, o que torna o número sensível a qualquer mudança na relação comercial entre Washington e Pequim.</p>
+  <div class="abp-note">Destino a definir: 5,4 milhões de toneladas de soja ainda não têm país declarado. Nesta semana, 234 mil toneladas saíram dessa conta, em geral porque o destino foi confirmado. Parte desse volume tende a aparecer como China nas próximas semanas.</div>
+
+  <h2 class="abp-h2" id="trigo-farelo">Trigo, farelo e óleo</h2>
+  <p class="abp-p"><b>Trigo:</b> semana fraca, com 183 mil toneladas vendidas, ante 538 mil na semana anterior. O compromisso soma 12,2 milhões de toneladas, 29% abaixo de 2025/26 e 60% da projeção, perto da média de 63%. México, Japão e Indonésia lideraram as compras.</p>
+  <p class="abp-p"><b>Farelo de soja:</b> 361 mil toneladas vendidas, acima da média das quatro semanas anteriores. O compromisso de 6,81 milhões de toneladas é 2% maior que o do ano passado, com destaque para Filipinas, México, Colômbia e Vietnã. A projeção do USDA, de 20,6 milhões de toneladas, supera a exportação de todas as safras recentes e exige um ritmo forte daqui para frente.</p>
+  <p class="abp-p"><b>Óleo de soja:</b> as exportações seguem residuais, com 40 mil toneladas contratadas, quase tudo para o Canadá. Com o mandato de biocombustíveis absorvendo o óleo dentro dos EUA, o país praticamente saiu do mercado externo.</p>
+
+  <h2 class="abp-h2" id="brasil">O que isso significa para o Brasil</h2>
+  <h3 class="abp-h3">Soja: China dividida entre EUA e Brasil</h3>
+  <p class="abp-p">As compras chinesas nos EUA reduzem a demanda pela soja brasileira justamente na janela em que o Brasil ainda tem pouco grão para vender, antes da colheita de 2026/27. O efeito para o produtor brasileiro aparece mais no prêmio de exportação nos portos do que na cotação de Chicago. Quando a safra brasileira chegar, a partir de fevereiro, a China volta a ter no Brasil a origem mais competitiva.</p>
+  <h3 class="abp-h3">Milho: concorrência maior na exportação</h3>
+  <p class="abp-p">O milho americano segue muito competitivo no México e na América Latina, mercados em que disputa espaço com o Brasil. O dado conversa com o 2º levantamento da Conab, divulgado no mesmo dia, que cortou a exportação brasileira de milho da safra 2025/26 para 40,9 milhões de toneladas e citou a colheita americana como um dos motivos. Menos exportação significa mais milho no mercado interno brasileiro, o que pesa sobre os preços no físico. A análise completa está no artigo <a href="/analises/conab-novembro-2026-safra-graos-2026-27/" style="color:#1E4812;font-weight:600">Conab novembro 2026</a>.</p>
+
+  <div class="abp-pullquote">Em resumo: o milho americano mostrou força na semana, a soja segue apoiada em um único comprador e o trigo continua fraco. Para o Brasil, o recado é concorrência mais dura no milho e uma China dividida na soja até a nossa colheita.</div>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item">
+    <summary>Quanto de soja os EUA já venderam na safra 2026/27? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Até a semana encerrada em 05/11/2026, o compromisso de exportação de soja dos EUA somava 31,4 milhões de toneladas, 78% acima do mesmo ponto de 2025/26 e 67% da exportação projetada pelo USDA para o ano-safra.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Quanto a China comprou de soja americana? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">A China tem 16,6 milhões de toneladas de soja contratadas nos EUA na safra 2026/27, contra apenas 464 mil toneladas no mesmo ponto da safra anterior. Sem a China, o compromisso americano está 14% abaixo do ano passado.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Por que as vendas de milho da semana foram tão altas? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Porque o México comprou 1.955 mil toneladas das 2.881 mil vendidas na semana, a maior venda semanal de milho da safra 2026/27. Mesmo assim, o compromisso total segue 28% abaixo de 2025/26.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O que é compromisso de exportação? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">É a soma do que já foi embarcado com as vendas fechadas que ainda vão ser embarcadas no ano-safra. É o melhor termômetro da demanda externa, porque mostra o volume já contratado, e não só o que saiu dos portos.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Quando sai o próximo relatório de vendas semanais? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">O USDA divulga o relatório toda quinta-feira às 10h30 de Brasília, com dados da semana encerrada na quinta anterior. Em semanas com feriado nos EUA, a divulgação passa para sexta, como aconteceu nesta semana.</p>
+  </details>
+
+  <div class="abp-sources">
+    <b>Fontes consultadas para este artigo:</b> USDA FAS, Export Sales Reporting, relatório de 13/11/2026 (semana encerrada em 05/11/2026) e histórico das safras 2021/22 a 2025/26; USDA WASDE, novembro de 2026; Conab, 2º levantamento da safra de grãos 2026/27.
+  </div>
+
+  <div class="abp-author-box">
+    <div class="abp-author-icon"><i data-lucide="pen-line"></i></div>
+    <div class="abp-author-text"><b>Equipe AgroBasis</b><br>Inteligência de mercado para o agronegócio: dashboards, análises e conteúdo educacional com dados oficiais.</div>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fonte dos dados: USDA FAS e Conab. Conteúdo referencial para acompanhamento de mercado, elaborado pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda.
+  </div>
+
+</div>
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); } else { window.addEventListener('load', () => lucide.createIcons()); }
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Vendas de exportação dos EUA: milho vende 2,9 milhões de t na semana e China sustenta a soja",
+  "description": "USDA, semana até 05/11: milho tem a maior venda da safra, puxada pelo México, e a soja chega a 67% da meta com a China. Os números e o que mudam.",
+  "author": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "datePublished": "2026-11-13",
+  "dateModified": "2026-11-13",
+  "mainEntityOfPage": "https://agrobasis.com.br/analises/vendas-exportacao-eua-semana-05-novembro-2026/"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quanto de soja os EUA já venderam na safra 2026/27?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Até a semana encerrada em 05/11/2026, o compromisso de exportação de soja dos EUA somava 31,4 milhões de toneladas, 78% acima do mesmo ponto de 2025/26 e 67% da exportação projetada pelo USDA para o ano-safra."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quanto a China comprou de soja americana?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A China tem 16,6 milhões de toneladas de soja contratadas nos EUA na safra 2026/27, contra apenas 464 mil toneladas no mesmo ponto da safra anterior. Sem a China, o compromisso americano está 14% abaixo do ano passado."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Por que as vendas de milho da semana foram tão altas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Porque o México comprou 1.955 mil toneladas das 2.881 mil vendidas na semana, a maior venda semanal de milho da safra 2026/27. Mesmo assim, o compromisso total segue 28% abaixo de 2025/26."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O que é compromisso de exportação?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "É a soma do que já foi embarcado com as vendas fechadas que ainda vão ser embarcadas no ano-safra. É o melhor termômetro da demanda externa, porque mostra o volume já contratado, e não só o que saiu dos portos."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quando sai o próximo relatório de vendas semanais?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O USDA divulga o relatório toda quinta-feira às 10h30 de Brasília, com dados da semana encerrada na quinta anterior. Em semanas com feriado nos EUA, a divulgação passa para sexta, como aconteceu nesta semana."
+      }
+    }
+  ]
+}
+</script>
