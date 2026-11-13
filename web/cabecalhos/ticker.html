@@ -1,0 +1,62 @@
+<!-- AgroBasis · faixa de indicadores do cabeçalho (rolagem contínua).
+     Câmbio ao vivo: AwesomeAPI. CBOT, B3, Ibovespa, DXY e Brent: dados/fechamento.json (fechamento do último pregão). -->
+<div class="abt" aria-label="Indicadores de mercado">
+  <div class="abt-track" id="abtTrack"><div class="abt-row" id="abtRow"><span class="abt-it"><b>Carregando indicadores</b></span></div></div>
+</div>
+<style>
+.abt{position:relative;overflow:hidden;width:100%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.abt-track{display:flex;width:max-content}
+.abt-track.on{animation:abt-run var(--abt-t,60s) linear infinite}
+.abt:hover .abt-track{animation-play-state:paused}
+.abt-row{display:flex;align-items:center;flex-shrink:0;white-space:nowrap}
+.abt-it{display:inline-flex;align-items:baseline;gap:6px;padding:0 22px;font:500 15px Geist,system-ui,sans-serif;color:#1d2420}
+.abt-it b{font-weight:700}
+.abt-it small{font-size:11.5px;color:#6b756d;font-weight:500}
+.abt-sep{width:1px;height:16px;background:#d5dcd7;flex-shrink:0}
+.abt-up{color:#2F7A1F}.abt-dn{color:#B23A2A}.abt-eq{color:#6b756d}
+@keyframes abt-run{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.abt-track.on{animation:none}.abt{overflow-x:auto}}
+</style>
+<script>
+(function () {
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var FX = "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,CNY-BRL";
+  var fx = null, fe = null;
+  function br(v, c) { return v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); }
+  function varia(p) {
+    var r = Math.round(p * 100) / 100, cl = r > 0 ? "abt-up" : r < 0 ? "abt-dn" : "abt-eq";
+    return '<span class="' + cl + '">' + (r > 0 ? "▲ " : r < 0 ? "▼ " : "") + br(Math.abs(r), 2) + "%</span>";
+  }
+  function preco(x) {
+    var f = x.formato, v = x.preco;
+    if (f === "usbu") return br(v, 2) + " <small>¢/bu</small>";
+    if (f === "uslb") return br(v, 2) + " <small>¢/lb</small>";
+    if (f === "ust") return "US$ " + br(v, 1) + " <small>/t curta</small>";
+    if (f === "rssc") return "R$ " + br(v, 2) + " <small>/sc</small>";
+    if (f === "usd") return "US$ " + br(v, 2);
+    if (f === "pts") return br(v, 0) + " <small>pts</small>";
+    if (f === "rs4") return "R$ " + br(v, 4);
+    return br(v, 2);
+  }
+  function item(nome, val, p, compl) { return '<span class="abt-it"><b>' + nome + "</b>" + (compl ? " <small>" + compl + "</small>" : "") + " " + val + " " + varia(p) + "</span>"; }
+  function montar() {
+    var h = [];
+    if (fx) [["USDBRL", "Dólar"], ["EURBRL", "Euro"], ["CNYBRL", "Yuan"]].forEach(function (k) { var q = fx[k[0]]; if (q) h.push(item(k[1], "R$ " + br(+q.bid, 4), +q.pctChange)); });
+    if (fe) {
+      var d = fe.data.split("-").reverse().slice(0, 2).join("/");
+      (fe.cbot || []).forEach(function (x) { h.push(item(x.nome + " CBOT", preco(x), x.var_pct, x.compl)); });
+      (fe.brasil || []).concat(fe.exterior || []).forEach(function (x) { if (/^Dólar comercial/.test(x.nome)) return; h.push(item(x.nome.replace("Índice dólar (DXY)", "DXY"), preco(x), x.var_pct, /^(pontos|venda|US\$\/barril)$/.test(x.compl) ? "" : x.compl)); });
+      h.push('<span class="abt-it"><small>CBOT, B3 e índices: fechamento de ' + d + "</small></span>");
+    }
+    if (!h.length) return;
+    var row = h.join('<i class="abt-sep"></i>') + '<i class="abt-sep"></i>', tr = document.getElementById("abtTrack");
+    tr.innerHTML = '<div class="abt-row">' + row + '</div><div class="abt-row" aria-hidden="true">' + row + "</div>";
+    var w = tr.firstChild.scrollWidth; tr.style.setProperty("--abt-t", Math.max(30, Math.round(w / 55)) + "s"); // ~55 px por segundo
+    tr.classList.add("on");
+  }
+  function json(u, i) { i = i || 0; return fetch(REPO[i] + u + "?v=" + Math.floor(Date.now() / 6e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); }).catch(function () { if (i + 1 < REPO.length) return json(u, i + 1); return null; }); }
+  function cambio() { return fetch(FX, { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) { if (d && d.USDBRL) fx = d; }).catch(function () {}); }
+  Promise.all([cambio(), json("dados/fechamento.json").then(function (d) { fe = d; })]).then(montar);
+  setInterval(function () { cambio().then(montar); }, 120000);
+})();
+</script>
