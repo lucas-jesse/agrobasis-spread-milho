@@ -260,7 +260,7 @@
   function lead() {
     var s = stats(st.g, st.f), F = D.fertilizantes[st.f], G = D.graos[st.g], h = hoje(st.g, st.f);
     var iF = F.usd_t[IU - 12], iG = G.usd_sc[IU - 12], vf = iF ? (F.usd_t[IU] / iF - 1) * 100 : null, vg = iG ? (G.usd_sc[IU] / iG - 1) * 100 : null;
-    var t = "Em " + mlong(D.meses[IU]) + ", foram precisas <b>" + br(s.now, 1) + " sacas de " + nG() + "</b> para pagar 1 tonelada de " + F.nome.toLowerCase().replace("(kcl)", "(KCl)").replace("(map)", "(MAP)").replace("(ssp)", "(SSP)") + " importada";
+    var t = "Em " + mlong(D.meses[IU]) + ", foram precisas <b>" + br(s.now, 1) + " sacas de " + nG() + "</b> para pagar 1 tonelada de " + F.nome.toLowerCase().replace("(kcl)", "(KCl)").replace("(map)", "(MAP)").replace("(ssp)", "(SSP)") + " no porto";
     t += s.a12 ? ", " + (s.now > s.a12 ? br((s.now / s.a12 - 1) * 100, 0) + "% a mais" : br((1 - s.now / s.a12) * 100, 0) + "% a menos") + " que um ano antes. " : ". ";
     if (vf != null && vg != null) t += "Em dólar, o adubo " + (vf >= 0 ? "subiu " : "caiu ") + br(Math.abs(vf), 0) + "% e o grão " + (vg >= 0 ? "subiu " : "caiu ") + br(Math.abs(vg), 0) + "% no período. ";
     t += "A relação está " + posicao(s.pctl) + " desde " + s.ini.slice(0, 4) + " (média de " + br(s.media, 1) + " sc/t).";
