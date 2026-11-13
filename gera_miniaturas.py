@@ -40,6 +40,7 @@ ALVOS = {
     "posicao-fundos-cftc": ("cot.html", "#abcG0", ""),
     "curva-do-dolar": ("curva-dolar.html", "#abdG0", ""),
     "safra-brasil-conab": ("conab.html", "#abcG0", ""),
+    "plantio-e-colheita-brasil": ("progresso.html", "#abcG0", ""),
 }
 
 

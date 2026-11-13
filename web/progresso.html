@@ -1,0 +1,506 @@
+<!-- AgroBasis · Plantio e Colheita no Brasil (Conab, semanal) · dashboard em HTML
+     Dados: dados/progresso/progresso.json no GitHub, gerado por exporta_progresso.py a cada boletim semanal da Conab. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abc{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--mr2:#8A6A4F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abc *{box-sizing:border-box}
+.abc-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abc-bc a{color:var(--mt);text-decoration:none}.abc-bc a:hover{color:var(--vd)}
+.abc-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abc-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 20px;margin-bottom:14px}
+.abc-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abc-meta{font-size:13px;color:var(--mt)}
+.abc-prox{font-size:12.5px;color:var(--mt);text-align:right;line-height:1.5}
+.abc-prox b{color:var(--tx);font-weight:600}
+/* termômetro: um cartão por commodity */
+.abc-board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.abc-c{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:11px 12px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .15s,box-shadow .15s;min-width:0}
+.abc-c:hover{border-color:#cfd9d1}
+.abc-c[aria-pressed=true]{border-color:var(--vd);box-shadow:0 0 0 1px var(--vd) inset}
+.abc-c .n{font-size:12px;font-weight:600;color:var(--mt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-c .v{font-family:Sora,sans-serif;font-weight:700;font-size:18px;margin-top:4px;line-height:1.1;white-space:nowrap}
+.abc-c .d{font-size:11.5px;font-weight:600;margin-top:3px;white-space:nowrap}
+.abc-c .g{position:relative;height:5px;border-radius:3px;margin-top:9px;background:linear-gradient(90deg,#e9d3bd,#eef1ef 50%,#c9dcb3)}
+.abc-c .g i{position:absolute;top:-3px;width:3px;height:11px;border-radius:2px;background:var(--tx);transform:translateX(-50%)}
+.abc-c .p{display:flex;justify-content:space-between;font-size:10.5px;color:#98a29a;margin-top:4px}
+.abc-c svg{display:block;width:100%;height:26px;margin-top:6px}
+.pos{color:var(--vd)}.neg{color:var(--mr2)}
+/* frase-resumo */
+.abc-lead{display:flex;gap:10px;align-items:flex-start;background:#f6f8f4;border:1px solid var(--ln);border-radius:12px;padding:11px 14px;font-size:14px;line-height:1.5;margin-bottom:14px}
+.abc-lead svg{flex:none;margin-top:3px;color:var(--vc)}
+.abc-lead b{font-weight:600}
+.abc-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.abc-seg::-webkit-scrollbar{display:none}
+.abc-seg button{flex:none;font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.abc-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abc-cats{margin-bottom:12px}
+.abc-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abc-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abc-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-k b{display:block;font-family:Sora,sans-serif;font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+.abc-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abc-k em{display:block;font-style:normal;font-size:12.5px;color:var(--mt);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abc-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.abc-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:0}
+.abc-ch h3 small{font-size:12px;font-weight:500;color:var(--mt);margin-left:6px}
+.abc-tools{display:flex;gap:6px;align-items:center;flex:none}
+.abc-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abc-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abc-chart{width:100%;height:520px}
+.abc-chart.md{height:380px}
+.abc-chart.sm{height:340px}
+.abc-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abc-nota{margin:0 4px 8px;font-size:12px;line-height:1.5;color:var(--mt)}
+.abc-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abc-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abc-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abc-faq details{border-bottom:1px solid var(--ln)}
+.abc-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abc-faq summary::-webkit-details-marker{display:none}
+.abc-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abc-faq details[open] summary:after{content:"−"}
+.abc-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abc-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abc-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abc-mais a:hover{border-color:var(--vc)}
+.abc-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:1020px){.abc-board{display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.abc-board::-webkit-scrollbar{display:none}.abc-c{flex:0 0 150px}}
+@media (max-width:820px){.abc-row{grid-template-columns:1fr}.abc-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .abc-tit{font-size:24px}.abc-prox{text-align:left}
+  .abc-k{padding:12px}.abc-k b{font-size:21px}
+  .abc-card{padding:12px 10px 4px;border-radius:14px}
+  .abc-chart{height:440px}.abc-chart.md{height:330px}.abc-chart.sm{height:310px}
+  .abc-ch{flex-wrap:wrap}.abc-ch .abc-tools{order:3;width:100%}.abc-ch .abc-tools .abc-seg{flex:1;display:flex}.abc-ch .abc-tools .abc-seg button{flex:1}
+  .abc-k b{font-size:19px;white-space:nowrap}
+  .abc-lead{font-size:13.5px}
+}
+.pg-ops{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.abc-c .pg-g{background:#EEF1EF;overflow:hidden}
+.abc-c .pg-g i{left:0;top:0;height:5px;border-radius:3px;background:var(--vc);transform:none}
+.abc-c[aria-pressed=true] .pg-g i{background:var(--vd)}
+.abc-c .p span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg-mapa{grid-template-columns:1.12fr 1fr}
+.cn-scroll{overflow-x:auto;margin:0 -4px 8px;-webkit-overflow-scrolling:touch}
+.cn-t{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+.cn-t th{font-weight:600;color:var(--mt);font-size:11.5px;padding:7px 8px;text-align:right;border-bottom:1px solid var(--ln);white-space:nowrap;vertical-align:bottom}
+.cn-t th small{font-weight:500;color:#98a29a}
+.cn-t td{padding:7px 8px;text-align:right;border-bottom:1px solid #F0F3F0;white-space:nowrap}
+.cn-t .l{text-align:left}
+.cn-t tr.uf{cursor:pointer}.cn-t tr.uf:hover td{background:#F7FAF5}
+.cn-t tr.sel td{background:#FFF6DF}
+.cn-t tr.tot td{background:#EEF4E8;font-weight:700;border-top:1px solid #cfd9d1}
+.cn-t .cn-n{color:var(--mt);font-size:12px;margin-left:4px;font-weight:500}
+.pg-bar{display:inline-block;width:70px;height:6px;border-radius:3px;background:#EEF1EF;margin-right:8px;vertical-align:middle;overflow:hidden}
+.pg-bar i{display:block;height:100%;background:var(--vc);border-radius:3px}
+@media (max-width:1100px){.abc-board{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (max-width:820px){.pg-mapa{grid-template-columns:1fr}}
+@media (max-width:560px){.cn-t .cn-n{display:none}.abc-board{grid-template-columns:repeat(2,minmax(0,1fr))}#abcG1{height:430px}}
+</style>
+
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Plantio e colheita no Brasil · Conab</h1>
+      <div class="abc-tit" id="abcTit">Carregando</div>
+      <div class="abc-meta" id="abcMeta">&nbsp;</div>
+    </div>
+    <div class="abc-prox" id="abcProx"></div>
+  </div>
+
+  <div class="abc-board" id="abcBoard" aria-label="Andamento de cada cultura"></div>
+
+  <p class="abc-lead" id="abcLead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>&nbsp;</span></p>
+
+  <div class="pg-ops">
+    <div class="abc-seg" id="abcOp"></div>
+    <div class="abc-seg" id="abcSafra"></div>
+  </div>
+
+  <div class="abc-kpis">
+    <div class="abc-k"><span id="kAl">Área</span><b id="kA">-</b><em id="kAs">&nbsp;</em></div>
+    <div class="abc-k"><span>Avanço na semana</span><b id="kS">-</b><em id="kSs">&nbsp;</em></div>
+    <div class="abc-k"><span>Contra o ano passado</span><b id="kY">-</b><em id="kYs">&nbsp;</em></div>
+    <div class="abc-k"><span>Contra a média de 5 anos</span><b id="kM">-</b><em id="kMs">&nbsp;</em></div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH0">Ritmo da safra</h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcLocal"></div>
+      <button class="abc-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart md" id="abcG0"></div>
+    <p class="abc-nota" id="abcN0"></p>
+  </div>
+
+  <div class="abc-row pg-mapa">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Por estado <small id="abcH1s"></small></h3>
+        <div class="abc-tools"><div class="abc-seg" id="abcMet"><button data-m="at" aria-pressed="true">% atual</button><button data-m="aa">vs ano passado</button><button data-m="m5">vs média</button></div>
+        <button class="abc-dl" data-dl="1" aria-label="Baixar mapa em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+      <div class="abc-chart" id="abcG1"></div>
+      <p class="abc-nota">Só aparecem os estados que a Conab acompanha nesta cultura. Clique num estado para ver a curva dele.</p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Estados na semana <small>barra = atual · ◆ ano passado · │ média 5 anos</small></h3><button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart" id="abcG2"></div>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Semana a semana por estado <small id="abcH3s"></small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="abc-chart" id="abcG3"></div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Tabela da semana <small id="abcH4s"></small></h3>
+      <button class="abc-dl" id="abcCsv" aria-label="Baixar tabela em CSV"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="cn-scroll"><table class="cn-t" id="abcTab"></table></div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Panorama de todas as culturas <small id="abcH5s"></small></h3></div>
+    <div class="cn-scroll"><table class="cn-t pg-pan" id="abcPan"></table></div>
+  </div>
+
+  <div class="abc-foot"><span>Fonte: Conab, Progresso de Safra (levantamento semanal) · Elaboração: AgroBasis</span><span id="abcAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>O que é o Progresso de Safra da Conab?</summary><p>É o boletim semanal em que a Companhia Nacional de Abastecimento informa quanto da área de cada cultura já foi plantada ou colhida, estado por estado. Ele acompanha soja, milho 1ª e 2ª safra, algodão, arroz, feijão e trigo nos estados que concentram quase toda a área de cada cultura.</p></details><details><summary>Como o percentual do Brasil é calculado?</summary><p>A Conab pondera o percentual de cada estado acompanhado pela área que ele tem na cultura. O número do Brasil, portanto, se refere aos estados acompanhados, que somam entre 87% e 99% da área nacional, conforme a cultura. A cobertura aparece no topo do painel.</p></details><details><summary>Por que comparar com o ano passado e com a média de 5 anos?</summary><p>O ritmo de plantio e colheita depende do clima, sobretudo das chuvas. A comparação com a mesma semana do ano anterior e com a média de cinco anos mostra se a safra está adiantada ou atrasada, o que afeta a janela da safrinha de milho, o risco de perdas e o fluxo de oferta para o mercado.</p></details><details><summary>Atraso no plantio da soja afeta o milho safrinha?</summary><p>Sim. O milho 2ª safra é semeado logo depois da colheita da soja, e quanto mais tarde ele entra, maior o risco de pegar o fim das chuvas e geadas na fase final. Por isso o ritmo da soja em Mato Grosso, Paraná, Goiás e Mato Grosso do Sul é acompanhado de perto pelo mercado de milho.</p></details><details><summary>Quando o painel é atualizado?</summary><p>A Conab publica o boletim toda semana, em geral na segunda-feira à tarde, com dados até a sexta ou o sábado anterior. O painel verifica na segunda, na terça e na quarta e atualiza sozinho.</p></details>
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/safra-brasil-conab/">Safra Brasil por estado</a><a href="/dashboards/condicao-de-safra-eua/">Safra dos EUA</a><a href="/dashboards/usda-complexo-soja/">USDA Soja</a><a href="/dashboards/usda-milho/">USDA Milho</a><a href="/dashboards/basis-soja-brasil/">Basis Soja</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+</div>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "O que é o Progresso de Safra da Conab?", "acceptedAnswer": {"@type": "Answer", "text": "É o boletim semanal em que a Companhia Nacional de Abastecimento informa quanto da área de cada cultura já foi plantada ou colhida, estado por estado. Ele acompanha soja, milho 1ª e 2ª safra, algodão, arroz, feijão e trigo nos estados que concentram quase toda a área de cada cultura."}}, {"@type": "Question", "name": "Como o percentual do Brasil é calculado?", "acceptedAnswer": {"@type": "Answer", "text": "A Conab pondera o percentual de cada estado acompanhado pela área que ele tem na cultura. O número do Brasil, portanto, se refere aos estados acompanhados, que somam entre 87% e 99% da área nacional, conforme a cultura. A cobertura aparece no topo do painel."}}, {"@type": "Question", "name": "Por que comparar com o ano passado e com a média de 5 anos?", "acceptedAnswer": {"@type": "Answer", "text": "O ritmo de plantio e colheita depende do clima, sobretudo das chuvas. A comparação com a mesma semana do ano anterior e com a média de cinco anos mostra se a safra está adiantada ou atrasada, o que afeta a janela da safrinha de milho, o risco de perdas e o fluxo de oferta para o mercado."}}, {"@type": "Question", "name": "Atraso no plantio da soja afeta o milho safrinha?", "acceptedAnswer": {"@type": "Answer", "text": "Sim. O milho 2ª safra é semeado logo depois da colheita da soja, e quanto mais tarde ele entra, maior o risco de pegar o fim das chuvas e geadas na fase final. Por isso o ritmo da soja em Mato Grosso, Paraná, Goiás e Mato Grosso do Sul é acompanhado de perto pelo mercado de milho."}}, {"@type": "Question", "name": "Quando o painel é atualizado?", "acceptedAnswer": {"@type": "Answer", "text": "A Conab publica o boletim toda semana, em geral na segunda-feira à tarde, com dados até a sexta ou o sábado anterior. O painel verifica na segunda, na terça e na quarta e atualiza sozinho."}}]}, {"@type": "WebApplication", "name": "Plantio e Colheita no Brasil (Conab) · AgroBasis", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/dashboards/plantio-e-colheita-brasil/", "description": "Andamento semanal do plantio e da colheita de soja, milho, algodão, arroz, feijão e trigo no Brasil, por estado, comparado ao ano passado e à média de 5 anos, com dados da Conab.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", cz: "#AEB7B0", grade: "rgba(29,36,32,.07)" };
+  var NOME_UF = { AC: "Acre", AL: "Alagoas", AM: "Amazonas", AP: "Amapá", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MG: "Minas Gerais", MS: "Mato Grosso do Sul", MT: "Mato Grosso", PA: "Pará", PB: "Paraíba", PE: "Pernambuco", PI: "Piauí", PR: "Paraná", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RO: "Rondônia", RR: "Roraima", RS: "Rio Grande do Sul", SC: "Santa Catarina", SE: "Sergipe", SP: "São Paulo", TO: "Tocantins" };
+  var OPN = { plantio: "Plantio", colheita: "Colheita" }, ART = { plantio: "O", colheita: "A" }, CONC = { plantio: "concluído", colheita: "concluída" }, OPV = { plantio: "plantada", colheita: "colhida" };
+  var $ = function (id) { return document.getElementById(id); };
+  var P, st = { c: "soja", op: "plantio", sf: null, uf: "BR", met: "at" }, charts = [];
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function pp(v, c) { return v == null || isNaN(v) ? "-" : (v > 0.05 ? "+" : v < -0.05 ? "−" : "") + br(Math.abs(v), c == null ? 1 : c) + " pp"; }
+  function cls(v) { return v == null ? "" : v > 0.05 ? "pos" : v < -0.05 ? "neg" : ""; }
+  function dt(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function ddmm(s) { var p = s.split("-"); return p[2] + "/" + p[1]; }
+  function ddmmaa(s) { var p = s.split("-"); return p[2] + "/" + p[1] + "/" + p[0]; }
+  function mais(s, dias) { var d = dt(s); d.setDate(d.getDate() + dias); return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+
+  // ---------- acesso aos dados ----------
+  function safras(c, op) { var o = P.culturas[c] && P.culturas[c].ops[op]; return o ? Object.keys(o).sort() : []; }
+  function serie(c, op, sf) { return P.culturas[c].ops[op][sf]; }
+  function ultimaSafra(c, op) { var s = safras(c, op); return s[s.length - 1]; }
+  function ativa(c, op, sf) { var w = serie(c, op, sf).semanas; return w[w.length - 1].d === P.ultima_semana; }
+  // operação mais relevante da cultura na semana: a que está em andamento; se nenhuma, a que terminou por último
+  function opPadrao(c) {
+    var ops = Object.keys(P.culturas[c].ops), cand = [];
+    ops.forEach(function (op) { var sf = ultimaSafra(c, op), w = serie(c, op, sf).semanas, u = w[w.length - 1]; cand.push({ op: op, sf: sf, d: u.d, v: u.br, at: u.d === P.ultima_semana && u.br > 0.4 && u.br < 99.95 }); });
+    var em = cand.filter(function (x) { return x.at; });
+    if (em.length) return em.sort(function (a, b) { return (a.op === "plantio" ? 0 : 1) - (b.op === "plantio" ? 0 : 1); })[0].op;
+    return cand.sort(function (a, b) { return a.d < b.d ? 1 : -1; })[0].op;
+  }
+  function S() { return serie(st.c, st.op, st.sf); }
+  function U() { var w = S().semanas; return w[w.length - 1]; }
+  function nomeC(c) { return P.culturas[c].nome; }
+  function anoAnt(sf) { return sf.indexOf("/") > 0 ? (+sf.slice(0, 4) - 1) + "/" + sf.slice(2, 4) : String(+sf - 1); }
+  function local(uf) { return uf === "BR" ? "Brasil" : NOME_UF[uf]; }
+  function val(w, uf, k) { k = k || ""; return uf === "BR" ? w["br" + (k ? "_" + k : "")] : (w["ufs" + (k ? "_" + k : "")] || {})[uf]; }
+
+  // ---------- painel de culturas ----------
+  function board() {
+    $("abcBoard").innerHTML = Object.keys(P.culturas).map(function (c) {
+      var op = opPadrao(c), sf = ultimaSafra(c, op), w = serie(c, op, sf).semanas, u = w[w.length - 1], vivo = u.d === P.ultima_semana, d = u.br - u.br_aa;
+      var sub = vivo ? OPN[op].toLowerCase() + " " + sf : (u.br >= 99.9 ? OPN[op].toLowerCase() + " concluído" : OPN[op].toLowerCase() + " até " + ddmm(u.d));
+      return '<button class="abc-c" data-c="' + c + '" data-op="' + op + '" aria-pressed="' + (c === st.c) + '"><div class="n">' + nomeC(c) + "</div>" +
+        '<div class="v">' + br(u.br, 1) + '<small style="font:500 11px Geist,sans-serif;color:#6b756d">%</small></div>' +
+        '<div class="d ' + (vivo ? cls(d) : "") + '">' + (vivo ? (d > 0.05 ? "▲ " : d < -0.05 ? "▼ " : "") + pp(d).replace(/^[+−]/, "") + " vs ano ant." : '<span style="color:#98a29a;font-weight:500">safra ' + sf + "</span>") + "</div>" +
+        '<div class="g pg-g"><i style="width:' + Math.min(100, u.br) + '%"></i></div>' +
+        '<div class="p"><span>' + sub + "</span></div></button>";
+    }).join("");
+  }
+  function seletores() {
+    $("abcOp").innerHTML = Object.keys(P.culturas[st.c].ops).sort().reverse().map(function (op) { return '<button data-op="' + op + '" aria-pressed="' + (op === st.op) + '">' + OPN[op] + "</button>"; }).join("");
+    $("abcSafra").innerHTML = safras(st.c, st.op).filter(function (sf) { return serie(st.c, st.op, sf).semanas.length >= 3 || sf === st.sf; }).slice(-3).map(function (sf) { return '<button data-sf="' + sf + '" aria-pressed="' + (sf === st.sf) + '">Safra ' + sf + "</button>"; }).join("");
+    var b = '<button data-u="BR" aria-pressed="' + (st.uf === "BR") + '">Brasil</button>';
+    if (st.uf !== "BR") b += '<button data-u="' + st.uf + '" aria-pressed="true">' + st.uf + "</button>";
+    $("abcLocal").innerHTML = b;
+  }
+
+  // ---------- curvas: safra atual, anterior e média ----------
+  function curvas(uf) {
+    var s = S(), w = s.semanas, at = [], aa = {}, m5 = [];
+    w.forEach(function (x) { var v = val(x, uf); if (v != null) at.push([x.d, v]); var a = val(x, uf, "aa"); if (a != null) aa[x.d] = a; var m = val(x, uf, "m5"); if (m != null) m5.push([x.d, m]); });
+    // safra anterior completa (deslocada 364 dias) para além da última semana com o comparativo
+    var ant = anoAnt(st.sf), so = P.culturas[st.c].ops[st.op][ant];
+    if (so) so.semanas.forEach(function (x) { var d = mais(x.d, 364), v = val(x, uf); if (v != null && aa[d] == null && !w.some(function (y) { return Math.abs(dt(y.d) - dt(d)) < 4 * 864e5; })) aa[d] = v; });
+    var aal = Object.keys(aa).sort().map(function (d) { return [d, aa[d]]; });
+    return { at: at, aa: aal, m5: m5, ant: ant };
+  }
+  function g0() {
+    var c = curvas(st.uf), fim = U(), ini = S().semanas[0];
+    var tudo = c.at.concat(c.aa, c.m5).map(function (p) { return dt(p[0]).getTime(); });
+    var x0 = Math.min.apply(null, tudo), x1 = Math.max.apply(null, tudo);
+    $("abcH0").textContent = OPN[st.op] + " · " + local(st.uf) + " · % da área " + OPV[st.op];
+    var u = c.at[c.at.length - 1];
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 16, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: mobile() ? 16 : 70, top: mobile() ? 56 : 34, bottom: 6, containLabel: true },
+      xAxis: { type: "time", min: x0, max: x1, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true, formatter: function (v) { var d = new Date(v); return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, splitLine: { show: false } },
+      yAxis: { type: "value", min: 0, max: 100, interval: 25, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: "{value}%" }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var h = '<div style="font-weight:600;margin-bottom:4px">Semana até ' + ddmmaa(new Date(ps[0].value[0]).toISOString().slice(0, 10)) + "</div>";
+        ps.forEach(function (q) { h += tl(q.marker, q.seriesName, br(q.value[1], 1) + "%"); }); return h; } }),
+      series: [
+        { name: "Média 5 anos", type: "line", data: c.m5, symbol: "none", lineStyle: { width: 2, type: [5, 4], color: COR.mr }, itemStyle: { color: COR.mr }, z: 2 },
+        { name: "Safra " + c.ant, type: "line", data: c.aa, symbol: "none", smooth: 0.2, lineStyle: { width: 2.2, color: COR.cz }, itemStyle: { color: COR.cz }, z: 1 },
+        { name: "Safra " + st.sf, type: "line", data: c.at, symbol: "circle", symbolSize: 6, smooth: 0.2, lineStyle: { width: 3.2, color: COR.vd }, itemStyle: { color: COR.vd },
+          areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(30,72,18,.16)" }, { offset: 1, color: "rgba(30,72,18,0)" }] } }, z: 3,
+          markPoint: u ? { symbol: "circle", symbolSize: 1, data: [{ coord: u, value: br(u[1], 1) + "%" }], label: { show: true, position: mobile() ? "top" : "right", distance: 8, color: COR.vd, fontWeight: 700, fontSize: 13, formatter: "{c}" } } : undefined }
+      ]
+    });
+  }
+
+  // ---------- mapa ----------
+  function g1() {
+    var u = U(), m = st.met, ufs = Object.keys(u.ufs), dados = Object.keys(NOME_UF).map(function (k) {
+      var v = u.ufs[k]; if (v == null) return { name: k, value: "-" };
+      if (m === "aa") v = u.ufs_aa[k] == null ? null : v - u.ufs_aa[k];
+      if (m === "m5") v = u.ufs_m5[k] == null ? null : v - u.ufs_m5[k];
+      return { name: k, value: v == null ? "-" : +v.toFixed(1) };
+    });
+    var vm;
+    if (m === "at") vm = { type: "continuous", min: 0, max: 100, inRange: { color: ["#F1EFE9", "#CFE1B9", "#86B85C", "#3B7A26", "#163A0D"] }, text: ["100%", "0%"] };
+    else {
+      var vals = dados.map(function (d) { return d.value; }).filter(function (v) { return v !== "-"; }), lim = Math.min(50, Math.max(5, Math.ceil(Math.max.apply(null, vals.map(Math.abs).concat([1])) / 5) * 5));
+      vm = { type: "continuous", min: -lim, max: lim, inRange: { color: ["#9C5B24", "#D9B48D", "#F1EFE9", "#A9CB8C", "#2F6B1F"] }, text: ["+" + lim + " pp", "−" + lim + " pp"] };
+    }
+    Object.assign(vm, { orient: mobile() ? "horizontal" : "vertical", left: mobile() ? "center" : 6, bottom: mobile() ? 0 : 20, itemHeight: mobile() ? 120 : 110, itemWidth: 10, calculable: false, textStyle: { color: COR.mt, fontSize: 11 } });
+    $("abcH1s").textContent = { at: "% da área " + OPV[st.op], aa: "diferença para o ano passado, pontos percentuais", m5: "diferença para a média de 5 anos, pontos percentuais" }[m];
+    return Object.assign({}, base, {
+      visualMap: vm,
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) {
+        var k = p.name; if (u.ufs[k] == null) return NOME_UF[k] + ": não acompanhado";
+        return "<b>" + NOME_UF[k] + "</b>" + tl("", "Semana até " + ddmm(u.d), br(u.ufs[k], 1) + "%") + tl("", "Ano passado", br(u.ufs_aa[k], 1) + "% (" + pp(u.ufs[k] - u.ufs_aa[k]) + ")") + tl("", "Média 5 anos", br(u.ufs_m5[k], 1) + "% (" + pp(u.ufs[k] - u.ufs_m5[k]) + ")");
+      } }),
+      series: [{ type: "map", map: "BR", nameProperty: "name", roam: false, selectedMode: "single", layoutCenter: ["54%", "50%"], layoutSize: mobile() ? "100%" : "96%",
+        label: { show: true, fontSize: mobile() ? 8.5 : 10, color: "#1d2420", formatter: function (p) { return u.ufs[p.name] == null ? "" : p.name; } },
+        itemStyle: { borderColor: "#fff", borderWidth: 0.8, areaColor: "#F3F5F3" }, emphasis: { label: { show: true, fontWeight: 700 }, itemStyle: { areaColor: "#FFD87A" } },
+        select: { label: { show: true, fontWeight: 700, color: "#000" }, itemStyle: { areaColor: "#FFC94A", borderColor: COR.tx, borderWidth: 1.5 } },
+        data: dados.map(function (d) { var esc = m === "at" && d.value !== "-" && d.value > 62; return Object.assign(d, { selected: d.name === st.uf, label: esc ? { color: "#fff" } : undefined }); }) }],
+      graphic: mobile() ? [] : [{ type: "text", right: 6, bottom: 4, style: { text: "agrobasis.com.br", fill: "#b6beb8", font: "11px Geist, sans-serif" } }]
+    });
+  }
+
+  // ---------- barras por estado com marcadores de comparação ----------
+  function ordemUF() { var u = U(); return Object.keys(u.ufs).sort(function (a, b) { return u.ufs[b] - u.ufs[a]; }); }
+  function g2() {
+    var u = U(), us = ordemUF();
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: ["Semana até " + ddmm(u.d), "Ano passado", "Média 5 anos"] },
+      grid: { left: 6, right: 8, top: 30, bottom: 6, containLabel: true },
+      yAxis: [{ type: "category", inverse: true, data: us, axisLabel: { color: COR.tx, fontSize: 12, fontWeight: 600 }, axisLine: { show: false }, axisTick: { show: false } },
+        { type: "category", inverse: true, position: "right", data: us, axisLine: { show: false }, axisTick: { show: false },
+          axisLabel: { margin: 10, align: "left", formatter: function (k) { var d = u.ufs[k] - u.ufs_aa[k]; return "{v|" + br(u.ufs[k], 0) + "%}" + (u.ufs_aa[k] == null || Math.abs(d) < 0.5 ? "" : " {" + (d > 0 ? "p" : "n") + "|" + (d > 0 ? "+" : "−") + br(Math.abs(d), 0) + "}"); },
+            rich: { v: { color: COR.tx, fontSize: 11.5, fontWeight: 600, width: 34, align: "right" }, p: { color: "#2F7D32", fontSize: 10.5, fontWeight: 600 }, n: { color: "#B5462E", fontSize: 10.5, fontWeight: 600 } } } }],
+      xAxis: { type: "value", min: 0, max: 100, interval: 25, axisLabel: { color: COR.mt, fontSize: 11, formatter: "{value}%" }, splitLine: { lineStyle: { color: COR.grade } } },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) {
+        var k = us[ps[0].dataIndex];
+        return "<b>" + NOME_UF[k] + "</b>" + tl("", "Semana até " + ddmm(u.d), br(u.ufs[k], 1) + "%") + tl("", "Semana anterior", br(val(prevW(), k), 1) + "%") + tl("", "Ano passado", br(u.ufs_aa[k], 1) + "%") + tl("", "Média 5 anos", br(u.ufs_m5[k], 1) + "%"); } }),
+      series: [
+        { name: "Semana até " + ddmm(u.d), type: "bar", barWidth: "56%", itemStyle: { color: COR.vd }, data: us.map(function (k) { return { value: u.ufs[k], itemStyle: { color: k === st.uf ? "#E3A72F" : COR.vd, borderRadius: [0, 4, 4, 0] } }; }), z: 2 },
+        { name: "Ano passado", type: "scatter", symbol: "diamond", symbolSize: 11, itemStyle: { color: "#fff", borderColor: COR.tx, borderWidth: 1.6 }, data: us.map(function (k) { return u.ufs_aa[k]; }), z: 4 },
+        { name: "Média 5 anos", type: "scatter", symbol: "rect", symbolSize: [3, 16], itemStyle: { color: COR.mr }, data: us.map(function (k) { return u.ufs_m5[k]; }), z: 3 }
+      ]
+    });
+  }
+  function prevW() { var w = S().semanas; return w.length > 1 ? w[w.length - 2] : { br: U().br_ant, ufs: {} }; }
+
+  // ---------- mapa de calor: estado x semana ----------
+  function g3() {
+    var w = S().semanas, us = ordemUF(), dados = [];
+    w.forEach(function (x, j) { us.forEach(function (k, i) { var v = x.ufs[k]; if (v != null) dados.push({ value: [j, i, +v.toFixed(1)], label: v > 60 ? { color: "#fff" } : undefined }); }); });
+    $("abcH3s").textContent = "% da área " + OPV[st.op] + ", safra " + st.sf;
+    var cats = w.map(function (x) { return ddmm(x.d); });
+    return Object.assign({}, base, {
+      grid: { left: 6, right: 10, top: 10, bottom: mobile() ? 52 : 40, containLabel: true },
+      xAxis: { type: "category", data: cats, axisLabel: { color: COR.mt, fontSize: 10.5, hideOverlap: true, rotate: mobile() ? 45 : 0 }, axisLine: { show: false }, axisTick: { show: false }, splitArea: { show: false } },
+      yAxis: { type: "category", inverse: true, data: us.map(function (k) { return k; }), axisLabel: { color: COR.tx, fontSize: 11.5, fontWeight: 600 }, axisLine: { show: false }, axisTick: { show: false } },
+      visualMap: { min: 0, max: 100, calculable: false, orient: "horizontal", left: "center", bottom: 0, itemWidth: 10, itemHeight: mobile() ? 140 : 200, text: ["100%", "0%"], textStyle: { color: COR.mt, fontSize: 11 }, inRange: { color: ["#F4F2EC", "#CFE1B9", "#86B85C", "#3B7A26", "#163A0D"] } },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) {
+        var x = w[p.value[0]], k = us[p.value[1]], ant = p.value[0] > 0 ? w[p.value[0] - 1].ufs[k] : null;
+        return "<b>" + NOME_UF[k] + "</b> · semana até " + ddmmaa(x.d) + tl("", OPN[st.op], br(p.value[2], 1) + "%") + (ant != null ? tl("", "Avanço na semana", pp(p.value[2] - ant)) : "") + tl("", "Ano passado", br(x.ufs_aa[k], 1) + "%"); } }),
+      series: [{ type: "heatmap", data: dados, itemStyle: { borderColor: "#fff", borderWidth: 1.5, borderRadius: 3 },
+        label: { show: !mobile() && w.length <= 30, fontSize: 9.5, color: "#1d2420", formatter: function (p) { var v = p.value[2]; return v >= 99.95 ? "" : br(v, 0); } }, emphasis: { itemStyle: { borderColor: COR.tx, borderWidth: 1.5 } } }]
+    });
+  }
+
+  // ---------- tabela ----------
+  function tabela() {
+    var u = U(), a = prevW(), us = ordemUF(), sf = st.sf;
+    var h = '<thead><tr><th class="l">Estado</th><th>Semana anterior<br><small>' + ddmm(a.d || u.d) + "</small></th><th>Semana atual<br><small>" + ddmm(u.d) + "</small></th><th>Avanço</th><th>Ano passado<br><small>" + ddmm(u.d_aa) + "</small></th><th>Média 5 anos</th><th>vs ano passado</th><th>vs média</th></tr></thead><tbody>";
+    function tr(nome, k, at, an, aa, m5, cl) {
+      return '<tr class="' + cl + (k && k === st.uf ? " sel" : "") + '"' + (k ? ' data-uf="' + k + '"' : "") + '><td class="l">' + nome + "</td><td>" + br(an, 1) + "%</td><td><b>" + br(at, 1) + "%</b></td><td>" + (an == null ? "-" : pp(at - an)) +
+        "</td><td>" + br(aa, 1) + "%</td><td>" + br(m5, 1) + '%</td><td class="' + cls(at - aa) + '">' + pp(at - aa) + '</td><td class="' + cls(at - m5) + '">' + pp(at - m5) + "</td></tr>";
+    }
+    us.forEach(function (k) { h += tr(k + ' <span class="cn-n">' + NOME_UF[k] + "</span>", k, u.ufs[k], (a.ufs || {})[k], u.ufs_aa[k], u.ufs_m5[k], "uf"); });
+    h += tr("Brasil <span class=\"cn-n\">" + (S().cobertura ? S().cobertura.estados + " estados, " + br(S().cobertura.pct_area, 0) + "% da área" : "estados acompanhados") + "</span>", null, u.br, u.br_ant, u.br_aa, u.br_m5, "tot") + "</tbody>";
+    $("abcTab").innerHTML = h;
+    $("abcH4s").textContent = OPN[st.op].toLowerCase() + " de " + nomeC(st.c).toLowerCase() + ", safra " + sf + ", % da área " + OPV[st.op];
+  }
+  function csv() {
+    var u = U(), a = prevW(), linhas = [["UF", "Semana_anterior_" + (a.d || ""), "Semana_atual_" + u.d, "Ano_passado_" + u.d_aa, "Media_5_anos"].join(";")];
+    function n(x) { return x == null ? "" : String(x).replace(".", ","); }
+    ordemUF().forEach(function (k) { linhas.push([k, n((a.ufs || {})[k]), n(u.ufs[k]), n(u.ufs_aa[k]), n(u.ufs_m5[k])].join(";")); });
+    linhas.push(["Brasil", n(u.br_ant), n(u.br), n(u.br_aa), n(u.br_m5)].join(";"));
+    var el = document.createElement("a"); el.href = URL.createObjectURL(new Blob(["﻿" + linhas.join("\n")], { type: "text/csv;charset=utf-8" }));
+    el.download = "agrobasis-conab-" + st.op + "-" + st.c + "-" + u.d + ".csv"; document.body.appendChild(el); el.click(); el.remove();
+  }
+
+  // ---------- panorama: todas as culturas e operações na última semana ----------
+  function panorama() {
+    var linhas = [];
+    Object.keys(P.culturas).forEach(function (c) {
+      Object.keys(P.culturas[c].ops).sort().reverse().forEach(function (op) {
+        var sf = ultimaSafra(c, op), w = serie(c, op, sf).semanas, u = w[w.length - 1];
+        if (u.d !== P.ultima_semana) return;
+        linhas.push({ c: c, op: op, sf: sf, u: u });
+      });
+    });
+    var h = '<thead><tr><th class="l">Cultura</th><th class="l">Operação</th><th>Safra</th><th>% da área</th><th>Na semana</th><th>Ano passado</th><th>vs ano passado</th><th>vs média 5 anos</th></tr></thead><tbody>';
+    linhas.forEach(function (x) {
+      var u = x.u, d = u.br - u.br_aa, m = u.br - u.br_m5;
+      h += '<tr class="uf" data-c="' + x.c + '" data-op="' + x.op + '"><td class="l"><b>' + nomeC(x.c) + '</b></td><td class="l">' + OPN[x.op] + "</td><td>" + x.sf + '</td><td><span class="pg-bar"><i style="width:' + Math.min(100, u.br) + '%"></i></span><b>' + br(u.br, 1) + "%</b></td><td>" + pp(u.br - u.br_ant) + "</td><td>" + br(u.br_aa, 1) + '%</td><td class="' + cls(d) + '">' + pp(d) + '</td><td class="' + cls(m) + '">' + pp(m) + "</td></tr>";
+    });
+    $("abcPan").innerHTML = h + "</tbody>";
+    $("abcH5s").textContent = "semana até " + ddmmaa(P.ultima_semana) + " · clique para abrir";
+  }
+
+  // ---------- indicadores e texto ----------
+  function kpis() {
+    var u = U(), a = u.br_ant, ds = a == null ? null : u.br - a, dy = u.br - u.br_aa, dm = u.br - u.br_m5;
+    $("kAl").textContent = "Área " + OPV[st.op];
+    $("kA").innerHTML = br(u.br, 1) + "<small>%</small>";
+    $("kAs").textContent = "semana até " + ddmmaa(u.d);
+    $("kS").innerHTML = '<i style="font-style:normal" class="' + (ds > 0.05 ? "pos" : "") + '">' + (ds == null ? "-" : (ds > 0.05 ? "+" : "") + br(ds, 1)) + "</i><small>pp</small>";
+    $("kSs").textContent = "de " + br(a, 1) + "% para " + br(u.br, 1) + "%";
+    $("kY").innerHTML = '<i style="font-style:normal" class="' + cls(dy) + '">' + pp(dy).replace(" pp", "") + "</i><small>pp</small>";
+    $("kYs").textContent = "ano passado: " + br(u.br_aa, 1) + "% em " + ddmm(u.d_aa);
+    $("kM").innerHTML = '<i style="font-style:normal" class="' + cls(dm) + '">' + pp(dm).replace(" pp", "") + "</i><small>pp</small>";
+    $("kMs").textContent = "média de 5 anos: " + br(u.br_m5, 1) + "%";
+  }
+  function lead() {
+    var u = U(), ds = u.br_ant == null ? null : u.br - u.br_ant, dy = u.br - u.br_aa, dm = u.br - u.br_m5, us = ordemUF(), vivo = u.d === P.ultima_semana;
+    var o = OPN[st.op].toLowerCase(), cul = nomeC(st.c).toLowerCase();
+    var t;
+    if (!vivo && u.br >= 99.9) t = ART[st.op] + " " + o + " de " + cul + " da safra " + st.sf + " foi " + CONC[st.op] + " na semana até " + ddmmaa(u.d) + ".";
+    else {
+      t = ART[st.op] + " " + o + " de " + cul + " " + st.sf + " chegou a <b>" + br(u.br, 1) + "% da área</b> até " + ddmm(u.d) + (ds != null && ds > 0.05 ? ", avanço de " + br(ds, 1) + " pp na semana" : "") + ". ";
+      t += Math.abs(dy) < 0.5 ? "Ritmo igual ao do ano passado" : (dy > 0 ? "Está " + br(dy, 1) + " pp à frente" : "Está " + br(-dy, 1) + " pp atrás") + " do ano passado (" + br(u.br_aa, 1) + "%)";
+      t += Math.abs(dm) < 0.5 ? " e em linha com a média de 5 anos." : " e " + (dm > 0 ? br(dm, 1) + " pp acima" : br(-dm, 1) + " pp abaixo") + " da média de 5 anos.";
+      var ab = us.filter(function (k) { return u.ufs[k] < 99.5; }), ok = us.filter(function (k) { return u.ufs[k] >= 99.5; });
+      if (ab.length && u.ufs[us[0]] > 0) {
+        var atr = ab.slice().sort(function (a, b) { return (u.ufs[a] - u.ufs_m5[a]) - (u.ufs[b] - u.ufs_m5[b]); })[0], dd = u.ufs[atr] - u.ufs_m5[atr];
+        if (ok.length) t += " " + (ok.length === 1 ? NOME_UF[ok[0]] + " já " + (st.op === "plantio" ? "concluiu" : "concluiu") : ok.join(", ").replace(/, ([A-Z]{2})$/, " e $1") + " já concluíram") + ".";
+        else t += " " + NOME_UF[us[0]] + " lidera com " + br(u.ufs[us[0]], 1) + "%.";
+        if (dd < -2) t += " " + NOME_UF[atr] + " é o mais atrasado frente à média (" + br(u.ufs[atr], 0) + "%, " + pp(dd, 0) + ").";
+      }
+      if (!vivo) t += " Última leitura disponível.";
+    }
+    $("abcLead").querySelector("span").innerHTML = t;
+  }
+
+  function render() {
+    var u = U(), cob = S().cobertura;
+    $("abcTit").textContent = OPN[st.op] + " de " + nomeC(st.c).toLowerCase() + " · safra " + st.sf;
+    $("abcMeta").textContent = "Semana até " + ddmmaa(u.d) + " · % da área " + OPV[st.op] + (cob ? " nos " + cob.estados + " estados acompanhados (" + br(cob.pct_area, 0) + "% da área da cultura)" : "");
+    $("abcProx").innerHTML = "Fonte: <b>Conab</b><br>atualiza toda semana, em geral na segunda-feira";
+    $("abcN0").textContent = "A safra " + anoAnt(st.sf) + " aparece deslocada um ano para comparar as mesmas semanas do calendário. Média de 5 anos calculada pela Conab.";
+    seletores(); kpis(); lead(); tabela(); panorama();
+    charts[0].setOption(g0(), true); charts[1].setOption(g1(), true); charts[2].setOption(g2(), true); charts[3].setOption(g3(), true);
+    $("abcG3").style.height = Math.max(240, 46 + ordemUF().length * (mobile() ? 26 : 30) + (mobile() ? 60 : 40)) + "px"; charts[3].resize();
+    $("abcAtu").textContent = "Última semana: " + ddmmaa(P.ultima_semana);
+  }
+  function abrir(c, op, sf) {
+    st.c = c; st.op = op || opPadrao(c); st.sf = sf || ultimaSafra(st.c, st.op);
+    if (st.uf !== "BR" && U().ufs[st.uf] == null) st.uf = "BR";
+    document.querySelectorAll("#abcBoard .abc-c").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.c === c)); });
+    history.replaceState(null, "", "#" + c + "-" + st.op);
+    render();
+  }
+  function escolherUF(k) { st.uf = (k === st.uf ? "BR" : k); render(); if (st.uf !== "BR" && mobile()) $("abcG0").scrollIntoView({ behavior: "smooth", block: "center" }); }
+  function baixar(i) {
+    var ch = charts[i], tit = [$("abcH0").textContent, "Por estado · " + $("abcH1s").textContent, "Estados na semana", "Semana a semana por estado"][i];
+    var opt = [g0, g1, g2, g3][i](); opt.animation = false;
+    opt.title = { text: tit, subtext: nomeC(st.c) + " · " + OPN[st.op].toLowerCase() + " safra " + st.sf + " · Conab, semana até " + ddmmaa(U().d), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 54, left: 8 });
+    if (opt.grid) opt.grid = Object.assign({}, opt.grid, { top: (opt.legend ? 84 : 64), bottom: i === 3 ? 60 : 30 });
+    if (i === 1) opt.series[0].layoutCenter = ["54%", "55%"];
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: Conab", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    ch.setOption(opt, true);
+    var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-conab-" + st.op + "-" + st.c + "-" + ["curva", "mapa", "estados", "semanas"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  function seg(id, fn) { $(id).addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) fn(b); }); }
+
+  Promise.all([carregarLib(), json("dados/progresso/progresso.json"), json("dados/conab/br_uf.json")]).then(function (r) {
+    P = r[1]; echarts.registerMap("BR", r[2]);
+    board();
+    charts = [0, 1, 2, 3].map(function (i) { return echarts.init($("abcG" + i), null, { renderer: "canvas" }); });
+    [1, 2].forEach(function (i) { charts[i].on("click", function (p) { var k = p.name || (i === 2 ? ordemUF()[p.dataIndex] : null); if (k && U().ufs[k] != null) escolherUF(k); }); });
+    charts[3].on("click", function (p) { var k = ordemUF()[p.value[1]]; if (k) escolherUF(k); });
+    $("abcBoard").addEventListener("click", function (e) { var b = e.target.closest(".abc-c"); if (b) abrir(b.dataset.c, b.dataset.op); });
+    seg("abcOp", function (b) { abrir(st.c, b.dataset.op); });
+    seg("abcSafra", function (b) { abrir(st.c, st.op, b.dataset.sf); });
+    seg("abcLocal", function (b) { st.uf = b.dataset.u; render(); });
+    seg("abcMet", function (b) { st.met = b.dataset.m; $("abcMet").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); charts[1].setOption(g1(), true); });
+    $("abcTab").addEventListener("click", function (e) { var t = e.target.closest("tr[data-uf]"); if (t) escolherUF(t.dataset.uf); });
+    $("abcPan").addEventListener("click", function (e) { var t = e.target.closest("tr[data-c]"); if (t) { st.uf = "BR"; abrir(t.dataset.c, t.dataset.op); window.scrollTo({ top: $("abc").offsetTop, behavior: "smooth" }); } });
+    $("abcCsv").addEventListener("click", csv);
+    document.querySelectorAll("#abc .abc-dl[data-dl]").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (P) render(); }, 150); });
+    var q = (location.hash || "").replace("#", "").split("-");
+    if (P.culturas[q[0]]) abrir(q[0], P.culturas[q[0]].ops[q[1]] ? q[1] : null); else abrir("soja");
+  }).catch(function (e) {
+    if (window.console) console.error("AgroBasis Progresso:", e);
+    $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
