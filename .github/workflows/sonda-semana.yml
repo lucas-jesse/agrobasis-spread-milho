@@ -1,0 +1,18 @@
+name: sonda-semana
+on: push
+permissions: {contents: write}
+jobs:
+  s:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 - <<'PY'
+          import requests, json
+          T=["CBOT:ZSF2027","CBOT:ZCZ2026","CBOT:ZWZ2026","CBOT:ZMZ2026","CBOT:ZLZ2026","BMFBOVESPA:CCMF2027","FX_IDC:USDBRL","TVC:DXY","ICEEUR:BRN1!","BMFBOVESPA:IBOV","CBOT:ZS1!","CBOT:ZC1!"]
+          C=["close","Perf.W","Perf.1M","change","description"]
+          r=requests.post("https://scanner.tradingview.com/global/scan",json={"symbols":{"tickers":T,"query":{"types":[]}},"columns":C},headers={"User-Agent":"Mozilla/5.0"},timeout=30)
+          out={i["s"]:dict(zip(C,i["d"])) for i in r.json().get("data",[])}
+          json.dump(out,open("semana.json","w"),indent=1,ensure_ascii=False); print(out)
+          PY
+      - run: git config user.name bot && git config user.email bot@x && git add semana.json && git commit -m r && git push origin HEAD:sonda-semana
