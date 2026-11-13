@@ -223,6 +223,9 @@ def main():
         r = next(x for x in rel if x["commodityCode"] == cod)
         resumo["produtos"][slug] = publicar(slug, cod, nome, mes, psd, cacheados, r["releaseTimeStamp"][:16])
     (PASTA / "resumo.json").write_text(json.dumps(resumo, ensure_ascii=False, indent=1), encoding="utf-8")
+    # sinal para a página /dashboards/ mostrar o cartão: só com o histórico completo
+    if not resumo["pendentes"] and len(resumo["produtos"]) == len(PRODUTOS):
+        (PASTA / "completo.json").write_text(json.dumps({"desde": resumo["atualizado_em"]}), encoding="utf-8")
     print(json.dumps(resumo, ensure_ascii=False)[:1500]); print("consultas:", consultas)
 
 
