@@ -1,0 +1,427 @@
+<!--
+============================================================
+AGROBASIS · ANÁLISE: EL NIÑO 2026/27 E A SAFRA BRASILEIRA
+============================================================
+URL: /analises/el-nino-2026-27-safra-soja-milho-trigo/
+
+CONFIGURAÇÃO NO PLUGIN DE SEO:
+  Title (SEO): El Niño 2026/27: o que esperar para soja, milho e trigo | AgroBasis
+  Meta description: El Niño forte em curso. Nas safras de El Niño forte, a soja do RS ficou 22% acima da tendência e a do MA, 29% abaixo. Estudo por estado e chuva atual.
+  Slug: el-nino-2026-27-safra-soja-milho-trigo
+  Frase-chave de foco: El Niño 2026 safra
+
+NOTA DE DADOS (conferidos em 13/11/2026):
+  ENSO: NOAA Climate Prediction Center. RONI trimestral (RONI.ascii.txt), Niño 3.4 semanal (wksst9120.for),
+  probabilidades oficiais por trimestre e discussão diagnóstica de 2026-11-12.
+  Chuva: reanálise ERA5 (Copernicus/ECMWF) no ponto de cada polo, via Open-Meteo, diária desde 1980; normal 1991-2020.
+  Previsão: ensemble ECMWF IFS (51 membros), 15 dias.
+  Produtividade: Conab, SerieHistoricaGraos por UF, safras 1990/91 a 2025/26; desvio da tendência quadrática;
+  fase pelo RONI de dez-fev (trigo: ago-out do ano da colheita). El Niño forte = RONI de dez-fev de +1,5 °C ou mais.
+  Arquivos: dados/clima/clima.json e dados/clima/enso_produtividade.json do repositório AgroBasis.
+
+NOTA DE ESTILO: sem travessão em H1/H2 e na prosa, tom sóbrio e direto.
+NOTA DE DESIGN: Design System AgroBasis, Geist + Sora, Lucide, gráficos em SVG puro.
+============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<style>
+  .abp-article {
+    font-family:'Geist', Arial, sans-serif;
+    color:#222222;
+    padding:36px 0 56px 0;
+    box-sizing:border-box;
+    background:#ffffff;
+  }
+  .abp-narrow { max-width:800px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+
+  .abp-breadcrumb { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+  .abp-breadcrumb a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-breadcrumb a:hover { text-decoration:underline; }
+
+  .abp-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Sora', Arial, sans-serif;
+    background:#EEF4E7; color:#1E4812; border:1px solid #d7e6c9;
+    border-radius:999px; padding:6px 14px 6px 10px;
+    font-size:12px; font-weight:700; letter-spacing:.2px;
+    margin-bottom:18px;
+  }
+  .abp-badge svg { width:13px; height:13px; stroke-width:2.2; }
+
+  .abp-h1 { font-size:35px; line-height:1.22; color:#222222; font-weight:800; margin:0 0 14px 0; }
+  .abp-lead { font-size:17px; line-height:1.7; color:#4a4a4a; margin:0 0 8px 0; }
+  .abp-meta { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#9a9a9a; margin:14px 0 30px 0; padding-bottom:20px; border-bottom:1px solid #eef1ed; }
+
+  .abp-h2 {
+    font-size:24px; color:#222222; font-weight:800;
+    margin:44px 0 14px 0; padding-left:12px; border-left:4px solid #1E4812;
+  }
+  .abp-h3 { font-size:17px; color:#222222; font-weight:700; margin:26px 0 10px 0; }
+  .abp-p { font-size:15.5px; line-height:1.8; color:#333333; margin:0 0 16px 0; }
+  .abp-p b { color:#1E4812; font-weight:700; }
+  .abp-list { margin:0 0 18px 0; padding-left:22px; }
+  .abp-list li { font-size:15.5px; line-height:1.8; color:#333333; margin-bottom:8px; }
+  .abp-list b { color:#222222; }
+
+  .abp-pullquote {
+    background:#fafbf9; border-left:3px solid #A17149; border-radius:0 14px 14px 0;
+    padding:18px 22px; margin:24px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:16px; line-height:1.6; color:#3f3f3f; font-style:italic;
+  }
+
+  .abp-note {
+    background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px;
+    padding:18px 20px; font-size:14px; line-height:1.65; color:#5b4636; margin:20px 0;
+  }
+  .abp-note b { color:#8a5a34; }
+
+  .abp-table {
+    width:100%; border-collapse:separate; border-spacing:0;
+    margin:14px 0 20px 0; font-size:14px;
+    border:1px solid #e5e7eb; border-radius:14px; overflow:hidden;
+  }
+  .abp-table th, .abp-table td {
+    padding:11px 14px; text-align:left; border-bottom:1px solid #eef1ed;
+  }
+  .abp-table tr:last-child td { border-bottom:none; }
+  .abp-table th {
+    background:#1E4812; color:#ffffff; font-weight:700;
+    font-family:'Sora', Arial, sans-serif; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .abp-table td { color:#3f3f3f; }
+  .abp-table tr:nth-child(even) td { background:#fafbf9; }
+
+  .abp-formula-box {
+    background:#fafbf9; border:1px solid #e5e7eb; border-left:3px solid #A17149;
+    border-radius:12px; padding:18px 20px; margin:18px 0 22px 0;
+  }
+  .abp-formula-code {
+    font-family:"Courier New", monospace; font-size:14.5px; color:#1E4812;
+    background:#EEF4E7; border-radius:8px; padding:12px 16px; display:block; margin-bottom:4px;
+    text-align:center; font-weight:600;
+  }
+
+  .abp-chart-card {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:18px;
+    padding:22px; margin:22px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05);
+  }
+  .abp-chart-title { font-family:'Geist', Arial, sans-serif; font-size:15px; font-weight:700; color:#222222; margin-bottom:2px; }
+  .abp-chart-sub { font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; margin-bottom:14px; }
+  .abp-chart-caption { font-family:'Sora', Arial, sans-serif; font-size:11px; color:#9a9a9a; text-align:right; margin-top:8px; }
+  .abp-legend { display:flex; gap:18px; flex-wrap:wrap; font-family:'Sora', Arial, sans-serif; font-size:12px; color:#5b5b5b; margin-bottom:10px; }
+  .abp-legend-item { display:flex; align-items:center; gap:6px; }
+  .abp-legend-dot { width:14px; height:3px; border-radius:2px; display:inline-block; }
+
+  .abp-toc {
+    background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px;
+    padding:18px 22px; margin:24px 0 8px 0;
+  }
+  .abp-toc-title { font-family:'Sora', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:10px; }
+  .abp-toc ol { margin:0; padding-left:20px; }
+  .abp-toc li { font-size:14px; line-height:1.9; }
+  .abp-toc a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-toc a:hover { text-decoration:underline; }
+
+  .abp-cta-box {
+    background:#1E4812; border-radius:20px; padding:32px 28px; margin:36px 0;
+    text-align:center;
+  }
+  .abp-cta-box h3 { color:#ffffff; font-size:20px; font-weight:800; margin:0 0 8px 0; }
+  .abp-cta-box p { color:#d7e6c9; font-size:14.5px; line-height:1.6; margin:0 0 20px 0; max-width:480px; margin-left:auto; margin-right:auto; }
+  .abp-cta-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#ffffff; color:#1E4812 !important; font-family:'Geist', Arial, sans-serif;
+    font-size:14.5px; font-weight:700; padding:13px 24px; border-radius:10px;
+    text-decoration:none !important; transition:background .15s ease;
+  }
+  .abp-cta-btn:hover { background:#EEF4E7; }
+  .abp-cta-btn svg { width:16px; height:16px; stroke-width:2.2; }
+
+  .abp-faq-item {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .abp-faq-item summary {
+    list-style:none; cursor:pointer; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:15px; font-weight:700; color:#222222;
+  }
+  .abp-faq-item summary::-webkit-details-marker { display:none; }
+  .abp-faq-item summary svg { width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+  .abp-faq-item[open] summary svg { transform:rotate(180deg); }
+  .abp-faq-a { padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+
+  .abp-sources {
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px;
+    padding:16px 20px; margin:30px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:12.5px; line-height:1.8; color:#7a7a7a;
+  }
+  .abp-sources b { color:#5b5b5b; }
+
+  .abp-disclaimer {
+    margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0;
+    font-family:'Sora', Arial, sans-serif;
+    font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6;
+  }
+
+  .abp-author-box {
+    display:flex; align-items:center; gap:12px; margin:30px 0;
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 18px;
+  }
+  .abp-author-icon { width:38px; height:38px; border-radius:50%; background:#EEF4E7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .abp-author-icon svg { width:19px; height:19px; color:#1E4812; }
+  .abp-author-text { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; line-height:1.5; }
+  .abp-author-text b { color:#222222; }
+
+  @media (max-width:768px) {
+    .abp-h1 { font-size:25px; }
+    .abp-lead { font-size:15px; }
+    .abp-h2 { font-size:20px; }
+    .abp-narrow { padding:0 14px; }
+    .abp-chart-card { padding:14px; }
+    .abp-cta-box { padding:24px 18px; }
+    .abp-table { font-size:12.5px; }
+    .abp-table th, .abp-table td { padding:8px 10px; }
+  }
+</style>
+
+<div class="abp-article">
+<div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/analises/">Análises</a> &nbsp;›&nbsp;
+    El Niño 2026/27
+  </div>
+
+  <div class="abp-badge"><i data-lucide="cloud-sun-rain"></i> Análise · Clima e safra</div>
+  <h1 class="abp-h1">El Niño 2026/27: o que a história diz para a safra de soja, milho e trigo</h1>
+  <p class="abp-lead">O Pacífico vive um dos El Niños mais intensos já medidos. Cruzamos 35 anos de produtividade da Conab com o índice oficial da NOAA para responder à pergunta que importa: o que costuma acontecer com a safra brasileira quando o fenômeno chega forte? A resposta é um país dividido, com o Sul de um lado e o Matopiba do outro.</p>
+  <div class="abp-meta">Por Equipe AgroBasis · Atualizado em 13 de novembro de 2026 · Leitura de 8 min</div>
+
+  <div class="abp-toc">
+    <div class="abp-toc-title">Neste artigo</div>
+    <ol>
+      <li><a href="#forca">Um El Niño acima de 1997 e 2015</a></li>
+      <li><a href="#padrao">O padrão de chuva no Brasil</a></li>
+      <li><a href="#soja">Soja: Sul ganha, Matopiba perde</a></li>
+      <li><a href="#milho-trigo">Milho e trigo</a></li>
+      <li><a href="#agora">Como está a chuva nesta safra</a></li>
+      <li><a href="#mercado">O que isso significa para o mercado</a></li>
+      <li><a href="#faq">Perguntas frequentes</a></li>
+    </ol>
+  </div>
+
+  <h2 class="abp-h2" id="forca">Um El Niño acima de 1997 e 2015</h2>
+  <p class="abp-p">O Climate Prediction Center da NOAA, o centro de previsão climática do governo americano, mantém o <b>alerta de El Niño</b> e, na discussão de 12/11, descreveu um fenômeno que continua se fortalecendo, com um evento forte a muito forte provável até o trimestre de janeiro a março de 2027. A probabilidade de El Niño no verão brasileiro, de dezembro a fevereiro, é de <b>100%</b>.</p>
+  <p class="abp-p">Os números confirmam a dimensão. A anomalia semanal da temperatura do mar na região Niño 3.4, termômetro clássico do fenômeno, está em <b>+3,3 °C</b> na semana até 04/11. É mais do que o pico dos dois maiores eventos recentes: +2,3 °C em 1997 e +3,0 °C em 2015. O RONI, índice trimestral que a NOAA adotou como medida oficial de intensidade, chegou a +1,97 °C em agosto a outubro, já na faixa de El Niño forte (acima de +1,5 °C).</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">2026 contra os grandes El Niños</div>
+    <div class="abp-chart-sub">Anomalia semanal da temperatura do mar no Niño 3.4, °C, de janeiro de cada ano a junho do ano seguinte</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#C9A27E;"></span> 1997/98</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#AEB7B0;"></span> 2015/16</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#8FB27A;"></span> 2023/24</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#C0502E;"></span> 2026/27</span></div>
+    <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Niño 3.4 semanal: 2026 contra 1997, 2015 e 2023"><rect x="46" y="16.0" width="574" height="113.6" fill="rgba(192,80,46,.06)"/><line x1="46" x2="620" y1="243.3" y2="243.3" stroke="#EEF1ED"/><text x="38" y="247.3" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">−1</text><line x1="46" x2="620" y1="197.8" y2="197.8" stroke="#EEF1ED"/><text x="38" y="201.8" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0</text><line x1="46" x2="620" y1="152.4" y2="152.4" stroke="#EEF1ED"/><text x="38" y="156.4" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">+1</text><line x1="46" x2="620" y1="106.9" y2="106.9" stroke="#EEF1ED"/><text x="38" y="110.9" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">+2</text><line x1="46" x2="620" y1="61.5" y2="61.5" stroke="#EEF1ED"/><text x="38" y="65.5" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">+3</text><line x1="46" x2="620" y1="16.0" y2="16.0" stroke="#EEF1ED"/><text x="38" y="20.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">+4</text><line x1="46" x2="620" y1="175.1" y2="175.1" stroke="#bbb" stroke-dasharray="4 4"/><line x1="46" x2="620" y1="129.6" y2="129.6" stroke="#bbb" stroke-dasharray="4 4"/><text x="46.0" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">jan</text><text x="110.1" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">mar</text><text x="174.3" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">mai</text><text x="238.4" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">jul</text><text x="302.5" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">set</text><text x="366.6" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">nov</text><text x="430.8" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">jan+1</text><text x="494.9" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">mar+1</text><text x="559.0" y="284" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">mai+1</text><polyline points="46.0,234.2 53.4,225.1 60.7,234.2 68.1,225.1 75.4,211.5 82.8,216.0 90.2,216.0 97.5,211.5 104.9,216.0 112.2,229.6 119.6,229.6 126.9,202.4 134.3,202.4 141.7,211.5 149.0,206.9 156.4,202.4 163.7,193.3 171.1,184.2 178.5,184.2 185.8,184.2 193.2,184.2 200.5,166.0 207.9,156.9 215.3,166.0 222.6,156.9 230.0,152.4 237.3,152.4 244.7,138.7 252.1,134.2 259.4,129.6 266.8,134.2 274.1,125.1 281.5,120.5 288.8,116.0 296.2,111.5 303.6,102.4 310.9,116.0 318.3,111.5 325.6,116.0 333.0,106.9 340.4,106.9 347.7,102.4 355.1,106.9 362.4,111.5 369.8,97.8 377.2,97.8 384.5,97.8 391.9,97.8 399.2,102.4 406.6,102.4 413.9,93.3 421.3,97.8 428.7,102.4 436.0,106.9 443.4,102.4 450.7,97.8 458.1,97.8 465.5,93.3 472.8,106.9 480.2,129.6 487.5,134.2 494.9,134.2 502.3,143.3 509.6,152.4 517.0,143.3 524.3,152.4 531.7,170.5 539.1,184.2 546.4,179.6 553.8,170.5 561.1,161.5 568.5,170.5 575.8,179.6 583.2,197.8 590.6,225.1 597.9,243.3 605.3,225.1 612.6,243.3" fill="none" stroke="#C9A27E" stroke-width="1.8" stroke-linejoin="round"/><polyline points="52.3,188.7 59.7,179.6 67.0,161.5 74.4,161.5 81.7,156.9 89.1,166.0 96.5,170.5 103.8,161.5 111.2,175.1 118.5,188.7 125.9,179.6 133.3,175.1 140.6,170.5 148.0,166.0 155.3,152.4 162.7,152.4 170.1,152.4 177.4,161.5 184.8,161.5 192.1,166.0 199.5,152.4 206.8,152.4 214.2,156.9 221.6,147.8 228.9,138.7 236.3,143.3 243.6,138.7 251.0,134.2 258.4,143.3 265.7,138.7 273.1,129.6 280.4,120.5 287.8,116.0 295.2,111.5 302.5,120.5 309.9,120.5 317.2,106.9 324.6,106.9 331.9,106.9 339.3,102.4 346.7,97.8 354.0,93.3 361.4,84.2 368.7,79.6 376.1,70.5 383.5,61.5 390.8,66.0 398.2,79.6 405.5,88.7 412.9,84.2 420.3,84.2 427.6,93.3 435.0,93.3 442.3,75.1 449.7,75.1 457.1,75.1 464.4,79.6 471.8,84.2 479.1,97.8 486.5,106.9 493.8,106.9 501.2,116.0 508.6,125.1 515.9,134.2 523.3,138.7 530.6,147.8 538.0,147.8 545.4,152.4 552.7,166.0 560.1,170.5 567.4,179.6 574.8,197.8 582.2,206.9 589.5,206.9 596.9,193.3 604.2,179.6 611.6,211.5 618.9,206.9" fill="none" stroke="#AEB7B0" stroke-width="1.8" stroke-linejoin="round"/><polyline points="49.2,234.2 56.5,229.6 63.9,225.1 71.2,225.1 78.6,220.5 85.9,220.5 93.3,220.5 100.7,211.5 108.0,206.9 115.4,202.4 122.7,193.3 130.1,197.8 137.5,197.8 144.8,197.8 152.2,193.3 159.5,184.2 166.9,179.6 174.3,179.6 181.6,175.1 189.0,175.1 196.3,179.6 203.7,161.5 211.1,156.9 218.4,156.9 225.8,152.4 233.1,156.9 240.5,152.4 247.8,147.8 255.2,147.8 262.6,143.3 269.9,147.8 277.3,143.3 284.6,138.7 292.0,129.6 299.4,125.1 306.7,125.1 314.1,125.1 321.4,120.5 328.8,129.6 336.2,129.6 343.5,129.6 350.9,125.1 358.2,125.1 365.6,116.0 372.9,116.0 380.3,111.5 387.7,102.4 395.0,106.9 402.4,111.5 409.7,106.9 417.1,106.9 424.5,106.9 431.8,111.5 439.2,111.5 446.5,120.5 453.9,120.5 461.3,116.0 468.6,120.5 476.0,129.6 483.3,129.6 490.7,138.7 498.1,134.2 505.4,147.8 512.8,138.7 520.1,152.4 527.5,143.3 534.8,156.9 542.2,166.0 549.6,161.5 556.9,175.1 564.3,184.2 571.6,188.7 579.0,188.7 586.4,193.3 593.7,193.3 601.1,197.8 608.4,184.2 615.8,179.6" fill="none" stroke="#8FB27A" stroke-width="1.8" stroke-linejoin="round"/><polyline points="52.3,229.6 59.7,225.1 67.0,216.0 74.4,220.5 81.7,216.0 89.1,206.9 96.5,202.4 103.8,202.4 111.2,202.4 118.5,202.4 125.9,197.8 133.3,193.3 140.6,193.3 148.0,188.7 155.3,175.1 162.7,161.5 170.1,156.9 177.4,161.5 184.8,156.9 192.1,156.9 199.5,152.4 206.8,138.7 214.2,129.6 221.6,120.5 228.9,116.0 236.3,120.5 243.6,106.9 251.0,102.4 258.4,97.8 265.7,88.7 273.1,84.2 280.4,79.6 287.8,79.6 295.2,79.6 302.5,70.5 309.9,70.5 317.2,61.5 324.6,56.9 331.9,52.4 339.3,52.4 346.7,52.4 354.0,43.3 361.4,43.3 368.7,47.8" fill="none" stroke="#C0502E" stroke-width="3.2" stroke-linejoin="round"/><circle cx="368.7" cy="47.8" r="4.5" fill="#C0502E" stroke="#fff" stroke-width="2"/><text x="368.7" y="37.8" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#C0502E" text-anchor="middle">+3,3 °C</text></svg>
+    <div class="abp-chart-caption">Fonte: NOAA Climate Prediction Center, semana até 04/11/2026 · Elaboração: AgroBasis</div>
+  </div>
+  <div class="abp-note">Desde 1950, só 7 verões tiveram El Niño forte pelo RONI: 1957/58, 1965/66, 1972/73, 1982/83, 1991/92, 1997/98, 2015/16. A NOAA considera alta a chance de o evento atual superar todos eles.</div>
+
+  <h2 class="abp-h2" id="padrao">O padrão de chuva no Brasil</h2>
+  <p class="abp-p">O El Niño muda a circulação da atmosfera e, no Brasil, costuma produzir um efeito em gangorra. O Sul recebe mais chuva, com frentes frias que ficam paradas sobre a região. O Norte e parte do Nordeste, incluindo o Matopiba, tendem a ter chuva irregular e veranicos. O Centro-Oeste fica no meio do caminho, com efeito menos definido.</p>
+  <p class="abp-p">Para medir isso nos polos produtores, calculamos a chuva de cada mês nas safras de El Niño forte desde 1980, comparada à normal de 1991 a 2020 do próprio local. O resultado aparece na tabela abaixo. Em Santa Rosa (RS), a chuva de dezembro a fevereiro ficou em média 45% acima da normal nessas safras; em Passo Fundo, 33% acima. Em La Niña, o sinal se inverte: −17% em Santa Rosa.</p>
+  <table class="abp-table">
+    <thead><tr><th>Polo</th><th>Out-nov em El Niño forte</th><th>Dez-fev em El Niño forte</th><th>Dez-fev em La Niña</th><th>Safra 2026/27 até agora</th></tr></thead>
+    <tbody>
+      <tr><td>Santa Rosa (RS)</td><td>+51%</td><td><b>+45%</b></td><td>−17%</td><td>109%</td></tr>
+      <tr><td>Passo Fundo (RS)</td><td>+42%</td><td><b>+33%</b></td><td>−14%</td><td>118%</td></tr>
+      <tr><td>Cruz Alta (RS)</td><td>+34%</td><td><b>+40%</b></td><td>−14%</td><td>128%</td></tr>
+      <tr><td>Chapecó (SC)</td><td>+50%</td><td><b>+21%</b></td><td>−2%</td><td>148%</td></tr>
+      <tr><td>Cascavel (PR)</td><td>+50%</td><td><b>+20%</b></td><td>+1%</td><td>162%</td></tr>
+      <tr><td>Londrina (PR)</td><td>+56%</td><td><b>+10%</b></td><td>−5%</td><td>172%</td></tr>
+      <tr><td>Dourados (MS)</td><td>+38%</td><td><b>+22%</b></td><td>−1%</td><td>152%</td></tr>
+      <tr><td>Rio Verde (GO)</td><td>+6%</td><td><b>+17%</b></td><td>−9%</td><td>92%</td></tr>
+      <tr><td>Sorriso (MT)</td><td>−12%</td><td><b>+6%</b></td><td>−1%</td><td>66%</td></tr>
+      <tr><td>Primavera do Leste (MT)</td><td>−6%</td><td><b>−1%</b></td><td>−5%</td><td>80%</td></tr>
+      <tr><td>Unaí (MG)</td><td>−25%</td><td><b>+40%</b></td><td>0%</td><td>109%</td></tr>
+      <tr><td>Luís Eduardo Magalhães (BA)</td><td>−16%</td><td><b>+22%</b></td><td>−2%</td><td>106%</td></tr>
+      <tr><td>Porto Nacional (TO)</td><td>−12%</td><td><b>+8%</b></td><td>−1%</td><td>71%</td></tr>
+      <tr><td>Balsas (MA)</td><td>−39%</td><td><b>−2%</b></td><td>+3%</td><td>160%</td></tr>
+      <tr><td>Uruçuí (PI)</td><td>−38%</td><td><b>−1%</b></td><td>+6%</td><td>174%</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">No Matopiba, o sinal mais claro aparece no início da temporada. Em Balsas (MA) e Uruçuí (PI), outubro e novembro tiveram chuva −39% e −38% frente à normal nas safras de El Niño forte, um atraso no estabelecimento das chuvas que costuma comprometer a janela de plantio. Com só quatro safras de El Niño forte na série de chuva, as médias mensais indicam tendência, não previsão.</p>
+
+  <h2 class="abp-h2" id="soja">Soja: Sul ganha, Matopiba perde</h2>
+  <p class="abp-p">O efeito na produtividade segue o mapa da chuva. Nas três safras de El Niño forte desde 1990 (1991/92, 1997/98 e 2015/16), a soja do <b>Rio Grande do Sul</b> ficou em média <b>21,7%</b> acima da tendência, com ganhos em todas elas (1991/92: +33%, 1997/98: +16%, 2015/16: +16%). Santa Catarina também ganhou (+6,4%).</p>
+  <p class="abp-p">Na outra ponta estão os estados do Norte e do Nordeste. O <b>Piauí</b> teve produtividade −35,8% frente à tendência, o <b>Maranhão</b> −28,8%, o Tocantins −16,0% e a Bahia −15,4%. O caso mais duro foi 2015/16, quando a soja do Piauí ficou −60% abaixo da tendência e a do Maranhão −47%.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja: produtividade nas safras de El Niño forte</div>
+    <div class="abp-chart-sub">Desvio médio em relação à tendência, por estado, safras 1991/92, 1997/98 e 2015/16</div>
+    <svg viewBox="0 0 640 386" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Desvio da produtividade da soja em El Niño forte"><line x1="423.6" x2="423.6" y1="6" y2="380" stroke="#999" stroke-dasharray="3 3"/><text x="180" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Rio Grande do Sul</text><rect x="423.6" y="12" width="118.7" height="21" rx="4" fill="#1E4812"/><text x="550.3" y="27" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#1E4812" text-anchor="start">+22%</text><text x="180" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Santa Catarina</text><rect x="423.6" y="42" width="35.0" height="21" rx="4" fill="#1E4812"/><text x="466.6" y="57" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#1E4812" text-anchor="start">+6%</text><text x="180" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Minas Gerais</text><rect x="423.6" y="72" width="16.4" height="21" rx="4" fill="#8FB27A"/><text x="448.0" y="87" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#8FB27A" text-anchor="start">+3%</text><text x="180" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Goiás</text><rect x="423.6" y="102" width="2.2" height="21" rx="4" fill="#8FB27A"/><text x="433.8" y="117" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#8FB27A" text-anchor="start">0%</text><text x="180" y="147" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">São Paulo</text><rect x="411.5" y="132" width="12.0" height="21" rx="4" fill="#D9B48D"/><text x="403.5" y="147" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#D9B48D" text-anchor="end">−2%</text><text x="180" y="177" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Mato Grosso</text><rect x="398.4" y="162" width="25.2" height="21" rx="4" fill="#D9B48D"/><text x="390.4" y="177" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#D9B48D" text-anchor="end">−5%</text><text x="180" y="207" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Paraná</text><rect x="387.5" y="192" width="36.1" height="21" rx="4" fill="#D9B48D"/><text x="379.5" y="207" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#D9B48D" text-anchor="end">−7%</text><text x="180" y="237" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Mato Grosso do Sul</text><rect x="387.5" y="222" width="36.1" height="21" rx="4" fill="#D9B48D"/><text x="379.5" y="237" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#D9B48D" text-anchor="end">−7%</text><text x="180" y="267" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Bahia</text><rect x="339.3" y="252" width="84.2" height="21" rx="4" fill="#A17149"/><text x="331.3" y="267" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149" text-anchor="end">−15%</text><text x="180" y="297" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Tocantins</text><rect x="336.0" y="282" width="87.5" height="21" rx="4" fill="#A17149"/><text x="328.0" y="297" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149" text-anchor="end">−16%</text><text x="180" y="327" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Maranhão</text><rect x="266.0" y="312" width="157.5" height="21" rx="4" fill="#A17149"/><text x="258.0" y="327" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149" text-anchor="end">−29%</text><text x="180" y="357" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Piauí</text><rect x="227.7" y="342" width="195.8" height="21" rx="4" fill="#A17149"/><text x="219.7" y="357" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149" text-anchor="end">−36%</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab (série histórica por UF) e NOAA (RONI de dezembro a fevereiro) · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">Mato Grosso, maior produtor, sentiu pouco na média (−4,6%), mas ficou 14% abaixo da tendência em 2015/16, ano de chuva irregular no início do plantio. O Paraná, apesar de estar no Sul, ficou −6,6%: o excesso de chuva no norte e no oeste paranaense também atrapalha, com doenças e dificuldade de colheita.</p>
+  <p class="abp-p">No agregado nacional, o efeito médio foi de apenas <b>−0,9%</b>. Os ganhos do Sul compensam as perdas do Norte e do Nordeste, e é por isso que o El Niño raramente aparece como quebra na safra brasileira total, mesmo quando muda bastante o resultado de cada região.</p>
+
+  <div class="abp-cta-box">
+    <h3>El Niño, chuva e produtividade em tempo real</h3>
+    <p>Índices da NOAA, chuva observada e prevista em 16 polos produtores e o estudo de produtividade por estado e cultura.</p>
+    <a href="/dashboards/clima-el-nino/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="milho-trigo">Milho e trigo</h2>
+  <p class="abp-p">O <b>milho de verão</b> repete o padrão da soja, com ganho expressivo no Rio Grande do Sul (+27% em El Niño forte) e perdas no Piauí (−54%) e no Maranhão (−13%). Na <b>2ª safra</b>, o Paraná se destaca positivamente (+21%), favorecido pela umidade que se estende até o outono, enquanto Goiás (−13%), Minas Gerais (−14%) e Bahia (−18%) perderam. No Brasil, a safrinha ficou 5% acima da tendência nessas safras.</p>
+  <p class="abp-p">O <b>trigo gaúcho</b> é a exceção no Sul. Como a colheita acontece na primavera, o excesso de chuva chega na pior hora. Nas safras de El Niño forte, a produtividade do trigo gaúcho ficou −13% frente à tendência. O dado conversa com a safra de 2026: a Conab cortou a estimativa de trigo para 5,26 milhões de toneladas em novembro, com perdas no Paraná e no Rio Grande do Sul.</p>
+  <table class="abp-table">
+    <thead><tr><th>Estado</th><th>Soja</th><th>Milho 1ª safra</th><th>Milho 2ª safra</th><th>Trigo</th></tr></thead>
+    <tbody>
+      <tr><td>Rio Grande do Sul</td><td>+22%</td><td>+27%</td><td>-</td><td>−13%</td></tr>
+      <tr><td>Santa Catarina</td><td>+6%</td><td>+7%</td><td>-</td><td>+6%</td></tr>
+      <tr><td>Paraná</td><td>−7%</td><td>0%</td><td>+21%</td><td>+8%</td></tr>
+      <tr><td>Mato Grosso do Sul</td><td>−7%</td><td>−12%</td><td>+7%</td><td>−18%</td></tr>
+      <tr><td>Mato Grosso</td><td>−5%</td><td>0%</td><td>−1%</td><td>-</td></tr>
+      <tr><td>Goiás</td><td>0%</td><td>−1%</td><td>−13%</td><td>-</td></tr>
+      <tr><td>Minas Gerais</td><td>+3%</td><td>+2%</td><td>−14%</td><td>−2%</td></tr>
+      <tr><td>Bahia</td><td>−15%</td><td>0%</td><td>−18%</td><td>-</td></tr>
+      <tr><td>Tocantins</td><td>−16%</td><td>−8%</td><td>-</td><td>-</td></tr>
+      <tr><td>Maranhão</td><td>−29%</td><td>−13%</td><td>-</td><td>-</td></tr>
+      <tr><td>Piauí</td><td>−36%</td><td>−54%</td><td>-</td><td>-</td></tr>
+      <tr><td>Brasil</td><td>−1%</td><td>−1%</td><td>+5%</td><td>0%</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">A tabela resume o desvio médio da produtividade em relação à tendência nas safras de El Niño forte, por cultura e estado. Traço indica estado com menos de duas safras de El Niño forte na série da Conab para aquela cultura.</p>
+
+  <h2 class="abp-h2" id="agora">Como está a chuva nesta safra</h2>
+  <p class="abp-p">Até agora, a safra 2026/27 segue o roteiro do El Niño no Sul. Desde 1º de setembro, choveu 172% da normal em Londrina, 171% em Ponta Grossa, 162% em Cascavel e 148% em Chapecó. No Rio Grande do Sul, Cruz Alta acumula 128% e Santa Rosa 109%.</p>
+  <p class="abp-p">O ponto de atenção está no Centro-Oeste e no Tocantins. Sorriso (MT) recebeu só 66% da normal desde setembro, Porto Nacional (TO) 71% e Primavera do Leste (MT) 80%. No Matopiba, os percentuais altos de Balsas e Uruçuí refletem chuvas pontuais sobre uma normal muito baixa no fim da estação seca, e não uma temporada regular. A previsão do modelo europeu para os próximos 15 dias indica volumes acima da normal na maior parte dos polos, o que pode aliviar o atraso no Mato Grosso.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Chuva desde 1º de setembro, em % da normal</div>
+    <div class="abp-chart-sub">Polos produtores, até 12/11/2026; normal = média 1991-2020</div>
+    <svg viewBox="0 0 640 506" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Chuva desde setembro em percentual da normal"><line x1="389.6" x2="389.6" y1="6" y2="500" stroke="#999" stroke-dasharray="3 3"/><text x="180" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Uruçuí (PI)</text><rect x="389.6" y="12" width="148.6" height="21" rx="4" fill="#2F6FA8"/><text x="546.2" y="27" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8" text-anchor="start">174%</text><text x="180" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Londrina (PR)</text><rect x="389.6" y="42" width="143.7" height="21" rx="4" fill="#2F6FA8"/><text x="541.4" y="57" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8" text-anchor="start">172%</text><text x="180" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Ponta Grossa (PR)</text><rect x="389.6" y="72" width="142.0" height="21" rx="4" fill="#2F6FA8"/><text x="539.6" y="87" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8" text-anchor="start">171%</text><text x="180" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Cascavel (PR)</text><rect x="389.6" y="102" width="124.7" height="21" rx="4" fill="#2F6FA8"/><text x="522.4" y="117" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8" text-anchor="start">162%</text><text x="180" y="147" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Balsas (MA)</text><rect x="389.6" y="132" width="119.4" height="21" rx="4" fill="#2F6FA8"/><text x="517.1" y="147" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8" text-anchor="start">160%</text><text x="180" y="177" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Dourados (MS)</text><rect x="389.6" y="162" width="104.3" height="21" rx="4" fill="#2F6FA8"/><text x="502.0" y="177" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8" text-anchor="start">152%</text><text x="180" y="207" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Chapecó (SC)</text><rect x="389.6" y="192" width="96.8" height="21" rx="4" fill="#2F6FA8"/><text x="494.4" y="207" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8" text-anchor="start">148%</text><text x="180" y="237" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Cruz Alta (RS)</text><rect x="389.6" y="222" width="55.7" height="21" rx="4" fill="#8CBADE"/><text x="453.3" y="237" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#8CBADE" text-anchor="start">128%</text><text x="180" y="267" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Passo Fundo (RS)</text><rect x="389.6" y="252" width="36.0" height="21" rx="4" fill="#8CBADE"/><text x="433.6" y="267" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#8CBADE" text-anchor="start">118%</text><text x="180" y="297" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Santa Rosa (RS)</text><rect x="389.6" y="282" width="17.8" height="21" rx="4" fill="#8CBADE"/><text x="415.5" y="297" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#8CBADE" text-anchor="start">109%</text><text x="180" y="327" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Unaí (MG)</text><rect x="389.6" y="312" width="17.0" height="21" rx="4" fill="#8CBADE"/><text x="414.6" y="327" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#8CBADE" text-anchor="start">109%</text><text x="180" y="357" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Luís Eduardo Magalhães (BA)</text><rect x="389.6" y="342" width="11.2" height="21" rx="4" fill="#8CBADE"/><text x="408.9" y="357" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#8CBADE" text-anchor="start">106%</text><text x="180" y="387" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Rio Verde (GO)</text><rect x="373.8" y="372" width="15.9" height="21" rx="4" fill="#D9B48D"/><text x="365.8" y="387" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#D9B48D" text-anchor="end">92%</text><text x="180" y="417" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Primavera do Leste (MT)</text><rect x="349.9" y="402" width="39.8" height="21" rx="4" fill="#D9B48D"/><text x="341.9" y="417" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#D9B48D" text-anchor="end">80%</text><text x="180" y="447" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Porto Nacional (TO)</text><rect x="332.1" y="432" width="57.6" height="21" rx="4" fill="#A17149"/><text x="324.1" y="447" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149" text-anchor="end">71%</text><text x="180" y="477" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Sorriso (MT)</text><rect x="320.8" y="462" width="68.8" height="21" rx="4" fill="#A17149"/><text x="312.8" y="477" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149" text-anchor="end">66%</text></svg>
+    <div class="abp-chart-caption">Fonte: Copernicus ERA5 (ECMWF), via Open-Meteo · Elaboração: AgroBasis</div>
+  </div>
+
+  <h2 class="abp-h2" id="mercado">O que isso significa para o mercado</h2>
+  <h3 class="abp-h3">Um risco regional, não nacional</h3>
+  <p class="abp-p">A história mostra que o El Niño forte não costuma derrubar a safra brasileira como um todo, mas redistribui a produção. Para o mercado, isso significa prêmios e basis diferentes por região: mais oferta no Sul e menos no Norte e no Nordeste, onde as tradings dependem do grão local para abastecer os portos do Arco Norte.</p>
+  <h3 class="abp-h3">Safrinha e trigo no radar</h3>
+  <p class="abp-p">No milho, o plantio adiantado da soja no Paraná e a umidade do El Niño favorecem a safrinha paranaense, mas o atraso das chuvas em Mato Grosso pode encurtar a janela de plantio do maior produtor de milho 2ª safra. No trigo, a safra de 2026 já sofreu com o excesso de chuva, e o país deve depender mais da importação em 2027.</p>
+  <h3 class="abp-h3">Acompanhar, não antecipar</h3>
+  <p class="abp-p">Cada El Niño é diferente, e o Atlântico, a distribuição das chuvas e o manejo pesam tanto quanto a intensidade no Pacífico. Com poucas safras de El Niño forte na série, as médias históricas devem ser lidas como tendência. O monitoramento da chuva e da previsão em cada região, semana a semana, é o que vai mostrar se 2026/27 segue o roteiro.</p>
+
+  <div class="abp-pullquote">Em resumo: o El Niño de 2026/27 é um dos mais fortes já medidos. A história aponta chuva e produtividade acima da tendência no Sul, risco no Matopiba e efeito pequeno no total do Brasil, com exceção do trigo gaúcho.</div>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item">
+    <summary>O El Niño de 2026/27 é forte? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Sim. A NOAA mantém o alerta de El Niño e prevê um evento forte a muito forte até o trimestre de janeiro a março de 2027. O índice oficial de intensidade (RONI) chegou a +1,97 °C em agosto a outubro, e a anomalia semanal do Niño 3.4 está em +3,3 °C, acima do pico dos El Niños de 1997/98 (+2,3 °C) e 2015/16 (+3,0 °C).</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Como o El Niño afeta a soja no Brasil? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Ele tende a dividir o país. Nas três safras de El Niño forte desde 1990, a produtividade da soja ficou em média +22% acima da tendência no Rio Grande do Sul e −29% no Maranhão, −36% no Piauí e −15% na Bahia. No Brasil como um todo, o efeito médio foi de −0,9%, porque as perdas e os ganhos regionais se compensam.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O El Niño é bom para o Rio Grande do Sul? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Para a soja e o milho de verão, historicamente sim: chove mais no Sul, e as safras gaúchas de El Niño forte ficaram acima da tendência. Para o trigo, o efeito é o contrário: o excesso de chuva na primavera, perto da colheita, derrubou a produtividade gaúcha em média 13% nessas safras. O excesso de chuva também traz risco de doenças, atraso de plantio e enchentes.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Quando o El Niño de 2026/27 deve terminar? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Pelas probabilidades da NOAA, o El Niño segue dominante até o início de 2027, e a neutralidade passa a ser o cenário mais provável a partir de abril a junho (61% de chance).</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Como foi feito o estudo de produtividade? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Com a série histórica da Conab por estado, desde a safra 1990/91. Para cada estado e cultura, calculamos a tendência de produtividade, que cresce com a tecnologia, e quanto cada safra ficou acima ou abaixo dela. Depois agrupamos as safras pela fase do ENSO no verão, medida pelo RONI de dezembro a fevereiro. Para o trigo, vale a fase de agosto a outubro do ano da colheita. Os resultados estão no painel Clima e El Niño do AgroBasis.</p>
+  </details>
+
+  <div class="abp-sources">
+    <b>Fontes consultadas para este artigo:</b> NOAA Climate Prediction Center (ENSO Diagnostic Discussion de 12/11/2026, RONI, Niño 3.4 semanal e probabilidades oficiais); Copernicus ERA5 e ECMWF IFS, via Open-Meteo; Conab, série histórica de área, produção e produtividade por UF e 2º levantamento da safra 2026/27.
+  </div>
+
+  <div class="abp-author-box">
+    <div class="abp-author-icon"><i data-lucide="pen-line"></i></div>
+    <div class="abp-author-text"><b>Equipe AgroBasis</b><br>Inteligência de mercado para o agronegócio: dashboards, análises e conteúdo educacional com dados oficiais.</div>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fonte dos dados: NOAA, Copernicus/ECMWF e Conab. Conteúdo referencial para acompanhamento de mercado, elaborado pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda.
+  </div>
+
+</div>
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); } else { window.addEventListener('load', () => lucide.createIcons()); }
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "El Niño 2026/27: o que a história diz para a safra de soja, milho e trigo",
+  "description": "El Niño forte em curso. Nas safras de El Niño forte, a soja do RS ficou 22% acima da tendência e a do MA, 29% abaixo. Estudo por estado e chuva atual.",
+  "author": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "datePublished": "2026-11-13",
+  "dateModified": "2026-11-13",
+  "mainEntityOfPage": "https://agrobasis.com.br/analises/el-nino-2026-27-safra-soja-milho-trigo/"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "O El Niño de 2026/27 é forte?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sim. A NOAA mantém o alerta de El Niño e prevê um evento forte a muito forte até o trimestre de janeiro a março de 2027. O índice oficial de intensidade (RONI) chegou a +1,97 °C em agosto a outubro, e a anomalia semanal do Niño 3.4 está em +3,3 °C, acima do pico dos El Niños de 1997/98 (+2,3 °C) e 2015/16 (+3,0 °C)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como o El Niño afeta a soja no Brasil?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ele tende a dividir o país. Nas três safras de El Niño forte desde 1990, a produtividade da soja ficou em média +22% acima da tendência no Rio Grande do Sul e −29% no Maranhão, −36% no Piauí e −15% na Bahia. No Brasil como um todo, o efeito médio foi de −0,9%, porque as perdas e os ganhos regionais se compensam."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O El Niño é bom para o Rio Grande do Sul?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Para a soja e o milho de verão, historicamente sim: chove mais no Sul, e as safras gaúchas de El Niño forte ficaram acima da tendência. Para o trigo, o efeito é o contrário: o excesso de chuva na primavera, perto da colheita, derrubou a produtividade gaúcha em média 13% nessas safras. O excesso de chuva também traz risco de doenças, atraso de plantio e enchentes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Quando o El Niño de 2026/27 deve terminar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pelas probabilidades da NOAA, o El Niño segue dominante até o início de 2027, e a neutralidade passa a ser o cenário mais provável a partir de abril a junho (61% de chance)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como foi feito o estudo de produtividade?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Com a série histórica da Conab por estado, desde a safra 1990/91. Para cada estado e cultura, calculamos a tendência de produtividade, que cresce com a tecnologia, e quanto cada safra ficou acima ou abaixo dela. Depois agrupamos as safras pela fase do ENSO no verão, medida pelo RONI de dezembro a fevereiro. Para o trigo, vale a fase de agosto a outubro do ano da colheita. Os resultados estão no painel Clima e El Niño do AgroBasis."
+      }
+    }
+  ]
+}
+</script>
