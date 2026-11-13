@@ -13,19 +13,15 @@ jobs:
         run: |
           mkdir -p out && cd out
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-          curl -sS -m 40 "https://apisidra.ibge.gov.br/values/t/254/n1/all/v/all/p/last%201" -o sidra254.json -w "sidra254 %{http_code} %{size_download}\n" >> status.txt || echo "sidra falhou" >> status.txt
-          curl -sS -m 40 "https://servicodados.ibge.gov.br/api/v3/agregados/254/metadados" -o meta254.json -w "meta254 %{http_code}\n" >> status.txt || echo "servicodados falhou" >> status.txt
           P=https://portaldeinformacoes.conab.gov.br
-          for f in Armazenagem.txt ArmazenagemUF.txt CapacidadeEstatica.txt SicarmUnidades.txt UnidadesArmazenadoras.txt armazenagem.txt; do
-            curl -sSL -A "$UA" -r 0-3000 -o "c_$f" -w "$f %{http_code} %{size_download}\n" "$P/downloads/arquivos/$f" >> status.txt || true
-          done
-          curl -sSL -A "$UA" "$P/armazenagem.html" -o portal_armaz.html -w "portal_armaz %{http_code} %{size_download}\n" >> status.txt || true
-          curl -sSL -A "$UA" "$P/" -o portal_home.html -w "portal_home %{http_code} %{size_download}\n" >> status.txt || true
-          grep -oE '[A-Za-z0-9_/.-]*rmaz[A-Za-z0-9_/.-]*' portal_home.html portal_armaz.html | sort -u | head -30 >> status.txt || true
-          grep -oE 'downloads/arquivos/[A-Za-z0-9_.-]+' portal_home.html portal_armaz.html | sort -u | head -60 >> status.txt || true
-          curl -sSL -A "$UA" "https://www.gov.br/conab/pt-br/atuacao/armazenagem" -o govbr.html -w "govbr %{http_code} %{size_download}\n" >> status.txt || true
-          grep -oE 'href="[^"]*(sicarm|armazen|capacidade)[^"]*"' govbr.html | sort -u | head -30 >> status.txt || true
-          cat status.txt
+          curl -sSL -A "$UA" "$P/main-YAMX5B7E.js" -o main.js -w "main %{http_code} %{size_download}\n" >> status.txt || true
+          grep -oE 'chunk-[A-Z0-9]+\.js' main.js | sort -u > chunks.txt || true
+          for c in $(cat chunks.txt); do curl -sSL -A "$UA" "$P/$c" >> todos.js; done
+          cat main.js >> todos.js
+          grep -oE '[A-Za-z0-9_]+\.(txt|csv|xlsx|zip)' todos.js | sort -u > arquivos.txt || true
+          grep -oiE '.{60}armazen.{80}' todos.js | head -40 > armaz_ctx.txt || true
+          for t in 255 256 257 1749 6952 6954; do curl -sS -m 40 "https://apisidra.ibge.gov.br/values/t/$t/n1/all/v/all/p/last%201" -o "sidra$t.json" -w "sidra$t %{http_code} %{size_download}\n" >> status.txt || true; done
+          cat status.txt arquivos.txt
       - name: publicar
         run: |
           cd out && git init -q && git checkout -q -b sonda-armaz
