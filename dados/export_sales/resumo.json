@@ -1,5 +1,5 @@
 {
- "atualizado_em": "13/11/2026 10:41",
+ "atualizado_em": "13/11/2026 10:42",
  "produtos": {
   "soja": {
    "produto": "Soja em grão",
@@ -47,10 +47,5 @@
    "projecao_usda": 181.0
   }
  },
- "pendentes": [
-  "milho 2022",
-  "trigo 2022",
-  "farelo 2022",
-  "oleo 2022"
- ]
+ "pendentes": []
 }
