@@ -1,0 +1,40 @@
+name: Exporta safra Conab por estado (dashboard HTML)
+
+on:
+  schedule:
+    # A Conab divulga o levantamento por volta das 9h de Brasília, em geral na 2ª quinta-feira do mês.
+    # Duas checagens por dia útil; sem levantamento novo, nada muda no repositório.
+    - cron: '52 12 * * 1-5'
+    - cron: '52 16 * * 1-5'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_conab.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: commit-dados
+  cancel-in-progress: false
+
+jobs:
+  conab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests openpyxl
+      - name: Baixar e montar
+        run: python exporta_conab.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/conab
+          git diff --staged --quiet || git commit -m "Safra Conab por estado"
+          git pull --rebase origin main
+          git push

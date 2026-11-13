@@ -1,0 +1,100 @@
+{
+ "safra": "2026/27",
+ "levantamento": {
+  "n": 1,
+  "mes": 10,
+  "ano": 2026
+ },
+ "produtos": {
+  "graos": {
+   "produto": "Total de grãos",
+   "safra": "2026/27",
+   "producao": 367140.1,
+   "producao_ant": 362236.4,
+   "area": 85405.8,
+   "prod": 4299.0,
+   "producao_lev_ant": null
+  },
+  "soja": {
+   "produto": "Soja",
+   "safra": "2026/27",
+   "producao": 181616.6,
+   "producao_ant": 180406.6,
+   "area": 49305.8,
+   "prod": 3683.0,
+   "producao_lev_ant": null
+  },
+  "milho": {
+   "produto": "Milho total",
+   "safra": "2026/27",
+   "producao": 148015.9,
+   "producao_ant": 144499.0,
+   "area": 23704.7,
+   "prod": 6244.0,
+   "producao_lev_ant": null
+  },
+  "milho1": {
+   "produto": "Milho 1ª safra",
+   "safra": "2026/27",
+   "producao": 32102.5,
+   "producao_ant": 29487.8,
+   "area": 4540.2,
+   "prod": 7071.0,
+   "producao_lev_ant": null
+  },
+  "milho2": {
+   "produto": "Milho 2ª safra",
+   "safra": "2026/27",
+   "producao": 113254.5,
+   "producao_ant": 112769.0,
+   "area": 18486.6,
+   "prod": 6126.0,
+   "producao_lev_ant": null
+  },
+  "trigo": {
+   "produto": "Trigo",
+   "safra": "2026",
+   "producao": 5734.9,
+   "producao_ant": 7873.4,
+   "area": 1928.8,
+   "prod": 2973.0,
+   "producao_lev_ant": null
+  },
+  "algodao": {
+   "produto": "Algodão em pluma",
+   "safra": "2026/27",
+   "producao": 4157.5,
+   "producao_ant": 4145.3,
+   "area": 2093.0,
+   "prod": 1986.0,
+   "producao_lev_ant": null
+  },
+  "arroz": {
+   "produto": "Arroz",
+   "safra": "2026/27",
+   "producao": 10752.1,
+   "producao_ant": 11076.2,
+   "area": 1529.3,
+   "prod": 7031.0,
+   "producao_lev_ant": null
+  },
+  "feijao": {
+   "produto": "Feijão total",
+   "safra": "2026/27",
+   "producao": 2930.2,
+   "producao_ant": 2950.0,
+   "area": 2546.1,
+   "prod": 1151.0,
+   "producao_lev_ant": null
+  },
+  "sorgo": {
+   "produto": "Sorgo",
+   "safra": "2026/27",
+   "producao": 8031.0,
+   "producao_ant": 7368.7,
+   "area": 2215.2,
+   "prod": 3625.0,
+   "producao_lev_ant": null
+  }
+ }
+}

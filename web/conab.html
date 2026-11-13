@@ -1,0 +1,493 @@
+<!-- AgroBasis · Safra Brasil (Conab): área, produtividade e produção por estado · dashboard em HTML
+     Dados: dados/conab/*.json no GitHub, gerados por exporta_conab.py a cada levantamento da Conab. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abc{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--mr2:#8A6A4F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abc *{box-sizing:border-box}
+.abc-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abc-bc a{color:var(--mt);text-decoration:none}.abc-bc a:hover{color:var(--vd)}
+.abc-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abc-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 20px;margin-bottom:14px}
+.abc-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abc-meta{font-size:13px;color:var(--mt)}
+.abc-prox{font-size:12.5px;color:var(--mt);text-align:right;line-height:1.5}
+.abc-prox b{color:var(--tx);font-weight:600}
+/* termômetro: um cartão por commodity */
+.abc-board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.abc-c{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:11px 12px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .15s,box-shadow .15s;min-width:0}
+.abc-c:hover{border-color:#cfd9d1}
+.abc-c[aria-pressed=true]{border-color:var(--vd);box-shadow:0 0 0 1px var(--vd) inset}
+.abc-c .n{font-size:12px;font-weight:600;color:var(--mt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-c .v{font-family:Sora,sans-serif;font-weight:700;font-size:18px;margin-top:4px;line-height:1.1;white-space:nowrap}
+.abc-c .d{font-size:11.5px;font-weight:600;margin-top:3px;white-space:nowrap}
+.abc-c .g{position:relative;height:5px;border-radius:3px;margin-top:9px;background:linear-gradient(90deg,#e9d3bd,#eef1ef 50%,#c9dcb3)}
+.abc-c .g i{position:absolute;top:-3px;width:3px;height:11px;border-radius:2px;background:var(--tx);transform:translateX(-50%)}
+.abc-c .p{display:flex;justify-content:space-between;font-size:10.5px;color:#98a29a;margin-top:4px}
+.abc-c svg{display:block;width:100%;height:26px;margin-top:6px}
+.pos{color:var(--vd)}.neg{color:var(--mr2)}
+/* frase-resumo */
+.abc-lead{display:flex;gap:10px;align-items:flex-start;background:#f6f8f4;border:1px solid var(--ln);border-radius:12px;padding:11px 14px;font-size:14px;line-height:1.5;margin-bottom:14px}
+.abc-lead svg{flex:none;margin-top:3px;color:var(--vc)}
+.abc-lead b{font-weight:600}
+.abc-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.abc-seg::-webkit-scrollbar{display:none}
+.abc-seg button{flex:none;font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.abc-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abc-cats{margin-bottom:12px}
+.abc-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abc-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abc-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-k b{display:block;font-family:Sora,sans-serif;font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+.abc-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abc-k em{display:block;font-style:normal;font-size:12.5px;color:var(--mt);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abc-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.abc-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:0}
+.abc-ch h3 small{font-size:12px;font-weight:500;color:var(--mt);margin-left:6px}
+.abc-tools{display:flex;gap:6px;align-items:center;flex:none}
+.abc-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abc-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abc-chart{width:100%;height:520px}
+.abc-chart.md{height:380px}
+.abc-chart.sm{height:340px}
+.abc-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abc-nota{margin:0 4px 8px;font-size:12px;line-height:1.5;color:var(--mt)}
+.abc-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abc-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abc-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abc-faq details{border-bottom:1px solid var(--ln)}
+.abc-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abc-faq summary::-webkit-details-marker{display:none}
+.abc-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abc-faq details[open] summary:after{content:"−"}
+.abc-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abc-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abc-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abc-mais a:hover{border-color:var(--vc)}
+.abc-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:1020px){.abc-board{display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.abc-board::-webkit-scrollbar{display:none}.abc-c{flex:0 0 150px}}
+@media (max-width:820px){.abc-row{grid-template-columns:1fr}.abc-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .abc-tit{font-size:24px}.abc-prox{text-align:left}
+  .abc-k{padding:12px}.abc-k b{font-size:21px}
+  .abc-card{padding:12px 10px 4px;border-radius:14px}
+  .abc-chart{height:440px}.abc-chart.md{height:330px}.abc-chart.sm{height:310px}
+  .abc-ch{flex-wrap:wrap}.abc-ch .abc-tools{order:3;width:100%}.abc-ch .abc-tools .abc-seg{flex:1;display:flex}.abc-ch .abc-tools .abc-seg button{flex:1}
+  .abc-k b{font-size:19px;white-space:nowrap}
+  .abc-lead{font-size:13.5px}
+}
+.abc-board{grid-template-columns:repeat(5,minmax(0,1fr))}
+.cn-mapa{grid-template-columns:1.12fr 1fr}
+.cn-scroll{overflow-x:auto;margin:0 -4px 8px;-webkit-overflow-scrolling:touch}
+.cn-t{width:100%;border-collapse:collapse;font-size:13px;min-width:860px}
+.cn-t th{font-weight:600;color:var(--mt);font-size:11.5px;padding:7px 8px;text-align:right;border-bottom:1px solid var(--ln);white-space:nowrap}
+.cn-t thead tr:first-child th{color:var(--tx);font-size:12px;text-align:center;border-bottom:0}
+.cn-t td{padding:7px 8px;text-align:right;border-bottom:1px solid #F0F3F0;white-space:nowrap}
+.cn-t .l{text-align:left}
+.cn-t tr.uf{cursor:pointer}.cn-t tr.uf:hover td{background:#F7FAF5}
+.cn-t tr.sel td{background:#FFF6DF}
+.cn-t tr.reg td{background:#F6F8F4;font-weight:600}
+.cn-t tr.tot td{background:#EEF4E8;font-weight:700;border-top:1px solid #cfd9d1}
+.cn-t .cn-n{color:var(--mt);font-size:12px;margin-left:4px}
+.cn-t td:nth-child(4),.cn-t td:nth-child(7){border-right:1px solid #F0F3F0}
+@media (max-width:820px){.cn-mapa{grid-template-columns:1fr}}
+@media (max-width:560px){#abcG0{height:430px}}
+</style>
+
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Safra brasileira de grãos · Conab</h1>
+      <div class="abc-tit" id="abcTit">Carregando</div>
+      <div class="abc-meta" id="abcMeta">&nbsp;</div>
+    </div>
+    <div class="abc-prox" id="abcProx"></div>
+  </div>
+
+  <div class="abc-board" id="abcBoard" aria-label="Produção estimada de cada cultura"></div>
+
+  <p class="abc-lead" id="abcLead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>&nbsp;</span></p>
+
+  <div class="abc-kpis">
+    <div class="abc-k"><span>Produção</span><b id="kP">-</b><em id="kPs">&nbsp;</em></div>
+    <div class="abc-k"><span>Área plantada</span><b id="kA">-</b><em id="kAs">&nbsp;</em></div>
+    <div class="abc-k"><span>Produtividade</span><b id="kY">-</b><em id="kYs">&nbsp;</em></div>
+    <div class="abc-k"><span>Revisão no mês</span><b id="kR">-</b><em id="kRs">&nbsp;</em></div>
+  </div>
+
+  <div class="abc-row cn-mapa">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Por estado <small id="abcH0s"></small></h3>
+        <div class="abc-tools"><div class="abc-seg" id="abcMet"><button data-m="producao" aria-pressed="true">Produção</button><button data-m="var">Variação</button><button data-m="prod">Produtividade</button><button data-m="area">Área</button></div>
+        <button class="abc-dl" data-dl="0" aria-label="Baixar mapa em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+      <div class="abc-chart" id="abcG0"></div>
+      <p class="abc-nota">Clique num estado para ver a série histórica e a tabela dele.</p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3 id="abcH1">Ranking dos estados</h3><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart" id="abcG1"></div>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH2">Série histórica</h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcLocal"><button data-u="BR" aria-pressed="true">Brasil</button></div>
+      <button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart md" id="abcG2"></div>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Como as estimativas mudaram <small>produção Brasil, a cada levantamento</small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart sm" id="abcG3"></div>
+      <p class="abc-nota" id="abcN3"></p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Regiões <small id="abcH4s"></small></h3><button class="abc-dl" data-dl="4" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart sm" id="abcG4"></div>
+    </div>
+  </div>
+
+  <div class="abc-card cn-tab">
+    <div class="abc-ch"><h3>Todos os estados <small id="abcH5s"></small></h3>
+      <button class="abc-dl cn-csv" id="abcCsv" aria-label="Baixar tabela em CSV"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="cn-scroll"><table class="cn-t" id="abcTab"></table></div>
+  </div>
+
+  <div class="abc-foot"><span>Fonte: Conab, Acompanhamento da Safra Brasileira de Grãos e séries históricas · Elaboração: AgroBasis</span><span id="abcAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>O que é o levantamento de safra da Conab?</summary><p>É a estimativa oficial da safra brasileira de grãos, publicada todo mês pela Companhia Nacional de Abastecimento. Cada ano-safra tem 12 levantamentos: o primeiro sai em outubro, antes do plantio da soja, e o último em setembro do ano seguinte, com a colheita encerrada. Os números são por estado e por cultura.</p></details><details><summary>Como a Conab faz a estimativa?</summary><p>Combina pesquisa de campo com produtores, cooperativas e agentes do setor em todos os estados, imagens de satélite, modelos agrometeorológicos e estatísticos. No começo da safra a produtividade é projetada por tendência e clima; ela vai sendo ajustada conforme o plantio, o desenvolvimento das lavouras e a colheita avançam.</p></details><details><summary>Por que as estimativas mudam ao longo da safra?</summary><p>Porque o clima e o andamento das lavouras só se confirmam com o tempo. O gráfico de revisões mostra como a produção estimada evoluiu de um levantamento para o outro nas últimas safras, o que ajuda a avaliar quanto a estimativa atual ainda pode mudar.</p></details><details><summary>O que são milho 1ª e 2ª safra?</summary><p>O milho de 1ª safra (verão) é plantado entre setembro e dezembro, no Sul, Sudeste e parte do Nordeste. O de 2ª safra, a safrinha, é semeado logo após a colheita da soja, entre janeiro e março, principalmente em Mato Grosso, Paraná, Goiás e Mato Grosso do Sul, e responde pela maior parte do milho brasileiro.</p></details><details><summary>Como converter produtividade em sacas por hectare?</summary><p>Divida a produtividade em kg/ha pelo peso da saca: 60 kg para soja, milho, trigo, sorgo e feijão, e 50 kg para arroz. Por exemplo, 3.600 kg/ha de soja equivalem a 60 sacas por hectare.</p></details><details><summary>Quando o painel é atualizado?</summary><p>Sempre que a Conab publica um novo levantamento, em geral na segunda quinta-feira de cada mês, por volta das 9h. O painel verifica duas vezes por dia útil e atualiza sozinho.</p></details>
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/usda-complexo-soja/">USDA Soja</a><a href="/dashboards/usda-milho/">USDA Milho</a><a href="/dashboards/exportacao-e-importacao-de-graos/">Exportações do Brasil</a><a href="/dashboards/basis-soja-brasil/">Basis Soja</a><a href="/dashboards/condicao-de-safra-eua/">Safra dos EUA</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+</div>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "O que é o levantamento de safra da Conab?", "acceptedAnswer": {"@type": "Answer", "text": "É a estimativa oficial da safra brasileira de grãos, publicada todo mês pela Companhia Nacional de Abastecimento. Cada ano-safra tem 12 levantamentos: o primeiro sai em outubro, antes do plantio da soja, e o último em setembro do ano seguinte, com a colheita encerrada. Os números são por estado e por cultura."}}, {"@type": "Question", "name": "Como a Conab faz a estimativa?", "acceptedAnswer": {"@type": "Answer", "text": "Combina pesquisa de campo com produtores, cooperativas e agentes do setor em todos os estados, imagens de satélite, modelos agrometeorológicos e estatísticos. No começo da safra a produtividade é projetada por tendência e clima; ela vai sendo ajustada conforme o plantio, o desenvolvimento das lavouras e a colheita avançam."}}, {"@type": "Question", "name": "Por que as estimativas mudam ao longo da safra?", "acceptedAnswer": {"@type": "Answer", "text": "Porque o clima e o andamento das lavouras só se confirmam com o tempo. O gráfico de revisões mostra como a produção estimada evoluiu de um levantamento para o outro nas últimas safras, o que ajuda a avaliar quanto a estimativa atual ainda pode mudar."}}, {"@type": "Question", "name": "O que são milho 1ª e 2ª safra?", "acceptedAnswer": {"@type": "Answer", "text": "O milho de 1ª safra (verão) é plantado entre setembro e dezembro, no Sul, Sudeste e parte do Nordeste. O de 2ª safra, a safrinha, é semeado logo após a colheita da soja, entre janeiro e março, principalmente em Mato Grosso, Paraná, Goiás e Mato Grosso do Sul, e responde pela maior parte do milho brasileiro."}}, {"@type": "Question", "name": "Como converter produtividade em sacas por hectare?", "acceptedAnswer": {"@type": "Answer", "text": "Divida a produtividade em kg/ha pelo peso da saca: 60 kg para soja, milho, trigo, sorgo e feijão, e 50 kg para arroz. Por exemplo, 3.600 kg/ha de soja equivalem a 60 sacas por hectare."}}, {"@type": "Question", "name": "Quando o painel é atualizado?", "acceptedAnswer": {"@type": "Answer", "text": "Sempre que a Conab publica um novo levantamento, em geral na segunda quinta-feira de cada mês, por volta das 9h. O painel verifica duas vezes por dia útil e atualiza sozinho."}}]}, {"@type": "WebApplication", "name": "Safra Brasil por Estado (Conab) · AgroBasis", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/dashboards/safra-brasil-conab/", "description": "Estimativas da Conab para a safra brasileira de grãos por estado: soja, milho 1ª e 2ª safra, trigo, algodão, arroz, feijão e sorgo, com mapa, ranking, série histórica e revisões de cada levantamento.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", mr2: "#8A6A4F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)" };
+  var ORDEM = ["graos", "soja", "milho", "milho1", "milho2", "trigo", "algodao", "arroz", "feijao", "sorgo"];
+  var CURTO = { graos: "Grãos (total)", soja: "Soja", milho: "Milho total", milho1: "Milho 1ª safra", milho2: "Milho 2ª safra", trigo: "Trigo", algodao: "Algodão pluma", arroz: "Arroz", feijao: "Feijão", sorgo: "Sorgo" };
+  var SACA = { soja: 60, milho: 60, milho1: 60, milho2: 60, trigo: 60, sorgo: 60, arroz: 50, feijao: 60 };   // kg por saca
+  var MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var MESES_L = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  var NOME_UF = { AC: "Acre", AL: "Alagoas", AM: "Amazonas", AP: "Amapá", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MG: "Minas Gerais", MS: "Mato Grosso do Sul", MT: "Mato Grosso", PA: "Pará", PB: "Paraíba", PE: "Pernambuco", PI: "Piauí", PR: "Paraná", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RO: "Rondônia", RR: "Roraima", RS: "Rio Grande do Sul", SC: "Santa Catarina", SE: "Sergipe", SP: "São Paulo", TO: "Tocantins" };
+  var REGIOES = [["NORTE", "Norte", ["RR", "RO", "AC", "AM", "AP", "PA", "TO"]], ["NORDESTE", "Nordeste", ["MA", "PI", "CE", "RN", "PB", "PE", "AL", "SE", "BA"]],
+    ["CENTRO-OESTE", "Centro-Oeste", ["MT", "MS", "GO", "DF"]], ["SUDESTE", "Sudeste", ["MG", "ES", "RJ", "SP"]], ["SUL", "Sul", ["PR", "SC", "RS"]]];
+  var $ = function (id) { return document.getElementById(id); };
+  var RES, CACHE = {}, D, st = { prod: "soja", met: "producao", uf: "BR", ord: "producao" }, charts = [];
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function sinal(v, c) { return v == null || isNaN(v) ? "-" : (v > 0 ? "+" : v < 0 ? "−" : "") + br(Math.abs(v), c); }
+  function pct(a, b) { return a == null || !b ? null : (a / b - 1) * 100; }
+  function mi(v, c) { return v == null ? "-" : br(v / 1000, c == null ? 1 : c); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  function produto(slug) {
+    if (CACHE[slug]) return Promise.resolve(CACHE[slug]);
+    return json("dados/conab/" + slug + ".json").then(function (d) { CACHE[slug] = d; return d; });
+  }
+  function sacas(kg) { var s = SACA[st.prod]; return s && kg ? kg / s : null; }
+  function prodTxt(kg) { var s = sacas(kg); return br(kg, 0) + " kg/ha" + (s ? " · " + br(s, 1) + " sc/ha" : ""); }
+  function linha(uf) { return uf === "BR" ? D.brasil : D.ufs[uf]; }
+  function nomeLocal(uf) { return uf === "BR" ? "Brasil" : NOME_UF[uf]; }
+  function levTxt(l) { return l.n + "º levantamento, " + MESES_L[l.mes - 1] + "/" + l.ano; }
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function eixoV(fmt, extra) { return Object.assign({ type: "value", splitNumber: 4, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+
+  // ---------- painel de culturas ----------
+  function board() {
+    $("abcBoard").innerHTML = ORDEM.filter(function (k) { return RES.produtos[k]; }).map(function (k) {
+      var p = RES.produtos[k], dv = pct(p.producao, p.producao_ant);
+      return '<button class="abc-c" data-p="' + k + '" aria-pressed="' + (k === st.prod) + '"><div class="n">' + CURTO[k] + "</div>" +
+        '<div class="v">' + mi(p.producao) + ' <small style="font:500 11px Geist,sans-serif;color:#6b756d">mi t</small></div>' +
+        '<div class="d ' + (dv == null ? "" : dv >= 0 ? "pos" : "neg") + '">' + (dv == null ? "-" : (dv >= 0 ? "▲ " : "▼ ") + br(Math.abs(dv), 1) + "%") + "</div>" +
+        '<div class="p" style="margin-top:2px"><span>safra ' + p.safra + "</span></div></button>";
+    }).join("");
+  }
+
+  // ---------- métricas por UF ----------
+  function valorUF(uf, m) {
+    var l = D.ufs[uf]; if (!l) return null;
+    if (m === "var") return l.producao[0] > 0 ? pct(l.producao[1], l.producao[0]) : null;
+    return l[m][1];
+  }
+  function ufsComDado() { return Object.keys(D.ufs).filter(function (u) { return (D.ufs[u].producao[1] || 0) > 0 || (D.ufs[u].producao[0] || 0) > 0; }); }
+  var ROT_MET = { producao: "produção, mil t", var: "variação da produção sobre a safra anterior, %", prod: "produtividade, kg/ha", area: "área plantada, mil ha" };
+
+  // 0) mapa
+  function g0() {
+    var m = st.met, ufs = Object.keys(NOME_UF), piso = (D.brasil.producao[0] || 0) * 0.005;
+    // na variação, estados com produção muito pequena (menos de 0,5% do Brasil) ficam neutros para não distorcer a escala
+    var dados = ufs.map(function (u) { var v = valorUF(u, m), l = D.ufs[u]; if (m === "var" && l && l.producao[0] < piso) v = null; return { name: u, value: v == null || (m !== "var" && !v) ? "-" : +v.toFixed(1) }; });
+    var vals = dados.map(function (d) { return d.value; }).filter(function (v) { return v !== "-"; });
+    var vm;
+    if (m === "var") {
+      var lim = Math.min(40, Math.max(5, Math.ceil(Math.max.apply(null, vals.map(Math.abs)) / 5) * 5));
+      vm = { type: "continuous", min: -lim, max: lim, inRange: { color: ["#9C5B24", "#D9B48D", "#F1EFE9", "#A9CB8C", "#2F6B1F"] }, text: ["+" + lim + "%", "−" + lim + "%"] };
+    } else {
+      vm = { type: "continuous", min: 0, max: Math.max.apply(null, vals.concat([1])), inRange: { color: ["#EEF4E8", "#B9D59A", "#6FA846", "#2F6B1F", "#163A0D"] }, text: ["mais", "menos"] };
+    }
+    Object.assign(vm, { orient: mobile() ? "horizontal" : "vertical", left: mobile() ? "center" : 6, bottom: mobile() ? 0 : 20, itemHeight: mobile() ? 120 : 110, itemWidth: 10, calculable: false, textStyle: { color: COR.mt, fontSize: 11 } });
+    return Object.assign({}, base, {
+      visualMap: vm,
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) {
+        var l = D.ufs[p.name]; if (!l) return NOME_UF[p.name] + ": sem área";
+        var dv = pct(l.producao[1], l.producao[0]), sh = D.brasil.producao[1] ? l.producao[1] / D.brasil.producao[1] * 100 : null;
+        return "<b>" + NOME_UF[p.name] + "</b>" + tl("", "Produção " + D.safra_atual, br(l.producao[1], 1) + " mil t") + tl("", "Safra " + D.safra_anterior, br(l.producao[0], 1) + " mil t") +
+          tl("", "Variação", dv == null ? "-" : sinal(dv, 1) + "%") + tl("", "Produtividade", prodTxt(l.prod[1])) + tl("", "Área", br(l.area[1], 1) + " mil ha") + tl("", "Participação no Brasil", br(sh, 1) + "%");
+      } }),
+      series: [{ type: "map", map: "BR", nameProperty: "name", roam: false, selectedMode: "single", layoutCenter: ["54%", "50%"], layoutSize: mobile() ? "100%" : "96%",
+        label: { show: true, fontSize: mobile() ? 8.5 : 10, color: "#1d2420", formatter: function (p) { return p.name; } },
+        itemStyle: { borderColor: "#fff", borderWidth: 0.8, areaColor: "#F3F5F3" }, emphasis: { label: { show: true, fontWeight: 700 }, itemStyle: { areaColor: "#FFD87A" } },
+        select: { label: { show: true, fontWeight: 700, color: "#000" }, itemStyle: { areaColor: "#FFC94A", borderColor: COR.tx, borderWidth: 1.5 } },
+        data: dados.map(function (d) { return Object.assign(d, { selected: d.name === st.uf }); }) }],
+      graphic: mobile() ? [] : [{ type: "text", right: 6, bottom: 4, style: { text: "agrobasis.com.br", fill: "#b6beb8", font: "11px Geist, sans-serif" } }]
+    });
+  }
+
+  // 1) ranking (top 15 da métrica)
+  function g1() {
+    var m = st.met === "var" ? "producao" : st.met, us = ufsComDado().sort(function (a, b) { return (valorUF(b, m) || 0) - (valorUF(a, m) || 0); }).slice(0, mobile() ? 12 : 15);
+    var unid = { producao: " mil t", prod: " kg/ha", area: " mil ha" }[m], dec = m === "prod" ? 0 : 1;
+    $("abcH1").textContent = "Ranking dos estados · " + { producao: "produção", prod: "produtividade", area: "área" }[m];
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 58, top: 30, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: us, axisLabel: { color: COR.tx, fontSize: 12, fontWeight: 600 }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoV(function (v) { return br(v); }, { splitNumber: 3 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) {
+        var u = us[ps[0].dataIndex], l = D.ufs[u], dv = pct(l[m][1], l[m][0]);
+        return "<b>" + NOME_UF[u] + "</b>" + tl("", "Safra " + D.safra_atual, br(l[m][1], dec) + unid) + tl("", "Safra " + D.safra_anterior, br(l[m][0], dec) + unid) + tl("", "Variação", dv == null ? "-" : sinal(dv, 1) + "%"); } }),
+      series: [
+        { name: D.safra_atual, type: "bar", barGap: "12%", barWidth: "36%", itemStyle: { color: COR.vd }, data: us.map(function (u) { return { value: D.ufs[u][m][1], itemStyle: { color: u === st.uf ? "#E3A72F" : COR.vd, borderRadius: [0, 4, 4, 0] } }; }),
+          label: { show: true, position: "right", color: COR.tx, fontSize: 11, fontWeight: 600, formatter: function (q) { var l = D.ufs[us[q.dataIndex]], dv = pct(l[m][1], l[m][0]); return br(q.value, m === "prod" ? 0 : 0) + (dv == null || Math.abs(dv) < 0.05 ? "" : "  " + sinal(dv, 0) + "%"); } } },
+        { name: D.safra_anterior, type: "bar", barWidth: "36%", itemStyle: { color: "#C9D1CB", borderRadius: [0, 4, 4, 0] }, data: us.map(function (u) { return D.ufs[u][m][0]; }) }
+      ]
+    });
+  }
+
+  // 2) série histórica (Brasil ou UF): produção em barras, produtividade em linha, estimativa atual destacada
+  function g2() {
+    var h = D.historico, u = st.uf, anos, prodc, prodt;
+    if (u === "BR") { anos = h.anos.slice(-25); prodc = h.brasil.producao.slice(-25); prodt = h.brasil.prod.slice(-25); }
+    else { anos = h.anos_uf.slice(); prodc = h.ufs[u].producao.slice(); prodt = h.ufs[u].prod.slice(); }
+    var at = linha(u);
+    if (anos.indexOf(D.safra_atual) < 0) { anos.push(D.safra_atual); prodc.push(at ? at.producao[1] : null); prodt.push(at ? at.prod[1] : null); }
+    else { var k = anos.indexOf(D.safra_atual); prodc[k] = at ? at.producao[1] : prodc[k]; prodt[k] = at ? at.prod[1] : prodt[k]; }
+    var n = anos.length - 1, rotA = D.inverno ? anos : anos.map(function (a) { return a.length > 6 ? a.slice(2) : a; });
+    $("abcH2").textContent = "Série histórica · " + nomeLocal(u);
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: ["Produção (mil t)", "Produtividade (kg/ha)"] },
+      grid: { left: 6, right: 6, top: 36, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: rotA, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: [eixoV(function (v) { return br(v / 1000, v >= 1e4 ? 0 : 1) + " mi"; }), eixoV(function (v) { return br(v); }, { splitLine: { show: false } })],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var i = ps[0].dataIndex, ant = i > 0 ? prodc[i - 1] : null, dv = pct(prodc[i], ant);
+        return '<div style="font-weight:600;margin-bottom:4px">Safra ' + anos[i] + (i === n ? " · estimativa atual" : "") + "</div>" + tl("", "Produção", br(prodc[i], 1) + " mil t") + tl("", "Sobre a safra anterior", dv == null ? "-" : sinal(dv, 1) + "%") + tl("", "Produtividade", prodt[i] ? prodTxt(prodt[i]) : "-"); } }),
+      series: [
+        { name: "Produção (mil t)", type: "bar", barWidth: "62%", itemStyle: { color: "#A9C29A" }, data: prodc.map(function (v, i) { return { value: v, itemStyle: { color: i === n ? COR.vd : "#A9C29A", borderRadius: [3, 3, 0, 0], decal: i === n ? { symbol: "rect", dashArrayX: [1, 0], dashArrayY: [3, 3], rotation: -Math.PI / 4, color: "rgba(255,255,255,.25)" } : null } }; }),
+          label: { show: true, position: "top", fontSize: 11, fontWeight: 700, color: COR.vd, formatter: function (q) { return q.dataIndex === n ? br(q.value / 1000, 1) + " mi t" : ""; } } },
+        { name: "Produtividade (kg/ha)", type: "line", yAxisIndex: 1, data: prodt, symbol: "circle", symbolSize: 5, lineStyle: { width: 2, color: COR.mr }, itemStyle: { color: COR.mr }, connectNulls: true }
+      ]
+    });
+  }
+
+  // 3) revisões: produção Brasil a cada levantamento, safra atual contra as anteriores
+  function g3() {
+    var rv = D.revisoes || {}, ks = Object.keys(rv).slice(-4), s = [], cinzas = ["#D3D9D4", "#BAC3BC", "#9EA9A1", "#7F8B83"];
+    ks.forEach(function (k, i) { s.push({ name: k, type: "line", data: rv[k], symbol: "none", lineStyle: { width: 1.6, color: cinzas[i] }, itemStyle: { color: cinzas[i] } }); });
+    var at = D.levantamentos.map(function (l) { return l.brasil ? l.brasil.producao[1] : null; });
+    s.push({ name: D.safra_atual, type: "line", data: at, symbol: "circle", symbolSize: 8, lineStyle: { width: 3, color: COR.vd }, itemStyle: { color: COR.vd },
+      label: { show: true, position: "top", color: COR.vd, fontWeight: 700, fontSize: 11.5, formatter: function (q) { return br(q.value / 1000, 1); } } });
+    var cats = []; for (var i = 1; i <= 12; i++) cats.push(i + "º");
+    var nota = "";
+    ks.forEach(function (k) { var v = rv[k]; if (v && v.length > 1) nota = k; });
+    if (nota) { var v = rv[nota], d = pct(v[v.length - 1], v[0]); $("abcN3").textContent = "Na safra " + nota + ", a produção terminou " + (d >= 0 ? br(d, 1) + "% acima" : br(-d, 1) + "% abaixo") + " do que a Conab estimava no 1º levantamento."; }
+    else $("abcN3").textContent = "";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 14, top: mobile() ? 54 : 34, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: cats, boundaryGap: false, axisLabel: { color: COR.mt, fontSize: 11 }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoV(function (v) { return br(v / 1000, 0) + " mi"; }, { scale: true }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var h = '<div style="font-weight:600;margin-bottom:4px">' + ps[0].axisValue + " levantamento</div>"; ps.slice().reverse().forEach(function (q) { if (q.value != null) h += tl(q.marker, q.seriesName, br(q.value / 1000, 1) + " mi t"); }); return h; } }),
+      series: s
+    });
+  }
+
+  // 4) regiões: produção na safra anterior x atual
+  function g4() {
+    var rs = REGIOES.filter(function (r) { return D.regioes[r[0]]; });
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 10, top: 34, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: rs.map(function (r) { return r[1]; }), axisLabel: { color: COR.tx, fontSize: mobile() ? 10.5 : 12, fontWeight: 600, interval: 0 }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoV(function (v) { return br(v / 1000, 0) + " mi"; }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) { var r = D.regioes[rs[ps[0].dataIndex][0]], dv = pct(r.producao[1], r.producao[0]);
+        return "<b>" + rs[ps[0].dataIndex][1] + "</b>" + tl("", "Safra " + D.safra_atual, br(r.producao[1], 1) + " mil t") + tl("", "Safra " + D.safra_anterior, br(r.producao[0], 1) + " mil t") + tl("", "Variação", dv == null ? "-" : sinal(dv, 1) + "%") + tl("", "Produtividade", r.prod[1] ? prodTxt(r.prod[1]) : "-"); } }),
+      series: [
+        { name: D.safra_anterior, type: "bar", barGap: "10%", barWidth: "32%", itemStyle: { color: "#C9D1CB", borderRadius: [3, 3, 0, 0] }, data: rs.map(function (r) { return D.regioes[r[0]].producao[0]; }) },
+        { name: D.safra_atual, type: "bar", barWidth: "32%", itemStyle: { color: COR.vd, borderRadius: [3, 3, 0, 0] }, data: rs.map(function (r) { return D.regioes[r[0]].producao[1]; }),
+          label: { show: true, position: "top", fontSize: 11, fontWeight: 600, color: COR.tx, formatter: function (q) { var r = D.regioes[rs[q.dataIndex][0]], dv = pct(r.producao[1], r.producao[0]); return dv == null ? "" : sinal(dv, 1) + "%"; } } }
+      ]
+    });
+  }
+
+  // 5) tabela completa por região e UF
+  function tabela() {
+    var cols = [["area", "Área (mil ha)", 1], ["prod", "Produtividade (kg/ha)", 0], ["producao", "Produção (mil t)", 1]];
+    var h = '<thead><tr><th rowspan="2" class="l">Região / UF</th>' + cols.map(function (c) { return '<th colspan="3">' + c[1] + "</th>"; }).join("") + '<th rowspan="2">Part. %</th></tr><tr>' +
+      cols.map(function () { return "<th>" + D.safra_anterior + "</th><th>" + D.safra_atual + "</th><th>Var.</th>"; }).join("") + "</tr></thead><tbody>";
+    function tr(nome, l, cls, uf) {
+      if (!l) return "";
+      var sh = D.brasil.producao[1] ? l.producao[1] / D.brasil.producao[1] * 100 : null;
+      return '<tr class="' + cls + (uf && uf === st.uf ? " sel" : "") + '"' + (uf ? ' data-uf="' + uf + '"' : "") + '><td class="l">' + nome + "</td>" + cols.map(function (c) {
+        var a = l[c[0]][0], b = l[c[0]][1], dv = a > 0 ? pct(b, a) : null;
+        return "<td>" + br(a, c[2]) + "</td><td><b>" + br(b, c[2]) + '</b></td><td class="' + (dv == null ? "" : dv >= 0.05 ? "pos" : dv <= -0.05 ? "neg" : "") + '">' + (dv == null ? "-" : sinal(dv, 1) + "%") + "</td>";
+      }).join("") + "<td>" + br(sh, 1) + "</td></tr>";
+    }
+    REGIOES.forEach(function (r) {
+      h += tr(r[1], D.regioes[r[0]], "reg");
+      r[2].forEach(function (u) { var l = D.ufs[u]; if (l && ((l.producao[0] || 0) > 0 || (l.producao[1] || 0) > 0)) h += tr(u + ' <span class="cn-n">' + NOME_UF[u] + "</span>", l, "uf", u); });
+    });
+    h += tr("Brasil", D.brasil, "tot") + "</tbody>";
+    $("abcTab").innerHTML = h;
+    $("abcH5s").textContent = "safra " + D.safra_anterior + " e " + D.safra_atual + ", " + levTxt(D.levantamento);
+  }
+  function csv() {
+    var linhas = [["Regiao_UF", "Area_" + D.safra_anterior, "Area_" + D.safra_atual, "Produtividade_" + D.safra_anterior, "Produtividade_" + D.safra_atual, "Producao_" + D.safra_anterior, "Producao_" + D.safra_atual].join(";")];
+    function add(n, l) { if (l) linhas.push([n, l.area[0], l.area[1], l.prod[0], l.prod[1], l.producao[0], l.producao[1]].map(function (x) { return String(x == null ? "" : x).replace(".", ","); }).join(";")); }
+    REGIOES.forEach(function (r) { add(r[1], D.regioes[r[0]]); r[2].forEach(function (u) { add(u, D.ufs[u]); }); });
+    add("Brasil", D.brasil);
+    var a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + linhas.join("\n")], { type: "text/csv;charset=utf-8" }));
+    a.download = "agrobasis-conab-" + st.prod + "-" + D.safra_atual.replace("/", "-") + ".csv"; document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  // ---------- indicadores e texto ----------
+  function kpis() {
+    var b = D.brasil, ls = D.levantamentos, ant = ls.length > 1 ? ls[ls.length - 2].brasil : null;
+    var dp = pct(b.producao[1], b.producao[0]), da = pct(b.area[1], b.area[0]), dy = pct(b.prod[1], b.prod[0]);
+    function cls(v) { return v == null ? "" : v >= 0 ? "pos" : "neg"; }
+    $("kP").innerHTML = mi(b.producao[1]) + "<small>mi t</small>";
+    $("kPs").innerHTML = '<i style="font-style:normal;font-weight:600" class="' + cls(dp) + '">' + sinal(dp, 1) + "%</i> sobre " + D.safra_anterior + " (" + mi(b.producao[0]) + " mi t)";
+    $("kA").innerHTML = mi(b.area[1], 2) + "<small>mi ha</small>";
+    $("kAs").innerHTML = '<i style="font-style:normal;font-weight:600" class="' + cls(da) + '">' + sinal(da, 1) + "%</i> sobre " + D.safra_anterior;
+    var sc = sacas(b.prod[1]);
+    $("kY").innerHTML = sc ? br(sc, 1) + "<small>sc/ha</small>" : br(b.prod[1], 0) + "<small>kg/ha</small>";
+    $("kYs").innerHTML = '<i style="font-style:normal;font-weight:600" class="' + cls(dy) + '">' + sinal(dy, 1) + "%</i> · " + br(b.prod[1], 0) + " kg/ha";
+    if (ant) {
+      var dr = b.producao[1] - ant.producao[1];
+      $("kR").innerHTML = sinal(dr / 1000, 2) + "<small>mi t</small>";
+      $("kRs").textContent = "sobre o " + ls[ls.length - 2].n + "º levantamento (" + mi(ant.producao[1]) + " mi t)";
+    } else {
+      $("kR").innerHTML = "1ª<small>estimativa</small>";
+      $("kRs").textContent = "primeiro levantamento da safra " + D.safra_atual;
+    }
+  }
+  function lead() {
+    var b = D.brasil, dp = pct(b.producao[1], b.producao[0]), us = ufsComDado();
+    var top = us.slice().sort(function (x, y) { return D.ufs[y].producao[1] - D.ufs[x].producao[1]; })[0];
+    var sobe = us.filter(function (u) { return D.ufs[u].producao[0] > 50; }).map(function (u) { return [u, D.ufs[u].producao[1] - D.ufs[u].producao[0]]; }).sort(function (a, c) { return c[1] - a[1]; });
+    var t = "A Conab estima <b>" + mi(b.producao[1]) + " milhões de t</b> de " + CURTO[st.prod].toLowerCase().replace("grãos (total)", "grãos") + " na safra " + D.safra_atual + ", " +
+      (dp >= 0 ? br(dp, 1) + "% acima" : br(-dp, 1) + "% abaixo") + " da safra " + D.safra_anterior + ".";
+    if (top) t += " " + NOME_UF[top] + " lidera, com " + br(D.ufs[top].producao[1] / b.producao[1] * 100, 0) + "% do total.";
+    if (sobe.length > 1) {
+      var mais = sobe[0], menos = sobe[sobe.length - 1];
+      if (mais[1] > 0) t += " Maior ganho: " + NOME_UF[mais[0]] + " (" + sinal(mais[1] / 1000, 1) + " mi t)";
+      if (menos[1] < 0) t += (mais[1] > 0 ? "; maior perda: " : " Maior perda: ") + NOME_UF[menos[0]] + " (" + sinal(menos[1] / 1000, 1) + " mi t)";
+      if (mais[1] > 0 || menos[1] < 0) t += ".";
+    }
+    $("abcLead").querySelector("span").innerHTML = t;
+  }
+  function seletorLocal() {
+    var b = '<button data-u="BR" aria-pressed="' + (st.uf === "BR") + '">Brasil</button>';
+    if (st.uf !== "BR") b += '<button data-u="' + st.uf + '" aria-pressed="true">' + st.uf + "</button>";
+    $("abcLocal").innerHTML = b;
+  }
+
+  function render() {
+    var l = D.levantamento;
+    $("abcTit").textContent = CURTO[st.prod] === "Grãos (total)" ? "Total de grãos" : D.produto;
+    $("abcMeta").textContent = "Safra " + D.safra_atual + " · " + levTxt(l) + " · área em mil ha, produção em mil t";
+    $("abcProx").innerHTML = "Fonte: <b>Conab</b><br>atualiza a cada levantamento mensal";
+    $("abcH0s").textContent = ROT_MET[st.met];
+    $("abcH4s").textContent = "produção em mi t";
+    kpis(); lead(); seletorLocal(); tabela();
+    charts[0].setOption(g0(), true); charts[1].setOption(g1(), true); charts[2].setOption(g2(), true); charts[3].setOption(g3(), true); charts[4].setOption(g4(), true);
+    $("abcAtu").textContent = levTxt(l);
+  }
+  function trocar(slug) {
+    st.prod = slug;
+    document.querySelectorAll("#abcBoard .abc-c").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.p === slug)); });
+    return produto(slug).then(function (d) { D = d; if (st.uf !== "BR" && !D.ufs[st.uf]) st.uf = "BR"; render(); });
+  }
+  function escolherUF(u) { st.uf = (u === st.uf ? "BR" : u); render(); if (st.uf !== "BR" && mobile()) $("abcG2").scrollIntoView({ behavior: "smooth", block: "center" }); }
+  function baixar(i) {
+    var ch = charts[i], tit = ["Por estado · " + ROT_MET[st.met], $("abcH1").textContent, $("abcH2").textContent, "Estimativas a cada levantamento", "Produção por região"][i] + " · " + (D.produto);
+    var opt = [g0, g1, g2, g3, g4][i](); opt.animation = false;
+    opt.title = { text: tit, subtext: "Conab · safra " + D.safra_atual + ", " + levTxt(D.levantamento), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 54, left: 8 });
+    if (opt.grid) opt.grid = Object.assign({}, opt.grid, { top: (opt.legend ? 84 : 64), bottom: 30 });
+    if (i === 0) opt.series[0].layoutCenter = ["54%", "55%"];
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: Conab", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    ch.setOption(opt, true);
+    var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-conab-" + st.prod + "-" + ["mapa", "ranking", "historico", "revisoes", "regioes"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  Promise.all([carregarLib(), json("dados/conab/resumo.json"), json("dados/conab/br_uf.json")]).then(function (r) {
+    RES = r[1]; echarts.registerMap("BR", r[2]);
+    var q = (location.hash || "").replace("#", ""); if (RES.produtos[q]) st.prod = q;
+    board();
+    charts = [0, 1, 2, 3, 4].map(function (i) { return echarts.init($("abcG" + i), null, { renderer: "canvas" }); });
+    charts[0].on("click", function (p) { if (p.name && D.ufs[p.name]) escolherUF(p.name); });
+    charts[1].on("click", function (p) { if (p.name && D.ufs[p.name]) escolherUF(p.name); });
+    $("abcMet").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.met = b.dataset.m; this.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); render(); });
+    $("abcLocal").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) { st.uf = b.dataset.u; render(); } });
+    $("abcTab").addEventListener("click", function (e) { var t = e.target.closest("tr[data-uf]"); if (t) escolherUF(t.dataset.uf); });
+    $("abcBoard").addEventListener("click", function (e) { var b = e.target.closest(".abc-c"); if (b) { trocar(b.dataset.p); history.replaceState(null, "", "#" + b.dataset.p); } });
+    $("abcCsv").addEventListener("click", csv);
+    document.querySelectorAll("#abc .abc-dl[data-dl]").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (D) render(); }, 150); });
+    return trocar(st.prod);
+  }).catch(function (e) {
+    if (window.console) console.error("AgroBasis Conab:", e);
+    $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
