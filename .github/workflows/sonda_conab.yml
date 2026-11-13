@@ -8,15 +8,9 @@ jobs:
     steps:
       - run: |
           mkdir out && cd out
-          B=https://portaldeinformacoes.conab.gov.br/downloads/arquivos
-          for f in SerieHistoricaGraos.txt LevantamentoGraos.txt SerieHistoricaGraos.csv; do
-            curl -sS -m 120 -A "Mozilla/5.0" -o "$f" -w "$f HTTP %{http_code} %{size_download}\n" "$B/$f" || true; done
-          curl -sS -m 60 -A "Mozilla/5.0" -o graos.html -w "graos HTTP %{http_code} %{size_download}\n" "https://www.conab.gov.br/info-agro/safras/graos" || true
-          curl -sS -m 60 -A "Mozilla/5.0" -o boletim.html -w "boletim HTTP %{http_code} %{size_download}\n" "https://www.conab.gov.br/info-agro/safras/graos/boletim-da-safra-de-graos" || true
-          curl -sS -m 60 -A "Mozilla/5.0" -o portal.html -w "portal HTTP %{http_code} %{size_download}\n" "https://portaldeinformacoes.conab.gov.br/download-arquivos.html" || true
-          curl -sS -m 60 -o br_uf.json -w "geo HTTP %{http_code} %{size_download}\n" "https://servicodados.ibge.gov.br/api/v3/malhas/paises/BR?formato=application/vnd.geo+json&qualidade=minima&intrarregiao=UF" || true
-          ls -la
-          for f in *.txt; do echo "== $f"; head -c 1500 "$f"; echo; done
+          B=https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/safra-de-graos/boletim-da-safra-de-graos
+          for p in "" "/1o-levantamento-safra-2026-27" "/2o-levantamento-safra-2026-27" "/2o-levantamento-safra-2025-26"; do
+            n=$(echo "idx$p" | tr '/' '_'); curl -sSL -m 60 -A "Mozilla/5.0" -o "$n.html" -w "$p HTTP %{http_code} %{size_download}\n" "$B$p" || true; done
+          for f in *.html; do echo "== $f"; grep -o 'href="[^"]*\(xls\|xlsx\|pdf\|csv\)[^"]*"' "$f" | sort -u | head -30; done
           git init -q -b sonda-conab && git config user.name bot && git config user.email bot@x
-          find . -size +45M -delete
           git add . && git commit -qm sonda && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" sonda-conab
