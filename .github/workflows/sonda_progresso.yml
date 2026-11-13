@@ -14,12 +14,9 @@ jobs:
           mkdir -p out && cd out
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
           B=https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/progresso-de-safra
-          for st in 0 20 40 60 80 100 120 140 160 180 200; do
-            curl -sSL -A "$UA" "$B?b_start:int=$st" | grep -oE "$B/[a-z0-9-]+" ; done | sort -u > pastas.txt
-          wc -l pastas.txt
-          for n in acompanhamento-das-lavouras-02-11-a-08-11-26 $(grep -E -- '-(25|24)$' pastas.txt | head -2 | xargs -n1 basename); do
-            curl -sSL -A "$UA" "$B/$n" | grep -oE 'href="[^"]+\.xlsx[^"]*"' | sed 's/href="//;s/"$//;s#/view$##' | sort -u > "x_$n.txt"
-            for f in $(cat "x_$n.txt"); do curl -sSL -A "$UA" "$f" -o "$n--$(basename "$f")"; done
+          for n in acompanhamento-das-lavouras-01-12-a-07-12-25 acompanhamento-das-lavouras-02-06-a-08-06-25 acompanhamento-das-lavouras-2020-a-2024 copy copy5; do
+            curl -sSL -A "$UA" "$B/$n" -o "p_$n.html"
+            grep -oE 'href="[^"]+"' "p_$n.html" | sed 's/href="//;s/"$//' | grep -F "$B/" | sort -u > "l_$n.txt"
           done
           ls -la
       - name: publicar
