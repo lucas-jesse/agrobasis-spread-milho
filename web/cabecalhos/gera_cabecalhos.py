@@ -4,7 +4,7 @@ from pathlib import Path
 
 CSS = """<style>
 .abh{background:#F6F8F4;border-bottom:1px solid #E7ECE8;font-family:'Geist',Arial,sans-serif}
-.abh-in{max-width:1180px;margin:0 auto;padding:30px 24px 28px;box-sizing:border-box}
+.abh-in{max-width:var(--w,1180px);margin:0 auto;padding:30px var(--p,24px) 28px;box-sizing:border-box}
 .abh-bc{font-size:12.5px;color:#7a847c;margin:0 0 12px}
 .abh-bc a{color:#1E4812;font-weight:600;text-decoration:none}.abh-bc a:hover{text-decoration:underline}
 .abh-bc span{margin:0 7px;color:#b5beb7}
@@ -34,9 +34,10 @@ PAGINAS = {
 CONTA = """<script>(function(){function c(){var n=document.querySelectorAll('.agd-card:not([hidden])').length,e=document.getElementById('abhN');if(e&&n)e.textContent=n+' painéis';}
 if(document.readyState!=='loading')setTimeout(c,1200);else document.addEventListener('DOMContentLoaded',function(){setTimeout(c,1200);});setTimeout(c,3500);})();</script>"""
 
+LARGURA = {"agenda": "--w:1000px;--p:0px", "educacional": "--w:1120px;--p:16px"}  # alinha com o conteúdo de cada página
 for slug, (bc, h1, sub, meta) in PAGINAS.items():
     html = (f"<!-- AgroBasis · cabeçalho da página /{slug}/ (gerado por web/cabecalhos/gera_cabecalhos.py) -->\n{FONTES}\n{CSS}\n"
-            f'<header class="abh"><div class="abh-in"><nav class="abh-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span>{bc}</nav>'
+            f'<header class="abh"><div class="abh-in" style="{LARGURA.get(slug, "")}"><nav class="abh-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span>{bc}</nav>'
             f"<h1>{h1}</h1>" + (f"<p>{sub}</p>" if sub else "") + (f'<div class="abh-meta">{meta}</div>' if meta else "") + "</div></header>"
             + (CONTA if slug == "dashboards" else ""))
     Path(f"{slug}.html").write_text(html)
