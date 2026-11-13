@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-.agd{font-family:'Geist',Arial,sans-serif;color:#222;max-width:1180px;margin:0 auto;padding:40px 24px 56px;box-sizing:border-box;background:#fff}
+.agd{font-family:'Geist',Arial,sans-serif;color:#222;max-width:1180px;margin:0 auto;padding:28px 24px 56px;box-sizing:border-box;background:#fff}
 .agd *{box-sizing:border-box}
 .agd-intro{max-width:760px;margin:0 0 28px;font-size:15.5px;line-height:1.7;color:#3f3f3f}
 .agd-filtros{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 32px}
@@ -34,7 +34,6 @@
 </style>
 
 <div class="agd" id="agd">
-  <p class="agd-intro">Acompanhe dados de mercado agrícola em ferramentas interativas desenvolvidas para leitura rápida de fundamentos, preços, basis, câmbio e derivativos.</p>
   <div class="agd-filtros" id="agdFiltros" role="group" aria-label="Filtrar dashboards por categoria"><button data-f="all" aria-pressed="true">Todos</button><button data-f="conab" aria-pressed="false">Conab</button><button data-f="usda" aria-pressed="false">USDA</button><button data-f="comercio-exterior" aria-pressed="false">Comércio Exterior</button><button data-f="derivativos" aria-pressed="false">Derivativos</button><button data-f="basis" aria-pressed="false">Basis</button><button data-f="cambio" aria-pressed="false">Câmbio</button><button data-f="fundos-cftc" aria-pressed="false">Fundos CFTC</button></div>
   <div class="agd-grid">
     <a class="agd-card" data-category="conab" href="/dashboards/safra-brasil-conab/" data-requer="dados/conab/resumo.json" hidden><div class="agd-img"><span class="agd-novo">Novo</span><img src="https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/web/miniaturas/safra-brasil-conab.webp" alt="Mapa da produção de soja por estado estimada pela Conab" width="900" height="506" loading="lazy" decoding="async"></div><div class="agd-body"><span class="agd-cat">Conab</span><h3>Safra Brasil por Estado</h3><p>Estimativas da Conab para soja, milho, trigo, algodão e outras culturas, com mapa, ranking, série histórica e revisões.</p><span class="agd-cta">Acessar painel <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>
