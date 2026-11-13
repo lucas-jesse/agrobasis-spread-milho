@@ -14,22 +14,13 @@ jobs:
           mkdir -p out && cd out
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
           B=https://www.gov.br/conab/pt-br/atuacao/informacoes-agropecuarias/safras/progresso-de-safra
-          curl -sSL -A "$UA" "$B" -o indice.html || true
-          curl -sSL -A "$UA" "$B/folder_contents" -o folder.html || true
-          grep -oE 'href="[^"]+"' indice.html | sed 's/href="//;s/"$//' | sort -u > links_indice.txt || true
-          # últimas pastas semanais
-          grep -oE "$B/[a-z0-9-]+" indice.html | sort -u > pastas.txt || true
-          head -3 pastas.txt | while read P; do
-            n=$(basename "$P"); curl -sSL -A "$UA" "$P" -o "pasta_$n.html" || true
-            grep -oE 'href="[^"]+"' "pasta_$n.html" | sed 's/href="//;s/"$//' | grep -iE 'xls|csv|pdf|download|@@' | sort -u > "links_$n.txt" || true
-            for f in $(grep -iE '\.(xlsx?|csv)' "links_$n.txt" | head -6); do curl -sSL -A "$UA" "$f" -o "$n-$(basename "${f%%/@@*}")" || true; done
+          for st in 0 20 40 60 80 100 120 140 160 180 200; do
+            curl -sSL -A "$UA" "$B?b_start:int=$st" | grep -oE "$B/[a-z0-9-]+" ; done | sort -u > pastas.txt
+          wc -l pastas.txt
+          for n in acompanhamento-das-lavouras-02-11-a-08-11-26 $(grep -E -- '-(25|24)$' pastas.txt | head -2 | xargs -n1 basename); do
+            curl -sSL -A "$UA" "$B/$n" | grep -oE 'href="[^"]+\.xlsx[^"]*"' | sed 's/href="//;s/"$//;s#/view$##' | sort -u > "x_$n.txt"
+            for f in $(cat "x_$n.txt"); do curl -sSL -A "$UA" "$f" -o "$n--$(basename "$f")"; done
           done
-          # portal de informações
-          curl -sSL -A "$UA" https://portaldeinformacoes.conab.gov.br/downloads/arquivos/ -o portal_arquivos.html || true
-          for f in ProgressoSafra.txt ProgressoDeSafra.txt ProgressoSafraGraos.txt AcompanhamentoProgressoSafra.txt; do
-            curl -sSL -A "$UA" -o "portal_$f" -w "$f %{http_code} %{size_download}\n" https://portaldeinformacoes.conab.gov.br/downloads/arquivos/$f >> portal_status.txt || true
-          done
-          curl -sSL -A "$UA" https://portaldeinformacoes.conab.gov.br/download-arquivos.html -o portal_downloads.html || true
           ls -la
       - name: publicar
         run: |
