@@ -1,0 +1,39 @@
+name: Exporta armazenagem de grãos por estado (dashboard HTML)
+
+on:
+  schedule:
+    # O IBGE publica a Pesquisa de Estoques duas vezes por ano; a checagem semanal pega a divulgação sem atraso.
+    - cron: '31 12 * * 1,4'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_armazenagem.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: armazenagem
+  cancel-in-progress: false
+
+jobs:
+  armazenagem:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests openpyxl
+      - name: Baixar e montar
+        run: python exporta_armazenagem.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/armazenagem
+          git diff --staged --quiet && exit 0
+          git commit -m "Armazenagem de grãos por estado"
+          for i in 1 2 3 4 5; do git pull --rebase origin main && git push && exit 0; sleep 15; done
+          exit 1
