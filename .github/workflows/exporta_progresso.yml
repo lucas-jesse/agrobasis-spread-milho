@@ -1,0 +1,41 @@
+name: Exporta progresso de plantio e colheita Conab (dashboard HTML)
+
+on:
+  schedule:
+    # A Conab publica o Progresso de Safra na segunda-feira (às vezes na terça), à tarde.
+    - cron: '23 21 * * 1'
+    - cron: '23 13,21 * * 2'
+    - cron: '23 13 * * 3'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_progresso.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: progresso-conab
+  cancel-in-progress: false
+
+jobs:
+  progresso:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests openpyxl
+      - name: Baixar e montar
+        run: python exporta_progresso.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/progresso
+          git diff --staged --quiet && exit 0
+          git commit -m "Progresso de safra Conab"
+          for i in 1 2 3 4 5; do git pull --rebase origin main && git push && exit 0; sleep 15; done
+          exit 1
