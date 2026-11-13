@@ -13,8 +13,7 @@ jobs:
         run: |
           mkdir -p out && cd out
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-          for t in 5459 5470 254 255; do curl -sS -m 90 "https://apisidra.ibge.gov.br/values/t/$t/n3/all/v/all/p/last%202" -o "sidra$t.json" -w "sidra$t %{http_code} %{size_download}\n" >> status.txt || true; done
-          curl -sS -m 90 "https://apisidra.ibge.gov.br/values/t/5470/n1/all/v/all/p/all" -o "s5470br.json" -w "s5470br %{http_code} %{size_download}\n" >> status.txt || true
+          for t in 5459 254 255; do curl -sS -m 90 "https://apisidra.ibge.gov.br/desctabapi.aspx?c=$t" -o "desc$t.html" -w "desc$t %{http_code} %{size_download}\n" >> status.txt || true; done
           cat status.txt
       - name: publicar
         run: |
