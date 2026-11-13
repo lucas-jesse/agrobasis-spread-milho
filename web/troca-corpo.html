@@ -1,0 +1,318 @@
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Relação de troca · grãos × fertilizantes</h1>
+      <div class="abc-tit" id="abcTit">Carregando</div>
+      <div class="abc-meta" id="abcMeta">&nbsp;</div>
+    </div>
+    <div class="tr-graos"><div class="abc-seg" id="abcGrao"></div></div>
+  </div>
+
+  <div class="abc-board tr-board" id="abcBoard" aria-label="Relação de troca de cada fertilizante"></div>
+
+  <p class="abc-lead" id="abcLead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg><span>&nbsp;</span></p>
+
+  <div class="abc-kpis">
+    <div class="abc-k"><span id="kRl">Relação de troca</span><b id="kR">-</b><em id="kRs">&nbsp;</em></div>
+    <div class="abc-k"><span>Posição na história</span><b id="kP">-</b><em id="kPs">&nbsp;</em></div>
+    <div class="abc-k"><span id="kFl">Fertilizante (CIF)</span><b id="kF">-</b><em id="kFs">&nbsp;</em></div>
+    <div class="abc-k"><span id="kGl">Grão</span><b id="kG">-</b><em id="kGs">&nbsp;</em></div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH0">Relação de troca mês a mês</h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcPer"><button data-p="60" aria-pressed="false">5 anos</button><button data-p="120" aria-pressed="true">10 anos</button><button data-p="0" aria-pressed="false">Desde 2010</button></div>
+      <button class="abc-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart md" id="abcG0"></div>
+    <p class="abc-nota" id="abcN0"></p>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>O que mexeu na relação <small>índice, 100 = mesmo mês do ano anterior</small></h3><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart tr-sm" id="abcG1"></div>
+      <p class="abc-nota" id="abcN1"></p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Sazonalidade <small>quanto a relação costuma ficar acima ou abaixo da média do ano</small></h3><button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart tr-sm" id="abcG2"></div>
+      <p class="abc-nota" id="abcN2"></p>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH3">Importação do fertilizante</h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcImp"><button data-i="f" aria-pressed="true">Este fertilizante</button><button data-i="t" aria-pressed="false">Todos os fertilizantes</button></div>
+      <button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart" id="abcG3"></div>
+    <p class="abc-nota" id="abcN3"></p>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Todas as combinações <small id="abcH4s"></small></h3>
+      <button class="abc-dl" id="abcCsv" aria-label="Baixar tabela em CSV"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="cn-scroll"><table class="cn-t tr-t" id="abcTab"></table></div>
+    <p class="abc-nota">Sacas para pagar 1 tonelada. Cor pela posição na história do par: verde é relação mais favorável que o normal; marrom, menos favorável. Clique numa célula para abrir o par.</p>
+  </div>
+
+  <div class="abc-foot"><span>Fontes: Comex Stat (MDIC/SECEX), Cepea/Esalq e Banco Central · Elaboração: AgroBasis</span><span id="abcAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    __FAQ__
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/safra-brasil-conab/">Safra Brasil por estado</a><a href="/dashboards/plantio-e-colheita-brasil/">Plantio e colheita</a><a href="/dashboards/basis-soja-brasil/">Basis Soja</a><a href="/dashboards/curva-do-dolar/">Curva do dólar</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+</div>
+<script type="application/ld+json">__LD__</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#A17149", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", cz: "#AEB7B0", grade: "rgba(29,36,32,.07)" };
+  var MES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var MESL = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  var $ = function (id) { return document.getElementById(id); };
+  var D, st = { g: "soja", f: "ureia", per: 120, imp: "f" }, charts = [], IU;
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function pct(v, c) { return v == null || isNaN(v) ? "-" : (v > 0.05 ? "+" : v < -0.05 ? "−" : "") + br(Math.abs(v), c == null ? 0 : c) + "%"; }
+  function mlab(m) { return MES[+m.slice(5) - 1] + "/" + m.slice(2, 4); }
+  function mlong(m) { return MESL[+m.slice(5) - 1] + " de " + m.slice(0, 4); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+  function eixoY(fmt) { return { type: "value", scale: true, axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt || function (v) { return br(v, 0); } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }; }
+  function eixoX(cats, extra) { return Object.assign({ type: "category", data: cats, boundaryGap: false, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } }, extra || {}); }
+
+  // ---------- cálculos ----------
+  function serie(g, f) { var F = D.fertilizantes[f].usd_t, G = D.graos[g].usd_sc; return D.meses.map(function (m, i) { return F[i] != null && G[i] ? F[i] / G[i] : null; }); }
+  function q(arr, p) { var a = arr.slice().sort(function (x, y) { return x - y; }), k = (a.length - 1) * p, b = Math.floor(k); return a[b] + (a[Math.min(b + 1, a.length - 1)] - a[b]) * (k - b); }
+  function stats(g, f) {
+    var s = serie(g, f), v = s.filter(function (x) { return x != null; }), now = s[IU];
+    var media = v.reduce(function (a, b) { return a + b; }, 0) / v.length;
+    var pctl = v.filter(function (x) { return x <= now; }).length / v.length * 100;
+    var mi = 1e9, ma = -1, mmi, mma; s.forEach(function (x, i) { if (x == null) return; if (x < mi) { mi = x; mmi = D.meses[i]; } if (x > ma) { ma = x; mma = D.meses[i]; } });
+    var a12 = s[IU - 12], a1 = s[IU - 1];
+    return { s: s, now: now, media: media, p25: q(v, 0.25), p75: q(v, 0.75), pctl: pctl, min: mi, mmin: mmi, max: ma, mmax: mma, a12: a12, a1: a1, ini: D.meses[s.findIndex(function (x) { return x != null; })] };
+  }
+  function hoje(g, f) { var u = D.graos[g].ultimo, F = D.fertilizantes[f].usd_t[IU]; return F && u.usd ? F / u.usd : null; }
+  function posicao(p) { return p <= 20 ? "entre as mais favoráveis" : p <= 40 ? "melhor que o normal" : p < 60 ? "perto do normal" : p < 80 ? "pior que o normal" : "entre as piores"; }
+  function corPct(p) { // verde (favorável) → neutro → marrom
+    var a = [[47, 107, 31], [169, 203, 140], [241, 239, 233], [217, 180, 141], [156, 91, 36]], t = Math.max(0, Math.min(1, p / 100)) * 4, i = Math.min(3, Math.floor(t)), k = t - i;
+    return "rgb(" + a[i].map(function (c, j) { return Math.round(c + (a[i + 1][j] - c) * k); }).join(",") + ")";
+  }
+  function unidG() { return st.g === "trigo" ? "saca de 60 kg" : "saca"; }
+  function nG(g) { return D.graos[g || st.g].nome.toLowerCase(); }
+  function nF(f) { return D.fertilizantes[f || st.f].curto; }
+  function comG() { return (st.g === "soja" ? "a " : "o ") + nG(); }
+
+  // ---------- painel ----------
+  function seletores() {
+    $("abcGrao").innerHTML = Object.keys(D.graos).map(function (g) { return '<button data-g="' + g + '" aria-pressed="' + (g === st.g) + '">' + D.graos[g].nome + "</button>"; }).join("");
+    $("abcBoard").innerHTML = Object.keys(D.fertilizantes).map(function (f) {
+      var s = stats(st.g, f), d = s.a12 ? (s.now / s.a12 - 1) * 100 : null;
+      return '<button class="abc-c" data-f="' + f + '" aria-pressed="' + (f === st.f) + '"><div class="n">' + D.fertilizantes[f].curto + "</div>" +
+        '<div class="v">' + br(s.now, 1) + '<small style="font:500 11px Geist,sans-serif;color:#6b756d"> sc/t</small></div>' +
+        '<div class="d ' + (d == null ? "" : d > 0.5 ? "neg" : d < -0.5 ? "pos" : "") + '">' + (d == null ? "&nbsp;" : (d > 0.5 ? "▲ " : d < -0.5 ? "▼ " : "") + pct(d).replace(/^[+−]/, "") + " em 12 meses") + "</div>" +
+        '<div class="g tr-g"><i style="left:' + Math.max(2, Math.min(98, s.pctl)) + '%"></i></div><div class="p"><span>favorável</span><span>caro</span></div></button>';
+    }).join("");
+  }
+  function kpis() {
+    var s = stats(st.g, st.f), F = D.fertilizantes[st.f], G = D.graos[st.g], m = D.meses[IU], px = D.ptax[IU];
+    $("kRl").textContent = "Sacas de " + nG() + " por t";
+    $("kR").innerHTML = br(s.now, 1) + "<small>sc/t</small>";
+    var d1 = s.a12 ? (s.now / s.a12 - 1) * 100 : null;
+    $("kRs").innerHTML = '<i style="font-style:normal" class="' + (d1 > 0.5 ? "neg" : d1 < -0.5 ? "pos" : "") + '">' + pct(d1) + "</i> em 12 meses (" + br(s.a12, 1) + " sc/t)";
+    $("kP").innerHTML = br(s.pctl, 0) + "<small>º percentil</small>";
+    $("kPs").textContent = "média desde " + s.ini.slice(0, 4) + ": " + br(s.media, 1) + " sc/t";
+    $("kFl").textContent = F.curto + ", importação CIF";
+    $("kF").innerHTML = "US$ " + br(F.usd_t[IU], 0) + "<small>/t</small>";
+    $("kFs").textContent = px ? "≈ R$ " + br(F.usd_t[IU] * px, 0) + "/t no porto (PTAX " + br(px, 2) + ")" : mlab(m);
+    $("kGl").textContent = G.nome + ", " + G.praca;
+    $("kG").innerHTML = "R$ " + br(G.brl_sc[IU], 2) + "<small>/sc</small>";
+    $("kGs").textContent = "US$ " + br(G.usd_sc[IU], 2) + "/sc, média de " + mlab(m);
+  }
+  function lead() {
+    var s = stats(st.g, st.f), F = D.fertilizantes[st.f], G = D.graos[st.g], h = hoje(st.g, st.f);
+    var iF = F.usd_t[IU - 12], iG = G.usd_sc[IU - 12], vf = iF ? (F.usd_t[IU] / iF - 1) * 100 : null, vg = iG ? (G.usd_sc[IU] / iG - 1) * 100 : null;
+    var t = "Em " + mlong(D.meses[IU]) + ", foram precisas <b>" + br(s.now, 1) + " sacas de " + nG() + "</b> para pagar 1 tonelada de " + F.nome.toLowerCase().replace("(kcl)", "(KCl)").replace("(map)", "(MAP)").replace("(ssp)", "(SSP)") + " importada";
+    t += s.a12 ? ", " + (s.now > s.a12 ? br((s.now / s.a12 - 1) * 100, 0) + "% a mais" : br((1 - s.now / s.a12) * 100, 0) + "% a menos") + " que um ano antes. " : ". ";
+    if (vf != null && vg != null) t += "Em dólar, o adubo " + (vf >= 0 ? "subiu " : "caiu ") + br(Math.abs(vf), 0) + "% e o grão " + (vg >= 0 ? "subiu " : "caiu ") + br(Math.abs(vg), 0) + "% no período. ";
+    t += "A relação está " + posicao(s.pctl) + " desde " + s.ini.slice(0, 4) + " (média de " + br(s.media, 1) + " sc/t).";
+    if (h) t += " Com " + comG() + " de " + D.graos[st.g].ultimo.d.slice(8, 10) + "/" + D.graos[st.g].ultimo.d.slice(5, 7) + ", a conta fica em " + br(h, 1) + " sc/t.";
+    $("abcLead").querySelector("span").innerHTML = t;
+  }
+
+  // ---------- gráficos ----------
+  function g0() {
+    var s = stats(st.g, st.f), ini = st.per ? Math.max(0, IU - st.per + 1) : D.meses.indexOf(s.ini), cats = D.meses.slice(ini, IU + 1).map(mlab), dados = s.s.slice(ini, IU + 1).map(function (v) { return v == null ? null : +v.toFixed(2); });
+    var h = hoje(st.g, st.f);
+    $("abcH0").textContent = "Sacas de " + nG() + " para pagar 1 t de " + nF();
+    $("abcN0").textContent = "Faixa verde: metade central da história (entre o 25º e o 75º percentil, " + br(s.p25, 1) + " a " + br(s.p75, 1) + " sc/t). Máxima de " + br(s.max, 1) + " sc/t em " + mlab(s.mmax) + "; mínima de " + br(s.min, 1) + " em " + mlab(s.mmin) + ".";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: mobile() ? 14 : 54, top: 22, bottom: 6, containLabel: true },
+      xAxis: eixoX(cats), yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var i = ps[0].dataIndex + ini, F = D.fertilizantes[st.f].usd_t[i], G = D.graos[st.g].usd_sc[i];
+        return '<div style="font-weight:600;margin-bottom:4px">' + mlong(D.meses[i]) + "</div>" + tl("", "Relação", br(s.s[i], 1) + " sc/t") + tl("", nF() + " CIF", "US$ " + br(F, 0) + "/t") + tl("", D.graos[st.g].nome, "US$ " + br(G, 2) + "/sc") + tl("", "Média histórica", br(s.media, 1) + " sc/t");
+      } }),
+      series: [
+        { name: "faixa", type: "line", data: cats.map(function () { return s.p25; }), lineStyle: { opacity: 0 }, symbol: "none", stack: "fx", silent: true, tooltip: { show: false } },
+        { name: "faixa2", type: "line", data: cats.map(function () { return s.p75 - s.p25; }), lineStyle: { opacity: 0 }, symbol: "none", stack: "fx", areaStyle: { color: "rgba(84,147,27,.10)" }, silent: true, tooltip: { show: false } },
+        { name: "Relação", type: "line", data: dados, symbol: "none", lineStyle: { width: 2.6, color: COR.vd }, itemStyle: { color: COR.vd }, connectNulls: true, z: 3,
+          markLine: { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.5 }, label: { formatter: "média " + br(s.media, 1), color: COR.mr, fontSize: 11, position: "insideEndTop" }, data: [{ yAxis: +s.media.toFixed(2) }] },
+          markPoint: { symbol: "circle", symbolSize: 8, itemStyle: { color: COR.vd, borderColor: "#fff", borderWidth: 2 }, data: [{ coord: [cats.length - 1, dados[dados.length - 1]], value: br(s.now, 1) }], label: { show: true, position: mobile() ? "top" : "right", color: COR.vd, fontWeight: 700, fontSize: 13, formatter: "{c}" } } }
+      ].concat(h ? [{ name: "Com o grão de hoje", type: "scatter", data: [[cats.length - 1, +h.toFixed(2)]], symbol: "diamond", symbolSize: 11, itemStyle: { color: "#fff", borderColor: COR.mr, borderWidth: 2 }, z: 4, tooltip: { formatter: function () { return "Com o " + nG() + " de " + D.graos[st.g].ultimo.d.split("-").reverse().join("/") + ": <b>" + br(h, 1) + " sc/t</b>"; } } }] : [])
+    });
+  }
+  function g1() {
+    var F = D.fertilizantes[st.f].usd_t, G = D.graos[st.g].usd_sc, n = mobile() ? 24 : 36, ini = Math.max(12, IU - n + 1), cats = [], f = [], g = [];
+    for (var i = ini; i <= IU; i++) { cats.push(mlab(D.meses[i])); f.push(F[i] && F[i - 12] ? +(F[i] / F[i - 12] * 100).toFixed(1) : null); g.push(G[i] && G[i - 12] ? +(G[i] / G[i - 12] * 100).toFixed(1) : null); }
+    var vf = f[f.length - 1], vg = g[g.length - 1];
+    $("abcN1").textContent = "Em " + mlab(D.meses[IU]) + ", contra um ano antes e em dólar: " + nF() + " " + pct(vf - 100) + ", " + nG() + " " + pct(vg - 100) + ". Quando a linha do adubo fica acima da do grão, a relação piora.";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 16, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 12, top: 32, bottom: 6, containLabel: true },
+      xAxis: eixoX(cats), yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return v == null ? "-" : br(v, 0) + " (" + pct(v - 100) + " em 12 meses)"; } }),
+      series: [
+        { name: nF() + " (US$/t)", type: "line", data: f, symbol: "none", lineStyle: { width: 2.4, color: COR.mr }, itemStyle: { color: COR.mr }, connectNulls: true,
+          markLine: { silent: true, symbol: "none", lineStyle: { color: COR.cz, width: 1 }, label: { show: false }, data: [{ yAxis: 100 }] } },
+        { name: D.graos[st.g].nome + " (US$/sc)", type: "line", data: g, symbol: "none", lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd }, connectNulls: true }
+      ]
+    });
+  }
+  function sazonal() {
+    var s = serie(st.g, st.f), anos = {}, out = [];
+    D.meses.forEach(function (m, i) { if (s[i] == null || i > IU) return; (anos[m.slice(0, 4)] = anos[m.slice(0, 4)] || []).push([+m.slice(5) - 1, s[i]]); });
+    var soma = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], n = soma.slice();
+    Object.keys(anos).forEach(function (a) { var x = anos[a]; if (x.length < 12) return; var md = x.reduce(function (t, y) { return t + y[1]; }, 0) / x.length; x.forEach(function (y) { soma[y[0]] += (y[1] / md - 1) * 100; n[y[0]]++; }); });
+    for (var k = 0; k < 12; k++) out.push(n[k] ? soma[k] / n[k] : null);
+    return out;
+  }
+  function g2() {
+    var v = sazonal(), mi = Math.min.apply(null, v), ma = Math.max.apply(null, v), imi = v.indexOf(mi), ima = v.indexOf(ma);
+    $("abcN2").textContent = "Desde " + stats(st.g, st.f).ini.slice(0, 4) + ", " + MESL[imi] + " foi, em média, o mês de relação mais favorável (" + pct(mi, 1) + " frente à média do ano) e " + MESL[ima] + " o menos favorável (" + pct(ma, 1) + "). Considera só anos completos.";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: 10, top: 18, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: MES, axisLabel: { color: COR.mt, fontSize: 11 }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY("{value}%"),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) { return "<b>" + MESL[ps[0].dataIndex] + "</b>" + tl("", "Frente à média do ano", pct(ps[0].value, 1)); } }),
+      series: [{ type: "bar", barWidth: "58%", data: v.map(function (x, i) { return { value: x == null ? null : +x.toFixed(2), itemStyle: { color: x <= 0 ? (i === imi ? COR.vd : "#8FB27A") : (i === ima ? COR.mr : "#D9B48D"), borderRadius: x <= 0 ? [0, 0, 4, 4] : [4, 4, 0, 0] } }; }) }]
+    });
+  }
+  function g3() {
+    var tot = st.imp === "t", vals = tot ? D.import_total_mil_t : D.fertilizantes[st.f].mil_t, ano = +D.meses[IU].slice(0, 4), ult = +D.meses[IU].slice(5);
+    function linha(a) { return MES.map(function (_, k) { var i = D.meses.indexOf(a + "-" + ("0" + (k + 1)).slice(-2)); return i < 0 || i > IU ? null : vals[i]; }); }
+    var atual = linha(ano), ant = linha(ano - 1), med = MES.map(function (_, k) { var xs = []; for (var a = ano - 5; a < ano; a++) { var i = D.meses.indexOf(a + "-" + ("0" + (k + 1)).slice(-2)); if (i >= 0 && vals[i] != null) xs.push(vals[i]); } return xs.length ? +(xs.reduce(function (t, x) { return t + x; }, 0) / xs.length).toFixed(1) : null; });
+    var acA = atual.slice(0, ult).reduce(function (t, x) { return t + (x || 0); }, 0), acB = ant.slice(0, ult).reduce(function (t, x) { return t + (x || 0); }, 0);
+    $("abcH3").textContent = "Importação " + (tot ? "de fertilizantes (total)" : "de " + nF()) + ", mil toneladas por mês";
+    $("abcN3").textContent = "De janeiro a " + MESL[ult - 1] + " de " + ano + ", o Brasil importou " + br(acA / 1000, 2) + " milhões de t" + (tot ? " de fertilizantes" : " de " + nF()) + ", " + pct((acA / acB - 1) * 100) + " frente ao mesmo período de " + (ano - 1) + ". Fonte: Comex Stat.";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 12, top: 32, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: MES, axisLabel: { color: COR.mt, fontSize: 11 }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return v == null ? "-" : br(v, 0) + " mil t"; } }),
+      series: [
+        { name: String(ano), type: "bar", barWidth: "34%", data: atual, itemStyle: { color: COR.vd, borderRadius: [3, 3, 0, 0] } },
+        { name: String(ano - 1), type: "bar", barWidth: "34%", data: ant, itemStyle: { color: "#C9D1CB", borderRadius: [3, 3, 0, 0] } },
+        { name: "Média " + (ano - 5) + "-" + (ano - 1), type: "line", data: med, symbol: "circle", symbolSize: 5, lineStyle: { width: 2, type: [5, 4], color: COR.mr }, itemStyle: { color: COR.mr } }
+      ]
+    });
+  }
+
+  // ---------- tabela ----------
+  function tabela() {
+    var gs = Object.keys(D.graos), fs = Object.keys(D.fertilizantes);
+    var h = '<thead><tr><th class="l">Fertilizante</th><th>Preço CIF<br><small>US$/t</small></th>' + gs.map(function (g) { return "<th>" + D.graos[g].nome + "<br><small>sc/t · média</small></th>"; }).join("") + "<th>Importado no ano<br><small>mil t</small></th></tr></thead><tbody>";
+    var ano = D.meses[IU].slice(0, 4);
+    fs.forEach(function (f) {
+      var F = D.fertilizantes[f], ac = D.meses.reduce(function (t, m, i) { return t + (m.slice(0, 4) === ano && i <= IU ? F.mil_t[i] : 0); }, 0);
+      h += '<tr class="uf"><td class="l"><b>' + F.curto + '</b> <span class="cn-n">' + F.nutriente + "</span></td><td>" + br(F.usd_t[IU], 0) + "</td>" +
+        gs.map(function (g) { var s = stats(g, f), sel = g === st.g && f === st.f; return '<td class="tr-c' + (sel ? " sel" : "") + '" data-g="' + g + '" data-f="' + f + '" style="background:' + corPct(s.pctl) + ";color:" + (s.pctl < 15 || s.pctl > 88 ? "#fff" : "#1d2420") + '"><b>' + br(s.now, 1) + "</b> <small>" + br(s.media, 1) + "</small></td>"; }).join("") +
+        "<td>" + br(ac, 0) + "</td></tr>";
+    });
+    $("abcTab").innerHTML = h + "</tbody>";
+    $("abcH4s").textContent = mlab(D.meses[IU]) + ", relação do mês e média desde 2010";
+  }
+  function csv() {
+    var linhas = [["mes", "fertilizante", "cif_usd_t", "grao", "grao_usd_sc", "grao_brl_sc", "sacas_por_t"].join(";")];
+    Object.keys(D.fertilizantes).forEach(function (f) { Object.keys(D.graos).forEach(function (g) { var s = serie(g, f); D.meses.forEach(function (m, i) { if (s[i] != null) linhas.push([m, f, D.fertilizantes[f].usd_t[i], g, D.graos[g].usd_sc[i], D.graos[g].brl_sc[i], s[i].toFixed(2)].join(";").replace(/\./g, ",")); }); }); });
+    var el = document.createElement("a"); el.href = URL.createObjectURL(new Blob(["﻿" + linhas.join("\n")], { type: "text/csv;charset=utf-8" }));
+    el.download = "agrobasis-relacao-de-troca.csv"; document.body.appendChild(el); el.click(); el.remove();
+  }
+
+  function render() {
+    var F = D.fertilizantes[st.f];
+    $("abcTit").textContent = D.graos[st.g].nome + " × " + F.curto;
+    $("abcMeta").textContent = mlong(D.meses[IU]) + " · sacas de " + nG() + " (" + D.graos[st.g].praca + ") para pagar 1 t de " + F.curto + " · preço de importação CIF";
+    seletores(); kpis(); lead(); tabela();
+    charts.forEach(function (c, i) { c.setOption([g0, g1, g2, g3][i](), true); });
+    $("abcAtu").textContent = "Fertilizantes até " + mlab(D.meses[IU]) + " · grãos até " + D.graos.soja.ultimo.d.split("-").reverse().join("/");
+    try { history.replaceState(null, "", "#" + st.g + "-" + st.f); } catch (e) {}
+  }
+  function baixar(i) {
+    var tit = [$("abcH0").textContent, "O que mexeu na relação", "Sazonalidade da relação de troca", $("abcH3").textContent][i];
+    var opt = [g0, g1, g2, g3][i](); opt.animation = false;
+    opt.title = { text: tit, subtext: D.graos[st.g].nome + " × " + nF() + " · " + mlong(D.meses[IU]), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 54, left: 8 });
+    opt.grid = Object.assign({}, opt.grid, { top: opt.legend ? 84 : 66, bottom: 30 });
+    opt.graphic = [marca(), { type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fontes: Comex Stat, Cepea", fill: "#9aa39c", font: "11px Geist, sans-serif" } }];
+    charts[i].setOption(opt, true);
+    var url = charts[i].getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-troca-" + st.g + "-" + st.f + "-" + ["historico", "precos", "sazonalidade", "importacao"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+  function seg(id, fn) { $(id).addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) fn(b); }); }
+  function marcar(id, b) { $(id).querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); }
+
+  Promise.all([carregarLib(), json("dados/troca/troca.json")]).then(function (r) {
+    D = r[1]; IU = D.meses.indexOf(D.ultimo_fert);
+    var q0 = (location.hash || "").replace("#", "").split("-");
+    if (D.graos[q0[0]]) st.g = q0[0]; if (D.fertilizantes[q0[1]]) st.f = q0[1];
+    charts = [0, 1, 2, 3].map(function (i) { return echarts.init($("abcG" + i), null, { renderer: "canvas" }); });
+    seg("abcGrao", function (b) { st.g = b.dataset.g; render(); });
+    $("abcBoard").addEventListener("click", function (e) { var b = e.target.closest(".abc-c"); if (b) { st.f = b.dataset.f; render(); } });
+    seg("abcPer", function (b) { st.per = +b.dataset.p; marcar("abcPer", b); charts[0].setOption(g0(), true); });
+    seg("abcImp", function (b) { st.imp = b.dataset.i; marcar("abcImp", b); charts[3].setOption(g3(), true); });
+    $("abcTab").addEventListener("click", function (e) { var c = e.target.closest("td[data-g]"); if (c) { st.g = c.dataset.g; st.f = c.dataset.f; render(); window.scrollTo({ top: $("abc").offsetTop, behavior: "smooth" }); } });
+    $("abcCsv").addEventListener("click", csv);
+    document.querySelectorAll("#abc .abc-dl[data-dl]").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (D) render(); }, 150); });
+    render();
+  }).catch(function (e) {
+    if (window.console) console.error("AgroBasis Troca:", e);
+    $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
