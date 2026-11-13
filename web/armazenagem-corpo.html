@@ -1,0 +1,392 @@
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Armazenagem de grãos · capacidade × safra</h1>
+      <div class="abc-tit" id="abcTit">Carregando</div>
+      <div class="abc-meta" id="abcMeta">&nbsp;</div>
+    </div>
+    <div class="ar-loc"><label for="abcUf">Estado</label><select id="abcUf" class="ar-sel"></select></div>
+  </div>
+
+  <p class="abc-lead" id="abcLead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/></svg><span>&nbsp;</span></p>
+
+  <div class="abc-kpis">
+    <div class="abc-k"><span>Capacidade (granel)</span><b id="kC">-</b><em id="kCs">&nbsp;</em></div>
+    <div class="abc-k"><span id="kPl">Safra de grãos (Conab)</span><b id="kP">-</b><em id="kPs">&nbsp;</em></div>
+    <div class="abc-k"><span>Cobertura da safra</span><b id="kR">-</b><em id="kRs">&nbsp;</em></div>
+    <div class="abc-k"><span id="kEl">Estoque armazenado</span><b id="kE">-</b><em id="kEs">&nbsp;</em></div>
+  </div>
+
+  <div class="abc-row ar-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Quanto da safra cabe nos armazéns <small>capacidade ÷ produção, por estado</small></h3><button class="abc-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart ar-map" id="abcG0"></div>
+      <p class="abc-nota" id="abcN0">Em cinza, estados com safra de grãos abaixo de 1 milhão de t ou sem capacidade divulgada pelo IBGE. Clique num estado para abrir os números dele.</p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Saldo de armazenagem <small>capacidade menos safra, milhões de t</small></h3><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart ar-map" id="abcG1"></div>
+      <p class="abc-nota" id="abcN1"></p>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH2">Capacidade de armazenagem × safra</h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcVis"><button data-v="t" aria-pressed="true">Milhões de t</button><button data-v="c" aria-pressed="false">Cobertura %</button></div>
+      <button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart md" id="abcG2"></div>
+    <p class="abc-nota" id="abcN2"></p>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3 id="abcH3">Estoque nos armazéns por produto <small>milhões de t, em 30/06 e 31/12</small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart ar-sm" id="abcG3"></div>
+      <p class="abc-nota" id="abcN3"></p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Quem guarda o grão <small>estoque no Brasil por tipo de empresa</small></h3><button class="abc-dl" data-dl="4" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart ar-sm" id="abcG4"></div>
+      <p class="abc-nota" id="abcN4"></p>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="abcH5">Municípios com maior capacidade</h3><button class="abc-dl" data-dl="5" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="abc-chart" id="abcG5"></div>
+    <p class="abc-nota" id="abcN5"></p>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Todos os estados <small id="abcH6s"></small></h3>
+      <button class="abc-dl" id="abcCsv" aria-label="Baixar tabela em CSV"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="cn-scroll"><table class="cn-t ar-t" id="abcTab"></table></div>
+    <p class="abc-nota">Ordenado pela safra. Cobertura é a capacidade estática dividida pela produção de grãos da Conab; a referência usada no setor é de 120%. Em cinza, estados com safra abaixo de 1 milhão de t. Clique numa linha para abrir o estado.</p>
+  </div>
+
+  <div class="abc-foot"><span>Fontes: IBGE, Pesquisa de Estoques (tabelas 5459 e 254) e Conab, série histórica de grãos · Elaboração: AgroBasis</span><span id="abcAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    __FAQ__
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/safra-brasil-conab/">Safra Brasil por estado</a><a href="/dashboards/plantio-e-colheita-brasil/">Plantio e colheita</a><a href="/dashboards/basis-soja-brasil/">Basis Soja</a><a href="/dashboards/relacao-de-troca-fertilizantes/">Relação de troca</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+</div>
+<script type="application/ld+json">__LD__</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#A17149", am: "#E3A72F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", cz: "#AEB7B0", grade: "rgba(29,36,32,.07)" };
+  var NOME_UF = { BR: "Brasil", AC: "Acre", AL: "Alagoas", AM: "Amazonas", AP: "Amapá", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MG: "Minas Gerais", MS: "Mato Grosso do Sul", MT: "Mato Grosso", PA: "Pará", PB: "Paraíba", PE: "Pernambuco", PI: "Piauí", PR: "Paraná", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RO: "Rondônia", RR: "Roraima", RS: "Rio Grande do Sul", SC: "Santa Catarina", SE: "Sergipe", SP: "São Paulo", TO: "Tocantins" };
+  var PROD = [["soja", "Soja", "#1E4812"], ["milho", "Milho", "#E3A72F"], ["trigo", "Trigo", "#C98F5B"], ["arroz", "Arroz", "#8FB27A"], ["outros", "Outros", "#C9D1CB"]];
+  var PROP = [["privada", "Empresas privadas", "#1E4812"], ["cooperativa", "Cooperativas", "#54931B"], ["governo", "Governo", "#A17149"], ["mista", "Mistas", "#C9D1CB"]];
+  var PEQ = 1e6; // abaixo de 1 milhão de t de safra a cobertura perde sentido (armazéns de café, sal, adubo etc.)
+  var REF = 120; // referência de cobertura usada no setor (capacidade 20% acima da safra)
+  var $ = function (id) { return document.getElementById(id); };
+  var D, IU, st = { uf: "BR", vis: "t" }, charts = [];
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function pct(v, c) { if (v == null || isNaN(v)) return "-"; var r = +v.toFixed(c == null ? 0 : c); return (r > 0 ? "+" : r < 0 ? "−" : "") + br(Math.abs(r), c == null ? 0 : c) + "%"; }
+  function mt(t, c) { return t == null ? "-" : br(t / 1e6, c == null ? 1 : c); }
+  function plab(p) { return (p.slice(5) === "01" ? "1º" : "2º") + " sem/" + p.slice(2, 4); }
+  function plong(p) { return (p.slice(5) === "01" ? "1º semestre" : "2º semestre") + " de " + p.slice(0, 4); }
+  function pdata(p) { return (p.slice(5) === "01" ? "30/06/" : "31/12/") + p.slice(0, 4); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+  function bola(c) { return '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + c + ';margin-right:6px"></span>'; }
+  function eixoY(fmt) { return { type: "value", axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt || function (v) { return br(v, 0); } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }; }
+
+  // ---------- cálculos ----------
+  var NS; // índice da última safra
+  function L(k) { return D.locais[k || st.uf]; }
+  function cap(k, i) { var c = L(k).cap.total; return c[i == null ? IU : i]; }
+  function prodT(k, j) { var p = D.producao[k || st.uf]; if (!p) return null; var v = p[j == null ? NS : j]; return v == null ? null : v * 1000; }
+  function cob(k) { var c = cap(k), p = prodT(k); return c && p ? c / p * 100 : null; }
+  function idxAno(ano) { // capacidade de referência de um ano: 1º semestre, ou 2º se o 1º não existir
+    var i = D.periodos.indexOf(ano + "-01"); if (i < 0) i = D.periodos.indexOf(ano + "-02"); return i;
+  }
+  function safraLab(s) { return s.slice(2, 4) + "/" + s.slice(5); }
+  function ufs() { return Object.keys(NOME_UF).filter(function (k) { return k !== "BR" && D.locais[k]; }); }
+  function corCob(v) { return v == null ? "#F3F5F3" : v < 40 ? "#9C5B24" : v < 70 ? "#D9B48D" : v < 100 ? "#EFE6D2" : v < REF ? "#A9CB8C" : "#2F6B1F"; }
+  function faixa(v) { return v == null ? "sem dado" : v < 40 ? "déficit muito alto" : v < 70 ? "déficit alto" : v < 100 ? "déficit moderado" : v < REF ? "capacidade cobre a safra" : "acima da referência de 120%"; }
+  function emLoc(k) { k = k || st.uf; var art = { BR: "no", AC: "no", AL: "em", AM: "no", AP: "no", BA: "na", CE: "no", DF: "no", ES: "no", GO: "em", MA: "no", MG: "em", MS: "em", MT: "em", PA: "no", PB: "na", PE: "em", PI: "no", PR: "no", RJ: "no", RN: "no", RO: "em", RR: "em", RS: "no", SC: "em", SE: "em", SP: "em", TO: "no" }; return art[k] + " " + NOME_UF[k]; }
+  function cresc(arr, i, n) { var a = arr[i], b = arr[i - n]; return a && b ? (a / b - 1) * 100 : null; }
+
+  // ---------- painel ----------
+  function seletor() {
+    var opts = ["BR"].concat(ufs().sort(function (a, b) { return NOME_UF[a].localeCompare(NOME_UF[b]); }));
+    $("abcUf").innerHTML = opts.map(function (k) { return '<option value="' + k + '"' + (k === st.uf ? " selected" : "") + ">" + NOME_UF[k] + "</option>"; }).join("");
+  }
+  function kpis() {
+    var l = L(), c = cap(), c12 = l.cap.total[IU - 2], p = prodT(), sf = D.producao.anos[NS], est = l.estab.total[IU];
+    $("kC").innerHTML = c ? mt(c) + "<small>mi t</small>" : "-";
+    $("kCs").innerHTML = (c && c12 ? '<i style="font-style:normal" class="' + (c >= c12 ? "pos" : "neg") + '">' + pct((c / c12 - 1) * 100, 1) + "</i> em 12 meses · " : "") + (est ? br(est, 0) + " armazéns" : "");
+    $("kPl").textContent = "Safra de grãos " + sf + " (Conab)";
+    $("kP").innerHTML = p ? mt(p) + "<small>mi t</small>" : "-";
+    var p10 = prodT(st.uf, NS - 10);
+    $("kPs").textContent = p && p10 ? pct((p / p10 - 1) * 100) + " em 10 safras" : "soma de todos os grãos";
+    var r = cob();
+    $("kR").innerHTML = r ? br(r, 0) + "<small>%</small>" : "-";
+    $("kRs").textContent = r ? (c < p ? "faltam " + mt(p - c) + " mi t de espaço" : "sobram " + mt(c - p) + " mi t de espaço") + " · ref. " + REF + "%" : "sem capacidade divulgada";
+    var e = l.estoque.total[IU];
+    $("kEl").textContent = "Estoque em " + pdata(D.periodos[IU]);
+    $("kE").innerHTML = e ? mt(e) + "<small>mi t</small>" : "-";
+    $("kEs").textContent = e && c ? br(e / c * 100, 0) + "% da capacidade ocupada" : "";
+  }
+  function lead() {
+    var k = st.uf, c = cap(), p = prodT(), r = cob(), sf = D.producao.anos[NS], P = D.periodos[IU];
+    var t;
+    if (!c) { $("abcLead").querySelector("span").innerHTML = "O IBGE não divulga a capacidade de armazenagem " + (k === "BR" ? "do país" : "deste estado") + " no " + plong(P) + " (dado sigiloso ou sem informantes suficientes)."; return; }
+    var c10 = cap(k, idxAno(+P.slice(0, 4) - 10)), p10 = prodT(k, NS - 10);
+    t = (k === "BR" ? "O Brasil" : NOME_UF[k]) + " tinha <b>" + mt(c) + " milhões de t de capacidade estática</b> para grãos a granel no " + plong(P) + ". ";
+    if (p) {
+      t += "A safra " + sf + " foi de " + mt(p) + " milhões de t, segundo a Conab: os armazéns comportam <b>" + br(r, 0) + "% da produção</b>";
+      t += c < p ? ", um déficit de " + mt(p - c) + " milhões de t. " : ", com sobra de " + mt(c - p) + " milhões de t. ";
+      if (c10 && p10) t += "Em dez anos, a capacidade " + (c >= c10 ? "cresceu " : "caiu ") + br(Math.abs((c / c10 - 1) * 100), 0) + "% e a safra " + (p >= p10 ? "cresceu " : "caiu ") + br(Math.abs((p / p10 - 1) * 100), 0) + "%" + (p / p10 > c / c10 ? ", por isso a falta de espaço aumentou." : ", e a cobertura melhorou.");
+    }
+    $("abcLead").querySelector("span").innerHTML = t;
+  }
+
+  // ---------- 0: mapa de cobertura ----------
+  function g0() {
+    var dados = Object.keys(NOME_UF).filter(function (k) { return k !== "BR"; }).map(function (k) { var v = D.locais[k] && (prodT(k) || 0) >= PEQ ? cob(k) : null; return { name: k, value: v == null ? "-" : +v.toFixed(1), itemStyle: { areaColor: v == null ? "#E9ECEA" : corCob(v) }, selected: k === st.uf }; });
+    var m = mobile(), pecas = [{ lt: 40, label: m ? "<40%" : "abaixo de 40%", color: corCob(30) }, { gte: 40, lt: 70, label: m ? "40-70" : "40% a 70%", color: corCob(50) }, { gte: 70, lt: 100, label: m ? "70-100" : "70% a 100%", color: corCob(80) }, { gte: 100, lt: REF, label: m ? "100-" + REF : "100% a " + REF + "%", color: corCob(110) }, { gte: REF, label: m ? "≥" + REF + "%" : REF + "% ou mais", color: corCob(200) }];
+    return Object.assign({}, base, {
+      visualMap: { type: "piecewise", pieces: pecas, orient: mobile() ? "horizontal" : "vertical", left: mobile() ? "center" : 4, bottom: mobile() ? 0 : 14, itemWidth: 12, itemHeight: 10, itemGap: 6, textStyle: { color: COR.mt, fontSize: 11 }, selectedMode: false, seriesIndex: 0 },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) {
+        var k = p.name, c = D.locais[k] && cap(k), pr = prodT(k);
+        if (!c) return "<b>" + NOME_UF[k] + "</b><br>capacidade não divulgada";
+        return "<b>" + NOME_UF[k] + "</b>" + tl("", "Capacidade", mt(c) + " mi t") + tl("", "Safra " + D.producao.anos[NS], mt(pr) + " mi t") + tl("", "Cobertura", br(cob(k), 0) + "%") + tl("", "Saldo", (c >= pr ? "+" : "−") + mt(Math.abs(c - pr)) + " mi t");
+      } }),
+      series: [{ type: "map", map: "BR", nameProperty: "name", roam: false, selectedMode: "single", layoutCenter: ["55%", mobile() ? "44%" : "50%"], layoutSize: mobile() ? "92%" : "96%",
+        label: { show: true, fontSize: mobile() ? 8.5 : 10, color: "#1d2420", formatter: function (p) { return p.name; } },
+        itemStyle: { borderColor: "#fff", borderWidth: 0.8 }, emphasis: { label: { show: true, fontWeight: 700 }, itemStyle: { areaColor: "#FFD87A" } },
+        select: { label: { show: true, fontWeight: 700, color: "#000" }, itemStyle: { areaColor: "#FFC94A", borderColor: COR.tx, borderWidth: 1.5 } },
+        data: dados.map(function (d) { var v = d.value; if (v !== "-" && (v < 40 || v >= REF)) d.label = { color: "#fff" }; return d; }) }],
+      graphic: mobile() ? [] : [{ type: "text", right: 6, bottom: 4, style: { text: "agrobasis.com.br", fill: "#b6beb8", font: "11px Geist, sans-serif" } }]
+    });
+  }
+
+  // ---------- 1: saldo por estado ----------
+  function g1() {
+    var us = ufs().filter(function (k) { return cap(k) && prodT(k); }).sort(function (a, b) { return prodT(b) - prodT(a); }).slice(0, mobile() ? 12 : 15);
+    var saldo = us.map(function (k) { return +((cap(k) - prodT(k)) / 1e6).toFixed(2); });
+    var piores = us.slice().sort(function (a, b) { return (cap(a) - prodT(a)) - (cap(b) - prodT(b)); });
+    $("abcN1").textContent = "Os " + us.length + " maiores produtores. " + NOME_UF[piores[0]] + " tem o maior déficit (" + mt(prodT(piores[0]) - cap(piores[0])) + " mi t), seguido de " + NOME_UF[piores[1]] + " (" + mt(prodT(piores[1]) - cap(piores[1])) + " mi t). Barras à direita indicam capacidade maior que a safra.";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: 16, top: 8, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: us, axisLabel: { color: COR.tx, fontSize: 12, fontWeight: 600 }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: Object.assign(eixoY(function (v) { return br(v, 0); }), { min: function (v) { return Math.floor(Math.min(0, v.min) * 1.22 / 10) * 10; }, max: function (v) { return v.max > 0 ? Math.ceil(v.max * 1.3) : 0; } }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) {
+        var k = us[ps[0].dataIndex]; return "<b>" + NOME_UF[k] + "</b>" + tl("", "Capacidade", mt(cap(k)) + " mi t") + tl("", "Safra " + D.producao.anos[NS], mt(prodT(k)) + " mi t") + tl("", "Saldo", (ps[0].value >= 0 ? "+" : "−") + br(Math.abs(ps[0].value), 1) + " mi t");
+      } }),
+      series: [{ type: "bar", barWidth: "62%", data: saldo.map(function (v, i) { var sel = us[i] === st.uf; return { value: v, itemStyle: { color: v < 0 ? (sel ? "#7a4518" : COR.mr) : (sel ? COR.vd : COR.vc), borderRadius: v < 0 ? [4, 0, 0, 4] : [0, 4, 4, 0] } }; }),
+        label: { show: true, position: "outside", formatter: function (p) { return (p.value >= 0 ? "+" : "−") + br(Math.abs(p.value), 1); }, color: COR.mt, fontSize: 11 } }]
+    });
+  }
+
+  // ---------- 2: evolução ----------
+  function evol() {
+    var anos = D.producao.anos, out = { cats: [], silo: [], gran: [], prod: [], cob: [], i: [] };
+    anos.forEach(function (s, j) {
+      var i = idxAno(+s.slice(0, 4) + 1); if (i < 0) return;
+      var l = L(), c = l.cap.total[i], p = prodT(st.uf, j);
+      out.cats.push(safraLab(s)); out.i.push(i);
+      out.silo.push(l.cap.silo[i] == null ? null : +(l.cap.silo[i] / 1e6).toFixed(2));
+      out.gran.push(l.cap.graneleiro[i] == null ? null : +(l.cap.graneleiro[i] / 1e6).toFixed(2));
+      out.prod.push(p == null ? null : +(p / 1e6).toFixed(2));
+      out.cob.push(c && p ? +(c / p * 100).toFixed(1) : null);
+    });
+    return out;
+  }
+  function g2() {
+    var e = evol(), n = e.cats.length - 1, ok = e.cob.filter(function (v) { return v != null; });
+    $("abcH2").textContent = (st.vis === "t" ? "Capacidade de armazenagem × safra " : "Cobertura da safra pelos armazéns ") + (st.uf === "BR" ? "no Brasil" : emLoc());
+    var melhor = Math.max.apply(null, ok), im = e.cob.indexOf(melhor);
+    $("abcN2").textContent = "Capacidade no 1º semestre do ano da colheita (30/06) contra a safra da Conab. Cobertura de " + br(e.cob[n], 0) + "% em " + e.cats[n] + "; a melhor marca da série foi " + br(melhor, 0) + "% em " + e.cats[im] + ". Silos são estruturas verticais; graneleiros são armazéns horizontais a granel.";
+    var comum = { graphic: [marca()], legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } }, grid: { left: 6, right: 14, top: 34, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: e.cats, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } } };
+    if (st.vis === "c") return Object.assign({}, base, comum, {
+      yAxis: eixoY("{value}%"),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return v == null ? "-" : br(v, 0) + "%"; } }),
+      series: [{ name: "Cobertura (capacidade ÷ safra)", type: "line", data: e.cob, symbol: "circle", symbolSize: 6, lineStyle: { width: 2.6, color: COR.vd }, itemStyle: { color: COR.vd }, areaStyle: { color: "rgba(84,147,27,.10)" }, connectNulls: true,
+        markLine: { silent: true, symbol: "none", lineStyle: { color: COR.mr, type: [5, 4], width: 1.5 }, label: { formatter: "referência " + REF + "%", color: COR.mr, fontSize: 11, position: "insideEndTop" }, data: [{ yAxis: REF }, { yAxis: 100, lineStyle: { color: COR.cz, type: "solid", width: 1 }, label: { formatter: "100%", color: COR.mt } }] } }]
+    });
+    return Object.assign({}, base, comum, {
+      yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var j = ps[0].dataIndex, c = (e.silo[j] || 0) + (e.gran[j] || 0);
+        return "<b>Safra " + e.cats[j] + "</b>" + tl(bola("#3B7A26"), "Silos", br(e.silo[j], 1) + " mi t") + tl(bola("#A9CB8C"), "Graneleiros", br(e.gran[j], 1) + " mi t") + tl("", "Capacidade total", br(c, 1) + " mi t") + tl(bola(COR.mr), "Safra (Conab)", br(e.prod[j], 1) + " mi t") + tl("", "Cobertura", e.cob[j] == null ? "-" : br(e.cob[j], 0) + "%");
+      } }),
+      series: [
+        { name: "Silos", type: "bar", stack: "c", barWidth: "56%", data: e.silo, itemStyle: { color: "#3B7A26" } },
+        { name: "Graneleiros", type: "bar", stack: "c", data: e.gran, itemStyle: { color: "#A9CB8C", borderRadius: [3, 3, 0, 0] } },
+        { name: "Safra de grãos (Conab)", type: "line", data: e.prod, symbol: "circle", symbolSize: 6, lineStyle: { width: 2.6, color: COR.mr }, itemStyle: { color: COR.mr }, connectNulls: true, z: 4 }
+      ]
+    });
+  }
+
+  // ---------- 3: estoques ----------
+  function g3() {
+    var l = L(), n = mobile() ? 10 : 16, ini = Math.max(0, IU - n + 1), cats = [], ser = {};
+    PROD.forEach(function (p) { ser[p[0]] = []; });
+    for (var i = ini; i <= IU; i++) {
+      cats.push(plab(D.periodos[i]));
+      var tot = l.estoque.total[i], soma = 0;
+      ["soja", "milho", "trigo", "arroz"].forEach(function (k) { var v = l.estoque[k][i]; soma += v || 0; ser[k].push(v == null ? null : +(v / 1e6).toFixed(2)); });
+      ser.outros.push(tot == null ? null : +(Math.max(0, tot - soma) / 1e6).toFixed(2));
+    }
+    var e = l.estoque, a = e.total[IU], b = e.total[IU - 2];
+    $("abcH3").innerHTML = "Estoque nos armazéns " + (st.uf === "BR" ? "" : emLoc() + " ") + "<small>milhões de t, em 30/06 e 31/12</small>";
+    $("abcN3").textContent = a ? "Em " + pdata(D.periodos[IU]) + ": " + mt(a) + " mi t estocadas" + (b ? " (" + pct((a / b - 1) * 100) + " frente a um ano antes)" : "") + ", sendo " + mt(e.soja[IU]) + " de soja e " + mt(e.milho[IU]) + " de milho. O pico de junho reflete a colheita da soja; o de dezembro, o milho safrinha." : "Estoque não divulgado para este estado.";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      grid: { left: 6, right: 8, top: 32, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: cats, axisLabel: { color: COR.mt, fontSize: 10.5, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (ps) {
+        var i = ini + ps[0].dataIndex; return "<b>" + pdata(D.periodos[i]) + "</b>" + ps.slice().reverse().map(function (p) { return tl(bola(p.color), p.seriesName, p.value == null ? "-" : br(p.value, 1) + " mi t"); }).join("") + tl("", "Total", mt(l.estoque.total[i]) + " mi t");
+      } }),
+      series: PROD.map(function (p, j) { return { name: p[1], type: "bar", stack: "e", barWidth: "60%", data: ser[p[0]], itemStyle: { color: p[2], borderRadius: j === PROD.length - 1 ? [3, 3, 0, 0] : 0 } }; })
+    });
+  }
+
+  // ---------- 4: propriedade ----------
+  function g4() {
+    var tot = 0, v = PROP.map(function (p) { var x = D.propriedade[p[0]][IU] || 0; tot += x; return x; });
+    var a10 = idxAno(+D.periodos[IU].slice(0, 4) - 10), coop10 = 0, t10 = 0;
+    PROP.forEach(function (p) { var x = D.propriedade[p[0]][a10] || 0; t10 += x; if (p[0] === "cooperativa") coop10 = x; });
+    $("abcN4").textContent = "Em " + pdata(D.periodos[IU]) + ", empresas privadas guardavam " + br(v[0] / tot * 100, 0) + "% do estoque e cooperativas " + br(v[1] / tot * 100, 0) + "%" + (t10 ? " (eram " + br(coop10 / t10 * 100, 0) + "% dez anos antes)" : "") + ". O governo, que mantinha os estoques públicos da Conab, responde por " + br(v[2] / tot * 100, 1).replace(",0", "") + "%. Dado nacional.";
+    return Object.assign({}, base, {
+      graphic: [marca(), { type: "text", left: "center", top: mobile() ? "39%" : "41%", style: { text: mt(tot) + " mi t", fill: COR.tx, font: "700 " + (mobile() ? 17 : 20) + "px Sora, Geist, sans-serif", textAlign: "center" } },
+        { type: "text", left: "center", top: mobile() ? "47%" : "49%", style: { text: "em " + pdata(D.periodos[IU]), fill: COR.mt, font: "12px Geist, sans-serif", textAlign: "center" } }],
+      legend: { bottom: 0, left: "center", itemWidth: 12, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 } },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) { return "<b>" + p.name + "</b>" + tl("", "Estoque", mt(p.value) + " mi t") + tl("", "Participação", br(p.percent, 1) + "%"); } }),
+      series: [{ type: "pie", radius: ["48%", "72%"], center: ["50%", "46%"], avoidLabelOverlap: true, itemStyle: { borderColor: "#fff", borderWidth: 2 },
+        label: { formatter: function (p) { return p.percent >= 3 ? br(p.percent, 0) + "%" : ""; }, color: COR.tx, fontWeight: 600, fontSize: 12 }, labelLine: { length: 6, length2: 6 },
+        data: PROP.map(function (p, j) { return { name: p[1], value: v[j], itemStyle: { color: p[2] } }; }) }]
+    });
+  }
+
+  // ---------- 5: municípios ----------
+  function munis() { return D.municipios.filter(function (m) { return st.uf === "BR" || m.uf === st.uf; }).slice(0, mobile() ? 12 : 20); }
+  function g5() {
+    var ms = munis(), totUF = cap();
+    $("abcH5").textContent = "Municípios com maior capacidade " + (st.uf === "BR" ? "do Brasil" : emLoc().replace(/^(no|na|em) /, function (x) { return { "no ": "do ", "na ": "da ", "em ": "de " }[x]; }));
+    if (!ms.length) { $("abcN5").textContent = "Nenhum município deste estado aparece entre os 300 de maior capacidade do país."; }
+    else {
+      var soma = ms.reduce(function (t, m) { return t + m.t; }, 0);
+      $("abcN5").textContent = "Capacidade estática a granel em " + pdata(ms[0].p) + ". " + (st.uf === "BR" ? "Os " + ms.length + " primeiros somam " + br(soma / totUF * 100, 0) + "% da capacidade do país; " + ms[0].nome + " (" + ms[0].uf + "), sozinho, tem " + mt(ms[0].t, 2) + " mi t. O IBGE divulga " + br(D.n_municipios, 0) + " municípios." : "Os " + ms.length + " primeiros somam " + br(soma / totUF * 100, 0) + "% da capacidade do estado.");
+    }
+    var fora = st.uf === "BR";
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: 60, top: 6, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: ms.map(function (m) { return m.nome + (fora ? " (" + m.uf + ")" : ""); }), axisLabel: { color: COR.tx, fontSize: 11.5, width: mobile() ? 110 : 190, overflow: "truncate" }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: { type: "value", show: false },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) { var m = ms[p.dataIndex]; return "<b>" + m.nome + " (" + m.uf + ")</b>" + tl("", "Capacidade", br(m.t / 1e6, 2) + " mi t") + tl("", "Parte de " + (fora ? "todo o país" : NOME_UF[st.uf]), br(m.t / totUF * 100, 1) + "%"); } }),
+      series: [{ type: "bar", barWidth: "64%", data: ms.map(function (m, i) { return { value: +(m.t / 1e6).toFixed(3), itemStyle: { color: i === 0 ? COR.vd : m.uf === "MT" && fora ? "#3B7A26" : "#8FB27A", borderRadius: [0, 4, 4, 0] } }; }),
+        label: { show: true, position: "right", color: COR.tx, fontSize: 11.5, fontWeight: 600, formatter: function (p) { return br(p.value, 2); } } }]
+    });
+  }
+
+  // ---------- tabela ----------
+  function linhas() {
+    var us = ufs().slice().sort(function (a, b) { return (prodT(b) || 0) - (prodT(a) || 0); });
+    return ["BR"].concat(us).map(function (k) {
+      var l = D.locais[k], c = cap(k), p = prodT(k), r = cob(k), i5 = idxAno(+D.periodos[IU].slice(0, 4) - 5);
+      return { k: k, c: c, silo: c ? l.cap.silo[IU] / c * 100 : null, n: l.estab.total[IU], p: p, r: r, s: c && p ? c - p : null, v5: c && l.cap.total[i5] ? (c / l.cap.total[i5] - 1) * 100 : null, e: l.estoque.total[IU] };
+    });
+  }
+  function tabela() {
+    var h = '<thead><tr><th class="l">Estado</th><th>Capacidade<br><small>mi t</small></th><th>Em silos<br><small>% da capac.</small></th><th>Armazéns<br><small>unidades</small></th><th>Safra ' + D.producao.anos[NS] + '<br><small>mi t</small></th><th>Cobertura<br><small>% da safra</small></th><th>Saldo<br><small>mi t</small></th><th>Capacidade<br><small>em 5 anos</small></th><th>Estoque<br><small>' + pdata(D.periodos[IU]) + "</small></th></tr></thead><tbody>";
+    linhas().forEach(function (x) {
+      var cl = x.k === "BR" ? "ar-br" : x.k === st.uf ? "sel" : "";
+      h += '<tr data-uf="' + x.k + '" class="' + cl + '"><td class="l"><b>' + NOME_UF[x.k] + "</b></td><td>" + mt(x.c) + "</td><td>" + br(x.silo, 0) + "</td><td>" + br(x.n, 0) + "</td><td>" + mt(x.p) + '</td><td><span class="ar-pill" style="background:' + (x.p < PEQ ? "#E9ECEA" : corCob(x.r)) + ";color:" + (x.p >= PEQ && x.r != null && (x.r < 40 || x.r >= REF) ? "#fff" : x.p < PEQ ? "#8a948c" : "#1d2420") + '">' + (x.r == null ? "-" : x.r > 999 ? "&gt;999%" : br(x.r, 0) + "%") + '</span></td><td class="' + (x.s == null ? "" : x.s < 0 ? "neg" : "pos") + '">' + (x.s == null ? "-" : Math.abs(x.s) < 5e4 ? "0,0" : (x.s >= 0 ? "+" : "−") + mt(Math.abs(x.s))) + "</td><td>" + pct(x.v5) + "</td><td>" + mt(x.e) + "</td></tr>";
+    });
+    $("abcTab").innerHTML = h + "</tbody>";
+    $("abcH6s").textContent = "capacidade no " + plong(D.periodos[IU]) + " e safra " + D.producao.anos[NS];
+  }
+  function csv() {
+    var out = [["periodo", "uf", "capacidade_t", "silos_t", "graneleiros_t", "armazens", "estoque_t", "estoque_soja_t", "estoque_milho_t", "estoque_trigo_t"].join(";")];
+    Object.keys(D.locais).forEach(function (k) { var l = D.locais[k]; D.periodos.forEach(function (p, i) { out.push([p, k, l.cap.total[i], l.cap.silo[i], l.cap.graneleiro[i], l.estab.total[i], l.estoque.total[i], l.estoque.soja[i], l.estoque.milho[i], l.estoque.trigo[i]].map(function (v) { return v == null ? "" : v; }).join(";")); }); });
+    var el = document.createElement("a"); el.href = URL.createObjectURL(new Blob(["﻿" + out.join("\n")], { type: "text/csv;charset=utf-8" }));
+    el.download = "agrobasis-armazenagem-ibge.csv"; document.body.appendChild(el); el.click(); el.remove();
+  }
+
+  var FN = [g0, g1, g2, g3, g4, g5];
+  function render() {
+    $("abcTit").textContent = NOME_UF[st.uf];
+    $("abcMeta").textContent = "Capacidade estática no " + plong(D.periodos[IU]) + " (IBGE) · safra " + D.producao.anos[NS] + " (Conab)";
+    $("abcUf").value = st.uf;
+    kpis(); lead(); tabela();
+    charts.forEach(function (c, i) { c.setOption(FN[i](), true); });
+    $("abcAtu").textContent = "IBGE até " + plong(D.periodos[IU]) + " · Conab safra " + D.producao.anos[NS];
+    try { history.replaceState(null, "", st.uf === "BR" ? location.pathname : "#" + st.uf.toLowerCase()); } catch (e) {}
+  }
+  function escolher(k) { st.uf = D.locais[k] ? k : "BR"; render(); }
+  function baixar(i) {
+    var tit = ["Quanto da safra cabe nos armazéns", "Saldo de armazenagem por estado", $("abcH2").textContent, "Estoque nos armazéns por produto", "Quem guarda o grão no Brasil", $("abcH5").textContent][i];
+    var opt = FN[i](); opt.animation = false;
+    opt.title = { text: tit, subtext: (i === 0 || i === 1 || i === 4 ? "Brasil" : NOME_UF[st.uf]) + " · " + plong(D.periodos[IU]), left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    if (opt.legend && i !== 4) opt.legend = Object.assign({}, opt.legend, { top: 54, left: 8 });
+    if (opt.grid) opt.grid = Object.assign({}, opt.grid, { top: opt.legend ? 84 : 62, bottom: 30 });
+    if (i === 0) opt.series[0].layoutCenter = ["55%", "56%"], opt.series[0].layoutSize = "84%";
+    opt.graphic = (opt.graphic || []).concat([{ type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fontes: IBGE, Conab", fill: "#9aa39c", font: "11px Geist, sans-serif" } }]);
+    charts[i].setOption(opt, true);
+    var url = charts[i].getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    render();
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-armazenagem-" + st.uf.toLowerCase() + "-" + ["mapa", "saldo", "evolucao", "estoques", "propriedade", "municipios"][i] + ".png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }
+
+  Promise.all([carregarLib(), json("dados/armazenagem/armazenagem.json"), json("dados/conab/br_uf.json")]).then(function (r) {
+    D = r[1]; echarts.registerMap("BR", r[2]);
+    IU = D.periodos.indexOf(D.ultimo); NS = D.producao.anos.length - 1;
+    while (NS > 0 && D.producao.BR[NS] == null) NS--;
+    var h = (location.hash || "").replace("#", "").toUpperCase(); if (D.locais[h]) st.uf = h;
+    seletor();
+    charts = FN.map(function (_, i) { return echarts.init($("abcG" + i), null, { renderer: "canvas" }); });
+    charts[0].on("click", function (p) { escolher(p.name === st.uf ? "BR" : p.name); });
+    charts[1].on("click", function (p) { escolher(p.name === st.uf ? "BR" : p.name); });
+    $("abcUf").addEventListener("change", function () { escolher(this.value); });
+    $("abcVis").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; st.vis = b.dataset.v; $("abcVis").querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); charts[2].setOption(g2(), true); });
+    $("abcTab").addEventListener("click", function (e) { var tr = e.target.closest("tr[data-uf]"); if (tr) { escolher(tr.dataset.uf); window.scrollTo({ top: $("abc").offsetTop, behavior: "smooth" }); } });
+    $("abcCsv").addEventListener("click", csv);
+    document.querySelectorAll("#abc .abc-dl[data-dl]").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); if (D) render(); }, 150); });
+    render();
+  }).catch(function (e) {
+    if (window.console) console.error("AgroBasis Armazenagem:", e);
+    $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
