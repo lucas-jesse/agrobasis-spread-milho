@@ -13,10 +13,11 @@ jobs:
         run: |
           mkdir -p out && cd out
           UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 Chrome/124 Safari/537.36"
-          for u in "soja.aspx?id=92" "soja.aspx?id=12" "milho.aspx?id=77" "trigo.aspx?id=178"; do
-            n=$(echo $u | tr '?=' '__'); curl -sSL -A "$UA" -e "https://www.cepea.org.br/br/indicador/soja.aspx" "https://www.cepea.org.br/br/indicador/series/$u" -o "cepea_$n" -w "$u %{http_code} %{size_download} %{content_type}\n" >> status.txt || true
-          done
-          file cepea_* >> status.txt; cat status.txt
+          curl -sS -X POST https://api-comexstat.mdic.gov.br/general -H 'Content-Type: application/json' \
+            -d '{"flow":"import","monthDetail":false,"period":{"from":"2025-01","to":"2025-12"},"filters":[{"filter":"heading","values":["3102","3103","3104","3105"]}],"details":["ncm"],"metrics":["metricFOB","metricKG","metricCIF"]}' -o ncms.json -w "ncms %{http_code}\n" >> status.txt || true
+          curl -sS -X POST https://api-comexstat.mdic.gov.br/general -H 'Content-Type: application/json' \
+            -d '{"flow":"import","monthDetail":true,"period":{"from":"2010-01","to":"2026-12"},"filters":[{"filter":"ncm","values":["31021010","31042010","31054000"]}],"details":["ncm"],"metrics":["metricKG","metricCIF"]}' -o serie.json -w "serie %{http_code} %{size_download} %{time_total}\n" >> status.txt || true
+          cat status.txt
       - name: publicar
         run: |
           cd out && git init -q && git checkout -q -b sonda-troca
