@@ -117,7 +117,8 @@ def bcb_ptax():
 def main():
     PASTA.mkdir(parents=True, exist_ok=True)
     hoje = date.today(); ate = f"{hoje.year}-{hoje.month:02d}"
-    ferts, total = fertilizantes(ate)
+    # o Comex Stat aplica o intervalo de meses a cada ano (até "2026-11" corta todos os dezembros): pede até dezembro
+    ferts, total = fertilizantes(f"{hoje.year}-12")
     ultimo_fert = max(m for f in ferts.values() for m, q in f["kg"].items() if q > 0)
     graos = {}
     for slug, (nome, praca, url, kg_un) in GRAOS.items():
