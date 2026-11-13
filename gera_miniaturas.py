@@ -42,6 +42,7 @@ ALVOS = {
     "safra-brasil-conab": ("conab.html", "#abcG0", ""),
     "plantio-e-colheita-brasil": ("progresso.html", "#abcG0", ""),
     "relacao-de-troca-fertilizantes": ("troca.html", "#abcG0", ""),
+    "clima-el-nino": ("clima.html", "#abcG0", ""),
 }
 
 

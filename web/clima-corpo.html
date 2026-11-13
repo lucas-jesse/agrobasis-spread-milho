@@ -1,0 +1,438 @@
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Dashboards</a></nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Clima e El Niño nas regiões produtoras</h1>
+      <div class="abc-tit" id="abcTit">Carregando</div>
+      <div class="abc-meta" id="abcMeta">&nbsp;</div>
+    </div>
+    <div class="cl-status" id="abcStatus"></div>
+  </div>
+
+  <!-- ===================== ENSO ===================== -->
+  <div class="abc-kpis">
+    <div class="abc-k"><span>Niño 3.4, semana</span><b id="kN">-</b><em id="kNs">&nbsp;</em></div>
+    <div class="abc-k"><span>RONI, trimestre</span><b id="kR">-</b><em id="kRs">&nbsp;</em></div>
+    <div class="abc-k"><span>El Niño no verão</span><b id="kP">-</b><em id="kPs">&nbsp;</em></div>
+    <div class="abc-k"><span>Volta à neutralidade</span><b id="kV">-</b><em id="kVs">&nbsp;</em></div>
+  </div>
+  <p class="abc-lead" id="abcLead"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/><circle cx="12" cy="12" r="4"/></svg><span>&nbsp;</span></p>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>2026 contra os grandes El Niños <small>anomalia semanal do Niño 3.4, °C</small></h3><button class="abc-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart cl-sm" id="abcG0"></div>
+      <p class="abc-nota">Semanas de janeiro de cada ano até junho do ano seguinte. Acima de +0,5 °C, condição de El Niño; acima de +1,5 °C, El Niño forte.</p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Probabilidades oficiais da NOAA <small>por trimestre, %</small></h3><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart cl-sm" id="abcG1"></div>
+      <p class="abc-nota" id="abcN1"></p>
+    </div>
+  </div>
+
+  <!-- ===================== CHUVA ===================== -->
+  <h2 class="cl-sec" id="chuva">Chuva nas regiões produtoras</h2>
+  <div class="abc-row cl-mapa">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Chuva frente à normal <small id="abcH2s"></small></h3>
+        <div class="abc-tools"><div class="abc-seg" id="abcMet"><button data-m="safra" aria-pressed="true">Desde 1º/set</button><button data-m="d30" aria-pressed="false">30 dias</button><button data-m="d90" aria-pressed="false">90 dias</button><button data-m="prev" aria-pressed="false">Próx. 15 dias</button></div>
+        <button class="abc-dl" data-dl="2" aria-label="Baixar mapa em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+      <div class="abc-chart" id="abcG2"></div>
+      <p class="abc-nota">Percentual da normal 1991-2020 de cada local. Clique num ponto para ver os detalhes.</p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Ranking <small id="abcH3s"></small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-chart" id="abcG3"></div>
+    </div>
+  </div>
+
+  <div class="cl-local">
+    <div class="cl-lh"><div><div class="cl-ln" id="abcLn"></div><div class="cl-lm" id="abcLm"></div></div><div class="abc-seg cl-sel" id="abcSel"></div></div>
+    <div class="abc-kpis">
+      <div class="abc-k"><span>Desde 1º de setembro</span><b id="k1">-</b><em id="k1s">&nbsp;</em></div>
+      <div class="abc-k"><span>Últimos 30 dias</span><b id="k2">-</b><em id="k2s">&nbsp;</em></div>
+      <div class="abc-k"><span>Previsão 15 dias</span><b id="k3">-</b><em id="k3s">&nbsp;</em></div>
+      <div class="abc-k"><span>Calor previsto</span><b id="k4">-</b><em id="k4s">&nbsp;</em></div>
+    </div>
+    <div class="abc-row">
+      <div class="abc-card">
+        <div class="abc-ch"><h3>Chuva acumulada na safra <small>mm desde 1º/set</small></h3><button class="abc-dl" data-dl="4" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+        <div class="abc-chart cl-sm" id="abcG4"></div>
+        <p class="abc-nota" id="abcN4"></p>
+      </div>
+      <div class="abc-card">
+        <div class="abc-ch"><h3>Previsão para os próximos 15 dias <small>ECMWF, 51 cenários</small></h3><button class="abc-dl" data-dl="5" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+        <div class="abc-chart cl-sm" id="abcG5"></div>
+        <p class="abc-nota">Barras: chuva média dos 51 cenários do modelo europeu; faixa: 10% a 90% dos cenários; linha tracejada: normal do dia. Linha laranja: temperatura máxima.</p>
+      </div>
+    </div>
+    <div class="abc-row">
+      <div class="abc-card">
+        <div class="abc-ch"><h3>Chuva mês a mês <small>mm, observado contra a normal</small></h3><button class="abc-dl" data-dl="6" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+        <div class="abc-chart cl-sm" id="abcG6"></div>
+      </div>
+      <div class="abc-card">
+        <div class="abc-ch"><h3>Como costuma chover com El Niño aqui <small>% frente à normal, por mês</small></h3><button class="abc-dl" data-dl="7" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+        <div class="abc-chart cl-sm" id="abcG7"></div>
+        <p class="abc-nota" id="abcN7"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PRODUTIVIDADE ===================== -->
+  <h2 class="cl-sec" id="produtividade">O que o El Niño fez com a produtividade</h2>
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Desvio da produtividade em relação à tendência <small id="abcH8s"></small></h3>
+      <div class="abc-tools"><div class="abc-seg" id="abcCult"></div>
+      <button class="abc-dl" data-dl="8" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart" id="abcG8"></div>
+    <p class="abc-nota" id="abcN8"></p>
+  </div>
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3 id="abcH9">Safra a safra</h3><div class="abc-tools"><div class="abc-seg" id="abcUf"></div><button class="abc-dl" data-dl="9" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+      <div class="abc-chart cl-sm" id="abcG9"></div>
+      <p class="abc-nota">Cada ponto é uma safra: no eixo horizontal, a intensidade do ENSO no verão (RONI); no vertical, quanto a produtividade ficou acima ou abaixo da tendência.</p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Tabela por estado <small id="abcH10s"></small></h3><button class="abc-dl" id="abcCsv" aria-label="Baixar tabela em CSV"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="cn-scroll"><table class="cn-t" id="abcTab"></table></div>
+    </div>
+  </div>
+
+  <div class="abc-foot"><span>Fontes: NOAA Climate Prediction Center, Copernicus ERA5 e ECMWF (via Open-Meteo), Conab · Elaboração: AgroBasis</span><span id="abcAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    __FAQ__
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/plantio-e-colheita-brasil/">Plantio e colheita</a><a href="/dashboards/safra-brasil-conab/">Safra Brasil por estado</a><a href="/dashboards/condicao-de-safra-eua/">Safra dos EUA</a><a href="/dashboards/relacao-de-troca-fertilizantes/">Relação de troca</a><a href="/dashboards/">Todos os dashboards</a>
+  </nav>
+</div>
+<script type="application/ld+json">__LD__</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#A17149", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", cz: "#AEB7B0", grade: "rgba(29,36,32,.07)", en: "#C0502E", la: "#2F6FA8", az: "#3C7FB8" };
+  var MES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var MESS = ["set", "out", "nov", "dez", "jan", "fev", "mar", "abr"];
+  var FASE = { en_forte: "El Niño forte", en: "El Niño fraco a moderado", neutro: "Neutro", ln: "La Niña" };
+  var TRI = { DJF: "dez-fev", JFM: "jan-mar", FMA: "fev-abr", MAM: "mar-mai", AMJ: "abr-jun", MJJ: "mai-jul", JJA: "jun-ago", JAS: "jul-set", ASO: "ago-out", SON: "set-nov", OND: "out-dez", NDJ: "nov-jan" };
+  var $ = function (id) { return document.getElementById(id); };
+  var C, P, st = { p: "santarosa", met: "safra", cult: "soja", uf: "RS" }, charts = [];
+
+  // ---------- utilidades ----------
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function sn(v, c) { return v == null || isNaN(v) ? "-" : (v > 0.05 ? "+" : v < -0.05 ? "−" : "") + br(Math.abs(v), c == null ? 0 : c); }
+  function cls(v) { return v == null ? "" : v > 0.5 ? "pos" : v < -0.5 ? "neg" : ""; }
+  function ddmm(s) { return s.slice(8, 10) + "/" + s.slice(5, 7); }
+  function mobile() { return window.innerWidth < 560; }
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.065)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 18e5), { cache: "no-store" }).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  var base = {
+    textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" }
+  };
+  function tl(m, n, v) { return '<div style="display:flex;justify-content:space-between;gap:16px"><span>' + m + n + "</span><b>" + v + "</b></div>"; }
+  function eixoY(fmt, extra) { return Object.assign({ type: "value", axisLabel: { color: COR.mt, fontSize: 11.5, formatter: fmt || function (v) { return br(v, 0); } }, splitLine: { lineStyle: { color: COR.grade } }, axisLine: { show: false }, axisTick: { show: false } }, extra || {}); }
+  function eixoCat(cats, extra) { return Object.assign({ type: "category", data: cats, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } }, extra || {}); }
+  function legenda() { return { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 11.5 } }; }
+  function pt(id) { return C.pontos.find(function (p) { return p.id === id; }); }
+  function pctNorm(p, m) {
+    if (m === "prev") return p.prev.tot.normal ? p.prev.tot.media / p.prev.tot.normal * 100 : null;
+    var a = p.acc[m]; return a && a[1] ? a[0] / a[1] * 100 : null;
+  }
+  function corChuva(v) { // marrom (seco) → neutro → azul (úmido)
+    if (v == null) return "#ccc";
+    var a = [[156, 91, 36], [217, 180, 141], [238, 238, 230], [140, 186, 222], [47, 111, 168]], t = Math.max(0, Math.min(1, (v - 40) / 120)) * 4, i = Math.min(3, Math.floor(t)), k = t - i;
+    return "rgb(" + a[i].map(function (c, j) { return Math.round(c + (a[i + 1][j] - c) * k); }).join(",") + ")";
+  }
+  function corDesvio(v) { return v == null ? "#ddd" : v >= 0 ? (v > 8 ? "#2F6B1F" : "#8FB27A") : (v < -8 ? "#9C5B24" : "#D9B48D"); }
+
+  // ---------- ENSO ----------
+  function ensoTopo() {
+    var E = C.enso, ult = E.roni[E.roni.length - 1], n34 = E.nino34.ultimo;
+    var djf = E.prob.find(function (x) { return x.s === "DJF"; }), neu = E.prob.find(function (x) { return x.n >= 50; });
+    $("abcTit").textContent = ult[2] >= 1.5 ? "El Niño forte em curso" : ult[2] >= 0.5 ? "El Niño em curso" : ult[2] <= -0.5 ? "La Niña em curso" : "Pacífico em neutralidade";
+    $("abcMeta").textContent = "Niño 3.4 na semana até " + ddmm(n34[0]) + "/" + n34[0].slice(0, 4) + " · chuva até " + ddmm(C.pontos[0].ultimo) + " · previsão ECMWF de " + ddmm(C.pontos[0].prev.d[0]);
+    $("abcStatus").innerHTML = '<span class="cl-badge">' + (E.status || "") + "</span><small>NOAA, " + (E.emitida ? ddmm(E.emitida) + "/" + E.emitida.slice(0, 4) : "") + (E.proxima ? " · próxima em " + ddmm(E.proxima) : "") + "</small>";
+    $("kN").innerHTML = sn(n34[1], 1) + "<small>°C</small>"; $("kNs").textContent = "anomalia na semana até " + ddmm(n34[0]);
+    $("kR").innerHTML = sn(ult[2], 2) + "<small>°C</small>"; $("kRs").textContent = TRI[ult[0]] + "/" + ult[1] + ", índice oficial da NOAA";
+    $("kP").innerHTML = (djf ? djf.en : "-") + "<small>%</small>"; $("kPs").textContent = "chance de El Niño em dez-fev";
+    $("kV").innerHTML = neu ? TRI[neu.s] : "-"; $("kVs").textContent = neu ? neu.n + "% de chance de neutralidade" : "sem previsão de neutralidade";
+    // texto
+    var maior = Math.max.apply(null, ["1997", "2015", "2023"].map(function (a) { return Math.max.apply(null, E.nino34.comparacao[a].map(function (x) { return x[1]; })); }));
+    var est = st.cult, R = P.culturas.soja.ufs;
+    var t = "O Pacífico vive um El Niño " + (ult[2] >= 2 ? "muito forte" : ult[2] >= 1.5 ? "forte" : "") + ": o Niño 3.4 está " + sn(n34[1], 1) + " °C acima da média, " + (n34[1] > maior ? "acima do pico dos El Niños de 1997, 2015 e 2023" : "perto dos maiores El Niños recentes") + ", e a NOAA dá " + (djf ? djf.en : "-") + "% de chance de o fenômeno seguir no verão. ";
+    t += "Para o Brasil, o padrão histórico é de <b>chuva acima da média no Sul</b> e <b>irregularidade no Matopiba e no Norte</b>. Nas safras de El Niño forte desde 1990, a produtividade da soja ficou " + sn(R.RS.fases.en_forte.media, 0) + "% frente à tendência no Rio Grande do Sul e " + sn(R.MA.fases.en_forte.media, 0) + "% no Maranhão.";
+    $("abcLead").querySelector("span").innerHTML = t;
+  }
+  function g0() {
+    var cmp = C.enso.nino34.comparacao, anos = Object.keys(cmp).sort(), cores = { "1997": "#C9A27E", "2015": "#AEB7B0", "2023": "#8FB27A" };
+    var atual = anos[anos.length - 1];
+    var series = anos.map(function (a) {
+      var eh = a === atual;
+      return { name: a === atual ? a + "/" + String(+a + 1).slice(2) : a + "/" + String(+a + 1).slice(2), type: "line", data: cmp[a].map(function (x) { return [x[0], x[1]]; }), symbol: "none", smooth: 0.2,
+        lineStyle: { width: eh ? 3.2 : 1.8, color: eh ? COR.en : cores[a] }, itemStyle: { color: eh ? COR.en : cores[a] }, z: eh ? 5 : 2,
+        markPoint: eh ? { symbol: "circle", symbolSize: 8, itemStyle: { color: COR.en, borderColor: "#fff", borderWidth: 2 }, data: [{ coord: cmp[a][cmp[a].length - 1], value: sn(cmp[a][cmp[a].length - 1][1], 1) }], label: { show: true, position: "top", color: COR.en, fontWeight: 700, fontSize: 12.5, formatter: "{c} °C" } } : undefined };
+    });
+    series[0].markArea = { silent: true, itemStyle: { color: "rgba(192,80,46,.05)" }, data: [[{ yAxis: 1.5 }, { yAxis: 4.5 }]] };
+    series[0].markLine = { silent: true, symbol: "none", lineStyle: { color: COR.cz, type: [4, 4] }, label: { show: false }, data: [{ yAxis: 0.5 }, { yAxis: 1.5 }] };
+    return Object.assign({}, base, {
+      graphic: [marca()], legend: legenda(),
+      grid: { left: 6, right: 16, top: 30, bottom: 6, containLabel: true },
+      xAxis: { type: "value", min: 0, max: 546, interval: 61, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { var d = new Date(2001, 0, 1 + v); return MES[d.getMonth()] + (v >= 365 ? "+1" : ""); } }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY(function (v) { return sn(v, 1); }, { min: -2, max: 4 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var d = new Date(2001, 0, 1 + ps[0].value[0]); var h = "<b>" + ("0" + d.getDate()).slice(-2) + " " + MES[d.getMonth()] + "</b>"; ps.forEach(function (q) { h += tl(q.marker, q.seriesName, sn(q.value[1], 1) + " °C"); }); return h; } }),
+      series: series
+    });
+  }
+  function g1() {
+    var pr = C.enso.prob;
+    $("abcN1").textContent = "Probabilidade de cada fase do ENSO por trimestre, segundo o Climate Prediction Center (NOAA). Discussão de " + (C.enso.emitida ? ddmm(C.enso.emitida) : "") + ": " + (C.enso.sinopse_en || "");
+    return Object.assign({}, base, {
+      legend: legenda(), grid: { left: 6, right: 10, top: 30, bottom: 6, containLabel: true },
+      xAxis: eixoCat(pr.map(function (x) { return TRI[x.s]; }), { axisLabel: { color: COR.mt, fontSize: 10.5, interval: 0, rotate: mobile() ? 40 : 0 } }),
+      yAxis: eixoY("{value}%", { max: 100 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(0,0,0,.03)" } }, valueFormatter: function (v) { return v + "%"; } }),
+      series: [["La Niña", "ln", COR.la], ["Neutro", "n", "#C9D1CB"], ["El Niño", "en", COR.en]].map(function (s) {
+        return { name: s[0], type: "bar", stack: "p", barWidth: "62%", data: pr.map(function (x) { return x[s[1]]; }), itemStyle: { color: s[2] },
+          label: { show: s[1] !== "ln" && !mobile(), position: "inside", color: s[1] === "en" ? "#fff" : COR.tx, fontSize: 10.5, formatter: function (q) { return q.value >= 12 ? q.value + "%" : ""; } } };
+      })
+    });
+  }
+
+  // ---------- mapa e ranking ----------
+  var ROT = { safra: "desde 1º de setembro", d30: "últimos 30 dias", d90: "últimos 90 dias", prev: "previsão dos próximos 15 dias (média do ECMWF)" };
+  function g2() {
+    $("abcH2s").textContent = ROT[st.met];
+    var dados = C.pontos.map(function (p) { var v = pctNorm(p, st.met); return { name: p.id, value: [p.lon, p.lat, v == null ? null : Math.round(v)], itemStyle: { color: corChuva(v), borderColor: p.id === st.p ? COR.tx : "#fff", borderWidth: p.id === st.p ? 2.5 : 1.5 } }; });
+    return Object.assign({}, base, {
+      geo: { map: "BR", roam: false, boundingCoords: [[-60.5, -4.5], [-41.5, -31.5]], layoutCenter: ["50%", "48%"], layoutSize: mobile() ? "92%" : "88%", itemStyle: { areaColor: "#F4F6F3", borderColor: "#fff", borderWidth: 1 }, emphasis: { disabled: true }, label: { show: false }, silent: true },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (q) { var p = pt(q.name), a = st.met === "prev" ? [p.prev.tot.media, p.prev.tot.normal] : p.acc[st.met]; return "<b>" + p.nome + " (" + p.uf + ")</b>" + tl("", "Chuva", br(a[0], 0) + " mm") + tl("", "Normal", br(a[1], 0) + " mm") + tl("", "% da normal", br(q.value[2], 0) + "%"); } }),
+      series: [{ type: "scatter", coordinateSystem: "geo", data: dados, symbolSize: mobile() ? 16 : 20, z: 3, labelLayout: { hideOverlap: true },
+        label: { show: true, formatter: function (q) { return q.value[2] == null ? "" : q.value[2] + "%"; }, position: "right", distance: 4, color: COR.tx, fontSize: mobile() ? 9.5 : 11, fontWeight: 600, textBorderColor: "#fff", textBorderWidth: 3 } }],
+      graphic: [{ type: "group", left: 8, bottom: 8, children: [0, 50, 100, 150].map(function (v, i) { return { type: "group", children: [{ type: "circle", shape: { cx: 6 + i * 52, cy: 6, r: 6 }, style: { fill: corChuva(v === 0 ? 40 : v) } }, { type: "text", style: { x: 15 + i * 52, y: 1, text: (v === 0 ? "≤50" : v === 150 ? "≥150" : v) + "%", fill: COR.mt, font: "11px Geist, sans-serif" } }] }; }) }]
+    });
+  }
+  function g3() {
+    var ps = C.pontos.slice().sort(function (a, b) { return pctNorm(b, st.met) - pctNorm(a, st.met); });
+    $("abcH3s").textContent = "% da normal, " + ROT[st.met];
+    return Object.assign({}, base, {
+      grid: { left: 6, right: 44, top: 6, bottom: 6, containLabel: true },
+      yAxis: { type: "category", inverse: true, data: ps.map(function (p) { return p.nome + " (" + p.uf + ")"; }), axisLabel: { color: COR.tx, fontSize: 11.5, fontWeight: 500 }, axisLine: { show: false }, axisTick: { show: false } },
+      xAxis: eixoY("{value}%", { splitNumber: 4 }),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(30,72,18,.04)" } }, formatter: function (q) { var p = ps[q[0].dataIndex], a = st.met === "prev" ? [p.prev.tot.media, p.prev.tot.normal] : p.acc[st.met]; return "<b>" + p.nome + "</b>" + tl("", "Chuva", br(a[0], 0) + " mm") + tl("", "Normal", br(a[1], 0) + " mm"); } }),
+      series: [{ type: "bar", barWidth: "62%", data: ps.map(function (p) { var v = pctNorm(p, st.met); return { value: Math.round(v), itemStyle: { color: corChuva(v), borderRadius: [0, 4, 4, 0], borderColor: p.id === st.p ? COR.tx : "transparent", borderWidth: 1.5 } }; }),
+        label: { show: true, position: "right", fontSize: 11, color: COR.tx, fontWeight: 600, formatter: "{c}%" },
+        markLine: { silent: true, symbol: "none", lineStyle: { color: COR.tx, type: [4, 4], width: 1 }, label: { show: false }, data: [{ xAxis: 100 }] } }]
+    });
+  }
+
+  // ---------- local ----------
+  function seletorLocal() {
+    $("abcSel").innerHTML = '<select id="abcSelS" aria-label="Escolher local">' + C.pontos.map(function (p) { return '<option value="' + p.id + '"' + (p.id === st.p ? " selected" : "") + ">" + p.nome + " (" + p.uf + ")</option>"; }).join("") + "</select>";
+    $("abcSelS").addEventListener("change", function (e) { st.p = e.target.value; local(); charts[2].setOption(g2(), true); charts[3].setOption(g3(), true); });
+  }
+  function local() {
+    var p = pt(st.p), a = p.acc, pv = p.prev;
+    $("abcLn").textContent = p.nome + " (" + p.uf + ")";
+    $("abcLm").textContent = "Polo de " + p.culturas + " · chuva observada até " + ddmm(p.ultimo);
+    function pc(x) { return x[1] ? x[0] / x[1] * 100 - 100 : null; }
+    $("k1").innerHTML = br(a.safra[0], 0) + "<small>mm</small>"; $("k1s").innerHTML = '<i class="' + cls(pc(a.safra)) + '" style="font-style:normal">' + sn(pc(a.safra), 0) + "%</i> frente à normal (" + br(a.safra[1], 0) + " mm)";
+    $("k2").innerHTML = br(a.d30[0], 0) + "<small>mm</small>"; $("k2s").innerHTML = '<i class="' + cls(pc(a.d30)) + '" style="font-style:normal">' + sn(pc(a.d30), 0) + "%</i> frente à normal (" + br(a.d30[1], 0) + " mm)";
+    $("k3").innerHTML = br(pv.tot.media, 0) + "<small>mm</small>"; $("k3s").textContent = "faixa provável " + br(pv.tot.p10, 0) + " a " + br(pv.tot.p90, 0) + " mm; normal " + br(pv.tot.normal, 0) + " mm";
+    var tm = pv.tmax.filter(function (x) { return x != null; }), mx = Math.max.apply(null, tm), d35 = tm.filter(function (x) { return x >= 35; }).length;
+    $("k4").innerHTML = br(mx, 0) + "<small>°C máx.</small>"; $("k4s").textContent = d35 ? d35 + " dia(s) com 35 °C ou mais" : "nenhum dia com 35 °C ou mais";
+    charts[4].setOption(g4(), true); charts[5].setOption(g5(), true); charts[6].setOption(g6(), true); charts[7].setOption(g7(), true);
+  }
+  function rotDia(i) { var d = new Date(2001, 8, 1 + i); return ("0" + d.getDate()).slice(-2) + "/" + MES[d.getMonth()]; }
+  function g4() {
+    var p = pt(st.p), cv = p.curva, n = cv.normal.length, cats = cv.normal.map(function (_, i) { return rotDia(i); }), f = cv.fases;
+    var s0 = +p.safra_ini.slice(0, 4);
+    var ult = cv.atual.length - 1, dif = cv.atual[ult] - cv.normal[ult];
+    $("abcN4").textContent = "Até " + ddmm(p.ultimo) + ", " + br(cv.atual[ult], 0) + " mm, " + (dif >= 0 ? br(dif, 0) + " mm acima" : br(-dif, 0) + " mm abaixo") + " da normal. As curvas de El Niño forte e La Niña são a média das safras de cada fase desde 1980" + (f.en_forte ? " (El Niño forte: " + f.en_forte.anos.map(function (y) { return y + "/" + String(y + 1).slice(2); }).join(", ") + ")" : "") + ".";
+    var ser = [
+      { name: "Normal 1991-2020", type: "line", data: cv.normal, symbol: "none", lineStyle: { width: 2, color: COR.tx, type: [5, 4] }, itemStyle: { color: COR.tx } },
+      { name: "Safra " + (s0 - 1) + "/" + String(s0).slice(2), type: "line", data: cv.anterior, symbol: "none", lineStyle: { width: 1.8, color: COR.cz }, itemStyle: { color: COR.cz } }
+    ];
+    if (f.en_forte) ser.push({ name: "Média El Niño forte", type: "line", data: f.en_forte.curva, symbol: "none", lineStyle: { width: 1.8, color: COR.en, opacity: .7 }, itemStyle: { color: COR.en } });
+    if (f.ln) ser.push({ name: "Média La Niña", type: "line", data: f.ln.curva, symbol: "none", lineStyle: { width: 1.8, color: COR.la, opacity: .7 }, itemStyle: { color: COR.la } });
+    ser.push({ name: "Safra " + s0 + "/" + String(s0 + 1).slice(2), type: "line", data: cv.atual, symbol: "none", lineStyle: { width: 3.2, color: COR.vd }, itemStyle: { color: COR.vd }, z: 5,
+      areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(30,72,18,.14)" }, { offset: 1, color: "rgba(30,72,18,0)" }] } } });
+    return Object.assign({}, base, {
+      graphic: [marca()], legend: legenda(),
+      grid: { left: 6, right: 14, top: mobile() ? 74 : 56, bottom: 6, containLabel: true },
+      xAxis: eixoCat(cats, { boundaryGap: false, axisLabel: { color: COR.mt, fontSize: 11, interval: function (i) { return rotDia(i).slice(0, 2) === "01"; }, formatter: function (v) { return v.slice(3); } } }),
+      yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return v == null ? "-" : br(v, 0) + " mm"; } }),
+      series: ser
+    });
+  }
+  function g5() {
+    var p = pt(st.p), v = p.prev, cats = v.d.map(function (d) { var x = new Date(d + "T12:00"); return ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"][x.getDay()] + " " + ddmm(d); });
+    return Object.assign({}, base, {
+      graphic: [marca()], legend: Object.assign(legenda(), { data: ["Chuva média", "Faixa 10-90%", "Normal", "Máxima"] }),
+      grid: { left: 6, right: 6, top: mobile() ? 52 : 32, bottom: 6, containLabel: true },
+      xAxis: eixoCat(cats, { axisLabel: { color: COR.mt, fontSize: 10.5, hideOverlap: true, formatter: function (x) { return x.slice(4); } } }),
+      yAxis: [eixoY(function (x) { return br(x, 0) + " mm"; }), eixoY(function (x) { return br(x, 0) + "°"; }, { scale: true, splitLine: { show: false } })],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var i = ps[0].dataIndex; return "<b>" + cats[i] + "</b>" + tl("", "Chuva média", br(v.media[i], 1) + " mm") + tl("", "Faixa provável", br(v.p10[i], 0) + " a " + br(v.p90[i], 0) + " mm") + tl("", "Normal do dia", br(v.normal_dia[i], 1) + " mm") + (v.tmax[i] != null ? tl("", "Máxima", br(v.tmax[i], 0) + " °C") : ""); } }),
+      series: [
+        { name: "p10", type: "line", data: v.p10, symbol: "none", lineStyle: { opacity: 0 }, stack: "f", silent: true, tooltip: { show: false } },
+        { name: "Faixa 10-90%", type: "line", data: v.p90.map(function (x, i) { return x - v.p10[i]; }), symbol: "none", lineStyle: { opacity: 0 }, stack: "f", areaStyle: { color: "rgba(47,111,168,.14)" }, itemStyle: { color: "rgba(47,111,168,.35)" } },
+        { name: "Chuva média", type: "bar", data: v.media, barWidth: "55%", itemStyle: { color: COR.az, borderRadius: [3, 3, 0, 0] } },
+        { name: "Normal", type: "line", data: v.normal_dia, symbol: "none", lineStyle: { width: 1.5, color: COR.tx, type: [4, 4] }, itemStyle: { color: COR.tx } },
+        { name: "Máxima", type: "line", yAxisIndex: 1, data: v.tmax, symbol: "circle", symbolSize: 4, lineStyle: { width: 1.8, color: "#E08A2E" }, itemStyle: { color: "#E08A2E" } }
+      ]
+    });
+  }
+  function g6() {
+    var p = pt(st.p), m = p.mensal;
+    return Object.assign({}, base, {
+      graphic: [marca()], legend: legenda(),
+      grid: { left: 6, right: 6, top: 30, bottom: 6, containLabel: true },
+      xAxis: eixoCat(m.map(function (x) { return MES[+x.m.slice(5) - 1] + "/" + x.m.slice(2, 4) + (x.parcial ? "*" : ""); })),
+      yAxis: eixoY(),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var x = m[ps[0].dataIndex]; return "<b>" + MES[+x.m.slice(5) - 1] + "/" + x.m.slice(0, 4) + (x.parcial ? " (parcial)" : "") + "</b>" + tl("", "Observado", br(x.obs, 0) + " mm") + tl("", "Normal", br(x.norm, 0) + " mm") + tl("", "% da normal", x.norm ? br(x.obs / x.norm * 100, 0) + "%" : "-"); } }),
+      series: [
+        { name: "Observado", type: "bar", barWidth: "55%", data: m.map(function (x) { var r = x.norm ? x.obs / x.norm * 100 : 100; return { value: x.obs, itemStyle: { color: corChuva(r), borderRadius: [3, 3, 0, 0] } }; }) },
+        { name: "Normal", type: "line", data: m.map(function (x) { return x.norm; }), symbol: "circle", symbolSize: 5, lineStyle: { width: 1.8, color: COR.tx, type: [4, 4] }, itemStyle: { color: COR.tx } }
+      ]
+    });
+  }
+  function g7() {
+    var p = pt(st.p), e = p.enso_mes, en = e.en_forte || [];
+    var f = p.curva.fases.en_forte, n = f ? f.anos.length : 0;
+    var sec = [], umi = []; en.forEach(function (v, i) { if (v != null && v <= -15) sec.push(MESS[i]); if (v != null && v >= 15) umi.push(MESS[i]); });
+    $("abcN7").textContent = "Média das safras de cada fase desde 1980" + (n ? " (El Niño forte: " + n + " safras)" : "") + ". " + (umi.length ? "Em El Niño forte, " + umi.join(", ") + " costumam ser mais chuvosos" : "") + (umi.length && sec.length ? "; " : "") + (sec.length ? (umi.length ? "" : "Em El Niño forte, ") + sec.join(", ") + " costumam ser mais secos" : "") + ". Poucas safras por fase: use como tendência, não como previsão.";
+    return Object.assign({}, base, {
+      graphic: [marca()], legend: legenda(),
+      grid: { left: 6, right: 6, top: 30, bottom: 6, containLabel: true },
+      xAxis: eixoCat(MESS), yAxis: eixoY("{value}%"),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return v == null ? "-" : sn(v, 0) + "% frente à normal"; } }),
+      series: [["El Niño forte", "en_forte", COR.en], ["El Niño fraco a moderado", "en", "#E3A68F"], ["La Niña", "ln", COR.la]].map(function (s) {
+        return { name: s[0], type: "bar", data: e[s[1]], itemStyle: { color: s[2], borderRadius: 2 }, barGap: "10%" };
+      })
+    });
+  }
+
+  // ---------- produtividade ----------
+  var CULT = { soja: "Soja", milho1: "Milho 1ª safra", milho2: "Milho 2ª safra", trigo: "Trigo" };
+  var NUF = { BR: "Brasil", MT: "Mato Grosso", PR: "Paraná", RS: "Rio Grande do Sul", GO: "Goiás", MS: "Mato Grosso do Sul", MG: "Minas Gerais", BA: "Bahia", SP: "São Paulo", SC: "Santa Catarina", TO: "Tocantins", MA: "Maranhão", PI: "Piauí" };
+  function g8() {
+    var cu = P.culturas[st.cult], ufs = Object.keys(cu.ufs).filter(function (u) { return cu.ufs[u].fases.en_forte.n >= 2; });
+    ufs.sort(function (a, b) { return cu.ufs[b].fases.en_forte.media - cu.ufs[a].fases.en_forte.media; });
+    var en = cu.ufs[ufs[0]], mn = cu.ufs[ufs[ufs.length - 1]];
+    $("abcH8s").textContent = CULT[st.cult] + ", média por fase do ENSO, safras desde 1990";
+    $("abcN8").textContent = "Em El Niño forte, a maior alta foi em " + NUF[ufs[0]] + " (" + sn(en.fases.en_forte.media, 1) + "%) e a maior perda em " + NUF[ufs[ufs.length - 1]] + " (" + sn(mn.fases.en_forte.media, 1) + "%). No Brasil como um todo: " + sn(cu.ufs.BR.fases.en_forte.media, 1) + "%. " + P.metodo;
+    return Object.assign({}, base, {
+      graphic: [marca()], legend: legenda(),
+      grid: { left: 6, right: 10, top: 30, bottom: 6, containLabel: true },
+      xAxis: eixoCat(ufs, { axisLabel: { color: COR.tx, fontSize: 11.5, fontWeight: 600, interval: 0 } }),
+      yAxis: eixoY("{value}%"),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", axisPointer: { type: "shadow", shadowStyle: { color: "rgba(0,0,0,.03)" } }, formatter: function (ps) { var u = ufs[ps[0].dataIndex], f = cu.ufs[u].fases; var h = "<b>" + NUF[u] + "</b>"; ["en_forte", "en", "neutro", "ln"].forEach(function (k) { h += tl("", FASE[k] + " (" + f[k].n + " safras)", sn(f[k].media, 1) + "%"); }); return h; } }),
+      series: [["El Niño forte", "en_forte", COR.en], ["El Niño fraco a moderado", "en", "#E3A68F"], ["La Niña", "ln", COR.la]].map(function (s) {
+        return { name: s[0], type: "bar", barGap: "8%", data: ufs.map(function (u) { return cu.ufs[u].fases[s[1]].media; }), itemStyle: { color: s[2], borderRadius: 2 },
+          label: s[1] === "en_forte" ? { show: !mobile(), position: "top", fontSize: 10, color: COR.en, fontWeight: 700, formatter: function (q) { return sn(q.value, 0); } } : undefined };
+      })
+    });
+  }
+  function seletoresProd() {
+    $("abcCult").innerHTML = Object.keys(P.culturas).map(function (c) { return '<button data-c="' + c + '" aria-pressed="' + (c === st.cult) + '">' + CULT[c] + "</button>"; }).join("");
+    var ufs = Object.keys(P.culturas[st.cult].ufs); if (ufs.indexOf(st.uf) < 0) st.uf = ufs.indexOf("RS") >= 0 ? "RS" : ufs[0];
+    $("abcUf").innerHTML = '<select id="abcUfS" aria-label="Escolher estado">' + ufs.map(function (u) { return '<option value="' + u + '"' + (u === st.uf ? " selected" : "") + ">" + NUF[u] + "</option>"; }).join("") + "</select>";
+    $("abcUfS").addEventListener("change", function (e) { st.uf = e.target.value; charts[9].setOption(g9(), true); });
+  }
+  function g9() {
+    var x = P.culturas[st.cult].ufs[st.uf];
+    $("abcH9").textContent = CULT[st.cult] + " em " + NUF[st.uf] + ": ENSO contra produtividade";
+    var cores = { en_forte: COR.en, en: "#E3A68F", neutro: "#AEB7B0", ln: COR.la };
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      grid: { left: 6, right: 16, top: 16, bottom: 22, containLabel: true },
+      xAxis: { type: "value", name: "RONI", nameLocation: "end", nameTextStyle: { color: COR.mt, fontSize: 11 }, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return sn(v, 1); } }, splitLine: { show: false }, axisLine: { lineStyle: { color: COR.ln } } },
+      yAxis: eixoY("{value}%"),
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (q) { var s = x.safras[q.dataIndex]; return "<b>Safra " + s.safra + "</b>" + tl("", "Fase", FASE[s.fase]) + tl("", "RONI", sn(s.roni, 2)) + tl("", "Produtividade", br(s.prod, 0) + " kg/ha") + tl("", "Tendência", br(s.tend, 0) + " kg/ha") + tl("", "Desvio", sn(s.desvio, 1) + "%"); } }),
+      series: [{ type: "scatter", symbolSize: 11, labelLayout: { hideOverlap: true }, data: x.safras.map(function (s) { return { value: [s.roni, s.desvio], itemStyle: { color: cores[s.fase], borderColor: "#fff", borderWidth: 1 } }; }),
+        label: { show: true, position: "top", fontSize: 9.5, color: COR.mt, formatter: function (q) { var s = x.safras[q.dataIndex]; return Math.abs(s.desvio) >= 12 || Math.abs(s.roni) >= 1.8 ? s.safra.replace(/^(\d{4})\/(\d{2})$/, "$1/$2").slice(2) : ""; } },
+        markLine: { silent: true, symbol: "none", lineStyle: { color: COR.cz, type: [4, 4] }, label: { show: false }, data: [{ yAxis: 0 }, { xAxis: 0.5 }, { xAxis: -0.5 }] } }]
+    });
+  }
+  function tabela() {
+    var cu = P.culturas[st.cult], ufs = Object.keys(cu.ufs);
+    $("abcH10s").textContent = CULT[st.cult] + ", desvio médio frente à tendência";
+    var h = '<thead><tr><th class="l">Estado</th><th>El Niño forte</th><th>El Niño</th><th>Neutro</th><th>La Niña</th><th>Pior safra</th></tr></thead><tbody>';
+    ufs.forEach(function (u) {
+      var f = cu.ufs[u].fases, pior = cu.ufs[u].safras.slice().sort(function (a, b) { return a.desvio - b.desvio; })[0];
+      h += '<tr class="uf' + (u === "BR" ? " tot" : "") + (u === st.uf ? " sel" : "") + '" data-uf="' + u + '"><td class="l">' + NUF[u] + "</td>" + ["en_forte", "en", "neutro", "ln"].map(function (k) {
+        var v = f[k].media; return '<td><span class="cl-cel" style="background:' + corDesvio(v) + ";color:" + (v != null && Math.abs(v) > 8 ? "#fff" : COR.tx) + '">' + sn(v, 1) + "%</span> <small>" + f[k].n + "</small></td>";
+      }).join("") + "<td>" + pior.safra + " <small>(" + sn(pior.desvio, 0) + "%)</small></td></tr>";
+    });
+    $("abcTab").innerHTML = h + "</tbody>";
+  }
+  function csv() {
+    var linhas = [["cultura", "uf", "safra", "produtividade_kg_ha", "tendencia_kg_ha", "desvio_pct", "roni", "fase"].join(";")];
+    Object.keys(P.culturas).forEach(function (c) { Object.keys(P.culturas[c].ufs).forEach(function (u) { P.culturas[c].ufs[u].safras.forEach(function (s) { linhas.push([c, u, s.safra, s.prod, s.tend, String(s.desvio).replace(".", ","), String(s.roni).replace(".", ","), s.fase].join(";")); }); }); });
+    var el = document.createElement("a"); el.href = URL.createObjectURL(new Blob(["﻿" + linhas.join("\n")], { type: "text/csv;charset=utf-8" }));
+    el.download = "agrobasis-enso-produtividade.csv"; document.body.appendChild(el); el.click(); el.remove();
+  }
+  function produtividade() { seletoresProd(); charts[8].setOption(g8(), true); charts[9].setOption(g9(), true); tabela(); }
+
+  var FN = [g0, g1, g2, g3, g4, g5, g6, g7, g8, g9];
+  function baixar(i) {
+    var titulos = ["Niño 3.4: 2026 contra os grandes El Niños", "Probabilidades do ENSO (NOAA)", "Chuva frente à normal, " + ROT[st.met], "Ranking da chuva, " + ROT[st.met], "Chuva acumulada na safra, " + pt(st.p).nome, "Previsão de 15 dias, " + pt(st.p).nome, "Chuva mês a mês, " + pt(st.p).nome, "Chuva com El Niño, " + pt(st.p).nome, "Produtividade x ENSO, " + CULT[st.cult], CULT[st.cult] + " em " + NUF[st.uf] + ": ENSO x produtividade"];
+    var opt = FN[i](); opt.animation = false;
+    opt.title = { text: titulos[i], left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd } };
+    if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 36, left: 8 });
+    if (opt.grid) opt.grid = Object.assign({}, opt.grid, { top: opt.legend ? 66 : 44, bottom: 30 });
+    opt.graphic = (i === 2 ? [] : [marca()]).concat([{ type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · NOAA, ERA5, ECMWF, Conab", fill: "#9aa39c", font: "11px Geist, sans-serif" } }]);
+    charts[i].setOption(opt, true);
+    var url = charts[i].getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
+    charts[i].setOption(FN[i](), true);
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-clima-" + i + ".png"; document.body.appendChild(a); a.click(); a.remove();
+  }
+  function seg(id, fn) { $(id).addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) fn(b); }); }
+  function marcar(id, b) { $(id).querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); }
+  function tudo() {
+    ensoTopo(); seletorLocal();
+    charts.forEach(function (c, i) { c.setOption(FN[i](), true); });
+    local(); produtividade();
+    $("abcAtu").textContent = "Atualizado em " + C.atualizado_em.split(" ")[0].split("-").reverse().join("/") + " às " + C.atualizado_em.split(" ")[1];
+  }
+
+  Promise.all([carregarLib(), json("dados/clima/clima.json"), json("dados/clima/enso_produtividade.json"), json("dados/conab/br_uf.json")]).then(function (r) {
+    C = r[1]; P = r[2]; echarts.registerMap("BR", r[3]);
+    var q = (location.hash || "").replace("#", ""); if (C.pontos.some(function (p) { return p.id === q; })) st.p = q;
+    charts = FN.map(function (_, i) { return echarts.init($("abcG" + i), null, { renderer: "canvas" }); });
+    [2, 3].forEach(function (i) { charts[i].on("click", function (q) { var id = i === 2 ? q.name : C.pontos.slice().sort(function (a, b) { return pctNorm(b, st.met) - pctNorm(a, st.met); })[q.dataIndex].id; if (id) { st.p = id; $("abcSelS").value = id; local(); charts[2].setOption(g2(), true); charts[3].setOption(g3(), true); document.querySelector(".cl-local").scrollIntoView({ behavior: "smooth", block: "start" }); } }); });
+    seg("abcMet", function (b) { st.met = b.dataset.m; marcar("abcMet", b); charts[2].setOption(g2(), true); charts[3].setOption(g3(), true); });
+    seg("abcCult", function (b) { st.cult = b.dataset.c; produtividade(); });
+    $("abcTab").addEventListener("click", function (e) { var t = e.target.closest("tr[data-uf]"); if (t) { st.uf = t.dataset.uf; $("abcUfS").value = st.uf; charts[9].setOption(g9(), true); tabela(); } });
+    $("abcCsv").addEventListener("click", csv);
+    document.querySelectorAll("#abc .abc-dl[data-dl]").forEach(function (b) { b.addEventListener("click", function () { baixar(+b.dataset.dl); }); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); tudo(); }, 150); });
+    tudo();
+  }).catch(function (e) {
+    if (window.console) console.error("AgroBasis Clima:", e);
+    $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
