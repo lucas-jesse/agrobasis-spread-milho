@@ -1,0 +1,12 @@
+data/indices/RONI.ascii.txt 200 14752
+data/indices/oni.ascii.txt 200 23050
+data/indices/wksst9120.for 200 148731
+data/indices/rel_mthsst9120.txt 200 26064
+products/analysis_monitoring/enso_advisory/ensodisc.shtml 200 13344
+products/analysis_monitoring/enso/roni/probabilities/ 200 28484
+products/analysis_monitoring/enso/roni/probabilities/index.php 200 28484
+href="/archives/enso/roni/images/2026/enso-probs-current.png"
+om_arch 200 237755 0.996164
+om_fc 200 1073
+om_ens 200 7851
+om_seas 200 53872
