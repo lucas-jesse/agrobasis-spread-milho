@@ -1,0 +1,17 @@
+@media (max-width:620px){
+.agd{padding:14px 16px 36px!important}
+.agd-intro{display:none!important}
+.agd-filtros{flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:7px!important;margin:0 -16px 16px!important;padding:0 16px 2px!important}
+.agd-filtros::-webkit-scrollbar{display:none}
+.agd-filtros button{flex:0 0 auto;white-space:nowrap;padding:7px 14px!important;font-size:13.5px!important}
+.agd-grid{gap:10px!important}
+.agd-card{flex-direction:row!important;align-items:center;border-radius:12px!important}
+.agd-card:hover{transform:none}
+.agd-img{flex:0 0 118px;width:118px;aspect-ratio:16/10;border-bottom:0!important;border-right:1px solid #EEF1EE}
+.agd-img:after{display:none}
+.agd-novo{top:6px!important;left:6px!important;font-size:10px!important;padding:2px 7px!important}
+.agd-body{padding:10px 12px!important;min-width:0}
+.agd-cat{font-size:11.5px!important}
+.agd-card h3{font-size:15px!important;margin:2px 0 0!important;line-height:1.3!important}
+.agd-card p,.agd-cta{display:none!important}
+}

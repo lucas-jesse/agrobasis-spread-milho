@@ -13,4 +13,4 @@
 }
 @media (min-width:1025px) and (max-width:1279px){.elementor-24 .elementor-element-3bf89c3{display:none!important}}
 /* cabeçalhos compactos das páginas internas: no celular, sem o parágrafo de apresentação */
-@media (max-width:620px){header.abh .abh-in{padding:16px 16px 14px!important}header.abh h1{font-size:24px!important}header.abh .abh-in>p{display:none!important}}
+@media (max-width:620px){header.abh .abh-in{padding:16px 16px 14px!important}header.abh h1{font-size:24px!important}header.abh .abh-in>p,header.abh .abh-meta{display:none!important}}
