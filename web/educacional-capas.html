@@ -1,0 +1,50 @@
+<!-- AgroBasis · capas padronizadas para os vídeos da página Educacional (só no site; o YouTube continua com a miniatura original) -->
+<style id="spv-capas-css">
+.spv-thumb{position:relative}
+.spv-capa{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:space-between;padding:14px 16px;color:#fff;font-family:Geist,system-ui,sans-serif;overflow:hidden;border-radius:inherit;background:var(--cb,linear-gradient(135deg,#1E4812,#2f6a1c))}
+.spv-capa:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:26px 26px;pointer-events:none}
+.spv-capa svg.spv-linha{position:absolute;right:-6px;bottom:22%;width:62%;height:48%;opacity:.28}
+.spv-capa-k{position:relative;font:700 10.5px/1.2 Geist,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ck,#B9DD8F)}
+.spv-capa-n{position:relative;font:700 34px/1 Sora,Geist,sans-serif;letter-spacing:-.01em;margin-top:auto;margin-bottom:6px}
+.spv-capa-n small{display:block;font:600 12px/1.3 Geist,sans-serif;letter-spacing:0;color:rgba(255,255,255,.75);margin-top:5px;max-width:78%}
+.spv-capa-m{position:relative;display:flex;align-items:center;gap:6px;font:700 12px Sora,sans-serif;opacity:.9}
+.spv-capa-m svg{width:16px;height:13px}
+.spv-thumb>img{visibility:hidden}
+.spv-thumb .spv-play,.spv-thumb .spv-dur{z-index:2}
+.spv-thumb .spv-play{left:auto!important;right:14px!important;top:14px!important;bottom:auto!important}
+.spv-card:hover .spv-capa{filter:brightness(1.08)}
+@media (max-width:620px){.spv-capa{padding:10px 11px}.spv-capa-n{font-size:22px;margin-bottom:3px}.spv-capa-n small{display:none}.spv-capa-k{font-size:9px}.spv-capa-m{font-size:10px}.spv-thumb .spv-play{right:8px!important;top:8px!important}}
+</style>
+<script id="spv-capas-js">
+(function () {
+  "use strict";
+  // estilo por trilha: [rótulo curto, fundo, cor do rótulo, tipo do destaque]
+  var EST = [
+    [/comece/i, "Comece por aqui", "linear-gradient(135deg,#1E4812,#2f6a1c)", "#B9DD8F", "aula"],
+    [/deriv/i, "Série Derivativos", "linear-gradient(135deg,#183a12,#3d6b23)", "#D8E8A6", "aula"],
+    [/comerc/i, "Comercialização", "linear-gradient(135deg,#5c3b1f,#A17149)", "#F3D9B8", "aula"],
+    [/an[aá]lise/i, "Análise de mercado", "linear-gradient(135deg,#22301f,#3f5a33)", "#B9DD8F", "tema"]
+  ];
+  var LINHA = '<svg class="spv-linha" viewBox="0 0 100 50" preserveAspectRatio="none" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"><path d="M0 42 L14 36 L24 39 L36 26 L48 30 L60 18 L72 22 L84 9 L100 4"/></svg>';
+  var MARCA = '<span class="spv-capa-m"><svg viewBox="0 0 24 20" fill="#fff"><rect x="1" y="14" width="4" height="5" rx="1"/><rect x="8" y="10" width="4" height="9" rx="1"/><rect x="15" y="5" width="4" height="14" rx="1"/><path d="M2 11 L10 5 L14 7 L21 1" stroke="#fff" stroke-width="1.8" fill="none"/></svg>AgroBasis</span>';
+  function capas(raiz) {
+    [].forEach.call((raiz || document).querySelectorAll(".spv-trilha"), function (t) {
+      var nome = ((t.querySelector("summary") || {}).innerText || "").split("\n")[0];
+      var e = EST.filter(function (x) { return x[0].test(nome); })[0] || EST[0];
+      [].forEach.call(t.querySelectorAll(".spv-card"), function (c, i) {
+        var th = c.querySelector(".spv-thumb"); if (!th || th.querySelector(".spv-capa")) return;
+        var destaque;
+        if (e[4] === "aula") destaque = "Aula " + String(i + 1).padStart(2, "0");
+        else destaque = [].map.call(c.querySelectorAll(".spv-tag"), function (g) { return g.textContent.trim(); }).slice(0, 2).join(" · ") || "Mercado";
+        var d = document.createElement("div");
+        d.className = "spv-capa"; d.setAttribute("aria-hidden", "true");
+        d.style.setProperty("--cb", e[2]); d.style.setProperty("--ck", e[3]);
+        d.innerHTML = LINHA + '<span class="spv-capa-k">' + e[1] + '</span><span class="spv-capa-n">' + destaque + "</span>" + MARCA;
+        th.insertBefore(d, th.firstChild);
+      });
+    });
+  }
+  function ini() { capas(); var s = document.querySelector(".spv"); if (s && window.MutationObserver) new MutationObserver(function () { capas(); }).observe(s, { childList: true, subtree: true }); }
+  if (document.readyState !== "loading") ini(); else document.addEventListener("DOMContentLoaded", ini);
+})();
+</script>
