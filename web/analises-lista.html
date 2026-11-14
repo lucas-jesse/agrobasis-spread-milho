@@ -1,0 +1,119 @@
+<!-- AgroBasis · página /analises/: filtro por tema e lista de análises (substitui o JetSmartFilters e o JetEngine).
+     Lê os posts pela API do WordPress; sem JS, mostra links por tema. -->
+<style>
+.anl{font-family:Geist,Arial,sans-serif;color:#1d2420;max-width:1180px;margin:0 auto;padding:22px 24px 40px;box-sizing:border-box}
+.anl *{box-sizing:border-box}
+.anl-bar{display:flex;gap:14px;align-items:center;justify-content:space-between;margin:0 0 22px;flex-wrap:wrap}
+.anl-ch{display:flex;gap:8px;flex-wrap:wrap}
+.anl-ch button{border:1px solid #DDE4DE;background:#fff;color:#1d2420;border-radius:999px;padding:8px 15px;font:600 14px Geist,sans-serif;cursor:pointer;white-space:nowrap;transition:all .15s}
+.anl-ch button:hover{border-color:#54931B;color:#1E4812}
+.anl-ch button.on{background:#1E4812;border-color:#1E4812;color:#fff}
+.anl-busca{position:relative;flex:0 1 280px}
+.anl-busca input{width:100%;border:1px solid #DDE4DE;border-radius:999px;padding:9px 14px 9px 36px;font:500 14px Geist,sans-serif;color:#1d2420;background:#fff;outline:0}
+.anl-busca input:focus{border-color:#54931B;box-shadow:0 0 0 3px rgba(84,147,27,.12)}
+.anl-busca svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#7a847c}
+.anl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px 24px}
+.anl a.anl-it{text-decoration:none;color:inherit;display:flex;flex-direction:column;min-width:0}
+.anl-img{position:relative;overflow:hidden;border-radius:12px;background:#EEF1EF;aspect-ratio:1200/630;flex:0 0 auto}
+.anl-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
+.anl-it:hover .anl-img img{transform:scale(1.03)}
+.anl-meta{display:flex;gap:8px;align-items:center;margin:12px 0 6px;font-size:12.5px}
+.anl-cat{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#3d7a14}
+.anl-dt{color:#7a847c}.anl-dt:before{content:"·";margin-right:8px;color:#b5beb7}
+.anl h3{font-family:Sora,Arial,sans-serif;font-size:18px;line-height:1.32;font-weight:700;margin:0 0 6px;color:#1d2420;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.anl p{font-size:14.5px;line-height:1.55;color:#4a544c;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.anl-it:hover h3{color:#1E4812}
+.anl-lead{grid-column:1/-1;display:grid!important;grid-template-columns:1.25fr 1fr;gap:28px;align-items:center;padding-bottom:26px;border-bottom:1px solid #E7ECE8}
+.anl-lead h3{font-size:26px;-webkit-line-clamp:4}.anl-lead p{-webkit-line-clamp:3;font-size:15.5px}.anl-lead .anl-meta{margin-top:0}
+.anl-mais{display:block;margin:30px auto 0;border:1.5px solid #1E4812;background:#fff;color:#1E4812;border-radius:10px;padding:11px 28px;font:600 15px Geist,sans-serif;cursor:pointer}
+.anl-mais:hover{background:#1E4812;color:#fff}
+.anl-vazio{grid-column:1/-1;color:#6b756d;padding:30px 0;text-align:center}
+.anl-sk{background:linear-gradient(90deg,#EEF1EF,#F6F8F6,#EEF1EF);background-size:200% 100%;animation:anlSk 1.2s infinite;border-radius:12px;aspect-ratio:1200/900}
+@keyframes anlSk{to{background-position:-200% 0}}
+@media (max-width:900px){.anl-grid{grid-template-columns:1fr 1fr}.anl-lead{grid-template-columns:1fr;gap:0}.anl-lead .anl-meta{margin-top:12px}}
+@media (max-width:620px){
+.abh-in p{display:none}
+.anl{padding:14px 16px 32px}
+.anl-bar{gap:10px;margin-bottom:14px}
+.anl-ch{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;width:100%;padding-bottom:2px}.anl-ch::-webkit-scrollbar{display:none}
+.anl-ch button{padding:7px 13px;font-size:13.5px;flex:0 0 auto}
+.anl-busca{flex:1 1 100%}
+.anl-grid{grid-template-columns:1fr;gap:0}
+.anl-lead{padding-bottom:18px;margin-bottom:4px}.anl-lead h3{font-size:21px}.anl-lead p{font-size:14.5px}
+.anl a.anl-row{display:grid;grid-template-columns:1fr 112px;gap:14px;align-items:start;padding:14px 0;border-bottom:1px solid #E7ECE8}
+.anl-row .anl-img{grid-column:2;grid-row:1;border-radius:9px}
+.anl-row .anl-txt{grid-column:1;grid-row:1}
+.anl-row .anl-meta{margin:0 0 5px}
+.anl-row h3{font-size:15.5px;margin:0}
+.anl-row p{display:none}
+}
+</style>
+
+<section class="anl" aria-label="Lista de análises">
+  <div class="anl-bar">
+    <div class="anl-ch" id="anlCh" role="tablist" aria-label="Filtrar por tema"></div>
+    <label class="anl-busca"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input type="search" id="anlQ" placeholder="Buscar análise" aria-label="Buscar análise"></label>
+  </div>
+  <div class="anl-grid" id="anlG"><div class="anl-sk"></div><div class="anl-sk"></div><div class="anl-sk"></div></div>
+  <button type="button" class="anl-mais" id="anlMais" hidden>Carregar mais análises</button>
+  <noscript><p><a href="/category/analises/">Ver todas as análises</a></p></noscript>
+</section>
+
+<script>
+(function () {
+  "use strict";
+  // temas do filtro: categorias do WordPress (id) ; "Todas" junta as categorias de análise
+  var TEMAS = [["todas", "Todas", "5,24,25,26,27,28,29,47"], ["soja", "Soja", "24"], ["milho", "Milho", "25"], ["trigo", "Trigo", "26"],
+               ["cambio", "Câmbio", "28"], ["clima", "Clima", "29"], ["economia", "Economia", "27"]];
+  var PRIO = ["conab", "usda", "wasde", "cot", "basis", "hedge", "câmbio", "cambio", "clima", "el niño", "bushel", "mercado", "soja", "milho", "trigo", "economia"];
+  var FORA = ["análises", "analises", "destaque análises", "destaque dados", "dados", "uncategorized", "análise", "analise"];
+  var MES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+  var POR = 12, G = document.getElementById("anlG"), M = document.getElementById("anlMais"), Q = document.getElementById("anlQ");
+  var tema = "todas", pag = 1, total = 1, busca = "", seq = 0;
+  function esc(s) { var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+  function txt(h) { var d = document.createElement("div"); d.innerHTML = h || ""; return (d.textContent || "").replace(/\s+/g, " ").trim(); }
+  function rotulo(p) {
+    var termos = [].concat.apply([], (p._embedded && p._embedded["wp:term"]) || []).map(function (t) { return t.name; });
+    var ok = termos.filter(function (n) { return FORA.indexOf(n.toLowerCase()) < 0; });
+    ok.sort(function (a, b) { var ia = PRIO.indexOf(a.toLowerCase()), ib = PRIO.indexOf(b.toLowerCase()); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
+    var r = ok[0] || "Análise"; return r.length <= 4 ? r.toUpperCase() : r.charAt(0).toUpperCase() + r.slice(1);
+  }
+  function data(s) { var d = new Date(s); return d.getDate() + " " + MES[d.getMonth()] + " " + d.getFullYear(); }
+  function img(p, tam) {
+    var m = p._embedded && p._embedded["wp:featuredmedia"] && p._embedded["wp:featuredmedia"][0];
+    if (!m || !m.source_url) return '<div class="anl-img"></div>';
+    var s = (m.media_details && m.media_details.sizes) || {}, u = (s[tam] || s.large || s.medium_large || {}).source_url || m.source_url;
+    return '<div class="anl-img"><img src="' + u + '" alt="' + esc(m.alt_text || txt(p.title.rendered)) + '" loading="lazy" decoding="async"></div>';
+  }
+  function card(p, lead) {
+    return '<a class="anl-it ' + (lead ? "anl-lead" : "anl-row") + '" href="' + p.link + '">' + img(p, lead ? "large" : "medium_large") +
+      '<div class="anl-txt"><div class="anl-meta"><span class="anl-cat">' + esc(rotulo(p)) + '</span><span class="anl-dt">' + data(p.date) + "</span></div>" +
+      "<h3>" + txt(p.title.rendered) + "</h3><p>" + esc(txt(p.excerpt.rendered)) + "</p></div></a>";
+  }
+  function carregar(mais) {
+    var id = ++seq, cats = TEMAS.filter(function (t) { return t[0] === tema; })[0][2];
+    if (!mais) { pag = 1; G.innerHTML = '<div class="anl-sk"></div><div class="anl-sk"></div><div class="anl-sk"></div>'; }
+    M.hidden = true;
+    var u = "/wp-json/wp/v2/posts?per_page=" + POR + "&page=" + pag + "&categories=" + cats + "&_embed=wp:featuredmedia,wp:term" + (busca ? "&search=" + encodeURIComponent(busca) : "");
+    fetch(u).then(function (r) { if (!r.ok) throw r.status; total = +(r.headers.get("X-WP-TotalPages") || 1); return r.json(); }).then(function (ps) {
+      if (id !== seq) return;
+      var h = ps.map(function (p, i) { return card(p, !mais && i === 0 && !busca); }).join("");
+      if (mais) G.insertAdjacentHTML("beforeend", h); else G.innerHTML = h || '<div class="anl-vazio">Nenhuma análise encontrada' + (busca ? " para “" + esc(busca) + "”" : "") + ".</div>";
+      M.hidden = pag >= total;
+    }).catch(function () { if (id === seq && !mais) G.innerHTML = '<div class="anl-vazio">Não foi possível carregar as análises agora. <a href="/category/analises/">Ver lista simples</a></div>'; });
+  }
+  var ch = document.getElementById("anlCh");
+  ch.innerHTML = TEMAS.map(function (t) { return '<button type="button" role="tab" data-t="' + t[0] + '">' + t[1] + "</button>"; }).join("");
+  function marcar() { [].forEach.call(ch.children, function (b) { var on = b.dataset.t === tema; b.classList.toggle("on", on); b.setAttribute("aria-selected", on); }); }
+  ch.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-t]"); if (!b || b.dataset.t === tema) return;
+    tema = b.dataset.t; marcar(); carregar(false);
+    try { history.replaceState(null, "", location.pathname + (tema === "todas" ? "" : "?tema=" + tema)); } catch (x) {}
+  });
+  M.addEventListener("click", function () { pag++; carregar(true); });
+  var to; Q.addEventListener("input", function () { clearTimeout(to); to = setTimeout(function () { busca = Q.value.trim(); carregar(false); }, 350); });
+  var q = (location.search.match(/[?&]tema=([a-z]+)/) || [])[1];
+  if (q && TEMAS.some(function (t) { return t[0] === q; })) tema = q;
+  marcar(); carregar(false);
+})();
+</script>
