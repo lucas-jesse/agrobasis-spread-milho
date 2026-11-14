@@ -95,7 +95,8 @@
 .abc-k b small{font-size:.55em;font-weight:600;margin-left:3px;color:var(--mt)}
 .abc-k em i.pos{color:#2F6DB5;font-weight:600}.abc-k em i.neg{color:#A35A1E;font-weight:600}
 .abc-chart.tp-sm{height:300px}
-.abc-chart.tp-mapa{height:560px}
+.tp-polos{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;align-items:center}
+.abc-chart.tp-mapa{height:520px}.abc-chart.tp-rank{height:470px}
 .tp-leg{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mt)}
 .tp-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-left:8px}
 .tp-leg i.b,.tp-jc.c0{background:#4C9A2A}.tp-leg i.a,.tp-jc.c1{background:#E8B84A}.tp-leg i.r,.tp-jc.c2{background:#D2694A}
@@ -107,7 +108,8 @@
 .tp-jc:hover{transform:scale(1.12)}.tp-jc.x{background:#F1F3F1;cursor:default}.tp-jc.x:hover{transform:none}
 .tp-jinfo{font-size:13px;color:var(--tx);background:#F6F8F4;border-radius:8px;padding:8px 12px;margin-top:8px;min-height:20px}
 .abc-lead{display:flex;gap:10px;align-items:flex-start}.abc-lead svg{flex:0 0 auto;margin-top:4px;color:var(--az,#2F6DB5)}
-@media (max-width:560px){.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:440px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}
+@media (max-width:860px){.tp-polos{grid-template-columns:1fr}}
+@media (max-width:560px){.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:420px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}
 </style>
 
 <div class="abc" id="abc">
@@ -169,11 +171,11 @@
 
   <div class="abc-card">
     <div class="abc-ch"><h3>Chuva prevista nos polos produtores <small>próximos 15 dias, % do normal</small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
-    <div class="abc-chart tp-mapa" id="tpG3"></div>
-    <p class="abc-nota" id="tpN3">Clique num polo para abrir a previsão completa. O efeito do El Niño sobre a safra está no painel <a href="/dashboards/clima-el-nino/">Clima e El Niño</a>.</p>
+    <div class="tp-polos"><div class="abc-chart tp-mapa" id="tpG3"></div><div class="abc-chart tp-rank" id="tpG4"></div></div>
+    <p class="abc-nota" id="tpN3">Clique num polo, no mapa ou na lista, para abrir a previsão completa. Azul: chuva acima do normal; marrom: abaixo. O efeito do El Niño sobre a safra está no painel <a href="/dashboards/clima-el-nino/">Clima e El Niño</a>.</p>
   </div>
 
-  <div class="abc-foot"><span>Previsão: Open-Meteo, a partir dos modelos ECMWF, GFS e outros serviços meteorológicos (CC BY 4.0) · Normal: reanálise ERA5, 1991 a 2020 · Elaboração: AgroBasis</span><span id="tpAtu"></span></div>
+  <div class="abc-foot"><span>Previsão: Open-Meteo, a partir dos modelos ECMWF, GFS e outros serviços meteorológicos (CC BY 4.0) · Normal: reanálise ERA5, 1991 a 2020 · Elaboração: AgroBasis</span></div>
 
   <section class="abc-faq" aria-label="Perguntas frequentes">
     <h2>Perguntas frequentes</h2>
@@ -409,19 +411,37 @@
       ]
     });
   }
-  function g3() {
-    var pts = CLIMA.pontos.map(function (p) {
+  function polos() {
+    return CLIMA.pontos.map(function (p) {
       var v = soma(p.prev.media) / soma(p.prev.normal_dia) * 100;
       return { name: p.nome, uf: p.uf, value: [p.lon, p.lat, Math.round(v)], mm: Math.round(soma(p.prev.media)) };
     });
-    function cor(v) { return v >= 130 ? "#1F5FA8" : v >= 100 ? "#6EA3DA" : v >= 70 ? "#D9B48D" : "#9C5B24"; }
+  }
+  function corP(v) { return v >= 130 ? "#1F5FA8" : v >= 100 ? "#6EA3DA" : v >= 70 ? "#D9B48D" : "#9C5B24"; }
+  function ttP(d) { return "<b>" + d.name + " (" + d.uf + ")</b>" + tl("", "Previsão 15 dias", d.mm + " mm") + tl("", "% do normal", d.value[2] + "%") + '<div style="color:#6b756d;margin-top:4px">clique para abrir</div>'; }
+  function g3() {
     return Object.assign({}, base, {
-      geo: { map: "BR", roam: false, layoutCenter: ["50%", "52%"], layoutSize: mobile() ? "120%" : "112%", center: [-52, -17], zoom: 1.6,
+      geo: { map: "BR", roam: false, boundingCoords: [[-63.5, -1.5], [-37, -32.5]], layoutCenter: ["50%", "50%"], layoutSize: "100%",
         itemStyle: { areaColor: "#F1F4F1", borderColor: "#fff", borderWidth: 1 }, emphasis: { disabled: true }, label: { show: false }, silent: true },
-      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) { return "<b>" + p.data.name + " (" + p.data.uf + ")</b>" + tl("", "Previsão 15 dias", p.data.mm + " mm") + tl("", "% do normal", p.data.value[2] + "%") + '<div style="color:#6b756d;margin-top:4px">clique para abrir</div>'; } }),
-      series: [{ type: "scatter", coordinateSystem: "geo", data: pts, symbolSize: mobile() ? 13 : 17, itemStyle: { color: function (p) { return cor(p.data.value[2]); }, borderColor: "#fff", borderWidth: 2 },
-        label: { show: true, position: "right", fontSize: mobile() ? 9.5 : 11, color: COR.tx, formatter: function (p) { return p.data.name + " " + p.data.value[2] + "%"; } }, z: 3 }],
-      graphic: [{ type: "text", right: 8, bottom: 6, style: { text: "agrobasis.com.br", fill: "#b6beb8", font: "11px Geist, sans-serif" } }]
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) { return ttP(p.data); } }),
+      series: [{ type: "scatter", coordinateSystem: "geo", data: polos(), symbolSize: mobile() ? 12 : 15, cursor: "pointer",
+        itemStyle: { color: function (p) { return corP(p.data.value[2]); }, borderColor: "#fff", borderWidth: 2, shadowBlur: 4, shadowColor: "rgba(0,0,0,.15)" },
+        label: { show: true, position: "right", distance: 4, fontSize: mobile() ? 9.5 : 10.5, color: COR.tx, formatter: function (p) { return p.data.name; } },
+        labelLayout: { hideOverlap: true }, emphasis: { scale: 1.4, label: { fontWeight: 700 } }, z: 3 }],
+      graphic: [{ type: "text", right: 4, bottom: 4, style: { text: "agrobasis.com.br", fill: "#b6beb8", font: "11px Geist, sans-serif" } }]
+    });
+  }
+  function g4() {
+    var P = polos().sort(function (a, b) { return a.value[2] - b.value[2]; });
+    return Object.assign({}, base, {
+      grid: { left: 4, right: 46, top: 8, bottom: 4, containLabel: true },
+      xAxis: { type: "value", show: false, max: function (v) { return Math.max(110, v.max); } },
+      yAxis: { type: "category", data: P.map(function (d) { return d.name + " (" + d.uf + ")"; }), axisLabel: { color: COR.tx, fontSize: 11.5 }, axisLine: { show: false }, axisTick: { show: false } },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) { return ttP(P[p.dataIndex]); } }),
+      series: [{ type: "bar", barWidth: "62%", cursor: "pointer", data: P.map(function (d) { return { value: d.value[2], itemStyle: { color: corP(d.value[2]), borderRadius: [0, 4, 4, 0] } }; }),
+        label: { show: true, position: "right", fontSize: 11.5, fontWeight: 600, color: COR.tx, formatter: "{c}%" },
+        markLine: { silent: true, symbol: "none", lineStyle: { color: COR.mt, type: [4, 4] }, label: { formatter: "normal", color: COR.mt, fontSize: 10.5, position: "end" }, data: [{ xAxis: 100 }] } }],
+      _P: P
     });
   }
   var FN = [g0, g1, g2, g3];
@@ -455,7 +475,6 @@
     $("tpConteudo").hidden = false;
     if (!charts.length) charts = [0, 1, 2].map(function (i) { return echarts.init($("tpG" + i)); });
     charts.forEach(function (c, i) { c.resize(); c.setOption(FN[i](), true); });
-    $("tpAtu").textContent = "Rodada mais recente dos modelos";
   }
   function abrir(m) {
     if (!m) return;
@@ -481,19 +500,21 @@
     ch.setOption(FN[i](), true);
     var a = document.createElement("a"); a.href = url; a.download = "agrobasis-tempo-" + (i === 3 ? "polos" : slug(atual)) + ".png"; document.body.appendChild(a); a.click(); a.remove();
   }
-  var mapa;
+  var mapa, rank;
   Promise.all([carregarLib(), json("dados/geo/municipios.json"), json("dados/clima/clima.json"), json("dados/conab/br_uf.json")]).then(function (r) {
     MUN = r[1].municipios.map(function (m) { return { n: m[0], uf: m[1], lat: m[2], lon: m[3], k: norm(m[0]) }; });
     CLIMA = r[2]; echarts.registerMap("BR", r[3]);
     ligarBusca();
     mapa = echarts.init($("tpG3")); mapa.setOption(g3());
     mapa.on("click", function (p) { if (p.data) abrir(porNome(p.data.name, p.data.uf)); });
+    rank = echarts.init($("tpG4")); var o4 = g4(); rank.setOption(o4);
+    rank.on("click", function (p) { var d = o4._P[p.dataIndex]; if (d) abrir(porNome(d.name, d.uf)); });
     document.querySelectorAll("#abc .abc-dl[data-dl]").forEach(function (b) { b.addEventListener("click", function () { if (atual || +b.dataset.dl === 3) baixar(+b.dataset.dl); }); });
     $("tpJan").addEventListener("click", function (e) { var c = e.target.closest("[data-t]"); if (c) $("tpJinfo").textContent = c.dataset.t; });
     var q = (location.search.match(/[?&]cidade=([a-z0-9-]+)/) || [])[1], rec = ler("ab_tempo_rec") || [];
     var m = (q && porSlug(q)) || (rec[0] && porSlug(rec[0])) || porNome("Sorriso", "MT");
     abrir(m);
-    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); mapa.resize(); }, 150); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); mapa.resize(); rank.resize(); }, 150); });
   }).catch(function (e) {
     if (window.console) console.error("AgroBasis Tempo:", e);
     $("tpMeta").textContent = "Não foi possível carregar a página agora. Tente novamente em instantes.";

@@ -20,7 +20,8 @@ extra = """.tp-busca{display:flex;gap:10px;align-items:stretch;margin:6px 0 10px
 .abc-k b small{font-size:.55em;font-weight:600;margin-left:3px;color:var(--mt)}
 .abc-k em i.pos{color:#2F6DB5;font-weight:600}.abc-k em i.neg{color:#A35A1E;font-weight:600}
 .abc-chart.tp-sm{height:300px}
-.abc-chart.tp-mapa{height:560px}
+.tp-polos{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;align-items:center}
+.abc-chart.tp-mapa{height:520px}.abc-chart.tp-rank{height:470px}
 .tp-leg{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mt)}
 .tp-leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-left:8px}
 .tp-leg i.b,.tp-jc.c0{background:#4C9A2A}.tp-leg i.a,.tp-jc.c1{background:#E8B84A}.tp-leg i.r,.tp-jc.c2{background:#D2694A}
@@ -32,7 +33,8 @@ extra = """.tp-busca{display:flex;gap:10px;align-items:stretch;margin:6px 0 10px
 .tp-jc:hover{transform:scale(1.12)}.tp-jc.x{background:#F1F3F1;cursor:default}.tp-jc.x:hover{transform:none}
 .tp-jinfo{font-size:13px;color:var(--tx);background:#F6F8F4;border-radius:8px;padding:8px 12px;margin-top:8px;min-height:20px}
 .abc-lead{display:flex;gap:10px;align-items:flex-start}.abc-lead svg{flex:0 0 auto;margin-top:4px;color:var(--az,#2F6DB5)}
-@media (max-width:560px){.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:440px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}"""
+@media (max-width:860px){.tp-polos{grid-template-columns:1fr}}
+@media (max-width:560px){.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:420px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}"""
 css = "\n".join(cot[ini:fim]) + "\n" + extra + "\n</style>"
 cab = ("<!-- AgroBasis · Previsão do tempo por município · página /clima/\n"
        "     Previsão no navegador via Open-Meteo (CC BY 4.0). Municípios: dados/geo/municipios.json. Polos: dados/clima/clima.json. -->\n")
