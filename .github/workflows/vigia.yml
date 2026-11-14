@@ -1,0 +1,28 @@
+name: Vigia dos dados
+
+on:
+  schedule:
+    # 10:43 de Brasília todos os dias (13:43 UTC), depois das coletas da manhã
+    - cron: '43 13 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  actions: read
+
+jobs:
+  vigia:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - run: python vigia/vigia.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

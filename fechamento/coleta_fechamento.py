@@ -8,6 +8,8 @@ dados/fechamento.json com preço de fechamento e variação do dia de:
 Fonte: scanner público do TradingView. Se a CBOT e a B3 não variaram nada, trata como feriado e não grava.
 
 Uso (na raiz do repositório): python fechamento/coleta_fechamento.py
+Com --agora, grava dados/cotacoes_agora.json (cotação durante o pregão, usada na página inicial)
+em vez de dados/fechamento.json.
 """
 import json
 import sys
@@ -36,8 +38,11 @@ def item(d, nome, compl, fmt):
             "var_pct": round((preco / ant - 1) * 100, 4) if ant else None}
 
 
-def main():
+def main(agora_mode=False):
     agora = datetime.now(BRT); hoje = agora.date()
+    if agora_mode and hoje.weekday() >= 5:
+        print("fim de semana: sem pregão")
+        return False
     tickers, mapa = [], {}
     for chave, (raiz, meses, nome, _) in CBOT.items():
         letra, ano = contratos(meses, hoje, 1)[0]
@@ -65,12 +70,18 @@ def main():
     if len(saida["cbot"]) < 3 or all(abs(x["var_pct"] or 0) < 1e-9 for x in graos):
         print("sem pregão de grãos hoje (ou coleta incompleta): card não gerado")
         return False
-    Path(RAIZ / "dados/fechamento.json").write_text(json.dumps(saida, ensure_ascii=False, indent=1), encoding="utf-8")
+    destino = "dados/cotacoes_agora.json" if agora_mode else "dados/fechamento.json"
+    if agora_mode:
+        saida["fonte"] += ", com 10 a 15 minutos de atraso"
+    Path(RAIZ / destino).write_text(json.dumps(saida, ensure_ascii=False, indent=1), encoding="utf-8")
     print(json.dumps(saida, ensure_ascii=False)[:2500])
     return True
 
 
 if __name__ == "__main__":
+    if "--agora" in sys.argv:
+        main(agora_mode=True)
+        raise SystemExit(0)
     ok = main()
     # o passo seguinte do workflow só gera o card se houve coleta
     Path(RAIZ / "fechamento/.gerar").write_text("1" if ok else "0")
