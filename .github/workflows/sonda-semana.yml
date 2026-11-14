@@ -6,13 +6,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: {repository: lucas-jesse/agrobasis-spread-milho, ref: main, path: repo}
+      - run: pip install requests python-calamine openpyxl
       - run: |
-          python3 - <<'PY'
-          import requests, json
-          T=["CBOT:ZSF2027","CBOT:ZCZ2026","CBOT:ZWZ2026","CBOT:ZMZ2026","CBOT:ZLZ2026","BMFBOVESPA:CCMF2027","FX_IDC:USDBRL","TVC:DXY","ICEEUR:BRN1!","BMFBOVESPA:IBOV","CBOT:ZS1!","CBOT:ZC1!"]
-          C=["close","Perf.W","Perf.1M","change","description"]
-          r=requests.post("https://scanner.tradingview.com/global/scan",json={"symbols":{"tickers":T,"query":{"types":[]}},"columns":C},headers={"User-Agent":"Mozilla/5.0"},timeout=30)
-          out={i["s"]:dict(zip(C,i["d"])) for i in r.json().get("data",[])}
-          json.dump(out,open("semana.json","w"),indent=1,ensure_ascii=False); print(out)
+          cd repo && python3 - <<'PY'
+          import json, exporta_troca as t
+          out={}
+          for k,u in [("soja","https://www.cepea.org.br/br/indicador/series/soja.aspx?id=92"),("milho","https://www.cepea.org.br/br/indicador/series/milho.aspx?id=77")]:
+              d=t.tentar(t.cepea,u); out[k]=[(str(a),b,c) for a,b,c in d[-12:]]
+          json.dump(out,open("../cepea.json","w"),indent=1); print(out)
           PY
-      - run: git config user.name bot && git config user.email bot@x && git add semana.json && git commit -m r && git push origin HEAD:sonda-semana
+      - run: git config user.name bot && git config user.email bot@x && git add cepea.json && git commit -m r && git push origin HEAD:sonda-semana
