@@ -19,6 +19,27 @@ extra = """.tp-busca{display:flex;gap:10px;align-items:stretch;margin:6px 0 10px
 .tp-chips button:hover{border-color:var(--vc);color:var(--vd);background:#F6FAF2}
 .abc-k b small{font-size:.55em;font-weight:600;margin-left:3px;color:var(--mt)}
 .abc-k em i.pos{color:#2F6DB5;font-weight:600}.abc-k em i.neg{color:#A35A1E;font-weight:600}
+.tp-dias{border-top:1px solid var(--ln)}
+.tp-dia{border-bottom:1px solid var(--ln)}
+.tp-dia summary{list-style:none;display:grid;grid-template-columns:64px 52px 1fr 1.3fr 28px;align-items:center;gap:8px;padding:10px 4px;cursor:pointer}
+.tp-dia summary::-webkit-details-marker{display:none}
+.tp-dia summary:hover{background:#F8FAF6}
+.tp-d{display:flex;flex-direction:column;line-height:1.15}.tp-d b{font:700 20px Sora,sans-serif;color:var(--tx);display:flex;align-items:center;gap:4px}.tp-d small{font-size:13px;color:var(--mt)}
+.tp-al{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#D2694A;color:#fff;font:700 11px Geist,sans-serif}
+.tp-ic svg{display:block}
+.tp-t{display:flex;gap:12px;font:600 18px Sora,sans-serif}.tp-t i{font-style:normal}.tp-t .mn{color:#2F6DB5}.tp-t .mx{color:#C0502E}
+.tp-c{display:flex;align-items:center;gap:8px;justify-content:flex-start}.tp-g{display:inline-flex;gap:2px}.tp-c b{font:600 17px Sora,sans-serif;color:var(--tx);white-space:nowrap}
+.tp-x{width:26px;height:26px;border-radius:7px;background:#EEF2EE;position:relative}
+.tp-x:before,.tp-x:after{content:"";position:absolute;left:7px;right:7px;top:12px;height:2px;background:var(--tx);border-radius:1px}
+.tp-x:after{transform:rotate(90deg);transition:transform .15s}
+.tp-dia[open] .tp-x:after{transform:rotate(0)}
+.tp-det{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 18px;padding:4px 8px 14px 8px;font-size:13px}
+.tp-det span{display:block;color:var(--mt);font-size:11.5px;text-transform:uppercase;letter-spacing:.05em}.tp-det b{font-weight:600;color:var(--tx)}
+.tp-per{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.tp-per span{background:#F3F7FB;border-radius:8px;padding:6px 8px;text-transform:none;letter-spacing:0;color:var(--tx);font-size:13px}.tp-per small{display:block;color:var(--mt);font-size:11px}
+.tp-dias .tp-ext{display:none}.tp-dias.todos .tp-ext{display:block}
+.tp-mais{display:block;margin:14px auto 2px;border:0;background:var(--vd);color:#fff;border-radius:10px;padding:11px 30px;font:600 15px Geist,sans-serif;cursor:pointer}
+.tp-mais:hover{background:#163a0d}
 .abc-chart.tp-sm{height:300px}
 .tp-polos{display:grid;grid-template-columns:1.15fr 1fr;gap:12px;align-items:center}
 .abc-chart.tp-mapa{height:520px}.abc-chart.tp-rank{height:470px}
@@ -34,7 +55,7 @@ extra = """.tp-busca{display:flex;gap:10px;align-items:stretch;margin:6px 0 10px
 .tp-jinfo{font-size:13px;color:var(--tx);background:#F6F8F4;border-radius:8px;padding:8px 12px;margin-top:8px;min-height:20px}
 .abc-lead{display:flex;gap:10px;align-items:flex-start}.abc-lead svg{flex:0 0 auto;margin-top:4px;color:var(--az,#2F6DB5)}
 @media (max-width:860px){.tp-polos{grid-template-columns:1fr}}
-@media (max-width:560px){.abc-k span,.abc-k em{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.abc-k span{font-size:10.5px;line-height:1.3}.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:420px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}"""
+@media (max-width:560px){.tp-dia summary{grid-template-columns:50px 44px 76px 1fr 26px;gap:6px;padding:10px 0}.tp-d b{font-size:18px}.tp-t{gap:8px;font-size:16px}.tp-c b{font-size:15px}.tp-ic svg{width:40px;height:40px}.tp-det{grid-template-columns:1fr 1fr;padding:2px 0 12px}.tp-per{grid-template-columns:repeat(2,1fr)}.tp-dias-card{padding-left:12px!important;padding-right:12px!important}.abc-k span,.abc-k em{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.abc-k span{font-size:10.5px;line-height:1.3}.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:420px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}"""
 css = "\n".join(cot[ini:fim]) + "\n" + extra + "\n</style>"
 cab = ("<!-- AgroBasis · Previsão do tempo por município · página /clima/\n"
        "     Previsão no navegador via Open-Meteo (CC BY 4.0). Municípios: dados/geo/municipios.json. Polos: dados/clima/clima.json. -->\n")
