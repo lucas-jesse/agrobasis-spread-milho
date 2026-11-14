@@ -1,0 +1,44 @@
+<style id="ab-menu-resp">
+/* AgroBasis · cabeçalho: menu sempre em uma linha acima de 1024px, logo sem deformar (aplicado no widget HTML 3609b5a do header 24) */
+@media (min-width:1025px){
+.elementor-24 .elementor-element-40d77e6{flex-wrap:nowrap!important}
+.elementor-24 .elementor-element-11eabb9{flex:0 0 auto!important;width:auto!important;max-width:none!important}
+.elementor-24 .elementor-element-11eabb9 img{width:clamp(150px,14vw,215px)!important;height:auto!important;max-width:none!important;object-fit:contain}
+.elementor-24 .elementor-element-0588178{--e-nav-menu-horizontal-menu-item-margin:clamp(2px,.5vw,15.5px)!important;flex:1 1 auto!important;min-width:0!important;width:auto!important}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main>.elementor-nav-menu{flex-wrap:nowrap!important;justify-content:center}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item{white-space:nowrap;padding-left:clamp(6px,.65vw,13px)!important;padding-right:clamp(6px,.65vw,13px)!important;font-size:clamp(14px,1.08vw,16px)!important}
+.elementor-24 .elementor-element-3bf89c3{flex:0 1 auto!important;width:clamp(150px,12.5vw,264px)!important;min-width:0!important}
+.elementor-24 .elementor-element-3bf89c3 .e-search-form,.elementor-24 .elementor-element-3bf89c3 .e-search-input-wrapper,.elementor-24 .elementor-element-3bf89c3 .e-search-input{min-width:0!important;max-width:100%!important}
+.elementor-24 .elementor-element-3bf89c3 .e-search-input-wrapper{flex:1 1 auto!important;width:auto!important}
+.elementor-24 .elementor-element-3bf89c3 .e-search-form{display:flex!important;width:100%!important}
+}
+@media (min-width:1025px) and (max-width:1279px){.elementor-24 .elementor-element-3bf89c3{display:none!important}}
+/* cabeçalhos compactos das páginas internas: no celular, sem o parágrafo de apresentação */
+@media (max-width:620px){header.abh .abh-in{padding:16px 16px 14px!important}header.abh h1{font-size:24px!important}header.abh .abh-in>p,header.abh .abh-meta{display:none!important}}
+/* cabeçalho com mais vida, mas discreto: fundo branco, fixo no topo ao rolar, linha verde no item ativo */
+.elementor-location-header,[data-elementor-type=header]{position:sticky;top:0;z-index:999}
+body.admin-bar .elementor-location-header,body.admin-bar [data-elementor-type=header]{top:32px}
+@media (max-width:782px){body.admin-bar .elementor-location-header,body.admin-bar [data-elementor-type=header]{top:0}}
+.elementor-24 .elementor-element-40d77e6{background:rgba(255,255,255,.96)!important;-webkit-backdrop-filter:saturate(1.4) blur(8px);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #E7ECE8;transition:box-shadow .2s}
+.ab-rolou .elementor-24 .elementor-element-40d77e6{box-shadow:0 6px 20px rgba(20,40,15,.08)}
+@media (min-width:1025px){
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item{position:relative}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item:after{content:"";position:absolute;left:50%;right:50%;bottom:4px;height:2.5px;border-radius:2px;background:#54931B;transition:left .22s ease,right .22s ease;display:block!important;opacity:1!important}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item:hover:after,.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item.elementor-item-active:after{left:clamp(6px,.65vw,13px);right:clamp(6px,.65vw,13px)}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item:hover{color:#1E4812!important}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item.elementor-item-active{color:#1E4812!important;font-weight:600}
+}
+/* faixa da página inicial com cotações: recolhe ao rolar, para o menu fixo não cobrir o conteúdo */
+.elementor-24 .elementor-element-7054b37{max-height:90px;transition:max-height .25s ease,opacity .2s ease;overflow:hidden}
+.ab-rolou .elementor-24 .elementor-element-7054b37{max-height:0!important;opacity:0;padding-top:0!important;padding-bottom:0!important;margin:0!important}
+.abw-sec{padding:44px 0 52px}
+@media (max-width:760px){.abw-sec{padding:28px 0 36px}}
+.elementor-24 .elementor-element-ab0menu{position:absolute!important;width:0!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important}
+</style>
+<script>(function(){var b=document.documentElement,on=false;function f(){var s=window.scrollY>8;if(s!==on){on=s;b.classList.toggle("ab-rolou",s);}}window.addEventListener("scroll",f,{passive:true});f();
+var FAIXA="<style>\n.abw{max-width:1140px;margin:0 auto;padding:0 20px;box-sizing:border-box;font-family:Geist,system-ui,sans-serif}\n.abw-in{display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;background:linear-gradient(120deg,#1E4812 0%,#2b6419 100%);border-radius:20px;padding:26px 30px;color:#fff;position:relative;overflow:hidden}\n.abw-in:after{content:\"\";position:absolute;right:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(185,221,143,.18),transparent 70%);pointer-events:none}\n.abw-ic{width:56px;height:56px;border-radius:16px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex:0 0 auto}\n.abw h3{font:700 21px/1.25 Sora,Geist,sans-serif;color:#fff;margin:0 0 5px}\n.abw p{font-size:15px;line-height:1.5;color:rgba(255,255,255,.85);margin:0}\n.abw a{position:relative;z-index:1;display:inline-flex;align-items:center;gap:9px;background:#fff;color:#1E4812!important;text-decoration:none!important;font:600 15px Geist,sans-serif;border-radius:12px;padding:13px 20px;white-space:nowrap;transition:transform .15s,background .15s}\n.abw a:hover{background:#F1F7EA;transform:translateY(-1px)}\n@media (max-width:760px){.abw{padding:0 16px}.abw-in{grid-template-columns:auto 1fr;gap:14px;padding:20px}.abw-ic{width:46px;height:46px;border-radius:13px}.abw h3{font-size:17.5px}.abw p{font-size:14px}.abw a{grid-column:1/-1;justify-content:center;width:100%}}\n<\/style>\n<div class=\"abw\" aria-label=\"Grupo do WhatsApp do AgroBasis\">\n  <div class=\"abw-in\">\n    <div class=\"abw-ic\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"#fff\"><path d=\"M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z\"/><\/svg><\/div>\n    <div><h3>O mercado de grãos no seu WhatsApp<\/h3><p>Resumo do mercado pela manhã, os relatórios do dia e as análises novas do AgroBasis. Gratuito.<\/p><\/div>\n    <a href=\"https://chat.whatsapp.com/HqNKK5KqNqqLuewxeJHOeI\" target=\"_blank\" rel=\"noopener\">Entrar no grupo<svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\"><path d=\"M5 12h14M13 6l6 6-6 6\"/><\/svg><\/a>\n  <\/div>\n<\/div>";
+function troca(){[].slice.call(document.querySelectorAll(".elementor-widget-heading,.elementor-widget-icon-box")).filter(function(w){return /Junte-se a produtores/.test(w.textContent);}).forEach(function(w){
+var c=w.closest(".e-con");if(!c||c.dataset.abw)return;
+while(c.parentElement){var p=c.parentElement.closest(".e-con");if(!p)break;var filhos=p.querySelectorAll(":scope>.e-con,:scope>.e-con-inner>.e-con,:scope>.elementor-element,:scope>.e-con-inner>.elementor-element");if(filhos.length!==1)break;c=p;}
+var s=document.createElement("section");s.className="abw-sec";s.innerHTML=FAIXA;c.dataset.abw="1";c.replaceWith(s);});}
+if(document.readyState!=="loading")troca();else document.addEventListener("DOMContentLoaded",troca);})();</script>

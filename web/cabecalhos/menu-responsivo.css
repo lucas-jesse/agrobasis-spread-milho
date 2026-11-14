@@ -27,3 +27,8 @@ body.admin-bar .elementor-location-header,body.admin-bar [data-elementor-type=he
 .elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item:hover{color:#1E4812!important}
 .elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item.elementor-item-active{color:#1E4812!important;font-weight:600}
 }
+/* faixa da página inicial com cotações: recolhe ao rolar, para o menu fixo não cobrir o conteúdo */
+.elementor-24 .elementor-element-7054b37{max-height:90px;transition:max-height .25s ease,opacity .2s ease;overflow:hidden}
+.ab-rolou .elementor-24 .elementor-element-7054b37{max-height:0!important;opacity:0;padding-top:0!important;padding-bottom:0!important;margin:0!important}
+.abw-sec{padding:44px 0 52px}
+@media (max-width:760px){.abw-sec{padding:28px 0 36px}}
