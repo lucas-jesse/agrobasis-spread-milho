@@ -7,5 +7,8 @@
 .elementor-24 .elementor-element-0588178 .elementor-nav-menu--main>.elementor-nav-menu{flex-wrap:nowrap!important;justify-content:center}
 .elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item{white-space:nowrap;padding-left:clamp(6px,.65vw,13px)!important;padding-right:clamp(6px,.65vw,13px)!important;font-size:clamp(14px,1.08vw,16px)!important}
 .elementor-24 .elementor-element-3bf89c3{flex:0 1 auto!important;width:clamp(150px,12.5vw,264px)!important;min-width:0!important}
+.elementor-24 .elementor-element-3bf89c3 .e-search-form,.elementor-24 .elementor-element-3bf89c3 .e-search-input-wrapper,.elementor-24 .elementor-element-3bf89c3 .e-search-input{min-width:0!important;max-width:100%!important}
+.elementor-24 .elementor-element-3bf89c3 .e-search-input-wrapper{flex:1 1 auto!important;width:auto!important}
+.elementor-24 .elementor-element-3bf89c3 .e-search-form{display:flex!important;width:100%!important}
 }
 @media (min-width:1025px) and (max-width:1279px){.elementor-24 .elementor-element-3bf89c3{display:none!important}}

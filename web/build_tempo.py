@@ -34,7 +34,7 @@ extra = """.tp-busca{display:flex;gap:10px;align-items:stretch;margin:6px 0 10px
 .tp-jinfo{font-size:13px;color:var(--tx);background:#F6F8F4;border-radius:8px;padding:8px 12px;margin-top:8px;min-height:20px}
 .abc-lead{display:flex;gap:10px;align-items:flex-start}.abc-lead svg{flex:0 0 auto;margin-top:4px;color:var(--az,#2F6DB5)}
 @media (max-width:860px){.tp-polos{grid-template-columns:1fr}}
-@media (max-width:560px){.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:420px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}"""
+@media (max-width:560px){.abc-k span,.abc-k em{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}.abc-k span{font-size:10.5px;line-height:1.3}.tp-gps{flex:1 1 100%;justify-content:center}.abc-chart.tp-mapa{height:420px}.abc-chart.tp-sm{height:260px}.tp-jt{grid-template-columns:58px repeat(17,26px)}}"""
 css = "\n".join(cot[ini:fim]) + "\n" + extra + "\n</style>"
 cab = ("<!-- AgroBasis · Previsão do tempo por município · página /clima/\n"
        "     Previsão no navegador via Open-Meteo (CC BY 4.0). Municípios: dados/geo/municipios.json. Polos: dados/clima/clima.json. -->\n")
