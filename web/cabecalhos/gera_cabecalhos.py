@@ -14,7 +14,7 @@ CSS = """<style>
 .abh-meta{display:flex;flex-wrap:wrap;gap:6px 18px;margin:14px 0 0;font-size:12.5px;color:#6b756d}
 .abh-meta b{color:#1E4812;font-weight:700}
 .abh-meta i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#54931B;margin-right:7px;vertical-align:1px}
-@media (max-width:620px){.abh-in{padding:22px 16px 20px}.abh h1{font-size:26px}.abh p{font-size:14.5px}}
+@media (max-width:620px){.abh-in{padding:16px 16px 14px}.abh h1{font-size:24px}.abh p{display:none}}
 </style>"""
 FONTES = """<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">"""
