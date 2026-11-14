@@ -1,0 +1,11 @@
+/* AgroBasis · cabeçalho: menu sempre em uma linha acima de 1024px, logo sem deformar (aplicado no widget HTML 3609b5a do header 24) */
+@media (min-width:1025px){
+.elementor-24 .elementor-element-40d77e6{flex-wrap:nowrap!important}
+.elementor-24 .elementor-element-11eabb9{flex:0 0 auto!important;width:auto!important;max-width:none!important}
+.elementor-24 .elementor-element-11eabb9 img{width:clamp(150px,14vw,215px)!important;height:auto!important;max-width:none!important;object-fit:contain}
+.elementor-24 .elementor-element-0588178{--e-nav-menu-horizontal-menu-item-margin:clamp(2px,.5vw,15.5px)!important;flex:1 1 auto!important;min-width:0!important;width:auto!important}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main>.elementor-nav-menu{flex-wrap:nowrap!important;justify-content:center}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item{white-space:nowrap;padding-left:clamp(6px,.65vw,13px)!important;padding-right:clamp(6px,.65vw,13px)!important;font-size:clamp(14px,1.08vw,16px)!important}
+.elementor-24 .elementor-element-3bf89c3{flex:0 1 auto!important;width:clamp(170px,15vw,264px)!important;min-width:0!important}
+}
+@media (min-width:1025px) and (max-width:1279px){.elementor-24 .elementor-element-3bf89c3{display:none!important}}
