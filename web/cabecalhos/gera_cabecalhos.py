@@ -20,7 +20,7 @@ FONTES = """<link rel="preconnect" href="https://fonts.googleapis.com"><link rel
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">"""
 
 PAGINAS = {
-    "dashboards": ("Dashboards", "Painéis de mercado agrícola",
+    "dashboards": ("Painéis", "Painéis de mercado agrícola",
                    "Soja, milho, trigo, câmbio, basis e posição dos fundos em painéis interativos, montados com dados oficiais da Conab, do USDA, do CFTC, da B3 e do Banco Central.",
                    '<span><i></i><b id="abhN">Painéis</b> interativos</span><span><i></i>Atualização automática</span><span><i></i>Gráficos exportáveis</span>'),
     "analises": ("Análises", "Análises e relatórios",
