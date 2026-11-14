@@ -145,6 +145,12 @@
     MUN.forEach(function (m) { var d = (m.lat - lat) * (m.lat - lat) + (m.lon - lon) * (m.lon - lon) * Math.cos(lat * Math.PI / 180) * Math.cos(lat * Math.PI / 180); if (d < dm) { dm = d; b = m; } });
     return b;
   }
+  function desenharChips() {
+    var salvos = (ler("ab_tempo_rec") || []).map(function (s) { return porSlug(s); }).filter(Boolean);
+    var chips = salvos.concat(POLOS.map(function (p) { var a = p.split("|"); return porNome(a[0], a[1]); }).filter(function (m) { return m && salvos.indexOf(m) < 0; }))
+      .filter(function (m) { return m !== atual; }).slice(0, 7);
+    $("tpChips").innerHTML = chips.map(function (m) { return '<button type="button" data-s="' + slug(m) + '">' + rot(m) + "</button>"; }).join("");
+  }
   function ligarBusca() {
     var inp = $("tpCidade"), caixa = $("tpSug"), lista = [], ativo = -1;
     function fechar() { caixa.style.display = "none"; ativo = -1; }
@@ -168,9 +174,7 @@
       navigator.geolocation.getCurrentPosition(function (p) { $("tpGps").classList.remove("on"); abrir(maisPerto(p.coords.latitude, p.coords.longitude)); },
         function () { $("tpGps").classList.remove("on"); $("tpGps").textContent = "Localização não autorizada"; }, { timeout: 10000, maximumAge: 6e5 });
     });
-    var salvos = (ler("ab_tempo_rec") || []).map(function (s) { return porSlug(s); }).filter(Boolean);
-    var chips = salvos.concat(POLOS.map(function (p) { var a = p.split("|"); return porNome(a[0], a[1]); }).filter(function (m) { return m && salvos.indexOf(m) < 0; })).slice(0, 7);
-    $("tpChips").innerHTML = chips.map(function (m) { return '<button type="button" data-s="' + slug(m) + '">' + rot(m) + "</button>"; }).join("");
+    desenharChips();
     $("tpChips").addEventListener("click", function (e) { var b = e.target.closest("[data-s]"); if (b) abrir(porSlug(b.dataset.s)); });
   }
 
@@ -417,7 +421,7 @@
     var ob = [], nb = 0; D.time.forEach(function (t, i) { if (t < h && t >= addDias(h, -30)) { ob.push(D.precipitation_sum[i]); nb += N ? nd(N, t) || 0 : 0; } });
     var p30 = soma(ob), dc = F.slice(0, 15).filter(function (x) { return x.p >= 1; }).length;
     $("tpTit").textContent = rot(atual);
-    $("tpMeta").textContent = "Previsão atualizada em " + new Date().toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) + " · lat " + br(atual.lat, 2) + ", lon " + br(atual.lon, 2);
+    $("tpMeta").innerHTML = "Atualizada em " + new Date().toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(",", " às") + '<span class="tp-coord"> · lat ' + br(atual.lat, 2) + ", lon " + br(atual.lon, 2) + "</span>";
     $("k7").innerHTML = br(p7, 0) + "<small>mm</small>"; $("k7s").textContent = F.slice(0, 7).filter(function (x) { return x.p >= 1; }).length + " dias com chuva";
     $("k15").innerHTML = br(p15, 0) + "<small>mm</small>";
     $("k15s").innerHTML = n15 ? '<i class="' + (p15 >= n15 ? "pos" : "neg") + '" style="font-style:normal">' + br(p15 / n15 * 100, 0) + "% do normal</i> · " + dc + " dias com chuva" : dc + " dias com chuva";
@@ -445,7 +449,7 @@
     atual = m; $("tpCidade").value = rot(m);
     $("tpTit").textContent = rot(m); $("tpMeta").textContent = "Carregando a previsão…";
     try { history.replaceState(null, "", location.pathname + "?cidade=" + slug(m)); } catch (e) {}
-    var rec = (ler("ab_tempo_rec") || []).filter(function (s) { return s !== slug(m); }); rec.unshift(slug(m)); guardar("ab_tempo_rec", rec.slice(0, 4));
+    var rec = (ler("ab_tempo_rec") || []).filter(function (s) { return s !== slug(m); }); rec.unshift(slug(m)); guardar("ab_tempo_rec", rec.slice(0, 4)); desenharChips();
     Promise.all([previsao(m), normal(m)]).then(function (r) {
       if (atual !== m) return;
       dados = r[0]; dados.normal = r[1]; render();
