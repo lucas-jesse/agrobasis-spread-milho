@@ -22,8 +22,8 @@
   var EST = [
     [/comece/i, "Comece por aqui", "linear-gradient(135deg,#1E4812,#2f6a1c)", "#B9DD8F", "aula"],
     [/deriv/i, "Série Derivativos", "linear-gradient(135deg,#183a12,#3d6b23)", "#D8E8A6", "aula"],
-    [/comerc/i, "Comercialização", "linear-gradient(135deg,#5c3b1f,#A17149)", "#F3D9B8", "aula"],
-    [/an[aá]lise/i, "Análise de mercado", "linear-gradient(135deg,#22301f,#3f5a33)", "#B9DD8F", "tema"]
+    [/comerc/i, "Comercialização", "linear-gradient(135deg,#5c3b1f,#A17149)", "#F3D9B8", "data"],
+    [/an[aá]lise/i, "Análise", "linear-gradient(135deg,#22301f,#3f5a33)", "#B9DD8F", "data"]
   ];
   var LINHA = '<svg class="spv-linha" viewBox="0 0 100 50" preserveAspectRatio="none" fill="none" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"><path d="M0 42 L14 36 L24 39 L36 26 L48 30 L60 18 L72 22 L84 9 L100 4"/></svg>';
   var MARCA = '<span class="spv-capa-m"><svg viewBox="0 0 24 20" fill="#fff"><rect x="1" y="14" width="4" height="5" rx="1"/><rect x="8" y="10" width="4" height="9" rx="1"/><rect x="15" y="5" width="4" height="14" rx="1"/><path d="M2 11 L10 5 L14 7 L21 1" stroke="#fff" stroke-width="1.8" fill="none"/></svg>AgroBasis</span>';
@@ -33,13 +33,18 @@
       var e = EST.filter(function (x) { return x[0].test(nome); })[0] || EST[0];
       [].forEach.call(t.querySelectorAll(".spv-card"), function (c, i) {
         var th = c.querySelector(".spv-thumb"); if (!th || th.querySelector(".spv-capa")) return;
-        var destaque;
+        var destaque, rot = e[1];
         if (e[4] === "aula") destaque = "Aula " + String(i + 1).padStart(2, "0");
-        else destaque = [].map.call(c.querySelectorAll(".spv-tag"), function (g) { return g.textContent.trim(); }).slice(0, 2).join(" · ") || "Mercado";
+        else {
+          var dt = ((c.querySelector(".spv-data") || {}).textContent || "").trim();
+          var tags = [].map.call(c.querySelectorAll(".spv-tag"), function (g) { return g.textContent.trim(); }).slice(0, 2);
+          destaque = dt ? dt.replace("/", " ").replace(/^./, function (x) { return x.toUpperCase(); }) : "Mercado";
+          if (tags.length) rot += " · " + tags.join(" · ");
+        }
         var d = document.createElement("div");
         d.className = "spv-capa"; d.setAttribute("aria-hidden", "true");
         d.style.setProperty("--cb", e[2]); d.style.setProperty("--ck", e[3]);
-        d.innerHTML = LINHA + '<span class="spv-capa-k">' + e[1] + '</span><span class="spv-capa-n">' + destaque + "</span>" + MARCA;
+        d.innerHTML = LINHA + '<span class="spv-capa-k">' + rot + '</span><span class="spv-capa-n">' + destaque + "</span>" + MARCA;
         th.insertBefore(d, th.firstChild);
       });
     });
