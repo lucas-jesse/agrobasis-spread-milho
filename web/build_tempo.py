@@ -21,7 +21,7 @@ extra = """.tp-busca{display:flex;gap:10px;align-items:stretch;margin:6px 0 10px
 .abc-k em i.pos{color:#2F6DB5;font-weight:600}.abc-k em i.neg{color:#A35A1E;font-weight:600}
 .tp-dias{border-top:1px solid var(--ln)}
 .tp-dia{border-bottom:1px solid var(--ln)}
-.tp-dia summary{list-style:none;display:grid;grid-template-columns:64px 52px 1fr 1.3fr 28px;align-items:center;gap:8px;padding:10px 4px;cursor:pointer}
+.tp-dia summary{list-style:none;display:grid;grid-template-columns:72px 56px 150px 1fr 28px;align-items:center;gap:8px;padding:10px 4px;cursor:pointer}
 .tp-dia summary::-webkit-details-marker{display:none}
 .tp-dia summary:hover{background:#F8FAF6}
 .tp-d{display:flex;flex-direction:column;line-height:1.15}.tp-d b{font:700 20px Sora,sans-serif;color:var(--tx);display:flex;align-items:center;gap:4px}.tp-d small{font-size:13px;color:var(--mt)}
