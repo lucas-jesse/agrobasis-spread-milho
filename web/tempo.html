@@ -149,7 +149,7 @@
       <input type="text" id="tpCidade" autocomplete="off" placeholder="Digite sua cidade, ex.: Cascavel" aria-label="Buscar município">
       <div class="tp-sug" id="tpSug"></div>
     </div>
-    <button type="button" class="tp-gps" id="tpGps"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg>Usar minha localização</button>
+    <button type="button" class="tp-gps" id="tpGps" title="Usar minha localização" aria-label="Usar minha localização"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8"/></svg><span>Usar minha localização</span></button>
   </div>
   <div class="tp-chips" id="tpChips"></div>
 
@@ -563,7 +563,7 @@
     desenharJanela(J);
     desenharDias();
     var t = "Em <b>" + rot(atual) + "</b>, a previsão indica <b>" + br(p15, 0) + " mm nos próximos 15 dias</b>";
-    if (n15) t += ", " + (p15 >= n15 ? br((p15 / n15 - 1) * 100, 0) + "% acima" : br((1 - p15 / n15) * 100, 0) + "% abaixo") + " do normal para o período (" + br(n15, 0) + " mm)";
+    if (n15) t += ", " + br(p15 / n15 * 100, 0) + "% do normal para o período (" + br(n15, 0) + " mm)";
     t += ". Nos últimos 30 dias choveu " + br(p30, 0) + " mm" + (nb ? ", " + br(p30 / nb * 100, 0) + "% do normal" : "") + ".";
     var mx = Math.max.apply(null, F.slice(0, 7).map(function (x) { return x.tx; }));
     if (mx >= 35) t += " Atenção para o calor: máxima de " + br(mx, 0) + " °C nos próximos 7 dias.";
@@ -575,7 +575,7 @@
     if (!charts.length) charts = [0, 1, 2].map(function (i) { return echarts.init($("tpG" + i)); });
     charts.forEach(function (c, i) { c.resize(); c.setOption(FN[i](), true); });
   }
-  function abrir(m) {
+  function abrir(m, inicial) {
     if (!m) return;
     atual = m; $("tpCidade").value = rot(m);
     $("tpTit").textContent = rot(m); $("tpMeta").textContent = "Carregando a previsão…";
@@ -584,7 +584,7 @@
     Promise.all([previsao(m), normal(m)]).then(function (r) {
       if (atual !== m) return;
       dados = r[0]; dados.normal = r[1]; render();
-      if (window.innerWidth < 900) $("tpConteudo").scrollIntoView({ behavior: "smooth", block: "start" });
+      if (!inicial && window.innerWidth < 900) $("tpConteudo").scrollIntoView({ behavior: "smooth", block: "start" });
     }).catch(function () { $("tpMeta").textContent = "Não foi possível carregar a previsão agora. Tente novamente em instantes."; });
   }
   function baixar(i) {
@@ -613,7 +613,7 @@
     $("tpJan").addEventListener("click", function (e) { var c = e.target.closest("[data-t]"); if (c) $("tpJinfo").textContent = c.dataset.t; });
     var q = (location.search.match(/[?&]cidade=([a-z0-9-]+)/) || [])[1], rec = ler("ab_tempo_rec") || [];
     var m = (q && porSlug(q)) || (rec[0] && porSlug(rec[0])) || porNome("Sorriso", "MT");
-    abrir(m);
+    abrir(m, true);
     var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); mapa.resize(); rank.resize(); }, 150); });
   }).catch(function (e) {
     if (window.console) console.error("AgroBasis Tempo:", e);
