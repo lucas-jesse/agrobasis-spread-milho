@@ -28,13 +28,16 @@ PAGINAS = {
     "educacional": ("Educacional", "Educacional", "", ""),
     "agenda": ("Agenda do Agro", "Agenda do Agro",
                "Datas e horários dos relatórios, indicadores e eventos que movimentam o mercado de grãos no Brasil e no mundo.", ""),
+    "ferramentas": ("Ferramentas", "Ferramentas para decisão",
+                    "Simuladores e calculadoras gratuitos para vender, travar preço e calcular custos: soja, milho, opções, conversões e frete mínimo da ANTT.",
+                    '<span><i></i>Gratuitas</span><span><i></i>Dados de mercado atualizados</span><span><i></i>Funcionam no celular</span>'),
     "dados": ("Dados", "Dados históricos",
               "Séries históricas e levantamentos próprios sobre câmbio, oferta, demanda e preços, para análise de risco e tomada de decisão.", ""),
 }
 CONTA = """<script>(function(){function c(){var n=document.querySelectorAll('.agd-card:not([hidden])').length,e=document.getElementById('abhN');if(e&&n)e.textContent=n+' painéis';}
 if(document.readyState!=='loading')setTimeout(c,1200);else document.addEventListener('DOMContentLoaded',function(){setTimeout(c,1200);});setTimeout(c,3500);})();</script>"""
 
-LARGURA = {"agenda": "--w:1000px;--p:0px", "educacional": "--w:1120px;--p:16px"}  # alinha com o conteúdo de cada página
+LARGURA = {"ferramentas": "--w:1060px;--p:0px", "agenda": "--w:1000px;--p:0px", "educacional": "--w:1120px;--p:16px"}  # alinha com o conteúdo de cada página
 for slug, (bc, h1, sub, meta) in PAGINAS.items():
     html = (f"<!-- AgroBasis · cabeçalho da página /{slug}/ (gerado por web/cabecalhos/gera_cabecalhos.py) -->\n{FONTES}\n{CSS}\n"
             f'<header class="abh"><div class="abh-in" style="{LARGURA.get(slug, "")}"><nav class="abh-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span>{bc}</nav>'
