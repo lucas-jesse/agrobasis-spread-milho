@@ -14,3 +14,16 @@
 @media (min-width:1025px) and (max-width:1279px){.elementor-24 .elementor-element-3bf89c3{display:none!important}}
 /* cabeçalhos compactos das páginas internas: no celular, sem o parágrafo de apresentação */
 @media (max-width:620px){header.abh .abh-in{padding:16px 16px 14px!important}header.abh h1{font-size:24px!important}header.abh .abh-in>p,header.abh .abh-meta{display:none!important}}
+/* cabeçalho com mais vida, mas discreto: fundo branco, fixo no topo ao rolar, linha verde no item ativo */
+.elementor-location-header,[data-elementor-type=header]{position:sticky;top:0;z-index:999}
+body.admin-bar .elementor-location-header,body.admin-bar [data-elementor-type=header]{top:32px}
+@media (max-width:782px){body.admin-bar .elementor-location-header,body.admin-bar [data-elementor-type=header]{top:0}}
+.elementor-24 .elementor-element-40d77e6{background:rgba(255,255,255,.96)!important;-webkit-backdrop-filter:saturate(1.4) blur(8px);backdrop-filter:saturate(1.4) blur(8px);border-bottom:1px solid #E7ECE8;transition:box-shadow .2s}
+.ab-rolou .elementor-24 .elementor-element-40d77e6{box-shadow:0 6px 20px rgba(20,40,15,.08)}
+@media (min-width:1025px){
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item{position:relative}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item:after{content:"";position:absolute;left:50%;right:50%;bottom:4px;height:2.5px;border-radius:2px;background:#54931B;transition:left .22s ease,right .22s ease;display:block!important;opacity:1!important}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item:hover:after,.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item.elementor-item-active:after{left:clamp(6px,.65vw,13px);right:clamp(6px,.65vw,13px)}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item:hover{color:#1E4812!important}
+.elementor-24 .elementor-element-0588178 .elementor-nav-menu--main .elementor-item.elementor-item-active{color:#1E4812!important;font-weight:600}
+}
