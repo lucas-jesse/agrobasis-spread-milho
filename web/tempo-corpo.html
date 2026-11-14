@@ -320,7 +320,7 @@
   function g4() {
     var P = polos().sort(function (a, b) { return a.value[2] - b.value[2]; });
     return Object.assign({}, base, {
-      grid: { left: 4, right: 46, top: 22, bottom: 4, containLabel: true },
+      grid: { left: 4, right: 46, top: 22, bottom: 20, containLabel: true },
       xAxis: { type: "value", show: false, max: function (v) { return Math.max(110, v.max); } },
       yAxis: { type: "category", data: P.map(function (d) { return d.name + " (" + d.uf + ")"; }), axisLabel: { color: COR.tx, fontSize: 11.5 }, axisLine: { show: false }, axisTick: { show: false } },
       tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) { return ttP(P[p.dataIndex]); } }),
