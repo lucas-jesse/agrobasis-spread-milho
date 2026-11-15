@@ -422,7 +422,11 @@ def main():
             ult_data = max(ser[s_at]); dias = (date.fromisoformat(ult["data"]) - date.fromisoformat(ult_data)).days
             if dias > 60 or (ser[s_at][ult_data] >= 99 and dias > 21):
                 continue
-            datas = sorted(ser[s_at])
+            def mais_um_ano(d):
+                d = date.fromisoformat(d)
+                return (d.replace(year=d.year + 1) if not (d.month == 2 and d.day == 29) else date(d.year + 1, 2, 28)).isoformat()
+            # média calculada também nas datas à frente (calendário da safra passada), para mostrar o caminho normal
+            datas = sorted(set(ser[s_at]) | {mais_um_ano(d) for d in (ser.get(s_at - 1) or {})})
             curvas.setdefault(c, {})[op] = {"safra": f"{s_at}/{str(s_at + 1)[2:]}", "atual": curva(ser, s_at), "anterior": curva(ser, s_at - 1),
                                            "media5": [[d, v] for d, v in zip(datas, media_safras(ser, s_at, datas)) if v is not None],
                                            "n_safras_media": sum(1 for s in range(s_at - 5, s_at) if len(ser.get(s) or {}) >= 3)}
