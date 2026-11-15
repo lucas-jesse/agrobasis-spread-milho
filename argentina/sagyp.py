@@ -116,8 +116,8 @@ def ler_avanco(linhas, ref):
                 k = {"R S PENA": "ROQUE SAENZ PENA"}.get(chave(par.group(1)), chave(par.group(1)))
             if nome_t[0].isupper() and len(nome_t[0]) > 1 and sem_acento(nome_t[0]).replace(".", "").isalpha():
                 # província com uma linha só (ex.: SAN LUIS, CORRIENTES)
-                pr = re.sub(r"\s*\(.*\)", "", nome)
-                prov.setdefault(chave(pr), {"area": 0, "atual": None, "area_ant": None, "anterior": None, "nome": pr.title()})
+                pr = re.sub(r"\s*\(.*\)", "", nome).replace("STGO. ESTERO", "SANTIAGO DEL ESTERO").replace("STGO.ESTERO", "SANTIAGO DEL ESTERO")
+                prov.setdefault(chave(pr), {"area": 0, "atual": None, "area_ant": None, "anterior": None, "nome": pr.title().replace(" Del ", " del ")})
                 prov[chave(pr)]["area"] += area or 0
                 dele[k] = {"nome": nome, "area": area, "prov": chave(pr), "pct": pct[-n:] if len(pct) <= n else None, "unica": True}
             else:
