@@ -1,0 +1,76 @@
+{
+ "sagyp_lista": {
+  "status": 200,
+  "tipo": "text/html; charset=UTF-8",
+  "bytes": 24735,
+  "cloudflare": false
+ },
+ "sagyp_pdf": {
+  "status": 200,
+  "tipo": "application/pdf",
+  "bytes": 1459569,
+  "cloudflare": false,
+  "paginas": 33,
+  "tabelas": 18
+ },
+ "sagyp_series": {
+  "status": 200,
+  "tipo": "text/html; charset=UTF-8",
+  "bytes": 8388,
+  "cloudflare": false
+ },
+ "sagyp_csv": {
+  "status": 200,
+  "tipo": "text/csv",
+  "bytes": 15471639,
+  "cloudflare": false
+ },
+ "sagyp_robots": {
+  "status": 200,
+  "tipo": "text/plain; charset=UTF-8",
+  "bytes": 89,
+  "cloudflare": false
+ },
+ "bcr_estim": {
+  "status": 200,
+  "tipo": "text/html; charset=UTF-8",
+  "bytes": 85352,
+  "cloudflare": false
+ },
+ "bcr_semanal": {
+  "status": 200,
+  "tipo": "text/html; charset=UTF-8",
+  "bytes": 76493,
+  "cloudflare": false
+ },
+ "bcr_lluvias": {
+  "status": 200,
+  "tipo": "text/html; charset=UTF-8",
+  "bytes": 60516,
+  "cloudflare": false
+ },
+ "bcr_robots": {
+  "status": 200,
+  "tipo": "text/plain",
+  "bytes": 1594,
+  "cloudflare": false
+ },
+ "bcba_pas": {
+  "status": 403,
+  "tipo": "text/html; charset=UTF-8",
+  "bytes": 5658,
+  "cloudflare": true
+ },
+ "bcba_robots": {
+  "status": 200,
+  "tipo": "text/plain; charset=utf-8",
+  "bytes": 2676,
+  "cloudflare": true
+ },
+ "tableau_estado": {
+  "status": 200,
+  "tipo": "text/html;charset=utf-8",
+  "bytes": 6765,
+  "cloudflare": false
+ }
+}
