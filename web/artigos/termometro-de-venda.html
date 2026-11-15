@@ -1,0 +1,471 @@
+<!--
+============================================================
+AGROBASIS · ARTIGO: TERMÔMETRO DE VENDA DA SOJA E DO MILHO
+============================================================
+URL: /analises/termometro-de-venda-soja-milho/
+  Title (SEO): Hora de vender soja e milho? Termômetro de venda | AgroBasis
+  Meta description: Índice de 0 a 100 por praça indica se é hora de vender soja e milho. No milho, leituras acima de 60 vieram antes de queda média de 7,4% em 3 meses.
+  Frase-chave de foco: hora de vender soja
+NOTA DE DADOS: dados/termometro.json gerado por exporta_termometro.py em 2026-11-15 18:33 (mercado de 13/11/2026).
+  Teste diário: retorno do preço físico de cada praça nos 63 pregões seguintes, por faixa do termômetro, nov/2021 em diante.
+  Tabela por ano: série semanal, retorno 13 semanas depois, células com menos de 15 leituras omitidas.
+============================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<style>
+  .abp-article {
+    font-family:'Geist', Arial, sans-serif;
+    color:#222222;
+    padding:36px 0 56px 0;
+    box-sizing:border-box;
+    background:#ffffff;
+  }
+  .abp-narrow { max-width:800px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+
+  .abp-breadcrumb { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+  .abp-breadcrumb a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-breadcrumb a:hover { text-decoration:underline; }
+
+  .abp-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Sora', Arial, sans-serif;
+    background:#EEF4E7; color:#1E4812; border:1px solid #d7e6c9;
+    border-radius:999px; padding:6px 14px 6px 10px;
+    font-size:12px; font-weight:700; letter-spacing:.2px;
+    margin-bottom:18px;
+  }
+  .abp-badge svg { width:13px; height:13px; stroke-width:2.2; }
+
+  .abp-h1 { font-size:35px; line-height:1.22; color:#222222; font-weight:800; margin:0 0 14px 0; }
+  .abp-lead { font-size:17px; line-height:1.7; color:#4a4a4a; margin:0 0 8px 0; }
+  .abp-meta { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#9a9a9a; margin:14px 0 30px 0; padding-bottom:20px; border-bottom:1px solid #eef1ed; }
+
+  .abp-h2 {
+    font-size:24px; color:#222222; font-weight:800;
+    margin:44px 0 14px 0; padding-left:12px; border-left:4px solid #1E4812;
+  }
+  .abp-h3 { font-size:17px; color:#222222; font-weight:700; margin:26px 0 10px 0; }
+  .abp-p { font-size:15.5px; line-height:1.8; color:#333333; margin:0 0 16px 0; }
+  .abp-p b { color:#1E4812; font-weight:700; }
+  .abp-list { margin:0 0 18px 0; padding-left:22px; }
+  .abp-list li { font-size:15.5px; line-height:1.8; color:#333333; margin-bottom:8px; }
+  .abp-list b { color:#222222; }
+
+  .abp-pullquote {
+    background:#fafbf9; border-left:3px solid #A17149; border-radius:0 14px 14px 0;
+    padding:18px 22px; margin:24px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:16px; line-height:1.6; color:#3f3f3f; font-style:italic;
+  }
+
+  .abp-note {
+    background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px;
+    padding:18px 20px; font-size:14px; line-height:1.65; color:#5b4636; margin:20px 0;
+  }
+  .abp-note b { color:#8a5a34; }
+
+  .abp-table {
+    width:100%; border-collapse:separate; border-spacing:0;
+    margin:14px 0 20px 0; font-size:14px;
+    border:1px solid #e5e7eb; border-radius:14px; overflow:hidden;
+  }
+  .abp-table th, .abp-table td {
+    padding:11px 14px; text-align:left; border-bottom:1px solid #eef1ed;
+  }
+  .abp-table tr:last-child td { border-bottom:none; }
+  .abp-table th {
+    background:#1E4812; color:#ffffff; font-weight:700;
+    font-family:'Sora', Arial, sans-serif; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .abp-table td { color:#3f3f3f; }
+  .abp-table tr:nth-child(even) td { background:#fafbf9; }
+
+  .abp-formula-box {
+    background:#fafbf9; border:1px solid #e5e7eb; border-left:3px solid #A17149;
+    border-radius:12px; padding:18px 20px; margin:18px 0 22px 0;
+  }
+  .abp-formula-code {
+    font-family:"Courier New", monospace; font-size:14.5px; color:#1E4812;
+    background:#EEF4E7; border-radius:8px; padding:12px 16px; display:block; margin-bottom:4px;
+    text-align:center; font-weight:600;
+  }
+
+  .abp-chart-card {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:18px;
+    padding:22px; margin:22px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05);
+  }
+  .abp-chart-title { font-family:'Geist', Arial, sans-serif; font-size:15px; font-weight:700; color:#222222; margin-bottom:2px; }
+  .abp-chart-sub { font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; margin-bottom:14px; }
+  .abp-chart-caption { font-family:'Sora', Arial, sans-serif; font-size:11px; color:#9a9a9a; text-align:right; margin-top:8px; }
+  .abp-legend { display:flex; gap:18px; flex-wrap:wrap; font-family:'Sora', Arial, sans-serif; font-size:12px; color:#5b5b5b; margin-bottom:10px; }
+  .abp-legend-item { display:flex; align-items:center; gap:6px; }
+  .abp-legend-dot { width:14px; height:3px; border-radius:2px; display:inline-block; }
+
+  .abp-toc {
+    background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px;
+    padding:18px 22px; margin:24px 0 8px 0;
+  }
+  .abp-toc-title { font-family:'Sora', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:10px; }
+  .abp-toc ol { margin:0; padding-left:20px; }
+  .abp-toc li { font-size:14px; line-height:1.9; }
+  .abp-toc a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-toc a:hover { text-decoration:underline; }
+
+  .abp-cta-box {
+    background:#1E4812; border-radius:20px; padding:32px 28px; margin:36px 0;
+    text-align:center;
+  }
+  .abp-cta-box h3 { color:#ffffff; font-size:20px; font-weight:800; margin:0 0 8px 0; }
+  .abp-cta-box p { color:#d7e6c9; font-size:14.5px; line-height:1.6; margin:0 0 20px 0; max-width:480px; margin-left:auto; margin-right:auto; }
+  .abp-cta-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#ffffff; color:#1E4812 !important; font-family:'Geist', Arial, sans-serif;
+    font-size:14.5px; font-weight:700; padding:13px 24px; border-radius:10px;
+    text-decoration:none !important; transition:background .15s ease;
+  }
+  .abp-cta-btn:hover { background:#EEF4E7; }
+  .abp-cta-btn svg { width:16px; height:16px; stroke-width:2.2; }
+
+  .abp-faq-item {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .abp-faq-item summary {
+    list-style:none; cursor:pointer; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:15px; font-weight:700; color:#222222;
+  }
+  .abp-faq-item summary::-webkit-details-marker { display:none; }
+  .abp-faq-item summary svg { width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+  .abp-faq-item[open] summary svg { transform:rotate(180deg); }
+  .abp-faq-a { padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+
+  .abp-sources {
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px;
+    padding:16px 20px; margin:30px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:12.5px; line-height:1.8; color:#7a7a7a;
+  }
+  .abp-sources b { color:#5b5b5b; }
+
+  .abp-disclaimer {
+    margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0;
+    font-family:'Sora', Arial, sans-serif;
+    font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6;
+  }
+
+  .abp-author-box {
+    display:flex; align-items:center; gap:12px; margin:30px 0;
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 18px;
+  }
+  .abp-author-icon { width:38px; height:38px; border-radius:50%; background:#EEF4E7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .abp-author-icon svg { width:19px; height:19px; color:#1E4812; }
+  .abp-author-text { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; line-height:1.5; }
+  .abp-author-text b { color:#222222; }
+
+  @media (max-width:768px) {
+    .abp-h1 { font-size:25px; }
+    .abp-lead { font-size:15px; }
+    .abp-h2 { font-size:20px; }
+    .abp-narrow { padding:0 14px; }
+    .abp-chart-card { padding:14px; }
+    .abp-cta-box { padding:24px 18px; }
+    .abp-table { font-size:12.5px; }
+    .abp-table th, .abp-table td { padding:8px 10px; }
+  }
+</style>
+<div class="abp-article">
+<div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/analises/">Análises</a> &nbsp;›&nbsp;
+    Termômetro de venda
+  </div>
+
+  <div class="abp-badge"><i data-lucide="gauge"></i> Ferramenta · Comercialização</div>
+  <h1 class="abp-h1">Hora de vender soja e milho? O termômetro que testamos em cinco anos de preços</h1>
+  <p class="abp-lead">Todo produtor faz a mesma pergunta várias vezes por safra: o preço de hoje está bom para vender? Criamos um índice de 0 a 100 que responde a essa pergunta para 10 praças de soja e 9 de milho, e testamos o que aconteceu com o preço físico depois de cada leitura desde 2021. No milho, quando o termômetro passou de 60, o preço caiu em média 7,4% nos três meses seguintes.</p>
+  <div class="abp-meta">Por Equipe AgroBasis · Atualizado em 15 de novembro de 2026 · Leitura de 8 min</div>
+
+  <div class="abp-toc">
+    <div class="abp-toc-title">Neste artigo</div>
+    <ol>
+      <li><a href="#o-que-e">O que é o Termômetro de Venda</a></li>
+      <li><a href="#calculo">Como a nota é calculada</a></li>
+      <li><a href="#resultados">O que cinco anos de dados mostram</a></li>
+      <li><a href="#pracas">O resultado praça por praça</a></li>
+      <li><a href="#erros">Onde o termômetro errou</a></li>
+      <li><a href="#hoje">O que o termômetro diz hoje</a></li>
+      <li><a href="#como-usar">Como usar na decisão de venda</a></li>
+      <li><a href="#faq">Perguntas frequentes</a></li>
+    </ol>
+  </div>
+
+  <h2 class="abp-h2" id="o-que-e">O que é o Termômetro de Venda</h2>
+  <p class="abp-p">Decidir quando vender é a parte mais difícil da comercialização de grãos. O preço muda todo dia em Chicago e na B3, o dólar mexe na conta, o basis de cada região tem o seu próprio ritmo e a sazonalidade da colheita pesa de forma diferente em cada praça. Olhar tudo isso ao mesmo tempo, todos os dias, não é simples.</p>
+  <p class="abp-p">O <b>Termômetro de Venda AgroBasis</b> junta essas informações num número só, de 0 a 100, calculado para cada praça. A leitura é direta: <b>quanto maior a nota, mais favorável o momento para vender</b>. Acima de 70, o momento é muito favorável; entre 55 e 70, favorável; entre 45 e 55, neutro; entre 30 e 45, pouco favorável; abaixo de 30, desfavorável.</p>
+  <p class="abp-p">O índice não tenta adivinhar o preço de amanhã. Ele compara a situação de hoje com a história de cada praça e diz se o produtor está diante de uma janela boa ou ruim, pelos critérios que um analista de comercialização olharia.</p>
+
+  <h2 class="abp-h2" id="calculo">Como a nota é calculada</h2>
+  <p class="abp-p">Cada componente recebe uma nota de 0 a 100 e entra no termômetro com um peso fixo. As regras são as mesmas para todas as praças e não mudam conforme o resultado.</p>
+  <table class="abp-table">
+    <thead><tr><th>Componente</th><th>Soja</th><th>Milho</th><th>Nota alta quando</th></tr></thead>
+    <tbody>
+      <tr><td>Preço na praça</td><td>35%</td><td>30%</td><td>o preço está alto frente aos últimos 3 anos</td></tr>
+      <tr><td>Basis</td><td>25%</td><td>20%</td><td>o basis está firme frente à mesma época dos 5 anos anteriores</td></tr>
+      <tr><td>Sazonalidade</td><td>25%</td><td>20%</td><td>o preço costuma cair nos 3 meses seguintes a esta época</td></tr>
+      <tr><td>Fundos na CBOT</td><td>15%</td><td>15%</td><td>os fundos estão muito comprados em Chicago</td></tr>
+      <tr><td>Carrego na B3</td><td>-</td><td>15%</td><td>a B3 paga pouco para esperar até o vencimento seguinte</td></tr>
+    </tbody>
+  </table>
+  <h3 class="abp-h3">Preço e basis: onde estamos frente ao passado</h3>
+  <p class="abp-p">O preço físico de cada praça é comparado com todos os pregões dos últimos 3 anos. Se o preço de hoje é maior que 90% deles, a nota do componente é 90. O <a href="/dashboards/basis-soja-brasil/">basis</a>, diferença entre o físico e a bolsa, é comparado com o que foi registrado na mesma época do ano nos 5 anos anteriores, porque o basis tem sazonalidade própria: costuma afrouxar na colheita e firmar na entressafra.</p>
+  <h3 class="abp-h3">Sazonalidade, fundos e carrego</h3>
+  <p class="abp-p">A sazonalidade olha o que o preço daquela praça fez nos 3 meses seguintes à mesma data em anos anteriores. Se costumou cair, vender agora ganha pontos. A <a href="/dashboards/posicao-fundos-cftc/">posição dos fundos</a> vem do relatório semanal da CFTC: fundos muito comprados deixam o preço exposto a realização de lucros. No milho, o <a href="/dashboards/spread-milho-b3/">carrego da B3</a>, diferença entre o contrato de cerca de 6 meses à frente e o mais próximo, mostra quanto o mercado paga para quem armazena. Carrego alto tira pontos da venda imediata.</p>
+
+  <h2 class="abp-h2" id="resultados">O que cinco anos de dados mostram</h2>
+  <p class="abp-p">Um indicador só vale se a história confirmar a leitura. Calculamos o termômetro para cada pregão desde novembro de 2021 em todas as praças, o que soma 22.624 leituras, e medimos a variação do preço físico nos 63 pregões seguintes, cerca de três meses. Em seguida, separamos as leituras em três faixas.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">O que o preço fez nos 3 meses seguintes</div>
+    <div class="abp-chart-sub">Variação média do preço físico nos 63 pregões seguintes à leitura, todas as praças, de nov/2021 a 11/2026</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#8FB27A;"></span> Soja</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> Milho</span></div>
+    <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Retorno médio do preço físico 3 meses depois, por faixa do termômetro"><line x1="46" x2="624" y1="260.0" y2="260.0" stroke="#EEF1ED"/><text x="38" y="264.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">−9%</text><line x1="46" x2="624" y1="212.4" y2="212.4" stroke="#EEF1ED"/><text x="38" y="216.4" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">−6%</text><line x1="46" x2="624" y1="164.8" y2="164.8" stroke="#EEF1ED"/><text x="38" y="168.8" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">−3%</text><line x1="46" x2="624" y1="117.2" y2="117.2" stroke="#999" stroke-dasharray="3 3"/><text x="38" y="121.2" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0%</text><line x1="46" x2="624" y1="69.6" y2="69.6" stroke="#EEF1ED"/><text x="38" y="73.6" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">+3%</text><line x1="46" x2="624" y1="22.0" y2="22.0" stroke="#EEF1ED"/><text x="38" y="26.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">+6%</text><text x="142.3" y="286" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">Termômetro até 40</text><rect x="90.3" y="95.3" width="48" height="21.9" rx="4" fill="#8FB27A"/><text x="114.3" y="88.3" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#5E8A44" text-anchor="middle">+1,4%</text><rect x="146.3" y="46.7" width="48" height="70.5" rx="4" fill="#1E4812"/><text x="170.3" y="39.7" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812" text-anchor="middle">+4,4%</text><text x="335.0" y="286" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">De 40 a 60</text><rect x="283.0" y="117.2" width="48" height="30.5" rx="4" fill="#8FB27A"/><text x="307.0" y="163.7" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#5E8A44" text-anchor="middle">−1,9%</text><rect x="339.0" y="117.2" width="48" height="61.2" rx="4" fill="#1E4812"/><text x="363.0" y="194.4" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812" text-anchor="middle">−3,9%</text><text x="527.7" y="286" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">Acima de 60</text><rect x="475.7" y="117.2" width="48" height="45.5" rx="4" fill="#8FB27A"/><text x="499.7" y="178.7" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#5E8A44" text-anchor="middle">−2,9%</text><rect x="531.7" y="117.2" width="48" height="117.4" rx="4" fill="#1E4812"/><text x="555.7" y="250.6" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812" text-anchor="middle">−7,4%</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab e AgroBasis (preço físico e basis), CBOT, B3, Banco Central e CFTC · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">O resultado vai na direção esperada nos dois grãos. No <b>milho</b>, depois de leituras até 40, o preço subiu em média +4,4% nos três meses seguintes. Depois de leituras acima de 60, caiu 7,4%, e a queda aconteceu em 72% dos casos. A diferença entre as duas pontas passa de 11 pontos percentuais.</p>
+  <p class="abp-p">Na <b>soja</b>, o sinal é mais fraco, mas tem a mesma direção: +1,4% depois de leituras até 40 e −2,9% depois de leituras acima de 60, com queda em 70% das vezes. Para um preço que depende de Chicago, do dólar e dos prêmios de porto ao mesmo tempo, é um resultado relevante.</p>
+  <div class="abp-note"><b>Como ler o teste.</b> As porcentagens são médias da variação do preço físico de cada praça nos três meses seguintes à leitura, sem custos de armazenagem, frete ou juros. Leituras de dias vizinhos se sobrepõem, então o número de leituras independentes é menor do que o total indica.</div>
+
+  <div class="abp-cta-box">
+    <h3>Veja o termômetro da sua praça</h3>
+    <p>Nota de hoje, o que mais pesa em cada componente, o teste histórico da praça e o gráfico desde 2021. Atualizado duas vezes por dia útil.</p>
+    <a href="/dashboards/termometro-de-venda/" class="abp-cta-btn">Acessar o Termômetro de Venda <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="pracas">O resultado praça por praça</h2>
+  <p class="abp-p">O padrão se repete na maioria das praças. No milho, o caso mais forte é <b>Rio Verde (GO)</b>: depois de leituras acima de 60, o preço caiu em média 10,9% nos três meses seguintes; depois de leituras até 40, subiu +6,2%. A tabela mostra a variação média do preço físico em cada faixa e a frequência de queda depois de leituras acima de 60.</p>
+  <h3 class="abp-h3">Milho</h3>
+  <table class="abp-table">
+    <thead><tr><th>Praça</th><th>Até 40</th><th>40 a 60</th><th>Acima de 60</th><th>Caiu depois de 60+</th></tr></thead>
+    <tbody>
+      <tr><td>Rondonópolis (MT)</td><td>+7,0%</td><td>−3,1%</td><td><b>−11,9%</b></td><td>75%</td></tr>
+      <tr><td>Rio Verde (GO)</td><td>+6,2%</td><td>−5,8%</td><td><b>−10,9%</b></td><td>77%</td></tr>
+      <tr><td>Itapeva (SP)</td><td>+5,7%</td><td>−6,3%</td><td><b>−9,1%</b></td><td>78%</td></tr>
+      <tr><td>Sorriso (MT)</td><td>+5,2%</td><td>−3,2%</td><td><b>−7,9%</b></td><td>66%</td></tr>
+      <tr><td>Ponta Grossa (PR)</td><td>+2,8%</td><td>−3,4%</td><td><b>−5,9%</b></td><td>75%</td></tr>
+      <tr><td>Maringá (PR)</td><td>+3,4%</td><td>−6,2%</td><td><b>−5,3%</b></td><td>74%</td></tr>
+      <tr><td>Vilhena (RO)</td><td>+2,7%</td><td>+0,7%</td><td><b>−3,8%</b></td><td>59%</td></tr>
+      <tr><td>Passo Fundo (RS)</td><td>+2,2%</td><td>−4,7%</td><td><b>−1,8%</b></td><td>66%</td></tr>
+    </tbody>
+  </table>
+  <h3 class="abp-h3">Soja</h3>
+  <table class="abp-table">
+    <thead><tr><th>Praça</th><th>Até 40</th><th>40 a 60</th><th>Acima de 60</th><th>Caiu depois de 60+</th></tr></thead>
+    <tbody>
+      <tr><td>Uberlândia (MG)</td><td>+2,2%</td><td>+1,4%</td><td><b>−9,4%</b></td><td>88%</td></tr>
+      <tr><td>Sorriso (MT)</td><td>+2,2%</td><td>−5,4%</td><td><b>−4,5%</b></td><td>74%</td></tr>
+      <tr><td>Rondonópolis (MT)</td><td>+2,0%</td><td>−3,9%</td><td><b>−4,1%</b></td><td>74%</td></tr>
+      <tr><td>Dourados (MS)</td><td>+3,0%</td><td>−5,1%</td><td><b>−2,8%</b></td><td>70%</td></tr>
+      <tr><td>Maringá (PR)</td><td>+0,9%</td><td>−1,4%</td><td><b>−2,0%</b></td><td>66%</td></tr>
+      <tr><td>Passo Fundo (RS)</td><td>+0,8%</td><td>−2,3%</td><td><b>−1,9%</b></td><td>67%</td></tr>
+      <tr><td>Paranaguá (PR)</td><td>+0,4%</td><td>+0,2%</td><td><b>−1,7%</b></td><td>65%</td></tr>
+      <tr><td>Cascavel (PR)</td><td>+1,1%</td><td>−2,5%</td><td><b>−1,0%</b></td><td>66%</td></tr>
+      <tr><td>Rio Grande (RS)</td><td>+1,1%</td><td>−2,2%</td><td><b>−0,8%</b></td><td>64%</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">Na soja, as praças do Centro-Oeste e de Minas Gerais respondem melhor ao termômetro do que as do Sul e as de porto. Em Uberlândia (MG), leituras acima de 60 vieram antes de queda média de 9,4%. Em Paranaguá (PR), o efeito é menor (−1,7%), o que faz sentido: o preço no porto acompanha mais de perto Chicago e o câmbio, enquanto as praças mais distantes do porto sentem mais a pressão da colheita sobre o basis.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Milho em Rio Verde (GO): termômetro e preço desde 2021</div>
+    <div class="abp-chart-sub">Leitura semanal. Faixa verde: termômetro acima de 60. Faixa marrom: abaixo de 40</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> Termômetro (0 a 100)</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#AEB7B0;"></span> Preço físico, R$/sc (eixo direito)</span></div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Termômetro de venda e preço do milho em Rio Verde desde 2021"><rect x="34" y="14.0" width="554" height="108.8" fill="rgba(30,72,18,.07)"/><rect x="34" y="177.2" width="554" height="108.8" fill="rgba(161,113,73,.08)"/><line x1="34" x2="588" y1="286.0" y2="286.0" stroke="#EEF1ED"/><text x="28" y="290.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0</text><line x1="34" x2="588" y1="231.6" y2="231.6" stroke="#EEF1ED"/><text x="28" y="235.6" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">20</text><line x1="34" x2="588" y1="177.2" y2="177.2" stroke="#EEF1ED"/><text x="28" y="181.2" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">40</text><line x1="34" x2="588" y1="122.8" y2="122.8" stroke="#EEF1ED"/><text x="28" y="126.8" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">60</text><line x1="34" x2="588" y1="68.4" y2="68.4" stroke="#EEF1ED"/><text x="28" y="72.4" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">80</text><line x1="34" x2="588" y1="14.0" y2="14.0" stroke="#EEF1ED"/><text x="28" y="18.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">100</text><text x="594" y="271.9" font-family="Geist,Arial" font-size="11" fill="#9a9a9a">R$ 40</text><text x="594" y="225.5" font-family="Geist,Arial" font-size="11" fill="#9a9a9a">R$ 50</text><text x="594" y="179.2" font-family="Geist,Arial" font-size="11" fill="#9a9a9a">R$ 60</text><text x="594" y="132.8" font-family="Geist,Arial" font-size="11" fill="#9a9a9a">R$ 70</text><text x="594" y="86.4" font-family="Geist,Arial" font-size="11" fill="#9a9a9a">R$ 80</text><text x="594" y="40.1" font-family="Geist,Arial" font-size="11" fill="#9a9a9a">R$ 90</text><text x="53.0" y="306" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">2022</text><line x1="53.0" x2="53.0" y1="286" y2="291" stroke="#ccc"/><text x="163.0" y="306" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">2023</text><line x1="163.0" x2="163.0" y1="286" y2="291" stroke="#ccc"/><text x="272.9" y="306" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">2024</text><line x1="272.9" x2="272.9" y1="286" y2="291" stroke="#ccc"/><text x="382.9" y="306" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">2025</text><line x1="382.9" x2="382.9" y1="286" y2="291" stroke="#ccc"/><text x="492.8" y="306" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="middle">2026</text><line x1="492.8" x2="492.8" y1="286" y2="291" stroke="#ccc"/><polyline points="34.0,91.7 36.1,105.6 38.2,114.9 40.3,124.2 42.5,96.4 44.6,82.4 46.7,82.4 48.8,73.2 50.9,73.2 53.0,82.4 55.1,63.9 57.3,54.6 59.4,45.3 61.5,45.3 63.6,45.3 65.7,50.0 67.8,59.3 69.9,26.8 72.1,40.7 74.2,36.1 76.3,59.3 78.4,82.4 80.5,94.0 82.6,93.6 84.7,91.7 86.9,82.4 89.0,87.1 91.1,82.4 93.2,77.8 95.3,91.7 97.4,105.6 99.5,82.4 101.7,73.2 103.8,105.6 105.9,133.4 108.0,124.2 110.1,128.8 112.2,128.8 114.4,119.5 116.5,119.5 118.6,124.2 120.7,124.2 122.8,112.6 124.9,110.3 127.0,110.3 129.2,110.3 131.3,105.6 133.4,110.3 135.5,114.9 137.6,105.6 139.7,105.6 141.8,105.6 144.0,110.3 146.1,96.4 148.2,110.3 150.3,119.5 152.4,124.2 154.5,114.9 156.6,96.4 158.8,96.4 160.9,96.4 163.0,96.4 165.1,110.3 167.2,119.5 169.3,114.9 171.4,114.9 173.6,110.3 175.7,114.9 177.8,101.0 179.9,110.3 182.0,110.3 184.1,110.3 186.2,119.5 188.4,138.1 190.5,138.1 192.6,161.3 194.7,175.2 196.8,193.7 198.9,212.3 201.0,216.9 203.2,230.8 205.3,230.8 207.4,230.8 209.5,254.0 211.6,244.7 213.7,244.7 215.8,244.7 218.0,263.3 220.1,277.2 222.2,267.9 224.3,249.4 226.4,267.9 228.5,263.3 230.6,267.9 232.8,254.0 234.9,254.0 237.0,249.4 239.1,254.0 241.2,254.0 243.3,254.0 245.5,240.1 247.6,244.7 249.7,240.1 251.8,235.5 253.9,235.5 256.0,230.8 258.1,230.8 260.3,216.9 262.4,198.4 264.5,193.7 266.6,175.2 268.7,175.2 270.8,165.9 272.9,161.3 275.1,184.5 277.2,184.5 279.3,193.7 281.4,207.6 283.5,207.6 285.6,203.0 287.7,203.0 289.9,203.0 292.0,212.3 294.1,212.3 296.2,207.6 298.3,221.5 300.4,221.5 302.5,235.5 304.7,240.1 306.8,244.7 308.9,244.7 311.0,240.1 313.1,240.1 315.2,240.1 317.3,240.1 319.5,244.7 321.6,235.5 323.7,244.7 325.8,249.4 327.9,254.0 330.0,251.7 332.1,244.7 334.3,251.7 336.4,235.5 338.5,230.8 340.6,230.8 342.7,216.9 344.8,212.3 346.9,212.3 349.1,207.6 351.2,212.3 353.3,203.0 355.4,189.1 357.5,189.1 359.6,175.2 361.7,165.9 363.9,156.6 366.0,158.9 368.1,142.7 370.2,147.4 372.3,158.9 374.4,156.6 376.5,165.9 378.7,161.3 380.8,161.3 382.9,175.2 385.0,198.4 387.1,152.0 389.2,147.4 391.4,152.0 393.5,147.4 395.6,128.8 397.7,110.3 399.8,105.6 401.9,91.7 404.0,82.4 406.2,73.2 408.3,82.4 410.4,96.4 412.5,87.1 414.6,101.0 416.7,119.5 418.8,133.4 421.0,128.8 423.1,142.7 425.2,156.6 427.3,165.9 429.4,203.0 431.5,203.0 433.6,207.6 435.8,216.9 437.9,221.5 440.0,221.5 442.1,212.3 444.2,216.9 446.3,216.9 448.4,216.9 450.6,221.5 452.7,216.9 454.8,212.3 456.9,203.0 459.0,198.4 461.1,210.0 463.2,212.3 465.4,203.0 467.5,203.0 469.6,203.0 471.7,198.4 473.8,198.4 475.9,198.4 478.0,184.5 480.2,184.5 482.3,184.5 484.4,179.8 486.5,189.1 488.6,193.7 490.7,184.5 492.8,179.8 495.0,179.8 497.1,184.5 499.2,193.7 501.3,198.4 503.4,198.4 505.5,198.4 507.6,193.7 509.8,191.4 511.9,189.1 514.0,184.5 516.1,179.8 518.2,179.8 520.3,189.1 522.5,189.1 524.6,193.7 526.7,198.4 528.8,198.4 530.9,198.4 533.0,198.4 535.1,207.6 537.3,207.6 539.4,214.6 541.5,221.5 543.6,216.9 545.7,216.9 547.8,216.9 549.9,221.5 552.1,221.5 554.2,216.9 556.3,216.9 558.4,216.9 560.5,203.0 562.6,196.0 564.7,175.2 566.9,175.2 569.0,184.5 571.1,165.9 573.2,184.5 575.3,184.5 577.4,203.0 579.5,207.6 581.7,207.6 583.8,198.4 585.9,198.4 588.0,198.4" fill="none" stroke="#AEB7B0" stroke-width="1.8" stroke-linejoin="round"/><polyline points="34.0,108.1 36.1,127.2 38.2,149.7 40.3,147.3 42.5,135.0 44.6,121.2 46.7,107.8 48.8,104.3 50.9,114.6 53.0,160.1 55.1,146.2 57.3,135.0 59.4,102.9 61.5,101.3 63.6,129.3 65.7,124.4 67.8,134.2 69.9,80.1 72.1,90.4 74.2,64.9 76.3,80.9 78.4,98.6 80.5,104.3 82.6,114.9 84.7,143.2 86.9,140.2 89.0,152.7 91.1,154.4 93.2,176.7 95.3,205.2 97.4,212.3 99.5,194.6 101.7,182.6 103.8,210.1 105.9,226.4 108.0,222.1 110.1,227.2 112.2,223.4 114.4,224.3 116.5,225.6 118.6,226.4 120.7,230.8 122.8,219.6 124.9,219.6 127.0,219.1 129.2,216.1 131.3,211.5 133.4,216.4 135.5,217.2 137.6,199.8 139.7,188.9 141.8,175.3 144.0,192.2 146.1,175.3 148.2,209.8 150.3,221.3 152.4,219.9 154.5,213.1 156.6,179.6 158.8,177.5 160.9,174.5 163.0,182.1 165.1,200.0 167.2,194.6 169.3,177.5 171.4,189.7 173.6,193.5 175.7,202.0 177.8,158.4 179.9,170.9 182.0,157.1 184.1,150.3 186.2,157.6 188.4,166.6 190.5,167.7 192.6,175.0 194.7,165.5 196.8,196.2 198.9,201.1 201.0,197.3 203.2,210.1 205.3,236.5 207.4,238.9 209.5,264.0 211.6,265.6 213.7,259.9 215.8,240.3 218.0,272.4 220.1,282.7 222.2,277.8 224.3,252.3 226.4,271.3 228.5,263.7 230.6,270.8 232.8,249.3 234.9,251.7 237.0,257.7 239.1,271.6 241.2,265.1 243.3,272.4 245.5,253.9 247.6,252.8 249.7,246.8 251.8,227.2 253.9,230.2 256.0,242.8 258.1,248.2 260.3,241.1 262.4,241.1 264.5,239.8 266.6,216.6 268.7,204.7 270.8,186.7 272.9,198.4 275.1,180.2 277.2,167.4 279.3,160.9 281.4,176.9 283.5,181.6 285.6,174.5 287.7,154.6 289.9,158.4 292.0,161.2 294.1,161.4 296.2,159.0 298.3,168.2 300.4,167.1 302.5,178.6 304.7,188.6 306.8,200.0 308.9,210.1 311.0,197.9 313.1,204.1 315.2,234.9 317.3,243.3 319.5,262.3 321.6,246.0 323.7,251.7 325.8,262.3 327.9,271.3 330.0,266.1 332.1,254.4 334.3,273.8 336.4,246.6 338.5,233.2 340.6,229.7 342.7,212.3 344.8,206.3 346.9,220.7 349.1,218.3 351.2,226.4 353.3,208.8 355.4,186.2 357.5,189.2 359.6,175.6 361.7,170.1 363.9,152.2 366.0,160.6 368.1,129.3 370.2,132.0 372.3,141.8 374.4,145.4 376.5,143.5 378.7,129.9 380.8,128.2 382.9,140.8 385.0,148.4 387.1,104.3 389.2,84.2 391.4,90.2 393.5,98.9 395.6,85.0 397.7,60.8 399.8,66.5 401.9,46.4 404.0,45.8 406.2,43.6 408.3,49.1 410.4,54.3 412.5,50.4 414.6,55.6 416.7,105.1 418.8,107.3 421.0,99.7 423.1,115.7 425.2,140.2 427.3,160.6 429.4,214.2 431.5,208.2 433.6,211.5 435.8,230.0 437.9,226.4 440.0,231.6 442.1,215.6 444.2,225.6 446.3,232.4 448.4,223.4 450.6,230.5 452.7,227.5 454.8,199.0 456.9,195.7 459.0,189.4 461.1,205.2 463.2,203.0 465.4,187.8 467.5,197.3 469.6,208.2 471.7,185.1 473.8,159.5 475.9,179.6 478.0,152.7 480.2,152.7 482.3,166.9 484.4,166.0 486.5,170.1 488.6,169.6 490.7,134.2 492.8,141.8 495.0,145.6 497.1,130.1 499.2,131.5 501.3,135.9 503.4,138.6 505.5,141.8 507.6,127.7 509.8,126.6 511.9,119.3 514.0,112.5 516.1,98.6 518.2,99.1 520.3,114.9 522.5,99.4 524.6,101.9 526.7,123.9 528.8,119.0 530.9,120.4 533.0,122.0 535.1,163.3 537.3,168.8 539.4,215.6 541.5,229.2 543.6,210.4 545.7,213.1 547.8,224.5 549.9,228.1 552.1,229.2 554.2,224.3 556.3,225.9 558.4,222.6 560.5,203.9 562.6,195.7 564.7,129.1 566.9,167.7 569.0,177.5 571.1,148.6 573.2,177.2 575.3,155.4 577.4,191.6 579.5,195.2 581.7,182.6 583.8,152.2 585.9,190.8 588.0,181.8" fill="none" stroke="#1E4812" stroke-width="2.4" stroke-linejoin="round"/><circle cx="588.0" cy="181.8" r="4.5" fill="#1E4812" stroke="#fff" stroke-width="2"/></svg>
+    <div class="abp-chart-caption">Fonte: Conab e AgroBasis (preço físico e basis), CBOT, B3, Banco Central e CFTC · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">O gráfico de Rio Verde ilustra o funcionamento. As leituras altas de 2022 e do início de 2025 vieram perto de topos de preço, e as leituras baixas de 2023 e 2024 apareceram perto dos fundos. Nem toda virada foi capturada, e em vários momentos o termômetro ficou na faixa neutra enquanto o preço andava.</p>
+
+  <h2 class="abp-h2" id="erros">Onde o termômetro errou</h2>
+  <p class="abp-p">Mostrar só a média esconde os períodos em que a leitura falhou. A tabela abaixo separa o resultado pelo ano em que a leitura foi feita, usando a série semanal de todas as praças.</p>
+  <table class="abp-table">
+    <thead><tr><th>Ano da leitura</th><th>Soja acima de 60</th><th>Soja até 40</th><th>Milho acima de 60</th><th>Milho até 40</th></tr></thead>
+    <tbody>
+      <tr><td>2021</td><td>+14,3%</td><td>-</td><td>+11,4%</td><td>-</td></tr>
+      <tr><td>2022</td><td>−2,7%</td><td>−3,1%</td><td>−8,1%</td><td>+1,7%</td></tr>
+      <tr><td>2023</td><td>-</td><td>−6,7%</td><td>-</td><td>−0,7%</td></tr>
+      <tr><td>2024</td><td>−20,9%</td><td>+6,3%</td><td>-</td><td>+10,9%</td></tr>
+      <tr><td>2025</td><td>−12,0%</td><td>+2,8%</td><td>−14,3%</td><td>+5,4%</td></tr>
+      <tr><td>2026</td><td>+0,9%</td><td>+9,6%</td><td>−8,5%</td><td>+6,1%</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">O erro mais claro foi o fim de <b>2021</b>. O termômetro estava alto para a soja e o milho, mas nos meses seguintes a seca na América do Sul e a guerra na Ucrânia levaram os grãos a recordes, e o preço subiu mais de 10% depois das leituras altas. Choques desse tipo não aparecem em nenhum dos componentes, porque não estão no preço quando a leitura é feita. Na soja, 2023 foi o caso inverso: o termômetro estava baixo, mas a supersafra brasileira continuou pressionando o preço físico, que caiu mesmo depois das leituras até 40.</p>
+  <p class="abp-p">Há também uma concentração que precisa ser dita. Na soja, a maior parte das leituras acima de 60 aconteceu em 2022, quando o preço estava no topo histórico, o que deixa o resultado da soja mais dependente daquele período. No milho, o sinal se repetiu em mais anos: leituras acima de 60 vieram antes de queda em 2022, 2025 e 2026, e leituras até 40 vieram antes de alta em 2022, 2024, 2025 e 2026.</p>
+  <div class="abp-pullquote">O termômetro organiza a leitura do mercado, mas não antecipa choques. Ele indica quando o preço está historicamente esticado, e é isso que justifica vender por partes, não tudo de uma vez.</div>
+
+  <h2 class="abp-h2" id="hoje">O que o termômetro diz hoje</h2>
+  <p class="abp-p">Com os preços de 13/11/2026, a soja e o milho estão em pontas opostas. A <b>soja</b> tem média de <b>76 pontos</b> nas 10 praças, na faixa muito favorável. O preço físico está no topo dos últimos três anos em quase todas as praças, a sazonalidade aponta para a pressão da colheita nos próximos meses e os fundos estão comprados em Chicago. A nota mais alta é a de Uberlândia (83).</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja: termômetro por praça em 13/11/2026</div>
+    <div class="abp-chart-sub">De 0 a 100. Quanto maior, mais favorável à venda</div>
+    <svg viewBox="0 0 640 292" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Termômetro da soja por praça"><line x1="296.0" x2="296.0" y1="6" y2="288" stroke="#E7ECE8" stroke-dasharray="3 3"/><line x1="359.0" x2="359.0" y1="6" y2="288" stroke="#E7ECE8" stroke-dasharray="3 3"/><line x1="401.0" x2="401.0" y1="6" y2="288" stroke="#E7ECE8" stroke-dasharray="3 3"/><line x1="464.0" x2="464.0" y1="6" y2="288" stroke="#E7ECE8" stroke-dasharray="3 3"/><text x="160" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Uberlândia (MG)</text><rect x="170" y="12" width="346.9" height="21" rx="4" fill="#1E4812"/><text x="524.9" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">83</text><text x="160" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Sorriso (MT)</text><rect x="170" y="42" width="333.9" height="21" rx="4" fill="#1E4812"/><text x="511.9" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">80</text><text x="160" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Dourados (MS)</text><rect x="170" y="72" width="332.2" height="21" rx="4" fill="#1E4812"/><text x="510.2" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">79</text><text x="160" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Rondonópolis (MT)</text><rect x="170" y="102" width="327.6" height="21" rx="4" fill="#1E4812"/><text x="505.6" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">78</text><text x="160" y="147" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Paranaguá (PR)</text><rect x="170" y="132" width="325.1" height="21" rx="4" fill="#1E4812"/><text x="503.1" y="147" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">77</text><text x="160" y="177" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Cascavel (PR)</text><rect x="170" y="162" width="312.9" height="21" rx="4" fill="#1E4812"/><text x="490.9" y="177" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">74</text><text x="160" y="207" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Rio Grande (RS)</text><rect x="170" y="192" width="312.5" height="21" rx="4" fill="#1E4812"/><text x="490.5" y="207" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">74</text><text x="160" y="237" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Maringá (PR)</text><rect x="170" y="222" width="310.4" height="21" rx="4" fill="#1E4812"/><text x="488.4" y="237" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#1E4812">74</text><text x="160" y="267" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Passo Fundo (RS)</text><rect x="170" y="252" width="289.8" height="21" rx="4" fill="#54931B"/><text x="467.8" y="267" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#54931B">69</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab e AgroBasis (preço físico e basis), CBOT, B3, Banco Central e CFTC · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">O <b>milho</b> tem média de <b>38 pontos</b>, na faixa pouco favorável. O preço está abaixo da média dos últimos três anos na maior parte das praças, o basis está fraco para a época e a B3 paga carrego para quem consegue armazenar. As praças do Centro-Oeste estão nas notas mais baixas, como Itapeva (SP), com 24 pontos.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Milho: termômetro por praça em 13/11/2026</div>
+    <div class="abp-chart-sub">De 0 a 100. Quanto maior, mais favorável à venda</div>
+    <svg viewBox="0 0 640 262" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Termômetro do milho por praça"><line x1="296.0" x2="296.0" y1="6" y2="258" stroke="#E7ECE8" stroke-dasharray="3 3"/><line x1="359.0" x2="359.0" y1="6" y2="258" stroke="#E7ECE8" stroke-dasharray="3 3"/><line x1="401.0" x2="401.0" y1="6" y2="258" stroke="#E7ECE8" stroke-dasharray="3 3"/><line x1="464.0" x2="464.0" y1="6" y2="258" stroke="#E7ECE8" stroke-dasharray="3 3"/><text x="160" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Passo Fundo (RS)</text><rect x="170" y="12" width="226.8" height="21" rx="4" fill="#C9A227"/><text x="404.8" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#C9A227">54</text><text x="160" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Ponta Grossa (PR)</text><rect x="170" y="42" width="226.4" height="21" rx="4" fill="#C9A227"/><text x="404.4" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#C9A227">54</text><text x="160" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Vilhena (RO)</text><rect x="170" y="72" width="194.9" height="21" rx="4" fill="#C9A227"/><text x="372.9" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#C9A227">46</text><text x="160" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Rio Verde (GO)</text><rect x="170" y="102" width="155.8" height="21" rx="4" fill="#C07A2E"/><text x="333.8" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#C07A2E">37</text><text x="160" y="147" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Sorriso (MT)</text><rect x="170" y="132" width="139.0" height="21" rx="4" fill="#C07A2E"/><text x="317.0" y="147" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#C07A2E">33</text><text x="160" y="177" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Maringá (PR)</text><rect x="170" y="162" width="137.8" height="21" rx="4" fill="#C07A2E"/><text x="315.8" y="177" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#C07A2E">33</text><text x="160" y="207" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Rondonópolis (MT)</text><rect x="170" y="192" width="101.2" height="21" rx="4" fill="#A35A1E"/><text x="279.2" y="207" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#A35A1E">24</text><text x="160" y="237" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Itapeva (SP)</text><rect x="170" y="222" width="100.4" height="21" rx="4" fill="#A35A1E"/><text x="278.4" y="237" font-family="Geist,Arial" font-size="12.5" font-weight="700" fill="#A35A1E">24</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab e AgroBasis (preço físico e basis), CBOT, B3, Banco Central e CFTC · Elaboração: AgroBasis</div>
+  </div>
+
+  <h2 class="abp-h2" id="como-usar">Como usar na decisão de venda</h2>
+  <p class="abp-p">O termômetro funciona melhor como régua para <b>escalonar vendas</b>, não como gatilho para vender tudo. Algumas formas práticas de usar:</p>
+  <ul class="abp-list">
+    <li><b>Defina uma régua antes.</b> Por exemplo, avançar na comercialização quando a praça passa de 60 e segurar quando está abaixo de 40, sempre respeitando o custo de produção e o caixa.</li>
+    <li><b>Olhe o que puxa a nota.</b> Uma nota alta puxada por preço e fundos pede uma decisão diferente de uma nota alta puxada só pela sazonalidade. A página mostra o peso de cada componente.</li>
+    <li><b>Combine com a proteção.</b> Quando o preço físico não está bom, mas a bolsa está, é possível travar só a parte de Chicago ou da B3 e deixar o basis para depois, ou o contrário.</li>
+    <li><b>Considere o custo de esperar.</b> Armazenagem, juros e quebra técnica corroem o ganho de segurar o grão. No milho, o carrego da B3 ajuda a medir se a espera é paga.</li>
+  </ul>
+  <p class="abp-p">Para quem quer entender o padrão de preço ao longo do ano, o estudo sobre o <a href="/analises/soja/qual-o-melhor-mes-para-vender-soja/">melhor mês para vender soja</a> complementa o componente de sazonalidade do termômetro.</p>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item">
+    <summary>O que é o Termômetro de Venda AgroBasis? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">É um índice de 0 a 100, calculado para 10 praças de soja e 9 de milho, que resume se o momento atual favorece a venda do grão. Ele combina, com pesos fixos, cinco leituras: o preço da praça frente aos últimos 3 anos, o basis frente à mesma época dos anos anteriores, a sazonalidade dos meses seguintes, a posição dos fundos na Bolsa de Chicago e, no milho, o carrego da B3. Quanto maior a nota, mais favorável à venda.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Como saber se é hora de vender soja? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Não existe resposta única, porque a decisão depende do custo, do caixa e da capacidade de armazenar de cada produtor. O que o termômetro faz é dizer se o mercado, na sua praça, está numa posição historicamente boa ou ruim para vender: preço alto frente ao passado, basis firme, sazonalidade desfavorável à frente e fundos muito comprados costumam indicar uma janela melhor para fixar parte da produção.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O Termômetro de Venda acerta sempre? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Não. No teste desde novembro de 2021, depois de leituras acima de 60 o preço do milho caiu em 72% das vezes e o da soja em 70% das vezes nos 3 meses seguintes. Em parte dos casos, o preço subiu. O exemplo mais claro foi o fim de 2021, quando o termômetro estava alto e a guerra na Ucrânia levou os grãos a novos recordes. Por isso ele é uma referência para escalonar vendas, não uma garantia.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Com que frequência o termômetro é atualizado? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Duas vezes por dia útil, às 12h25 e às 18h25 (horário de Brasília), com o fechamento da CBOT e da B3, o dólar do dia e o último basis disponível de cada praça. A posição dos fundos é atualizada uma vez por semana, quando a CFTC divulga o relatório Commitments of Traders.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O termômetro é uma recomendação de compra ou venda? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Não. É um indicador educacional, calculado com dados públicos e regras fixas. A decisão de vender depende do custo de produção, das dívidas, do armazenamento, do frete e do apetite a risco de cada produtor. Desempenho passado não garante resultado futuro.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Por que a soja e o milho estão em pontas opostas do termômetro? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Em 13/11/2026, a soja estava com média de 76 pontos, puxada por preço físico no topo dos últimos 3 anos e fundos comprados em Chicago. O milho estava em 38, com preço e basis abaixo do normal para a época e a B3 pagando carrego para quem consegue esperar.</p>
+  </details>
+
+  <div class="abp-sources">
+    <b>Fontes consultadas para este artigo:</b> preços físicos e basis por praça (Conab e levantamento AgroBasis); futuros de soja e milho na CBOT (CME Group) e de milho na B3; dólar comercial e PTAX (Banco Central do Brasil); posição de fundos (CFTC, Commitments of Traders, categoria Managed Money). Cálculo e teste histórico: AgroBasis, com dados de novembro de 2021 a novembro de 2026.
+  </div>
+
+  <div class="abp-author-box">
+    <div class="abp-author-icon"><i data-lucide="pen-line"></i></div>
+    <div class="abp-author-text"><b>Equipe AgroBasis</b><br>Inteligência de mercado para o agronegócio: dashboards, análises e conteúdo educacional com dados oficiais.</div>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fonte dos dados: Conab, CME Group, B3, Banco Central e CFTC. Conteúdo referencial para acompanhamento de mercado, elaborado pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda. Desempenho passado não garante resultado futuro.
+  </div>
+
+</div>
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); } else { window.addEventListener('load', () => lucide.createIcons()); }
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Hora de vender soja e milho? O termômetro que testamos em cinco anos de preços",
+  "description": "Índice de 0 a 100 por praça indica se é hora de vender soja e milho. No milho, leituras acima de 60 vieram antes de queda média de 7,4% em 3 meses.",
+  "image": "https://agrobasis.com.br/wp-content/uploads/2026/11/termometro-de-venda-capa.png",
+  "author": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "datePublished": "2026-11-15",
+  "dateModified": "2026-11-15",
+  "mainEntityOfPage": "https://agrobasis.com.br/analises/termometro-de-venda-soja-milho/"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "O que é o Termômetro de Venda AgroBasis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "É um índice de 0 a 100, calculado para 10 praças de soja e 9 de milho, que resume se o momento atual favorece a venda do grão. Ele combina, com pesos fixos, cinco leituras: o preço da praça frente aos últimos 3 anos, o basis frente à mesma época dos anos anteriores, a sazonalidade dos meses seguintes, a posição dos fundos na Bolsa de Chicago e, no milho, o carrego da B3. Quanto maior a nota, mais favorável à venda."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Como saber se é hora de vender soja?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Não existe resposta única, porque a decisão depende do custo, do caixa e da capacidade de armazenar de cada produtor. O que o termômetro faz é dizer se o mercado, na sua praça, está numa posição historicamente boa ou ruim para vender: preço alto frente ao passado, basis firme, sazonalidade desfavorável à frente e fundos muito comprados costumam indicar uma janela melhor para fixar parte da produção."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O Termômetro de Venda acerta sempre?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Não. No teste desde novembro de 2021, depois de leituras acima de 60 o preço do milho caiu em 72% das vezes e o da soja em 70% das vezes nos 3 meses seguintes. Em parte dos casos, o preço subiu. O exemplo mais claro foi o fim de 2021, quando o termômetro estava alto e a guerra na Ucrânia levou os grãos a novos recordes. Por isso ele é uma referência para escalonar vendas, não uma garantia."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Com que frequência o termômetro é atualizado?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Duas vezes por dia útil, às 12h25 e às 18h25 (horário de Brasília), com o fechamento da CBOT e da B3, o dólar do dia e o último basis disponível de cada praça. A posição dos fundos é atualizada uma vez por semana, quando a CFTC divulga o relatório Commitments of Traders."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O termômetro é uma recomendação de compra ou venda?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Não. É um indicador educacional, calculado com dados públicos e regras fixas. A decisão de vender depende do custo de produção, das dívidas, do armazenamento, do frete e do apetite a risco de cada produtor. Desempenho passado não garante resultado futuro."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Por que a soja e o milho estão em pontas opostas do termômetro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Em 13/11/2026, a soja estava com média de 76 pontos, puxada por preço físico no topo dos últimos 3 anos e fundos comprados em Chicago. O milho estava em 38, com preço e basis abaixo do normal para a época e a B3 pagando carrego para quem consegue esperar."
+      }
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Termômetro de Venda AgroBasis",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "url": "https://agrobasis.com.br/dashboards/termometro-de-venda/",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BRL"
+  }
+}
+</script>
