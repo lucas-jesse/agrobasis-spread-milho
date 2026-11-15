@@ -24,6 +24,16 @@
 .abh-c i.up{color:#2E7D1E}.abh-c i.dn{color:#B4441F}.abh-c i.eq{color:#6b756d}
 .abh-mf{display:flex;justify-content:space-between;gap:10px;margin-top:12px;font-size:12.5px}
 .abh-mf a{color:var(--vd)!important;font-weight:600;text-decoration:none!important}
+.abh-tm{display:block;margin-top:12px;padding-top:12px;border-top:1px solid #E7ECE8;text-decoration:none!important;color:#1d2420!important}
+.abh-tmh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.abh-tmh b{font:700 14px Sora,sans-serif;color:#1E4812}.abh-tmh small{font-size:12px;color:#1E4812;font-weight:600}
+.abh-tmg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.abh-tmi{border:1px solid #E7ECE8;border-radius:12px;padding:9px 11px}
+.abh-tmi span{display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#6b756d;font-weight:600}
+.abh-tmi span b{font:700 20px Sora,sans-serif;letter-spacing:0}
+.abh-tmb{position:relative;height:6px;border-radius:4px;margin:7px 0 5px;background:linear-gradient(90deg,#A35A1E 0%,#C07A2E 30%,#D9A23B 50%,#54931B 62%,#1E4812 100%)}
+.abh-tmb i{position:absolute;top:-4px;width:4px;height:14px;border-radius:2px;background:#1d2420;box-shadow:0 0 0 2px #fff;transform:translateX(-50%)}
+.abh-tmi em{font-style:normal;font-size:12px;font-weight:600}
 @media (max-width:860px){.abh-in{grid-template-columns:1fr;gap:26px;padding:34px 18px 30px}.abh h1{font-size:31px}.abh-sub{font-size:15.5px;margin-bottom:20px}}
 @media (max-width:560px){.abh{border-radius:0 0 22px 22px}.abh-in{padding:26px 16px 24px;gap:22px}.abh h1{font-size:27px}.abh-k{font-size:11px;margin-bottom:10px}.abh-sub{display:none}.abh h1{margin-bottom:18px}.abh-bt{flex-direction:column;gap:9px}.abh-bt a{width:100%;padding:13px 16px}.abh-m{padding:14px;border-radius:16px}.abh-c{padding:10px 11px}.abh-c b{font-size:19px}.abh-c span{font-size:10.5px}}
 
@@ -64,6 +74,13 @@
         <div class="abh-c"><span>Milho Chicago</span><b id="abhMilho">-</b><i id="abhMilhoV">&nbsp;</i></div>
       </div>
       <div class="abh-mf"><span style="color:#6b756d">Chicago em US$ por bushel</span><a href="/dashboards/">Ver painéis →</a></div>
+      <a class="abh-tm" href="/dashboards/termometro-de-venda/" id="abhTm" hidden>
+        <div class="abh-tmh"><b>Termômetro de venda</b><small>Ver por praça →</small></div>
+        <div class="abh-tmg">
+          <div class="abh-tmi"><span>Soja<b id="abhTmS">-</b></span><div class="abh-tmb"><i id="abhTmSi"></i></div><em id="abhTmSf">&nbsp;</em></div>
+          <div class="abh-tmi"><span>Milho<b id="abhTmM">-</b></span><div class="abh-tmb"><i id="abhTmMi"></i></div><em id="abhTmMf">&nbsp;</em></div>
+        </div>
+      </a>
     </div>
   </div>
 </section>
@@ -97,6 +114,18 @@
     pr("usdbrl", "abhUsd", function (v) { return "R$ " + br(v, 4); });
     $("abhD").textContent = rot;
   }).catch(function () { $("abhD").textContent = "indisponível no momento"; });
+  // mini termômetro de venda (média das praças)
+  pega(0, "termometro.json").then(function (t) {
+    function faixa(n) { return n >= 70 ? ["Muito favorável", "#1E4812"] : n >= 55 ? ["Favorável", "#3d7a14"] : n >= 45 ? ["Neutro", "#B07F1E"] : n >= 30 ? ["Pouco favorável", "#B0662A"] : ["Desfavorável", "#A35A1E"]; }
+    function med(P) { var v = Object.keys(P).map(function (k) { return P[k].nota; }).filter(function (x) { return x != null; }); return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : null; }
+    [["soja", "S"], ["milho", "M"]].forEach(function (x) {
+      var n = med(t[x[0]] || {}); if (n == null) return; var f = faixa(n);
+      $("abhTm" + x[1]).textContent = Math.round(n); $("abhTm" + x[1]).style.color = f[1];
+      $("abhTm" + x[1] + "i").style.left = Math.max(2, Math.min(98, n)) + "%";
+      $("abhTm" + x[1] + "f").textContent = f[0]; $("abhTm" + x[1] + "f").style.color = f[1];
+    });
+    $("abhTm").hidden = false;
+  }).catch(function () {});
   // dólar em tempo real durante o pregão
   fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL").then(function (r) { return r.json(); }).then(function (j) {
     var q = j && j.USDBRL; if (!q) return;
