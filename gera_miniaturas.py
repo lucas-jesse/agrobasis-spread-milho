@@ -45,6 +45,7 @@ ALVOS = {
     "clima-el-nino": ("clima.html", "#abcG0", ""),
     "armazenagem-graos-brasil": ("armazenagem.html", "#abcG2", ""),
     "termometro-de-venda": ("termometro.html", ".tm-gauge-card", ""),
+    "safra-argentina": ("argentina.html", "#arG0", ""),
 }
 
 

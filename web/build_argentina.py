@@ -30,7 +30,7 @@ extra = """.ar-tab{overflow-x:auto;margin:2px 0 6px}
 .ar-bcri{display:block;border:1px solid var(--ln);border-radius:12px;padding:12px 14px;text-decoration:none!important;color:var(--tx)!important}
 .ar-bcri:hover{border-color:var(--vc)}.ar-bcri span{display:block;font-size:11.5px;color:var(--mt);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:4px}.ar-bcri b{font-size:14.5px;font-weight:600;line-height:1.4}
 .ar-pc{margin-top:4px}
-@media (max-width:560px){.ar-estn{grid-template-columns:1fr;gap:4px}.ar-bcr{grid-template-columns:1fr}.ar-tab table{font-size:12.5px}.ar-tab td,.ar-tab th{padding:8px 6px}.ar-estp td:first-child{width:96px}}"""
+@media (max-width:560px){.ar-tab .m-esc{display:none}.ar-tab .b{min-width:110px}.ar-estn{grid-template-columns:1fr;gap:4px}.ar-bcr{grid-template-columns:1fr}.ar-tab table{font-size:12.5px}.ar-tab td,.ar-tab th{padding:8px 6px}.ar-estp td:first-child{width:96px}}"""
 css = "\n".join(cot[ini:fim]) + "\n" + extra + "\n</style>"
 cab = ("<!-- AgroBasis · Safra Argentina · painel em HTML\n"
        "     Dados: dados/argentina/argentina.json no GitHub, gerado por exporta_argentina.py. -->\n")

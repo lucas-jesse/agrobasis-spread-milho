@@ -197,11 +197,11 @@
   function provincias() {
     var o = sel, ps = o.av.provincias.filter(function (p) { return p.atual != null && p.area > 0; });
     $("arH1").textContent = (o.op === "plantio" ? "Plantio" : "Colheita") + " de " + NOME[o.c].toLowerCase() + " por província";
-    var h = '<table><thead><tr><th>Província</th><th class="n">Área (mil ha)</th><th class="b">' + dm(ultimo(o.av.semanas)) + '</th><th class="n">Safra passada</th><th class="n">Na semana</th></tr></thead><tbody>';
+    var h = '<table><thead><tr><th>Província</th><th class="n m-esc">Área (mil ha)</th><th class="b">' + dm(ultimo(o.av.semanas)) + '</th><th class="n">Safra passada</th><th class="n m-esc">Na semana</th></tr></thead><tbody>';
     ps.forEach(function (p) {
       var d = p.anterior != null ? p.atual - p.anterior : null;
-      h += "<tr><td>" + p.nome + '</td><td class="n">' + br(p.area / 1000, 0) + '</td><td class="b"><div class="ar-bar"><i style="width:' + Math.min(100, p.atual) + '%"></i><span>' + br(p.atual, p.atual < 10 ? 1 : 0) + '%</span></div></td><td class="n">' +
-        (p.anterior != null ? br(p.anterior, p.anterior < 10 ? 1 : 0) + '% <small class="' + (d >= 0 ? "ar-up" : "ar-dn") + '">' + sinal(d, 0) + "</small>" : "-") + '</td><td class="n">' + (p.semana != null ? "+" + br(p.semana, 0) + " p.p." : "-") + "</td></tr>";
+      h += "<tr><td>" + p.nome + '</td><td class="n m-esc">' + br(p.area / 1000, 0) + '</td><td class="b"><div class="ar-bar"><i style="width:' + Math.min(100, p.atual) + '%"></i><span>' + br(p.atual, p.atual < 10 ? 1 : 0) + '%</span></div></td><td class="n">' +
+        (p.anterior != null ? br(p.anterior, p.anterior < 10 ? 1 : 0) + '% <small class="' + (d >= 0 ? "ar-up" : "ar-dn") + '">' + sinal(d, 0) + "</small>" : "-") + '</td><td class="n m-esc">' + (p.semana != null ? "+" + br(p.semana, 0) + " p.p." : "-") + "</td></tr>";
     });
     $("arProv").innerHTML = h + "</tbody></table>";
   }
@@ -249,13 +249,13 @@
   // ---------- estimativas
   function producao() {
     var B = D.bcr.estimativas || {}, U = D.usda || {}, G = D.informe.producao || {}, gc = G.cultivos || {};
-    var h = '<table><thead><tr><th>Cultura</th><th class="n">Governo ' + (G.campanha ? G.campanha.slice(2, 4) + "/" + G.campanha.slice(7) : "") + '</th><th class="n">BCR 25/26</th><th class="n b2">BCR 26/27</th><th class="n b2">USDA 26/27</th><th class="n">Área 26/27 (gov.)</th></tr></thead><tbody>';
+    var h = '<table><thead><tr><th>Cultura</th><th class="n m-esc">Governo ' + (G.campanha ? G.campanha.slice(2, 4) + "/" + G.campanha.slice(7) : "") + '</th><th class="n">BCR 25/26</th><th class="n b2">BCR 26/27</th><th class="n b2">USDA 26/27</th><th class="n m-esc">Área 26/27 (gov.)</th></tr></thead><tbody>';
     ["soja", "milho", "trigo"].forEach(function (c) {
       var b = B[c] || [], b1 = b.find(function (x) { return x.safra === "2026/2027"; }) || {}, b0 = b.find(function (x) { return x.safra === "2025/2026"; }) || {};
       var u = U[c], uv = u ? u.producao_mil_t[u.producao_mil_t.length - 1] / 1000 : null;
       var av = (D.informe.avanco[c] || {}).plantio || (D.informe.avanco[c] || {}).colheita, area = av && av.total ? av.total.area / 1e6 : null;
-      h += "<tr><td>" + NOME[c] + '</td><td class="n">' + (gc[c] ? br(gc[c].prod_mil_t / 1000, 1) : "-") + '</td><td class="n">' + br(b0.prod_mi_t, 1) + '</td><td class="n b2">' + (b1.prod_mi_t != null ? br(b1.prod_mi_t, 1) : '<small>só área: ' + br(b1.area_mi_ha, 1) + " mi ha</small>") +
-        '</td><td class="n b2">' + br(uv, 1) + '</td><td class="n">' + (area ? br(area, 2) + " mi ha" : "-") + "</td></tr>";
+      h += "<tr><td>" + NOME[c] + '</td><td class="n m-esc">' + (gc[c] ? br(gc[c].prod_mil_t / 1000, 1) : "-") + '</td><td class="n">' + br(b0.prod_mi_t, 1) + '</td><td class="n b2">' + (b1.prod_mi_t != null ? br(b1.prod_mi_t, 1) : '<small>só área<br>' + br(b1.area_mi_ha, 1) + " mi ha</small>") +
+        '</td><td class="n b2">' + br(uv, 1) + '</td><td class="n m-esc">' + (area ? br(area, 2) + " mi ha" : "-") + "</td></tr>";
     });
     $("arProd").innerHTML = h + "</tbody></table>";
     var u = U.soja && U.soja.relatorio;
@@ -269,11 +269,11 @@
     $("arChSub").textContent = "até " + dm(P[0].ultimo);
     function pc(o, n) { return n > 0 ? Math.round(o / n * 100) : null; }
     function cor(p) { return p == null ? COR.mt : p >= 130 ? "#2F6FA8" : p >= 85 ? COR.vd : p >= 60 ? "#B07F1E" : COR.mr; }
-    var h = '<table><thead><tr><th>Polo</th><th class="n">Desde 1º/set</th><th class="n">Últimos 30 dias</th><th class="n">Próximos 15 dias</th></tr></thead><tbody>';
+    var h = '<table><thead><tr><th>Polo</th><th class="n">Desde 1º/set</th><th class="n m-esc">Últimos 30 dias</th><th class="n">Próximos 15 dias</th></tr></thead><tbody>';
     P.forEach(function (p) {
       var s = p.acc.safra, d30 = p.acc.d30, pr = p.prev && p.prev.tot;
       var ps = pc(s[0], s[1]), p30 = pc(d30[0], d30[1]), pp = pr ? pc(pr.media, pr.normal) : null;
-      h += "<tr><td><b>" + p.nome + "</b><small>" + p.uf + '</small></td><td class="n">' + br(s[0], 0) + ' mm <em style="color:' + cor(ps) + '">' + br(ps, 0) + '%</em></td><td class="n">' + br(d30[0], 0) + ' mm <em style="color:' + cor(p30) + '">' + br(p30, 0) + '%</em></td><td class="n">' + (pr ? br(pr.media, 0) + ' mm <em style="color:' + cor(pp) + '">' + br(pp, 0) + "%</em>" : "-") + "</td></tr>";
+      h += "<tr><td><b>" + p.nome + "</b><small>" + p.uf + '</small></td><td class="n">' + br(s[0], 0) + ' mm <em style="color:' + cor(ps) + '">' + br(ps, 0) + '%</em></td><td class="n m-esc">' + br(d30[0], 0) + ' mm <em style="color:' + cor(p30) + '">' + br(p30, 0) + '%</em></td><td class="n">' + (pr ? br(pr.media, 0) + ' mm <em style="color:' + cor(pp) + '">' + br(pp, 0) + "%</em>" : "-") + "</td></tr>";
     });
     $("arChuva").innerHTML = h + '</tbody></table><p class="abc-nota ar-pc">Porcentagens: chuva em relação à normal do período.</p>';
   }
@@ -291,7 +291,7 @@
       grid: { left: 42, right: 12, top: 30, bottom: 44 },
       legend: { show: false },
       graphic: [marca(), { type: "group", left: 0, top: 0, children: ["en_forte", "en", "neutro", "ln"].map(function (f, i) {
-        return { type: "group", left: i * (mobile() ? 84 : 110), children: [{ type: "rect", shape: { x: 0, y: 3, width: 10, height: 10, r: 2 }, style: { fill: FASE[f][1] } }, { type: "text", left: 14, top: 1, style: { text: FASE[f][0], fill: COR.mt, font: "12px Geist, sans-serif" } }] };
+        return { type: "group", left: [0, 96, 160, 226][i] * (mobile() ? 1 : 1.15), children: [{ type: "rect", shape: { x: 0, y: 3, width: 10, height: 10, r: 2 }, style: { fill: FASE[f][1] } }, { type: "text", left: 14, top: 1, style: { text: FASE[f][0], fill: COR.mt, font: "12px Geist, sans-serif" } }] };
       }) }],
       tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var i = ini + ps[0].dataIndex; return "<b>" + A.safras[i] + "</b><br>" + br(A.rend[i], 1) + " qq/ha · " + sinal(A.desvio[i], 1) + "% da tendência<br>" + (FASE[A.fase_safra[i]] || FASE.neutro)[0] + "<br>Produção: " + br(A.prod_mil_t[i] / 1000, 1) + " mi t"; } }),
       xAxis: { type: "category", data: A.safras.slice(ini), axisLabel: { color: COR.mt, fontSize: 10.5, rotate: mobile() ? 60 : 45 }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
