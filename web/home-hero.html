@@ -1,18 +1,17 @@
 <!-- AgroBasis · abertura da página inicial (sem foto) + mercado hoje + ajustes de layout da home no celular -->
 <style>
-.abh{--vd:#1E4812;--vc:#54931B;--mr:#A17149;font-family:Geist,system-ui,sans-serif;color:#fff;background:radial-gradient(120% 140% at 100% 0%,#2f6a1c 0%,#1E4812 46%,#163a0d 100%);border-radius:0 0 28px 28px;position:relative;overflow:hidden}
-.abh:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 85%);-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 85%);pointer-events:none}
+.abh{--vd:#1E4812;--vc:#54931B;--mr:#A17149;font-family:Geist,system-ui,sans-serif;color:#1d2420;background:#F6F8F4;border-bottom:1px solid #E7ECE8;position:relative;overflow:hidden}
 .abh-in{position:relative;max-width:1140px;margin:0 auto;padding:56px 20px 52px;display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:center}
-.abh-k{font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#B9DD8F;margin:0 0 14px}
-.abh h1{font:700 44px/1.08 Sora,Geist,sans-serif;color:#fff;margin:0 0 16px;letter-spacing:-.01em}
-.abh h1 em{font-style:normal;color:#B9DD8F}
-.abh-sub{font-size:17px;line-height:1.55;color:rgba(255,255,255,.86);margin:0 0 26px;max-width:520px}
+.abh-k{font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#54931B;margin:0 0 14px}
+.abh h1{font:700 44px/1.08 Sora,Geist,sans-serif;color:#1d2420;margin:0 0 16px;letter-spacing:-.01em}
+.abh h1 em{font-style:normal;color:#1E4812}
+.abh-sub{font-size:17px;line-height:1.55;color:#4a524c;margin:0 0 26px;max-width:520px}
 .abh-bt{display:flex;gap:12px;flex-wrap:wrap}
 .abh-bt a{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:12px;padding:14px 20px;font:600 15.5px Geist,sans-serif;text-decoration:none!important;transition:transform .15s,background .15s}
 .abh-bt a:hover{transform:translateY(-1px)}
-.abh-b1{background:#fff;color:var(--vd)!important}.abh-b1:hover{background:#F1F7EA}
-.abh-b2{background:rgba(255,255,255,.08);color:#fff!important;border:1.5px solid rgba(255,255,255,.45)}.abh-b2:hover{background:rgba(255,255,255,.16)}
-.abh-m{background:#fff;color:#1d2420;border-radius:20px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,.22)}
+.abh-b1{background:var(--vd);color:#fff!important}.abh-b1:hover{background:#163a0d}
+.abh-b2{background:#fff;color:var(--vd)!important;border:1.5px solid #C9D6C4}.abh-b2:hover{background:#F1F7EA;border-color:var(--vd)}
+.abh-m{background:#fff;color:#1d2420;border-radius:20px;padding:20px;border:1px solid #E3E8E2;box-shadow:0 1px 2px rgba(30,72,18,.04)}
 .abh-mh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;gap:8px}
 .abh-mh b{font:700 17px Sora,sans-serif;color:var(--vd)}.abh-mh small{font-size:12px;color:#6b756d}
 .abh-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -35,7 +34,7 @@
 .abh-tmb i{position:absolute;top:-4px;width:4px;height:14px;border-radius:2px;background:#1d2420;box-shadow:0 0 0 2px #fff;transform:translateX(-50%)}
 .abh-tmi em{font-style:normal;font-size:12px;font-weight:600}
 @media (max-width:860px){.abh-in{grid-template-columns:1fr;gap:26px;padding:34px 18px 30px}.abh h1{font-size:31px}.abh-sub{font-size:15.5px;margin-bottom:20px}}
-@media (max-width:560px){.abh{border-radius:0 0 22px 22px}.abh-in{padding:26px 16px 24px;gap:22px}.abh h1{font-size:27px}.abh-k{font-size:11px;margin-bottom:10px}.abh-sub{display:none}.abh h1{margin-bottom:18px}.abh-bt{flex-direction:column;gap:9px}.abh-bt a{width:100%;padding:13px 16px}.abh-m{padding:14px;border-radius:16px}.abh-c{padding:10px 11px}.abh-c b{font-size:19px}.abh-c span{font-size:10.5px}}
+@media (max-width:560px){.abh-in{padding:26px 16px 24px;gap:22px}.abh h1{font-size:27px}.abh-k{font-size:11px;margin-bottom:10px}.abh-sub{display:none}.abh h1{margin-bottom:18px}.abh-bt{flex-direction:column;gap:9px}.abh-bt a{width:100%;padding:13px 16px}.abh-m{padding:14px;border-radius:16px}.abh-c{padding:10px 11px}.abh-c b{font-size:19px}.abh-c span{font-size:10.5px}}
 
 /* ---- ajustes da página inicial ---- */
 /* cards de atalho: compactos, 2 por linha no celular */
