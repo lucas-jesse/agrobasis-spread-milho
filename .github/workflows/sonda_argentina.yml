@@ -1,7 +1,7 @@
 name: Sonda Argentina
 on: workflow_dispatch
 permissions:
-  contents: read
+  contents: write
 jobs:
   sonda:
     runs-on: ubuntu-latest
@@ -13,7 +13,11 @@ jobs:
           python-version: '3.11'
       - run: pip install -q requests pdfplumber
       - run: python argentina/sonda.py
-      - uses: actions/upload-artifact@v4
-        with:
-          name: sonda
-          path: argentina/sonda/
+      - name: Publicar no ramo sonda-argentina
+        run: |
+          git config user.name "AgroBasis Bot"; git config user.email "bot@agrobasis.com.br"
+          git checkout -q --orphan sonda-argentina
+          git rm -rq --cached . 
+          git add -f argentina/sonda
+          git commit -qm "sonda $(date +%F_%H%M)"
+          git push -qf origin sonda-argentina
