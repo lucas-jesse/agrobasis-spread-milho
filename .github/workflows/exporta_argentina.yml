@@ -1,0 +1,41 @@
+name: Safra Argentina
+
+on:
+  schedule:
+    # quinta e sexta à noite (informe da SAGyP sai na quinta) e todo dia de manhã para a chuva
+    - cron: '40 22 * * 4,5'
+    - cron: '15 11 * * *'
+  workflow_dispatch:
+    inputs:
+      historico:
+        description: 'Ler todos os informes desde 2020 (primeira carga)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: argentina
+  cancel-in-progress: false
+
+jobs:
+  argentina:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q requests pdfplumber numpy
+      - name: Coletar e montar
+        run: python exporta_argentina.py ${{ inputs.historico && '--historico --produtividade' || '' }}
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/argentina dados/clima/cache
+          git diff --staged --quiet && exit 0
+          git commit -qm "Safra Argentina $(TZ=America/Sao_Paulo date +'%F %H:%M')"
+          for i in 1 2 3 4; do git pull --rebase -q origin main && git push -q && break; sleep 9; done
