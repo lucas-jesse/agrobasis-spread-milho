@@ -87,9 +87,9 @@ def meses(desde, ate):
         y, m = (y + 1, 1) if m == 12 else (y, m + 1)
 
 
-def ler_e_guardar(d, url):
+def ler_e_guardar(d, url, forcar=False):
     alvo = CACHE / f"{d.isoformat()}.json"
-    if alvo.exists():
+    if alvo.exists() and not forcar:
         return json.loads(alvo.read_text())
     tmp = PASTA / "_tmp.pdf"
     tmp.write_bytes(get(url).content)
@@ -116,9 +116,11 @@ def coletar_informes(historico):
         except Exception as e:
             print("  lista falhou", mes, e); continue
         for d, url in lst:
-            if not (CACHE / f"{d.isoformat()}.json").exists():
+            # os informes das últimas 2 semanas são relidos sempre (correções e melhorias do leitor)
+            recente = (hoje - d).days <= 14
+            if recente or not (CACHE / f"{d.isoformat()}.json").exists():
                 print("  informe", d)
-                ler_e_guardar(d, url); novos += 1
+                ler_e_guardar(d, url, forcar=recente); novos += 1
                 time.sleep(1.5)
     print("informes novos:", novos)
     return sorted((json.loads(f.read_text()) for f in CACHE.glob("*.json")), key=lambda r: r["data"])

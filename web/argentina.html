@@ -1,0 +1,447 @@
+<!-- AgroBasis · Safra Argentina · painel em HTML
+     Dados: dados/argentina/argentina.json no GitHub, gerado por exporta_argentina.py. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.abc{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--mr2:#8A6A4F;--cz:#6E7B8F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.abc *{box-sizing:border-box}
+.abc-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.abc-bc a{color:var(--mt);text-decoration:none}.abc-bc a:hover{color:var(--vd)}
+.abc-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.abc-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px 20px;margin-bottom:14px}
+.abc-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.abc-meta{font-size:13px;color:var(--mt)}
+.abc-prox{font-size:12.5px;color:var(--mt);text-align:right;line-height:1.5}
+.abc-prox b{color:var(--tx);font-weight:600}
+/* termômetro: um cartão por commodity */
+.abc-board{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.abc-c{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:11px 12px 10px;cursor:pointer;text-align:left;font:inherit;color:inherit;transition:border-color .15s,box-shadow .15s;min-width:0}
+.abc-c:hover{border-color:#cfd9d1}
+.abc-c[aria-pressed=true]{border-color:var(--vd);box-shadow:0 0 0 1px var(--vd) inset}
+.abc-c .n{font-size:12px;font-weight:600;color:var(--mt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-c .v{font-family:Sora,sans-serif;font-weight:700;font-size:18px;margin-top:4px;line-height:1.1;white-space:nowrap}
+.abc-c .d{font-size:11.5px;font-weight:600;margin-top:3px;white-space:nowrap}
+.abc-c .g{position:relative;height:5px;border-radius:3px;margin-top:9px;background:linear-gradient(90deg,#e9d3bd,#eef1ef 50%,#c9dcb3)}
+.abc-c .g i{position:absolute;top:-3px;width:3px;height:11px;border-radius:2px;background:var(--tx);transform:translateX(-50%)}
+.abc-c .p{display:flex;justify-content:space-between;font-size:10.5px;color:#98a29a;margin-top:4px}
+.abc-c svg{display:block;width:100%;height:26px;margin-top:6px}
+.pos{color:var(--vd)}.neg{color:var(--mr2)}
+/* frase-resumo */
+.abc-lead{display:flex;gap:10px;align-items:flex-start;background:#f6f8f4;border:1px solid var(--ln);border-radius:12px;padding:11px 14px;font-size:14px;line-height:1.5;margin-bottom:14px}
+.abc-lead svg{flex:none;margin-top:3px;color:var(--vc)}
+.abc-lead b{font-weight:600}
+.abc-seg{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:9px;padding:2px;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.abc-seg::-webkit-scrollbar{display:none}
+.abc-seg button{flex:none;font:500 12.5px Geist,sans-serif;border:0;background:none;color:var(--mt);padding:6px 10px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.abc-seg button[aria-pressed=true]{background:#fff;color:var(--tx);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.abc-cats{margin-bottom:12px}
+.abc-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.abc-k{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;min-width:0}
+.abc-k span{display:block;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-k b{display:block;font-family:Sora,sans-serif;font-size:25px;font-weight:700;margin-top:6px;line-height:1}
+.abc-k b small{font-size:12.5px;color:var(--mt);font-weight:500;margin-left:3px;font-family:Geist,sans-serif}
+.abc-k em{display:block;font-style:normal;font-size:12.5px;color:var(--mt);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.abc-card{background:#fff;border:1px solid var(--ln);border-radius:16px;padding:16px 16px 8px;margin-bottom:14px;min-width:0}
+.abc-ch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.abc-ch h3{font:600 16px Geist,sans-serif;margin:0;color:var(--tx);flex:1;min-width:0}
+.abc-ch h3 small{font-size:12px;font-weight:500;color:var(--mt);margin-left:6px}
+.abc-tools{display:flex;gap:6px;align-items:center;flex:none}
+.abc-dl{border:1px solid var(--ln);background:#fff;border-radius:8px;width:32px;height:30px;display:inline-grid;place-items:center;cursor:pointer;color:var(--mt);flex:none}
+.abc-dl:hover{color:var(--vd);border-color:var(--vc)}
+.abc-chart{width:100%;height:520px}
+.abc-chart.md{height:380px}
+.abc-chart.sm{height:340px}
+.abc-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.abc-nota{margin:0 4px 8px;font-size:12px;line-height:1.5;color:var(--mt)}
+.abc-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--mt);margin-top:4px}
+.abc-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.abc-faq h2{font:600 16px Geist,sans-serif;color:var(--tx);margin:0 0 6px}
+.abc-faq details{border-bottom:1px solid var(--ln)}
+.abc-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.abc-faq summary::-webkit-details-marker{display:none}
+.abc-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt);font-weight:400}
+.abc-faq details[open] summary:after{content:"−"}
+.abc-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.abc-mais{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 8px}
+.abc-mais a{font-size:13px;font-weight:500;color:var(--vd);text-decoration:none;border:1px solid var(--ln);border-radius:999px;padding:8px 14px;background:#fff}
+.abc-mais a:hover{border-color:var(--vc)}
+.abc-err{padding:40px;text-align:center;color:var(--mt)}
+@media (max-width:1020px){.abc-board{display:flex;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}.abc-board::-webkit-scrollbar{display:none}.abc-c{flex:0 0 150px}}
+@media (max-width:820px){.abc-row{grid-template-columns:1fr}.abc-kpis{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){
+  .abc-tit{font-size:24px}.abc-prox{text-align:left}
+  .abc-k{padding:12px}.abc-k b{font-size:21px}
+  .abc-card{padding:12px 10px 4px;border-radius:14px}
+  .abc-chart{height:440px}.abc-chart.md{height:330px}.abc-chart.sm{height:310px}
+  .abc-ch{flex-wrap:wrap}.abc-ch .abc-tools{order:3;width:100%}.abc-ch .abc-tools .abc-seg{flex:1;display:flex}.abc-ch .abc-tools .abc-seg button{flex:1}
+  .abc-k b{font-size:19px;white-space:nowrap}
+  .abc-lead{font-size:13.5px}
+}
+.ar-tab{overflow-x:auto;margin:2px 0 6px}
+.ar-tab table{width:100%;border-collapse:collapse;font-size:13.5px}
+.ar-tab th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mt);font-weight:600;text-align:left;padding:8px 10px;border-bottom:1px solid var(--ln);white-space:nowrap}
+.ar-tab td{padding:9px 10px;border-bottom:1px solid #F0F3F0;white-space:nowrap}
+.ar-tab tr:last-child td{border-bottom:0}
+.ar-tab .n{text-align:right}.ar-tab .b{width:34%;min-width:140px}.ar-tab .b2{background:#F7FAF5}
+.ar-tab td small{font-size:11.5px;color:var(--mt);margin-left:4px}
+.ar-tab td b+small{display:block;margin:1px 0 0}
+.ar-tab td em{font-style:normal;font-weight:600;font-size:12.5px;margin-left:4px}
+.ar-bar{position:relative;height:20px;background:#EEF2EE;border-radius:5px;overflow:hidden}
+.ar-bar i{position:absolute;left:0;top:0;bottom:0;background:#54931B;border-radius:5px}
+.ar-bar span{position:relative;font-size:12px;font-weight:600;padding-left:7px;line-height:20px;color:#1d2420}
+.ar-up{color:#2E7D1E!important;font-style:normal}.ar-dn{color:#B4441F!important;font-style:normal}
+.ar-est{display:flex;height:22px;border-radius:6px;overflow:hidden;background:#EEF2EE}
+.ar-est i{display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-style:normal;font-weight:600}
+.ar-estn{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;margin:6px 0 8px}
+.ar-estl b{display:block;font-size:14.5px}.ar-estl small{font-size:12px;color:var(--mt)}
+.ar-leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--mt);margin:0 0 10px}
+.ar-leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.ar-um{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12.5px;margin:0 0 10px;padding:9px 10px;background:#F7FAF5;border-radius:10px}
+.ar-um span{color:var(--mt);margin-right:4px}.ar-um b{font-weight:600}.ar-um .s{color:#A35A1E}.ar-um .a{color:#1E4812}.ar-um .e{color:#2F6FA8}
+.ar-estp{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px}.ar-estp td{padding:5px 0}.ar-estp td:first-child{width:130px;padding-right:10px;white-space:nowrap}
+.ar-bcr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 10px}
+.ar-bcri{display:block;border:1px solid var(--ln);border-radius:12px;padding:12px 14px;text-decoration:none!important;color:var(--tx)!important}
+.ar-bcri:hover{border-color:var(--vc)}.ar-bcri span{display:block;font-size:11.5px;color:var(--mt);text-transform:uppercase;letter-spacing:.05em;font-weight:600;margin-bottom:4px}.ar-bcri b{font-size:14.5px;font-weight:600;line-height:1.4}
+.ar-pc{margin-top:4px}
+@media (max-width:560px){.ar-estn{grid-template-columns:1fr;gap:4px}.ar-bcr{grid-template-columns:1fr}.ar-tab table{font-size:12.5px}.ar-tab td,.ar-tab th{padding:8px 6px}.ar-estp td:first-child{width:96px}}
+</style>
+
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Painéis</a><span>/</span>Safra Argentina</nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Safra Argentina: soja, milho e trigo</h1>
+      <div class="abc-tit">Plantio, colheita e condição das lavouras</div>
+      <div class="abc-meta" id="arMeta">Informe semanal do governo argentino, Bolsa de Rosario e USDA</div>
+    </div>
+  </div>
+
+  <div class="abc-kpis" id="arKpis"></div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="arH0">Ritmo do plantio</h3>
+      <div class="abc-tools"><div class="abc-seg" id="arOp"></div>
+      <button class="abc-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart md" id="arG0"></div>
+    <p class="abc-nota" id="arN0"></p>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3 id="arH1">Por província</h3></div>
+    <div class="ar-tab" id="arProv"></div>
+    <p class="abc-nota">Porcentagem da área prevista de cada província, na data do informe e na mesma data da safra passada. Ordenado pela área.</p>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Condição das lavouras <small id="arEstSub"></small></h3><div class="abc-tools"><div class="abc-seg" id="arEstC"></div></div></div>
+      <div id="arEst"></div>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Lavouras boas ou muito boas <small>% da área, semana a semana</small></h3>
+        <div class="abc-tools"><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+      <div class="abc-chart sm" id="arG1"></div>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Estimativas de produção <small>milhões de toneladas</small></h3></div>
+    <div class="ar-tab" id="arProd"></div>
+    <p class="abc-nota" id="arProdN"></p>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Chuva nos polos argentinos <small id="arChSub"></small></h3></div>
+    <div class="ar-tab" id="arChuva"></div>
+    <p class="abc-nota">Chuva observada pela reanálise ERA5 comparada com a normal de 1991 a 2020 de cada ponto. Previsão: média dos 51 membros do modelo europeu (ECMWF) para 15 dias.</p>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Produtividade e El Niño <small>desvio em relação à tendência</small></h3>
+      <div class="abc-tools"><div class="abc-seg" id="arPrC"><button data-c="soja" aria-pressed="true">Soja</button><button data-c="milho">Milho</button><button data-c="trigo">Trigo</button></div>
+      <button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
+    <div class="abc-chart md" id="arG2"></div>
+    <div class="ar-tab" id="arFases"></div>
+    <p class="abc-nota">Produtividade de cada safra comparada com a tendência de longo prazo, que cresce com a tecnologia. A cor da barra mostra a fase do ENSO no verão (índice RONI da NOAA, dezembro a fevereiro).</p>
+  </div>
+
+  <div class="abc-card" id="arBcrCard">
+    <div class="abc-ch"><h3>Bolsa de Comercio de Rosario <small>últimos relatórios, em espanhol</small></h3></div>
+    <div class="ar-bcr" id="arBcr"></div>
+  </div>
+
+  <div class="abc-foot"><span>Fontes: Secretaría de Agricultura, Ganadería y Pesca da Argentina (Estimaciones Agrícolas), Bolsa de Comercio de Rosario (GEA), USDA, ERA5/ECMWF e NOAA · Elaboração: AgroBasis</span><span id="arAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>Qual a fonte dos dados da safra argentina?</summary><p>O avanço do plantio e da colheita, a condição das lavouras e a umidade do solo vêm do Informe Semanal de Estimaciones Agrícolas da Secretaría de Agricultura, Ganadería y Pesca da Argentina, publicado às quintas-feiras com dados de cerca de 40 delegações regionais. As estimativas de produção vêm do próprio governo, da Bolsa de Comercio de Rosario (GEA) e do USDA. A chuva vem da reanálise ERA5 e do modelo europeu ECMWF.</p></details><details><summary>Quando a Argentina planta e colhe soja e milho?</summary><p>O milho começa a ser plantado em setembro, com uma parte em dezembro e janeiro (milho tardio). A soja de primeira é plantada de outubro a dezembro e a de segunda, depois do trigo, até janeiro. A colheita de soja e milho vai de março a julho. O trigo é plantado de maio a julho e colhido de novembro a janeiro.</p></details><details><summary>Por que a safra argentina importa para o produtor brasileiro?</summary><p>A Argentina é o maior exportador mundial de farelo e óleo de soja e um dos maiores exportadores de milho e trigo. Uma safra cheia lá aumenta a concorrência com o Brasil na exportação a partir de março e pesa nos prêmios dos portos brasileiros e na Bolsa de Chicago. Uma quebra, como a de 2022/23, faz o contrário.</p></details><details><summary>Como é medida a condição das lavouras?</summary><p>Cada delegação do governo argentino informa a porcentagem da área em estado muito bom, bom, regular ou ruim, além da fase da lavoura e da umidade do solo. O AgroBasis pondera essas porcentagens pela área de cada delegação para chegar ao número da Argentina e de cada província. O quadro de soja e milho aparece quando as lavouras já emergiram, em geral a partir de dezembro.</p></details><details><summary>O El Niño é bom para a safra argentina?</summary><p>Em geral, sim. O El Niño costuma trazer mais chuva para a região pampeana no verão, e as safras de El Niño tendem a ficar acima da tendência de produtividade, como mostra o gráfico do painel. A La Niña costuma trazer seca, como em 2008/09, 2017/18 e 2022/23. O excesso de chuva, porém, também pode atrasar o plantio e a colheita.</p></details><details><summary>Com que frequência o painel é atualizado?</summary><p>O avanço, a condição e as estimativas são atualizados toda quinta e sexta-feira à noite, depois da publicação do governo argentino e da Bolsa de Rosario. A chuva e a previsão são atualizadas todo dia de manhã.</p></details>
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/condicao-de-safra-eua/">Safra dos EUA</a><a href="/dashboards/plantio-e-colheita-brasil/">Plantio e colheita no Brasil</a><a href="/dashboards/clima-el-nino/">Clima e El Niño</a><a href="/dashboards/usda-complexo-soja/">USDA soja</a><a href="/dashboards/usda-milho/">USDA milho</a>
+  </nav>
+</div>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Qual a fonte dos dados da safra argentina?", "acceptedAnswer": {"@type": "Answer", "text": "O avanço do plantio e da colheita, a condição das lavouras e a umidade do solo vêm do Informe Semanal de Estimaciones Agrícolas da Secretaría de Agricultura, Ganadería y Pesca da Argentina, publicado às quintas-feiras com dados de cerca de 40 delegações regionais. As estimativas de produção vêm do próprio governo, da Bolsa de Comercio de Rosario (GEA) e do USDA. A chuva vem da reanálise ERA5 e do modelo europeu ECMWF."}}, {"@type": "Question", "name": "Quando a Argentina planta e colhe soja e milho?", "acceptedAnswer": {"@type": "Answer", "text": "O milho começa a ser plantado em setembro, com uma parte em dezembro e janeiro (milho tardio). A soja de primeira é plantada de outubro a dezembro e a de segunda, depois do trigo, até janeiro. A colheita de soja e milho vai de março a julho. O trigo é plantado de maio a julho e colhido de novembro a janeiro."}}, {"@type": "Question", "name": "Por que a safra argentina importa para o produtor brasileiro?", "acceptedAnswer": {"@type": "Answer", "text": "A Argentina é o maior exportador mundial de farelo e óleo de soja e um dos maiores exportadores de milho e trigo. Uma safra cheia lá aumenta a concorrência com o Brasil na exportação a partir de março e pesa nos prêmios dos portos brasileiros e na Bolsa de Chicago. Uma quebra, como a de 2022/23, faz o contrário."}}, {"@type": "Question", "name": "Como é medida a condição das lavouras?", "acceptedAnswer": {"@type": "Answer", "text": "Cada delegação do governo argentino informa a porcentagem da área em estado muito bom, bom, regular ou ruim, além da fase da lavoura e da umidade do solo. O AgroBasis pondera essas porcentagens pela área de cada delegação para chegar ao número da Argentina e de cada província. O quadro de soja e milho aparece quando as lavouras já emergiram, em geral a partir de dezembro."}}, {"@type": "Question", "name": "O El Niño é bom para a safra argentina?", "acceptedAnswer": {"@type": "Answer", "text": "Em geral, sim. O El Niño costuma trazer mais chuva para a região pampeana no verão, e as safras de El Niño tendem a ficar acima da tendência de produtividade, como mostra o gráfico do painel. A La Niña costuma trazer seca, como em 2008/09, 2017/18 e 2022/23. O excesso de chuva, porém, também pode atrasar o plantio e a colheita."}}, {"@type": "Question", "name": "Com que frequência o painel é atualizado?", "acceptedAnswer": {"@type": "Answer", "text": "O avanço, a condição e as estimativas são atualizados toda quinta e sexta-feira à noite, depois da publicação do governo argentino e da Bolsa de Rosario. A chuva e a previsão são atualizadas todo dia de manhã."}}]}, {"@type": "WebApplication", "name": "Safra Argentina: plantio, colheita e condição das lavouras", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "url": "https://agrobasis.com.br/dashboards/safra-argentina/", "description": "Avanço do plantio e da colheita de soja, milho e trigo na Argentina, condição das lavouras por província, estimativas de produção, chuva nos polos e produtividade por fase do El Niño.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#A35A1E", am: "#D9A23B", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", cz: "#AEB7B0", grade: "rgba(29,36,32,.07)" };
+  var NOME = { soja: "Soja", milho: "Milho", trigo: "Trigo", girassol: "Girassol" };
+  var OP = { plantio: "plantio", colheita: "colheita" };
+  var FASE = { en_forte: ["El Niño forte", "#B0412A"], en: ["El Niño", "#E08A5B"], neutro: ["Neutro", "#AEB7B0"], ln: ["La Niña", "#2F6FA8"] };
+  var $ = function (id) { return document.getElementById(id); };
+  var D = null, charts = [], sel = null, estC = null, prC = "soja";
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return Number(v).toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function sinal(v, c) { if (v == null || isNaN(v)) return "-"; return (v > 0 ? "+" : v < 0 ? "−" : "") + br(Math.abs(v), c); }
+  function mobile() { return window.innerWidth < 560; }
+  function dm(s) { return s.slice(8, 10) + "/" + s.slice(5, 7); }
+  function dmY(s) { return s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(0, 4); }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 6e5)).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  var base = { textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 500,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" } };
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.06)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function grafico(i, opt) {
+    var el = $("arG" + i); if (!el) return;
+    if (!charts[i]) charts[i] = echarts.init(el, null, { renderer: "canvas" });
+    charts[i].setOption(Object.assign({ graphic: [marca()] }, base, opt), true);
+  }
+
+  // ---------- operações disponíveis (cultura + plantio/colheita)
+  function opcoes() {
+    var out = [];
+    ["soja", "milho", "trigo", "girassol"].forEach(function (c) {
+      ["plantio", "colheita"].forEach(function (op) {
+        var cv = (D.curvas[c] || {})[op], av = ((D.informe.avanco[c] || {})[op]);
+        if (cv && av && cv.atual.length) out.push({ c: c, op: op, cv: cv, av: av });
+      });
+    });
+    return out;
+  }
+  function ultimo(arr) { return arr && arr.length ? arr[arr.length - 1] : null; }
+  function valorEm(serie, data) {
+    // valor da curva numa data (interpolado), para comparar média e safra passada
+    if (!serie || !serie.length) return null;
+    var t = Date.parse(data);
+    for (var i = 0; i < serie.length; i++) {
+      var ti = Date.parse(serie[i][0]);
+      if (ti === t) return serie[i][1];
+      if (ti > t) {
+        if (!i) return null;
+        var t0 = Date.parse(serie[i - 1][0]); return serie[i - 1][1] + (serie[i][1] - serie[i - 1][1]) * (t - t0) / (ti - t0);
+      }
+    }
+    return null;
+  }
+  function umAno(s) { var d = new Date(s + "T12:00:00"); d.setFullYear(d.getFullYear() + 1); return d.toISOString().slice(0, 10); }
+
+  function kpis() {
+    var html = "";
+    opcoes().slice(0, 4).forEach(function (o) {
+      var a = ultimo(o.cv.atual), tot = o.av.total;
+      var ant = tot && tot.anterior ? tot.anterior[tot.anterior.length - 1] : null;
+      var med = valorEm(o.cv.media5, a[0]);
+      var d = ant != null ? a[1] - ant : null;
+      html += '<div class="abc-k"><span>' + NOME[o.c] + " " + (o.op === "plantio" ? "plantada" : "colhida") + "</span><b>" + br(a[1], a[1] < 10 ? 1 : 0) + "<small>%</small></b><em>" +
+        (d != null ? '<i class="' + (d >= 0 ? "ar-up" : "ar-dn") + '">' + sinal(d, Math.abs(d) < 10 ? 1 : 0) + " p.p.</i> vs ano passado" : "") +
+        (med != null && !mobile() ? " · média " + br(med, 0) + "%" : "") + "</em></div>";
+    });
+    $("arKpis").innerHTML = html;
+  }
+
+  function segOps() {
+    var ops = opcoes();
+    if (!sel) sel = ops[0];
+    $("arOp").innerHTML = ops.map(function (o, i) {
+      return '<button data-i="' + i + '" aria-pressed="' + (o.c === sel.c && o.op === sel.op) + '">' + NOME[o.c] + (ops.filter(function (x) { return x.c === o.c; }).length > 1 ? " · " + o.op : "") + "</button>";
+    }).join("");
+    $("arOp").onclick = function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      sel = ops[+b.dataset.i]; segOps(); curvaG(); provincias();
+    };
+  }
+
+  function curvaG() {
+    var o = sel, cv = o.cv;
+    $("arH0").textContent = "Ritmo " + (o.op === "plantio" ? "do plantio" : "da colheita") + " de " + NOME[o.c].toLowerCase() + " · safra " + cv.safra;
+    var ant = cv.anterior.map(function (p) { return [umAno(p[0]), p[1]]; });
+    var a = ultimo(cv.atual);
+    var ini = cv.atual[0][0], fim = a[0];
+    var todos = cv.atual.concat(ant, cv.media5).map(function (p) { return p[0]; }).sort();
+    var serie = function (nome, dados, cor, larg, tipo) {
+      return { name: nome, type: "line", data: dados.map(function (p) { return [p[0], p[1]]; }), showSymbol: false, smooth: 0.2, lineStyle: { width: larg, color: cor, type: tipo || "solid" }, itemStyle: { color: cor }, z: larg > 2 ? 5 : 2 };
+    };
+    var s = [serie("Safra " + cv.safra, cv.atual, COR.vd, 3), serie("Safra passada", ant, COR.cz, 2)];
+    if (cv.media5.length) s.push(serie("Média de " + cv.n_safras_media + " safras", cv.media5, COR.am, 2, "dashed"));
+    s[0].showSymbol = true; s[0].symbolSize = 6;
+    s[0].markPoint = { symbol: "circle", symbolSize: 1, data: [{ coord: [a[0], a[1]], label: { show: true, formatter: br(a[1], a[1] < 10 ? 1 : 0) + "%", position: "top", color: COR.vd, fontWeight: 700, fontSize: 13 } }] };
+    grafico(0, {
+      legend: { top: 0, left: 0, icon: "roundRect", itemWidth: 14, itemHeight: 3, textStyle: { fontSize: 12, color: COR.mt } },
+      grid: { left: 40, right: 16, top: 38, bottom: 30 },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return v == null ? "-" : br(v, v < 10 ? 1 : 0) + "%"; } }),
+      xAxis: { type: "time", min: todos[0], max: todos[todos.length - 1], axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { var d = new Date(v); return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } }, splitLine: { show: false } },
+      yAxis: { type: "value", min: 0, max: 100, axisLabel: { color: COR.mt, fontSize: 11, formatter: "{value}%" }, splitLine: { lineStyle: { color: COR.grade } } },
+      series: s
+    });
+    var tot = o.av.total, antv = tot && tot.anterior ? ultimo(tot.anterior) : null, med = valorEm(cv.media5, a[0]);
+    $("arN0").innerHTML = "Até " + dmY(a[0]) + ", " + br(a[1], a[1] < 10 ? 1 : 0) + "% da área " + (o.op === "plantio" ? "prevista de " + br(tot.area / 1e6, 2) + " milhões de hectares foi plantada" : "foi colhida") +
+      (antv != null ? ", contra " + br(antv, antv < 10 ? 1 : 0) + "% na mesma data da safra passada" : "") + (med != null ? " e " + br(med, 0) + "% na média das últimas safras" : "") + ". A safra passada aparece deslocada um ano, para ficar no mesmo calendário.";
+  }
+
+  function provincias() {
+    var o = sel, ps = o.av.provincias.filter(function (p) { return p.atual != null && p.area > 0; });
+    $("arH1").textContent = (o.op === "plantio" ? "Plantio" : "Colheita") + " de " + NOME[o.c].toLowerCase() + " por província";
+    var h = '<table><thead><tr><th>Província</th><th class="n">Área (mil ha)</th><th class="b">' + dm(ultimo(o.av.semanas)) + '</th><th class="n">Safra passada</th><th class="n">Na semana</th></tr></thead><tbody>';
+    ps.forEach(function (p) {
+      var d = p.anterior != null ? p.atual - p.anterior : null;
+      h += "<tr><td>" + p.nome + '</td><td class="n">' + br(p.area / 1000, 0) + '</td><td class="b"><div class="ar-bar"><i style="width:' + Math.min(100, p.atual) + '%"></i><span>' + br(p.atual, p.atual < 10 ? 1 : 0) + '%</span></div></td><td class="n">' +
+        (p.anterior != null ? br(p.anterior, p.anterior < 10 ? 1 : 0) + '% <small class="' + (d >= 0 ? "ar-up" : "ar-dn") + '">' + sinal(d, 0) + "</small>" : "-") + '</td><td class="n">' + (p.semana != null ? "+" + br(p.semana, 0) + " p.p." : "-") + "</td></tr>";
+    });
+    $("arProv").innerHTML = h + "</tbody></table>";
+  }
+
+  // ---------- condição
+  var EST = [["Muito boa", "#1E4812"], ["Boa", "#7FB24E"], ["Regular", "#D9A23B"], ["Ruim", "#A35A1E"]];
+  function barraEstado(e) {
+    return '<div class="ar-est">' + e.map(function (v, i) { return v > 0 ? '<i style="width:' + v + "%;background:" + EST[i][1] + '" title="' + EST[i][0] + ": " + br(v, 0) + '%">' + (v >= 9 ? br(v, 0) : "") + "</i>" : ""; }).join("") + "</div>";
+  }
+  function estado() {
+    var cs = ["soja", "milho", "trigo", "girassol"].filter(function (c) { return D.informe.estado[c]; });
+    if (!cs.length) { $("arEst").innerHTML = '<p class="abc-nota">Sem quadro de condição neste informe.</p>'; return; }
+    if (!estC || cs.indexOf(estC) < 0) estC = cs.indexOf("soja") >= 0 ? "soja" : cs.indexOf("milho") >= 0 ? "milho" : cs[0];
+    $("arEstC").innerHTML = cs.map(function (c) { return '<button data-c="' + c + '" aria-pressed="' + (c === estC) + '">' + NOME[c] + "</button>"; }).join("");
+    $("arEstC").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; estC = b.dataset.c; estado(); };
+    var E = D.informe.estado[estC], n = E.nacional;
+    $("arEstSub").textContent = "semana até " + dm(D.informe.data);
+    var leg = '<div class="ar-leg">' + EST.map(function (x) { return '<span><i style="background:' + x[1] + '"></i>' + x[0] + "</span>"; }).join("") + "</div>";
+    var h = '<div class="ar-estn"><div class="ar-estl"><b>Argentina</b><small>' + br(n.estado[0] + n.estado[1], 0) + "% boa ou muito boa</small></div>" + barraEstado(n.estado) + "</div>" + leg;
+    h += '<div class="ar-um"><span>Umidade do solo</span><b class="s">' + br(n.umidade.seca, 0) + '% com falta</b><b class="a">' + br(n.umidade.adequada, 0) + '% adequada</b><b class="e">' + br(n.umidade.excesso, 0) + "% com excesso</b></div>";
+    h += '<table class="ar-estp"><tbody>' + E.provincias.filter(function (p) { return p.area > 20000; }).map(function (p) {
+      return "<tr><td>" + p.nome + "</td><td>" + barraEstado(p.estado) + "</td></tr>";
+    }).join("") + "</tbody></table>";
+    $("arEst").innerHTML = h;
+    estadoHist();
+  }
+  function estadoHist() {
+    var H = D.estado_hist[estC] || {}, ks = Object.keys(H).sort();
+    var s = [];
+    ks.forEach(function (k, i) {
+      var atual = i === ks.length - 1;
+      var dados = H[k].map(function (p) { return [atual ? p[0] : umAno(p[0]), p[1]]; });
+      s.push({ name: "Safra " + k, type: "line", data: dados, showSymbol: atual, symbolSize: 5, lineStyle: { width: atual ? 3 : 2, color: atual ? COR.vd : COR.cz }, itemStyle: { color: atual ? COR.vd : COR.cz } });
+    });
+    grafico(1, {
+      legend: { top: 0, left: 0, icon: "roundRect", itemWidth: 14, itemHeight: 3, textStyle: { fontSize: 12, color: COR.mt } },
+      grid: { left: 40, right: 14, top: 36, bottom: 28 },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return br(v, 0) + "%"; } }),
+      xAxis: { type: "time", axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { var d = new Date(v); return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } } },
+      yAxis: { type: "value", min: function (v) { return Math.max(0, Math.floor(v.min / 10) * 10 - 10); }, max: 100, axisLabel: { color: COR.mt, fontSize: 11, formatter: "{value}%" }, splitLine: { lineStyle: { color: COR.grade } } },
+      series: s
+    });
+  }
+
+  // ---------- estimativas
+  function producao() {
+    var B = D.bcr.estimativas || {}, U = D.usda || {}, G = D.informe.producao || {}, gc = G.cultivos || {};
+    var h = '<table><thead><tr><th>Cultura</th><th class="n">Governo ' + (G.campanha ? G.campanha.slice(2, 4) + "/" + G.campanha.slice(7) : "") + '</th><th class="n">BCR 25/26</th><th class="n b2">BCR 26/27</th><th class="n b2">USDA 26/27</th><th class="n">Área 26/27 (gov.)</th></tr></thead><tbody>';
+    ["soja", "milho", "trigo"].forEach(function (c) {
+      var b = B[c] || [], b1 = b.find(function (x) { return x.safra === "2026/2027"; }) || {}, b0 = b.find(function (x) { return x.safra === "2025/2026"; }) || {};
+      var u = U[c], uv = u ? u.producao_mil_t[u.producao_mil_t.length - 1] / 1000 : null;
+      var av = (D.informe.avanco[c] || {}).plantio || (D.informe.avanco[c] || {}).colheita, area = av && av.total ? av.total.area / 1e6 : null;
+      h += "<tr><td>" + NOME[c] + '</td><td class="n">' + (gc[c] ? br(gc[c].prod_mil_t / 1000, 1) : "-") + '</td><td class="n">' + br(b0.prod_mi_t, 1) + '</td><td class="n b2">' + (b1.prod_mi_t != null ? br(b1.prod_mi_t, 1) : '<small>só área: ' + br(b1.area_mi_ha, 1) + " mi ha</small>") +
+        '</td><td class="n b2">' + br(uv, 1) + '</td><td class="n">' + (area ? br(area, 2) + " mi ha" : "-") + "</td></tr>";
+    });
+    $("arProd").innerHTML = h + "</tbody></table>";
+    var u = U.soja && U.soja.relatorio;
+    $("arProdN").textContent = "Governo: última safra fechada, no informe de " + dmY(D.informe.data) + ". BCR: Bolsa de Comercio de Rosario" + (D.bcr.mensal ? ", estimativa de " + dmY(D.bcr.mensal.data) : "") + ". USDA: relatório WASDE" + (u ? " de " + ("0" + u.mes).slice(-2) + "/" + u.ano : "") + ". Na Argentina, a safra 26/27 de soja e milho é plantada agora e colhida a partir de março; a de trigo está em colheita.";
+  }
+
+  // ---------- chuva
+  function chuva() {
+    var P = D.chuva || [];
+    if (!P.length) { $("arChuva").innerHTML = '<p class="abc-nota">Sem dados de chuva.</p>'; return; }
+    $("arChSub").textContent = "até " + dm(P[0].ultimo);
+    function pc(o, n) { return n > 0 ? Math.round(o / n * 100) : null; }
+    function cor(p) { return p == null ? COR.mt : p >= 130 ? "#2F6FA8" : p >= 85 ? COR.vd : p >= 60 ? "#B07F1E" : COR.mr; }
+    var h = '<table><thead><tr><th>Polo</th><th class="n">Desde 1º/set</th><th class="n">Últimos 30 dias</th><th class="n">Próximos 15 dias</th></tr></thead><tbody>';
+    P.forEach(function (p) {
+      var s = p.acc.safra, d30 = p.acc.d30, pr = p.prev && p.prev.tot;
+      var ps = pc(s[0], s[1]), p30 = pc(d30[0], d30[1]), pp = pr ? pc(pr.media, pr.normal) : null;
+      h += "<tr><td><b>" + p.nome + "</b><small>" + p.uf + '</small></td><td class="n">' + br(s[0], 0) + ' mm <em style="color:' + cor(ps) + '">' + br(ps, 0) + '%</em></td><td class="n">' + br(d30[0], 0) + ' mm <em style="color:' + cor(p30) + '">' + br(p30, 0) + '%</em></td><td class="n">' + (pr ? br(pr.media, 0) + ' mm <em style="color:' + cor(pp) + '">' + br(pp, 0) + "%</em>" : "-") + "</td></tr>";
+    });
+    $("arChuva").innerHTML = h + '</tbody></table><p class="abc-nota ar-pc">Porcentagens: chuva em relação à normal do período.</p>';
+  }
+
+  // ---------- produtividade x ENSO
+  function produtividade() {
+    var P = (D.produtividade || {}).culturas || {}, C = P[prC];
+    if (!C) return;
+    var A = C.Argentina, n = A.safras.length, ini = Math.max(0, n - 30);
+    var dados = A.desvio.slice(ini).map(function (v, i) {
+      var f = A.fase_safra[ini + i] || "neutro";
+      return { value: v, itemStyle: { color: (FASE[f] || FASE.neutro)[1], borderRadius: v >= 0 ? [3, 3, 0, 0] : [0, 0, 3, 3] } };
+    });
+    grafico(2, {
+      grid: { left: 42, right: 12, top: 30, bottom: 44 },
+      legend: { show: false },
+      graphic: [marca(), { type: "group", left: 0, top: 0, children: ["en_forte", "en", "neutro", "ln"].map(function (f, i) {
+        return { type: "group", left: i * (mobile() ? 84 : 110), children: [{ type: "rect", shape: { x: 0, y: 3, width: 10, height: 10, r: 2 }, style: { fill: FASE[f][1] } }, { type: "text", left: 14, top: 1, style: { text: FASE[f][0], fill: COR.mt, font: "12px Geist, sans-serif" } }] };
+      }) }],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) { var i = ini + ps[0].dataIndex; return "<b>" + A.safras[i] + "</b><br>" + br(A.rend[i], 1) + " qq/ha · " + sinal(A.desvio[i], 1) + "% da tendência<br>" + (FASE[A.fase_safra[i]] || FASE.neutro)[0] + "<br>Produção: " + br(A.prod_mil_t[i] / 1000, 1) + " mi t"; } }),
+      xAxis: { type: "category", data: A.safras.slice(ini), axisLabel: { color: COR.mt, fontSize: 10.5, rotate: mobile() ? 60 : 45 }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: { type: "value", axisLabel: { color: COR.mt, fontSize: 11, formatter: "{value}%" }, splitLine: { lineStyle: { color: COR.grade } } },
+      series: [{ type: "bar", data: dados, barMaxWidth: 18 }]
+    });
+    var provs = Object.keys(C);
+    var h = '<table><thead><tr><th>Média por fase</th>' + ["en_forte", "en", "ln"].map(function (f) { return '<th class="n">' + FASE[f][0] + "</th>"; }).join("") + "</tr></thead><tbody>";
+    provs.forEach(function (p) {
+      var F = C[p].fases;
+      h += "<tr><td>" + (p === "Argentina" ? "<b>Argentina</b>" : p) + "</td>" + ["en_forte", "en", "ln"].map(function (f) {
+        var x = F[f]; return '<td class="n">' + (x && x.n >= 2 ? '<span class="' + (x.media >= 0 ? "ar-up" : "ar-dn") + '">' + sinal(x.media, 1) + "%</span> <small>" + x.n + "</small>" : "-") + "</td>";
+      }).join("") + "</tr>";
+    });
+    $("arFases").innerHTML = h + '</tbody></table><p class="abc-nota">Desvio médio da produtividade em relação à tendência, por fase do ENSO, nas safras desde 1990/91 (número de safras em cinza). Principais províncias produtoras.</p>';
+  }
+
+  function bcrBox() {
+    var b = D.bcr, it = [];
+    if (b.semanal) it.push(["Informe semanal da zona núcleo", b.semanal]);
+    if (b.mensal) it.push(["Estimativa mensal nacional", b.mensal]);
+    if (!it.length) { $("arBcrCard").hidden = true; return; }
+    $("arBcr").innerHTML = it.map(function (x) {
+      return '<a class="ar-bcri" href="' + (x[1].pdf || "https://www.bcr.com.ar/es/mercados/gea") + '" target="_blank" rel="noopener"><span>' + x[0] + " · " + dmY(x[1].data) + "</span><b>" + (x[1].titulo || "Abrir relatório") + "</b></a>";
+    }).join("");
+  }
+
+  function tudo() {
+    kpis(); segOps(); curvaG(); provincias(); estado(); producao(); chuva(); produtividade(); bcrBox();
+    $("arMeta").textContent = "Informe da Secretaría de Agricultura de " + dmY(D.informe.data) + " · histórico desde " + dmY(D.primeiro_informe).slice(3);
+    $("arAtu").textContent = "Atualizado em " + D.atualizado_em.slice(8, 10) + "/" + D.atualizado_em.slice(5, 7) + " às " + D.atualizado_em.slice(11, 16);
+  }
+
+  $("arPrC").onclick = function (e) { var b = e.target.closest("button"); if (!b) return; prC = b.dataset.c; [].forEach.call(this.children, function (x) { x.setAttribute("aria-pressed", x === b); }); produtividade(); };
+  document.querySelectorAll(".abc-dl").forEach(function (b) {
+    b.onclick = function () { var c = charts[+b.dataset.dl]; if (!c) return; var a = document.createElement("a"); a.href = c.getDataURL({ pixelRatio: 2, backgroundColor: "#fff" }); a.download = "agrobasis-safra-argentina.png"; a.click(); };
+  });
+  var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { charts.forEach(function (c) { c && c.resize(); }); }, 150); });
+
+  Promise.all([carregarLib(), json("dados/argentina/argentina.json")]).then(function (r) { D = r[1]; tudo(); })
+    .catch(function () { $("arKpis").outerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente de novo em alguns minutos.</div>'; });
+})();
+</script>

@@ -23,7 +23,7 @@ def sem_acento(s):
 def chave(s):
     """nome normalizado para casar delegações entre tabelas"""
     s = sem_acento(s).upper().replace("GRAL ", "GENERAL ").replace("PCIA. ", "").replace("STGO.", "SANTIAGO DEL")
-    return " ".join(re.sub(r"[^A-Z0-9 ]", " ", s).split())
+    return " ".join(re.sub(r"[^A-Z0-9 ]", " ", s).split()).replace("DEL DEL", "DEL")
 
 
 def num(t):
@@ -87,8 +87,9 @@ def ler_avanco(linhas, ref):
             reg = {"area": num(m.group(2)), "atual": atual, "area_ant": area_ant, "anterior": ant}
             k = "TOTAL PAIS" if "TOTAL" in sem_acento(nome).upper() else chave(nome)
             prov[k] = reg | {"nome": nome.title() if k != "TOTAL PAIS" else "Total do país"}
-            for d in pend:
-                dele[d]["prov"] = k
+            if k != "TOTAL PAIS":
+                for d in pend:
+                    dele[d]["prov"] = k
             pend = []
             i += 3 if ant is not None else 2
             continue
@@ -113,7 +114,7 @@ def ler_avanco(linhas, ref):
             par = re.search(r"\((.*)\)", nome)
             if par:  # "CHACO (Charata)", "STGO. ESTERO (Quimilí)": a delegação é o que está entre parênteses
                 k = {"R S PENA": "ROQUE SAENZ PENA"}.get(chave(par.group(1)), chave(par.group(1)))
-            if nome_t[0].isupper() and len(nome_t[0]) > 1 and sem_acento(nome_t[0]).isalpha():
+            if nome_t[0].isupper() and len(nome_t[0]) > 1 and sem_acento(nome_t[0]).replace(".", "").isalpha():
                 # província com uma linha só (ex.: SAN LUIS, CORRIENTES)
                 pr = re.sub(r"\s*\(.*\)", "", nome)
                 prov.setdefault(chave(pr), {"area": 0, "atual": None, "area_ant": None, "anterior": None, "nome": pr.title()})
