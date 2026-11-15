@@ -191,9 +191,12 @@ def series_estado(informes):
             n = e.get("nacional")
             if not n:
                 continue
-            s0 = safra_de(r["data"], c, "plantio")
-            if c in ("soja", "milho", "girassol") and date.fromisoformat(r["data"]).month <= 6:
-                s0 = date.fromisoformat(r["data"]).year - 1
+            d = date.fromisoformat(r["data"])
+            # condição de verão (soja, milho, girassol) vai de outubro a setembro; a do trigo, de maio a janeiro
+            if c == "trigo":
+                s0 = d.year if d.month >= 5 else d.year - 1
+            else:
+                s0 = d.year if d.month >= 10 else d.year - 1
             est = n["estado"]
             out.setdefault(c, {}).setdefault(s0, []).append([r["data"], round(est[0] + est[1], 1), round(est[2] + est[3], 1), n["umidade"]["seca"]])
     return out
@@ -417,7 +420,7 @@ def main():
             s_at = max(ser)
             # só mostra operações em andamento ou terminadas há pouco
             ult_data = max(ser[s_at]); dias = (date.fromisoformat(ult["data"]) - date.fromisoformat(ult_data)).days
-            if dias > 60:
+            if dias > 60 or (ser[s_at][ult_data] >= 99 and dias > 21):
                 continue
             datas = sorted(ser[s_at])
             curvas.setdefault(c, {})[op] = {"safra": f"{s_at}/{str(s_at + 1)[2:]}", "atual": curva(ser, s_at), "anterior": curva(ser, s_at - 1),
