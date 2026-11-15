@@ -206,14 +206,14 @@
 
   // textos de cada componente com o valor real
   function texto(k, c) {
-    var v = c.valor, n = c.nota;
+    var v = c.valor, n = c.nota, np = Math.min(99, Math.max(1, Math.round(n == null ? 0 : n)));
     if (n == null) return "Sem histórico suficiente.";
     var un = prod === "soja" ? " c/bu" : " R$/sc";
     switch (k) {
-      case "preco": return "R$ " + br(v, 2) + " por saca, acima de " + br(n, 0) + "% dos preços dos últimos 3 anos.";
-      case "basis": return "Basis de " + (v > 0 ? "+" : "") + br(v, prod === "soja" ? 0 : 2) + un + ", acima de " + br(n, 0) + "% dos registrados nesta época nos últimos 5 anos.";
+      case "preco": return "R$ " + br(v, 2) + " por saca, acima de " + np + "% dos preços dos últimos 3 anos.";
+      case "basis": return "Basis de " + (v > 0 ? "+" : "") + br(v, prod === "soja" ? 0 : 2) + un + ", acima de " + np + "% dos registrados nesta época nos últimos 5 anos.";
       case "sazonal": return "Nesta época do ano, o preço da praça " + (v < 0 ? "caiu" : "subiu") + " em média " + br(Math.abs(v) * 100, 1) + "% nos 3 meses seguintes.";
-      case "fundos": return "Fundos " + (v >= 0 ? "comprados" : "vendidos") + " em " + br(Math.abs(v) / 1000, 1) + " mil contratos, posição maior que " + br(n, 0) + "% das semanas dos últimos 3 anos.";
+      case "fundos": return "Fundos " + (v >= 0 ? "comprados" : "vendidos") + " em " + br(Math.abs(v) / 1000, 1) + " mil contratos, posição maior que " + np + "% das semanas dos últimos 3 anos.";
       case "carrego": return "A B3 paga " + (v >= 0 ? "+" : "") + br(v * 100, 1) + "% para vender cerca de 6 meses à frente." + (v > 0.05 ? " Carrego alto favorece esperar." : "");
     }
     return "";

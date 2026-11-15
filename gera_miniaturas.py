@@ -44,6 +44,7 @@ ALVOS = {
     "relacao-de-troca-fertilizantes": ("troca.html", "#abcG0", ""),
     "clima-el-nino": ("clima.html", "#abcG0", ""),
     "armazenagem-graos-brasil": ("armazenagem.html", "#abcG2", ""),
+    "termometro-de-venda": ("termometro.html", ".tm-gauge-card", ""),
 }
 
 
