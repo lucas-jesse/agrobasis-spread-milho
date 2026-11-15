@@ -115,7 +115,7 @@
     var cs = Object.keys(p.componentes).map(function (k) { return [k, p.componentes[k]]; }).filter(function (x) { return x[1].nota != null; });
     cs.sort(function (a, b) { return Math.abs(b[1].nota - 50) * b[1].peso - Math.abs(a[1].nota - 50) * a[1].peso; });
     var f = faixa(p.nota)[0].toLowerCase();
-    var t = "Em <b>" + praca.replace(/ [A-Z]{2}$/, "") + "</b>, o termômetro da " + prod + " está em <b>" + br(p.nota, 0) + "</b>: " + f + ". ";
+    var t = "Em <b>" + praca.replace(/ [A-Z]{2}$/, "") + "</b>, o termômetro " + (prod === "soja" ? "da soja" : "do milho") + " está em <b>" + br(p.nota, 0) + "</b>: " + f + ". ";
     var pr = cs.slice(0, 2).map(function (x) {
       var k = x[0], n = x[1].nota, alto = n >= 50;
       return { preco: alto ? "o preço está alto na comparação com os últimos 3 anos" : "o preço está baixo na comparação com os últimos 3 anos",
