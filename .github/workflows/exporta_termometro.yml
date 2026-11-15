@@ -1,0 +1,35 @@
+name: Termômetro de venda
+
+on:
+  schedule:
+    # 18:25 de Brasília nos dias úteis (depois do fechamento e das coletas de basis) e 12:25 (pega basis novo da Conab)
+    - cron: '25 21 * * 1-5'
+    - cron: '25 15 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: termometro
+  cancel-in-progress: true
+
+jobs:
+  termometro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Calcular termômetro
+        run: python exporta_termometro.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/termometro.json
+          git diff --staged --quiet && exit 0
+          git commit -m "Termômetro de venda $(TZ=America/Sao_Paulo date +'%F %H:%M')"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 7; done

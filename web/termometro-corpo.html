@@ -1,0 +1,245 @@
+<div class="abc" id="abc">
+  <nav class="abc-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Painéis</a><span>/</span>Termômetro de venda</nav>
+  <div class="abc-h">
+    <div>
+      <h1 class="abc-kick">Termômetro de venda AgroBasis</h1>
+      <div class="abc-tit">O momento está bom para vender?</div>
+      <div class="abc-meta" id="tmMeta">Soja e milho, por praça, de 0 a 100</div>
+    </div>
+    <div class="tm-ctl">
+      <div class="abc-seg" id="tmProd"><button data-p="soja" aria-pressed="true">Soja</button><button data-p="milho">Milho</button></div>
+      <select id="tmPraca" aria-label="Escolher praça"></select>
+    </div>
+  </div>
+
+  <div class="tm-topo">
+    <div class="abc-card tm-gauge-card">
+      <div class="abc-chart tm-gauge" id="tmG0"></div>
+      <div class="tm-faixa" id="tmFaixa">&nbsp;</div>
+      <p class="tm-frase" id="tmFrase">&nbsp;</p>
+      <div class="tm-acoes"><button type="button" class="tm-share" id="tmShare"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>Compartilhar no WhatsApp</button></div>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Componentes <small>nota de 0 a 100 e peso no termômetro</small></h3></div>
+      <div class="tm-comps" id="tmComps"></div>
+    </div>
+  </div>
+
+  <div class="abc-row">
+    <div class="abc-card">
+      <div class="abc-ch"><h3>Todas as praças <small>termômetro hoje</small></h3></div>
+      <div class="abc-chart tm-sm" id="tmG1"></div>
+      <p class="abc-nota">Clique numa praça para ver os detalhes.</p>
+    </div>
+    <div class="abc-card">
+      <div class="abc-ch"><h3>O que a história mostra <small>preço da praça 3 meses depois</small></h3></div>
+      <div class="tm-teste" id="tmTeste"></div>
+      <p class="abc-nota" id="tmTesteN"></p>
+    </div>
+  </div>
+
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Termômetro e preço desde 2021 <small>semanal</small></h3><button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="abc-chart md" id="tmG2"></div>
+    <p class="abc-nota">Faixa verde: termômetro acima de 60. Faixa marrom: abaixo de 40. A linha cinza é o preço físico da praça, em R$ por saca.</p>
+  </div>
+
+  <div class="tm-aviso">Indicador educacional, calculado com dados públicos e regras fixas. Não é recomendação de compra ou venda: a decisão depende do seu custo, do seu caixa, do armazenamento e do seu risco. Desempenho passado não garante resultado futuro.</div>
+  <div class="abc-foot"><span id="tmFonte">Fontes: Conab, CBOT, B3, Banco Central e CFTC · Elaboração: AgroBasis</span><span id="tmAtu"></span></div>
+
+  <section class="abc-faq" aria-label="Perguntas frequentes">
+    <h2>Perguntas frequentes</h2>
+    __FAQ__
+  </section>
+  <nav class="abc-mais" aria-label="Continue explorando">
+    <a href="/dashboards/basis-soja-brasil/">Basis da soja</a><a href="/dashboards/basis-milho-brasil/">Basis do milho</a><a href="/dashboards/posicao-fundos-cftc/">Posição dos fundos</a><a href="/dashboards/curva-do-dolar/">Curva do dólar</a><a href="/simulador-de-milho/">Simulador do milho</a>
+  </nav>
+</div>
+<script type="application/ld+json">__LD__</script>
+
+<script>
+(function () {
+  "use strict";
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
+  var COR = { vd: "#1E4812", vc: "#54931B", mr: "#A35A1E", am: "#D9A23B", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)" };
+  var NOMES = { preco: "Preço na praça", basis: "Basis", sazonal: "Sazonalidade", fundos: "Fundos na CBOT", carrego: "Carrego na B3" };
+  var PADRAO = { soja: "Paranaguá", milho: "Rio Verde GO" };
+  var $ = function (id) { return document.getElementById(id); };
+  var D = null, prod = "soja", praca = null, charts = [];
+  function br(v, c) { if (v == null || isNaN(v)) return "-"; return v.toLocaleString("pt-BR", { minimumFractionDigits: c || 0, maximumFractionDigits: c || 0 }); }
+  function mobile() { return window.innerWidth < 560; }
+  function faixa(n) {
+    if (n == null) return ["Sem dados", COR.mt];
+    if (n >= 70) return ["Muito favorável à venda", COR.vd];
+    if (n >= 55) return ["Favorável à venda", COR.vc];
+    if (n >= 45) return ["Neutro", COR.am];
+    if (n >= 30) return ["Pouco favorável à venda", "#C07A2E"];
+    return ["Desfavorável à venda", COR.mr];
+  }
+  function corNota(n) { return n >= 60 ? COR.vc : n >= 40 ? COR.am : COR.mr; }
+  function carregarLib(i) {
+    i = i || 0;
+    return new Promise(function (ok, nok) {
+      if (window.echarts) return ok();
+      var s = document.createElement("script"); s.src = LIBS[i]; s.onload = ok;
+      s.onerror = function () { i + 1 < LIBS.length ? carregarLib(i + 1).then(ok, nok) : nok(); };
+      document.head.appendChild(s);
+    });
+  }
+  function json(c, i) {
+    i = i || 0;
+    return fetch(REPO[i] + c + "?v=" + Math.floor(Date.now() / 6e5)).then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { if (i + 1 < REPO.length) return json(c, i + 1); throw new Error("sem dados"); });
+  }
+  var base = { textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 500,
+    tooltip: { confine: true, backgroundColor: "#fff", borderColor: COR.ln, borderWidth: 1, padding: [8, 12], textStyle: { color: COR.tx, fontSize: 12.5 }, extraCssText: "box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:10px" } };
+  function marca() { return { type: "text", left: "center", top: "middle", rotation: 0.38, z: -10, silent: true, style: { text: "AgroBasis", fill: "rgba(30,72,18,0.06)", font: "700 " + (mobile() ? 44 : 72) + "px Sora, Geist, sans-serif" } }; }
+  function dmY(s) { return s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(0, 4); }
+
+  // textos de cada componente com o valor real
+  function texto(k, c) {
+    var v = c.valor, n = c.nota;
+    if (n == null) return "Sem histórico suficiente.";
+    var un = prod === "soja" ? " c/bu" : " R$/sc";
+    switch (k) {
+      case "preco": return "R$ " + br(v, 2) + " por saca, acima de " + br(n, 0) + "% dos preços dos últimos 3 anos.";
+      case "basis": return "Basis de " + (v > 0 ? "+" : "") + br(v, prod === "soja" ? 0 : 2) + un + ", acima de " + br(n, 0) + "% dos registrados nesta época nos últimos 5 anos.";
+      case "sazonal": return "Nesta época do ano, o preço da praça " + (v < 0 ? "caiu" : "subiu") + " em média " + br(Math.abs(v) * 100, 1) + "% nos 3 meses seguintes.";
+      case "fundos": return "Fundos " + (v >= 0 ? "comprados" : "vendidos") + " em " + br(Math.abs(v) / 1000, 1) + " mil contratos, posição maior que " + br(n, 0) + "% das semanas dos últimos 3 anos.";
+      case "carrego": return "A B3 paga " + (v >= 0 ? "+" : "") + br(v * 100, 1) + "% para vender cerca de 6 meses à frente." + (v > 0.05 ? " Carrego alto favorece esperar." : "");
+    }
+    return "";
+  }
+  function frase(p) {
+    var cs = Object.keys(p.componentes).map(function (k) { return [k, p.componentes[k]]; }).filter(function (x) { return x[1].nota != null; });
+    cs.sort(function (a, b) { return Math.abs(b[1].nota - 50) * b[1].peso - Math.abs(a[1].nota - 50) * a[1].peso; });
+    var f = faixa(p.nota)[0].toLowerCase();
+    var t = "Em <b>" + praca.replace(/ [A-Z]{2}$/, "") + "</b>, o termômetro da " + prod + " está em <b>" + br(p.nota, 0) + "</b>: " + f + ". ";
+    var pr = cs.slice(0, 2).map(function (x) {
+      var k = x[0], n = x[1].nota, alto = n >= 50;
+      return { preco: alto ? "o preço está alto na comparação com os últimos 3 anos" : "o preço está baixo na comparação com os últimos 3 anos",
+               basis: alto ? "o basis está acima do normal para a época" : "o basis está abaixo do normal para a época",
+               sazonal: alto ? "nesta época o preço costuma cair nos meses seguintes" : "nesta época o preço costuma subir nos meses seguintes",
+               fundos: alto ? "os fundos estão muito comprados em Chicago" : "os fundos estão pouco comprados em Chicago",
+               carrego: alto ? "a B3 paga pouco para esperar" : "a B3 paga para esperar (carrego alto)" }[k];
+    });
+    return t + "O que mais pesa: " + pr.join(" e ") + ".";
+  }
+
+  function gauge(n) {
+    var f = faixa(n);
+    return Object.assign({}, base, {
+      series: [{ type: "gauge", startAngle: 200, endAngle: -20, min: 0, max: 100, radius: "96%", center: ["50%", "62%"], splitNumber: 5,
+        axisLine: { lineStyle: { width: mobile() ? 18 : 22, color: [[0.3, COR.mr], [0.45, "#C07A2E"], [0.55, COR.am], [0.7, COR.vc], [1, COR.vd]] } },
+        pointer: { length: "62%", width: 7, itemStyle: { color: COR.tx } }, anchor: { show: true, size: 16, itemStyle: { color: COR.tx, borderColor: "#fff", borderWidth: 3 } },
+        axisTick: { show: false }, splitLine: { length: 8, distance: -8, lineStyle: { color: "#fff", width: 3 } },
+        axisLabel: { distance: mobile() ? 24 : 30, color: COR.mt, fontSize: 11 },
+        title: { show: false },
+        detail: { valueAnimation: true, offsetCenter: [0, "34%"], formatter: function (v) { return Math.round(v); }, color: f[1], fontSize: mobile() ? 40 : 50, fontWeight: 700, fontFamily: "Sora, Geist, sans-serif" },
+        data: [{ value: n == null ? 0 : n }] }]
+    });
+  }
+  function ranking() {
+    var P = D[prod], L = Object.keys(P).filter(function (k) { return P[k].nota != null; }).map(function (k) { return [k, P[k].nota]; });
+    L.sort(function (a, b) { return a[1] - b[1]; });
+    return Object.assign({}, base, {
+      grid: { left: 4, right: 40, top: 6, bottom: 6, containLabel: true },
+      xAxis: { type: "value", min: 0, max: 100, show: false },
+      yAxis: { type: "category", data: L.map(function (x) { return x[0]; }), axisLabel: { color: COR.tx, fontSize: 12, formatter: function (v) { return v === praca ? "{b|" + v + "}" : v; }, rich: { b: { fontWeight: 700, color: COR.vd } } }, axisLine: { show: false }, axisTick: { show: false } },
+      tooltip: Object.assign({}, base.tooltip, { trigger: "item", formatter: function (p) { return "<b>" + p.name + "</b><br>" + br(p.value, 0) + " · " + faixa(p.value)[0]; } }),
+      series: [{ type: "bar", barWidth: "60%", cursor: "pointer", data: L.map(function (x) { return { value: x[1], itemStyle: { color: corNota(x[1]), borderRadius: [0, 4, 4, 0], opacity: x[0] === praca ? 1 : 0.55 } }; }),
+        label: { show: true, position: "right", fontWeight: 600, fontSize: 12, formatter: function (p) { return br(p.value, 0); } },
+        markLine: { silent: true, symbol: "none", lineStyle: { color: COR.mt, type: [4, 4] }, label: { show: false }, data: [{ xAxis: 50 }] } }]
+    });
+  }
+  function historico() {
+    var h = D[prod][praca].hist;
+    return Object.assign({}, base, {
+      graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 14, itemHeight: 8, textStyle: { color: COR.mt, fontSize: 12 }, data: ["Termômetro", "Preço (R$/sc)"] },
+      grid: { left: 6, right: 6, top: 34, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: h.datas, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true, formatter: function (v) { return v.slice(5, 7) + "/" + v.slice(2, 4); } }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: [{ type: "value", min: 0, max: 100, interval: 20, axisLabel: { color: COR.mt, fontSize: 11 }, splitLine: { lineStyle: { color: COR.grade } } },
+              { type: "value", scale: true, axisLabel: { color: COR.mt, fontSize: 11, formatter: "R$ {value}" }, splitLine: { show: false } }],
+      tooltip: Object.assign({}, base.tooltip, { trigger: "axis", formatter: function (ps) {
+        var i = ps[0].dataIndex; return "<b>" + dmY(h.datas[i]) + "</b><br>Termômetro: <b>" + br(h.nota[i], 0) + "</b> (" + faixa(h.nota[i])[0] + ")<br>Preço: R$ " + br(h.preco[i], 2) + "/sc";
+      } }),
+      series: [
+        { name: "Termômetro", type: "line", data: h.nota, symbol: "none", lineStyle: { width: 2.2, color: COR.vd }, itemStyle: { color: COR.vd },
+          markArea: { silent: true, data: [[{ yAxis: 60, itemStyle: { color: "rgba(84,147,27,.08)" } }, { yAxis: 100 }], [{ yAxis: 0, itemStyle: { color: "rgba(163,90,30,.07)" } }, { yAxis: 40 }]] } },
+        { name: "Preço (R$/sc)", type: "line", yAxisIndex: 1, data: h.preco, symbol: "none", lineStyle: { width: 1.6, color: "#9AA6A0" }, itemStyle: { color: "#9AA6A0" } }
+      ]
+    });
+  }
+  function desenharComps(p) {
+    var ks = Object.keys(p.componentes);
+    $("tmComps").innerHTML = ks.map(function (k) {
+      var c = p.componentes[k], n = c.nota;
+      return '<div class="tm-c"><div class="tm-ct"><b>' + NOMES[k] + '</b><span>peso ' + c.peso + '%</span><em style="color:' + (n == null ? COR.mt : corNota(n)) + '">' + (n == null ? "-" : br(n, 0)) + "</em></div>" +
+        '<div class="tm-bar"><i style="width:' + (n || 0) + "%;background:" + (n == null ? COR.ln : corNota(n)) + '"></i></div><p>' + texto(k, c) + "</p></div>";
+    }).join("");
+  }
+  function desenharTeste(p) {
+    var R = { ate40: ["Até 40", COR.mr], "40a60": ["De 40 a 60", COR.am], acima60: ["Acima de 60", COR.vc] };
+    $("tmTeste").innerHTML = p.teste.map(function (t) {
+      var r = R[t.faixa], v = t.ret_medio;
+      return '<div class="tm-t"><span style="border-color:' + r[1] + '">' + r[0] + "</span><b class=\"" + (v < 0 ? "neg" : "pos") + '">' + (v > 0 ? "+" : "") + br(v, 1) + "%</b><small>preço caiu em " + br(t.pct_caiu, 0) + "% das vezes · " + t.n + " dias</small></div>";
+    }).join("");
+    $("tmTesteN").textContent = "Variação média do preço físico de " + praca.replace(/ [A-Z]{2}$/, "") + " nos 63 pregões (cerca de 3 meses) seguintes a cada dia, conforme a faixa do termômetro naquele dia, de novembro de 2021 até hoje.";
+  }
+  function render() {
+    var P = D[prod];
+    if (!P[praca]) praca = P[PADRAO[prod]] ? PADRAO[prod] : Object.keys(P)[0];
+    var p = P[praca];
+    $("tmPraca").innerHTML = Object.keys(P).map(function (k) { return '<option value="' + k + '"' + (k === praca ? " selected" : "") + ">" + k + "</option>"; }).join("");
+    var f = faixa(p.nota);
+    $("tmFaixa").textContent = f[0]; $("tmFaixa").style.color = f[1];
+    $("tmFrase").innerHTML = frase(p);
+    $("tmMeta").textContent = (prod === "soja" ? "Soja" : "Milho") + " em " + praca + " · preço de referência R$ " + br(p.preco_ref, 2) + "/sc" + (p.preco_estimado ? " (estimado com o fechamento de " + D.referencia_mercado.slice(8, 10) + "/" + D.referencia_mercado.slice(5, 7) + ")" : "");
+    desenharComps(p); desenharTeste(p);
+    if (!charts.length) charts = [0, 1, 2].map(function (i) { return echarts.init($("tmG" + i)); });
+    charts[0].setOption(gauge(p.nota), true); charts[1].setOption(ranking(), true); charts[2].setOption(historico(), true);
+    charts.forEach(function (c) { c.resize(); });
+    try { history.replaceState(null, "", location.pathname + "?p=" + prod + "&praca=" + encodeURIComponent(praca)); } catch (e) {}
+    try { localStorage.setItem("ab_tm", JSON.stringify({ p: prod, praca: praca })); } catch (e) {}
+  }
+  function compartilhar() {
+    var p = D[prod][praca], url = "https://agrobasis.com.br/dashboards/termometro-de-venda/?p=" + prod + "&praca=" + encodeURIComponent(praca);
+    var t = "Termômetro de venda AgroBasis: " + prod + " em " + praca + " está em " + Math.round(p.nota) + "/100 (" + faixa(p.nota)[0].toLowerCase() + "). Veja os detalhes: " + url;
+    try { if (window.gtag) gtag("event", "compartilhar_termometro", { produto: prod, praca: praca }); } catch (e) {}
+    window.open("https://wa.me/?text=" + encodeURIComponent(t), "_blank", "noopener");
+  }
+  function baixar() {
+    var ch = charts[2], opt = historico(); opt.animation = false;
+    opt.title = { text: "Termômetro de venda: " + prod + " em " + praca, subtext: "AgroBasis · desde nov/2021", left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
+    opt.legend.top = 54; opt.legend.left = 8; opt.grid.top = 84; opt.grid.bottom = 30;
+    opt.graphic = opt.graphic.concat([{ type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fontes: Conab, CBOT, B3, BCB, CFTC", fill: "#9aa39c", font: "11px Geist, sans-serif" } }]);
+    ch.setOption(opt, true); var u = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" }); ch.setOption(historico(), true);
+    var a = document.createElement("a"); a.href = u; a.download = "agrobasis-termometro-" + prod + ".png"; document.body.appendChild(a); a.click(); a.remove();
+  }
+  Promise.all([carregarLib(), json("dados/termometro.json")]).then(function (r) {
+    D = r[1];
+    var q = new URLSearchParams(location.search), salvo = {};
+    try { salvo = JSON.parse(localStorage.getItem("ab_tm")) || {}; } catch (e) {}
+    prod = q.get("p") === "milho" ? "milho" : q.get("p") === "soja" ? "soja" : (salvo.p || "soja");
+    praca = q.get("praca") || salvo.praca || PADRAO[prod];
+    [].forEach.call(document.querySelectorAll("#tmProd button"), function (b) { b.setAttribute("aria-pressed", b.dataset.p === prod); });
+    $("tmProd").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-p]"); if (!b || b.dataset.p === prod) return;
+      prod = b.dataset.p; praca = PADRAO[prod];
+      [].forEach.call(this.children, function (x) { x.setAttribute("aria-pressed", x === b); }); render();
+    });
+    $("tmPraca").addEventListener("change", function () { praca = this.value; render(); });
+    $("tmShare").addEventListener("click", compartilhar);
+    document.querySelector("#abc .abc-dl").addEventListener("click", baixar);
+    render();
+    charts[1].on("click", function (p) { if (p.name) { praca = p.name; render(); } });
+    $("tmAtu").textContent = "Atualizado em " + D.atualizado_em.slice(8, 10) + "/" + D.atualizado_em.slice(5, 7) + " às " + D.atualizado_em.slice(11, 16);
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); charts[0].setOption(gauge(D[prod][praca].nota), true); }, 150); });
+  }).catch(function (e) {
+    if (window.console) console.error("Termômetro:", e);
+    $("tmMeta").textContent = "Não foi possível carregar o termômetro agora. Tente novamente em instantes.";
+  });
+})();
+</script>

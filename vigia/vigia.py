@@ -32,6 +32,7 @@ ARQUIVOS = {
     "dados/curva_soja.json": ("Curva da soja", 50, True),
     "dados/clima": ("Clima e El Niño (chuva e previsão)", 30, False),
     "dados/troca": ("Relação de troca", 50, True),
+    "dados/termometro.json": ("Termômetro de venda", 50, True),
     "dados/cot": ("Posição dos fundos (CFTC)", 9 * 24, False),
     "dados/export_sales": ("Vendas semanais de exportação dos EUA", 9 * 24, False),
     "dados/usda": ("Relatório WASDE do USDA", 40 * 24, False),
