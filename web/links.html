@@ -16,6 +16,12 @@ html,body{margin:0;background:#F5F6F2}
 .lk-a svg{position:absolute;left:18px;top:50%;transform:translateY(-50%)}
 .lk-a.prim{background:#1E4812;border-color:#1E4812;color:#fff!important}
 .lk-a.prim:hover{background:#163a0d}
+.lk-sec{width:100%;margin:30px 0 0}
+.lk-sec h2{font:600 12px Geist,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#7a847c;text-align:center;margin:0 0 12px}
+.lk-gr{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.lk-t{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 6px 14px;border-radius:12px;background:#fff;border:1px solid #DCE2DA;text-decoration:none!important;color:#1d2420!important;font:600 13.5px/1.25 Geist,sans-serif;text-align:center;transition:border-color .15s}
+.lk-t:hover{border-color:#1E4812}
+.lk-t span.ic{width:38px;height:38px;border-radius:10px;background:#EEF4E9;display:flex;align-items:center;justify-content:center}
 .lk-rod{font-size:12px;color:#8a938c;text-align:center;margin-top:34px;line-height:1.6}
 </style>
 
@@ -40,6 +46,15 @@ html,body{margin:0;background:#F5F6F2}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#0A66C2"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9V21H9z"/></svg>
         LinkedIn</a>
     </nav>
+
+    <section class="lk-sec" aria-label="Ferramentas gratuitas">
+      <h2>Gratuito no site</h2>
+      <div class="lk-gr">
+        <a class="lk-t" data-l="clima" href="/clima/"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E4812" stroke-width="2"><path d="M20 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 15.3"/><path d="M8 19v2M12 17v2M16 19v2"/></svg></span>Previsão do tempo</a>
+        <a class="lk-t" data-l="paineis" href="/dashboards/"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E4812" stroke-width="2"><path d="M4 19V5M4 19h16M8 15l4-4 3 3 5-6"/></svg></span>Painéis de mercado</a>
+        <a class="lk-t" data-l="ferramentas" href="/ferramentas/"><span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1E4812" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h4"/></svg></span>Simuladores</a>
+      </div>
+    </section>
 
     <div class="lk-rod">Conteúdo informativo e educacional,<br>sem recomendação de compra ou venda.</div>
   </div>
