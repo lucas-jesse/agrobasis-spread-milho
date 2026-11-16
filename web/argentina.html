@@ -258,7 +258,7 @@
       var ant = tot && tot.anterior ? tot.anterior[tot.anterior.length - 1] : null;
       var med = valorEm(o.cv.media5, a[0]);
       var d = ant != null ? a[1] - ant : null;
-      html += '<div class="abc-k"><span>' + NOME[o.c] + " " + (o.op === "plantio" ? "plantada" : "colhida") + "</span><b>" + br(a[1], a[1] < 10 ? 1 : 0) + "<small>%</small></b><em>" +
+      html += '<div class="abc-k"><span>' + NOME[o.c] + " " + (o.op === "plantio" ? "plantad" : "colhid") + (o.c === "soja" ? "a" : "o") + "</span><b>" + br(a[1], a[1] < 10 ? 1 : 0) + "<small>%</small></b><em>" +
         (d != null ? '<i class="' + (d >= 0 ? "ar-up" : "ar-dn") + '">' + sinal(d, Math.abs(d) < 10 ? 1 : 0) + " p.p.</i> vs ano passado" : "") +
         (med != null && !mobile() ? " · média " + br(med, 0) + "%" : "") + "</em></div>";
     });
