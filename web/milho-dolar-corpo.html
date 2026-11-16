@@ -193,7 +193,10 @@
       tooltip: Object.assign({}, base.tooltip, { valueFormatter: function (v) { return v == null ? "-" : "US$ " + br(v, 2) + "/sc"; } }),
       series: [{ name: "Prêmio", type: "line", showSymbol: false, data: S.premio.slice(ini), lineStyle: { width: 2, color: COR.vd }, areaStyle: { color: "rgba(30,72,18,.06)" },
         markLine: { silent: true, symbol: "none", lineStyle: { color: COR.mt, type: "dotted" }, label: { show: false }, data: [{ yAxis: 0 }] } }] });
-    $("mdN5").textContent = "Hoje o milho B3 vale US$ " + br(D.hoje.premio, 2) + " por saca acima de Chicago (" + br(D.hoje.pct_premio, 0) + "º percentil desde 2020). Chicago no 1º vencimento: US$ " + br(D.hoje.zc, 2) + "/bu. Prêmio baixo indica que a distância veio do câmbio ou do mercado interno, não de Chicago.";
+    $("mdN5").textContent = "Hoje o milho B3 vale US$ " + br(D.hoje.premio, 2) + " por saca acima de Chicago (" + br(D.hoje.pct_premio, 0) + "º percentil desde 2020). Chicago no 1º vencimento: US$ " + br(D.hoje.zc, 2) + "/bu. " +
+      (D.hoje.pct_premio <= 25 ? "Prêmio baixo: a fraqueza do milho em dólar vem do câmbio ou do mercado interno, não de Chicago." :
+       D.hoje.pct_premio >= 75 ? "Prêmio alto: o milho da B3 está caro em relação a Chicago." :
+       "Prêmio na faixa normal: a variação do milho em dólar acompanha, em boa parte, o nível de Chicago.");
   }
   function kpis() {
     var H = D.hoje;
