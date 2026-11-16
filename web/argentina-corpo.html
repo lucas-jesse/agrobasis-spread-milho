@@ -183,7 +183,7 @@
     s[0].markPoint = { symbol: "circle", symbolSize: 1, data: [{ coord: [a[0], a[1]], label: { show: true, formatter: br(a[1], a[1] < 10 ? 1 : 0) + "%", position: "top", color: COR.vd, fontWeight: 700, fontSize: 13 } }] };
     grafico(0, {
       legend: { top: 0, left: 0, icon: "roundRect", itemWidth: 14, itemHeight: 3, textStyle: { fontSize: 12, color: COR.mt } },
-      grid: { left: 40, right: 16, top: 38, bottom: 30 },
+      grid: { left: 40, right: 16, top: mobile() ? 60 : 38, bottom: 30 },
       tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return v == null ? "-" : br(v, v < 10 ? 1 : 0) + "%"; } }),
       xAxis: { type: "time", min: todos[0], max: todos[todos.length - 1], axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { var d = new Date(v); return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } }, splitLine: { show: false } },
       yAxis: { type: "value", min: 0, max: 100, axisLabel: { color: COR.mt, fontSize: 11, formatter: "{value}%" }, splitLine: { lineStyle: { color: COR.grade } } },
@@ -238,7 +238,7 @@
     });
     grafico(1, {
       legend: { top: 0, left: 0, icon: "roundRect", itemWidth: 14, itemHeight: 3, textStyle: { fontSize: 12, color: COR.mt } },
-      grid: { left: 40, right: 14, top: 36, bottom: 28 },
+      grid: { left: 40, right: 14, top: mobile() ? 44 : 36, bottom: 28 },
       tooltip: Object.assign({}, base.tooltip, { trigger: "axis", valueFormatter: function (v) { return br(v, 0) + "%"; } }),
       xAxis: { type: "time", axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { var d = new Date(v); return ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2); } }, axisLine: { lineStyle: { color: COR.ln } } },
       yAxis: { type: "value", min: function (v) { return Math.max(0, Math.floor(v.min / 10) * 10 - 10); }, max: 100, axisLabel: { color: COR.mt, fontSize: 11, formatter: "{value}%" }, splitLine: { lineStyle: { color: COR.grade } } },
