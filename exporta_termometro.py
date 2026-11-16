@@ -226,6 +226,13 @@ def main():
         "milho": montar("milho", ler("dados/basis/milho.json"), ler("dados/cot/milho.json"), ccm=ler("dados/ccm_historico.json"), hoje=hoje),
     }
     (RAIZ / "dados/termometro.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    # curva de fundo da página inicial: soja CBOT (contrato de referência), um ponto por semana
+    bs = ler("dados/basis/soja.json")
+    pts = [(d, v) for d, v in zip(bs["datas"], bs["cbot_ref_cents"]) if v][::-5][::-1]
+    (RAIZ / "dados/home_curva.json").write_text(json.dumps({
+        "serie": "Soja CBOT, contrato de referência (US$ cents/bu)", "fonte": "CME",
+        "inicio": pts[0][0], "fim": pts[-1][0], "valores": [round(v, 2) for _, v in pts]},
+        separators=(",", ":")), encoding="utf-8")
     for prod in ("soja", "milho"):
         for praca, v in out[prod].items():
             print(prod, praca, v["nota"], {k: c["nota"] for k, c in v["componentes"].items()}, v["teste"])
