@@ -212,7 +212,7 @@
     var Sg = D.sinal, eps = Sg.episodios.slice().reverse();
     $("mdRes").innerHTML = '<div><b>' + Sg.n21 + '</b><span>episódios com resultado</span></div><div><b>' + br(Sg.acerto21, 0) + '%</b><span>com resultado positivo em 1 mês</span></div><div><b>' + sinal(Sg.media21, 1) + ' p.p.</b><span>resultado médio em 1 mês</span></div><div><b>' + (Sg.media42 == null ? "-" : sinal(Sg.media42, 1) + ' p.p.') + '</b><span>resultado médio em 2 meses</span></div>';
     $("mdEp").querySelector("tbody").innerHTML = eps.map(function (e) {
-      var f = e.f21 == null ? '<td colspan="3" class="md-mt">em andamento</td>' :
+      var f = e.f21 == null ? '<td class="md-mt">-</td><td class="md-mt">-</td><td class="md-mt">em andamento</td>' :
         "<td>" + sinal(e.f21_milho, 1) + "%</td><td>" + sinal(e.f21_dolar, 1) + "%</td><td class=\"" + (e.f21 > 0 ? "md-up" : "md-dn") + "\">" + sinal(e.f21, 1) + " p.p.</td>";
       return "<tr><td>" + dmY(e.data) + "</td><td>" + e.contrato + "</td><td>" + sinal(e.gap, 1) + " p.p.</td>" + f + "</tr>";
     }).join("");
@@ -229,7 +229,7 @@
     $("cOut").innerHTML = '<div><span>Milho comprado</span><b>' + n + ' CCM</b><em>R$ ' + br(notMi, 0) + ' · US$ ' + br(notUsd, 0) + '</em></div>' +
       '<div><span>Mini dólar vendido</span><b>' + wdo + ' WDO</b><em>US$ ' + br(wdo * K.usd_wdo, 0) + (mt === "beta" ? ' · sensibilidade ' + br(beta, 2) : ' · mesmo valor') + '</em></div>' +
       '<div><span>Carrego do vendido em dólar</span><b>' + (carr == null ? "-" : "R$ " + br(carr, 0)) + '</b><em>por mês, se o dólar à vista ficar parado</em></div>';
-    var vm = [-6, -3, 0, 3, 6], vd = [-6, -3, 0, 3, 6];
+    var vm = [-6, -3, 0, 3, 6], vd = mobile() ? [-6, 0, 6] : [-6, -3, 0, 3, 6];
     var h = "<thead><tr><th>Milho \\ Dólar</th>" + vd.map(function (x) { return "<th>" + sinal(x, 0) + "%</th>"; }).join("") + "</tr></thead><tbody>";
     vm.forEach(function (a) {
       h += "<tr><th>" + sinal(a, 0) + "%</th>" + vd.map(function (b) {
@@ -259,7 +259,7 @@
     [].forEach.call(document.querySelectorAll(".abc-dl"), function (b) {
       b.onclick = function () { var c = charts[+b.dataset.dl]; if (!c) return; var a = document.createElement("a"); a.href = c.getDataURL({ pixelRatio: 2, backgroundColor: "#fff" }); a.download = "agrobasis-milho-dolar-" + b.dataset.dl + ".png"; a.click(); };
     });
-    var t; window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(function () { charts.forEach(function (c) { c && c.resize(); }); }, 150); });
+    var t; window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(function () { charts.forEach(function (c) { c && c.resize(); }); calc(); }, 150); });
   }).catch(function () { $("mdMeta").textContent = "Não foi possível carregar os dados agora. Tente novamente em alguns minutos."; });
 })();
 </script>
