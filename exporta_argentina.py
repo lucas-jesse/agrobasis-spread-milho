@@ -175,6 +175,11 @@ def media_safras(ser, s_atual, datas, n=5):
                     vals.append(y0 + (y1 - y0) * (x - x0) / (x1 - x0) if x1 > x0 else y0); break
         vals = [v for v in vals if v is not None]
         res.append(round(sum(vals) / len(vals), 1) if len(vals) >= 3 else None)
+    # avanço é acumulado: a média não pode recuar (safras com informes faltando no fim puxariam para baixo)
+    topo = 0
+    for i, v in enumerate(res):
+        if v is not None:
+            topo = max(topo, v); res[i] = topo
     return res
 
 
