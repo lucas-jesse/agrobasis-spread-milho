@@ -56,6 +56,15 @@
 .abh-pg b{font-size:14.5px}.abh-pg span{display:none}
 }
 
+.abh-m{display:block;text-decoration:none!important;color:#1d2420!important;transition:transform .15s}.abh-m:hover{transform:translateY(-2px)}
+.abh-mh b{font-size:19px!important}
+.abh-q{font-size:14px;line-height:1.5;color:#4a524c;margin:6px 0 16px}
+.abh-m .abh-tmi{padding:14px 0;border-top:1px solid #E7ECE8}
+.abh-m .abh-tmi span{font-size:13px}.abh-m .abh-tmi span b{font-size:44px}
+.abh-m .abh-tmb{height:12px;margin:10px 0 8px}.abh-m .abh-tmb i{top:-5px;height:22px;width:4px}
+.abh-tme{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.abh-tme em{font-size:14px}.abh-tme small{font-size:11.5px;color:#6b756d}
+.abh-mv{border-top:1px solid #E7ECE8;padding-top:12px;font:600 14px Geist,sans-serif;color:#1E4812}
+@media (max-width:640px){.abh-q{display:none}.abh-mh{margin-bottom:4px}.abh-m .abh-tmi{padding:10px 0}.abh-m .abh-tmi span b{font-size:36px}}
 /* ---- ajustes da página inicial ---- */
 /* cards de atalho: compactos, 2 por linha no celular */
 @media (max-width:767px){
@@ -86,23 +95,14 @@
           <a class="abh-b2" href="https://chat.whatsapp.com/HqNKK5KqNqqLuewxeJHOeI" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Grupo do WhatsApp</a>
         </div>
       </div>
-      <div class="abh-m" id="abhM">
-        <div class="abh-mh"><b>Mercado hoje</b><small id="abhD">carregando…</small></div>
-        <table class="abh-t"><tbody>
-          <tr><td>Dólar comercial</td><td id="abhUsd">-</td><td id="abhUsdV"></td></tr>
-          <tr><td>Soja Chicago<small>US$/bu</small></td><td id="abhSoja">-</td><td id="abhSojaV"></td></tr>
-          <tr><td>Milho B3<small>R$/sc</small></td><td id="abhMb3">-</td><td id="abhMb3V"></td></tr>
-          <tr><td>Milho Chicago<small>US$/bu</small></td><td id="abhMilho">-</td><td id="abhMilhoV"></td></tr>
-        </tbody></table>
-        <a class="abh-tm" href="/dashboards/termometro-de-venda/" id="abhTm" hidden>
-          <div class="abh-tmh"><b>Termômetro de venda</b><small>Ver por praça e método →</small></div>
-          <div class="abh-tmg">
-            <div class="abh-tmi"><span>Soja<b id="abhTmS">-</b></span><div class="abh-tmb"><s></s><s></s><s></s><s></s><s></s><i id="abhTmSi"></i></div><em id="abhTmSf">&nbsp;</em></div>
-            <div class="abh-tmi"><span>Milho<b id="abhTmM">-</b></span><div class="abh-tmb"><s></s><s></s><s></s><s></s><s></s><i id="abhTmMi"></i></div><em id="abhTmMf">&nbsp;</em></div>
-          </div>
-        </a>
-        <p class="abh-mf">Fontes: B3, CME, BCB · Indicador de mercado, não recomendação individual</p>
-      </div>
+      <a class="abh-m" id="abhM" href="/dashboards/termometro-de-venda/">
+        <div class="abh-mh"><b>Termômetro de venda</b><small id="abhD">&nbsp;</small></div>
+        <p class="abh-q">O momento está bom para vender? Nota de 0 a 100, calculada todo dia com preço, basis, sazonalidade e fundos.</p>
+        <div class="abh-tmi"><span>Soja<b id="abhTmS">-</b></span><div class="abh-tmb"><s></s><s></s><s></s><s></s><s></s><i id="abhTmSi"></i></div><div class="abh-tme"><em id="abhTmSf">&nbsp;</em><small>0 segurar · 100 vender</small></div></div>
+        <div class="abh-tmi"><span>Milho<b id="abhTmM">-</b></span><div class="abh-tmb"><s></s><s></s><s></s><s></s><s></s><i id="abhTmMi"></i></div><div class="abh-tme"><em id="abhTmMf">&nbsp;</em><small>0 segurar · 100 vender</small></div></div>
+        <div class="abh-mv">Ver por praça e método&nbsp;→</div>
+        <p class="abh-mf">Média das praças acompanhadas · Indicador de mercado, não recomendação individual</p>
+      </a>
     </div>
     <p class="abh-cl" id="abhCt" hidden></p>
   </div>
@@ -123,29 +123,11 @@
   var R = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/dados/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/dados/"];
   var $ = function (i) { return document.getElementById(i); };
   function br(v, c) { return v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); }
-  function varia(id, p) {
-    var e = $(id); if (p == null || isNaN(p)) { e.innerHTML = "&nbsp;"; return; }
-    e.className = p > 0.005 ? "up" : p < -0.005 ? "dn" : "eq";
-    e.textContent = (p > 0.005 ? "▲ " : p < -0.005 ? "▼ " : "") + br(Math.abs(p), 2) + "%";
-  }
   function pega(i, arq) {
     return fetch(R[i] + arq + "?v=" + Math.floor(Date.now() / 3e5)).then(function (r) { if (!r.ok) throw 0; return r.json(); })
       .catch(function () { if (i + 1 < R.length) return pega(i + 1, arq); throw 0; });
   }
   function hojeBR() { var h = new Date(); return h.getFullYear() + "-" + String(h.getMonth() + 1).padStart(2, "0") + "-" + String(h.getDate()).padStart(2, "0"); }
-  Promise.all([pega(0, "fechamento.json"), pega(0, "cotacoes_agora.json").catch(function () { return null; })]).then(function (r) {
-    var f = r[0], a = r[1], d = f, rot;
-    // durante o pregão (e até o fechamento ser gravado) usa a coleta mais recente do dia
-    if (a && a.data === hojeBR() && (!f || a.gerado_em_brt > f.gerado_em_brt)) { d = a; rot = "atualizado às " + a.gerado_em_brt.slice(11, 16) + " · atraso de ~15 min"; }
-    else rot = "fechamento de " + f.data.slice(8, 10) + "/" + f.data.slice(5, 7);
-    var all = {}; ["cbot", "brasil", "exterior"].forEach(function (k) { (d[k] || []).forEach(function (x) { all[x.chave] = x; }); });
-    function pr(ch, el, fmt) { var x = all[ch]; if (!x) return; $(el).innerHTML = fmt(x.preco); varia(el + "V", x.var_pct); }
-    pr("soja", "abhSoja", function (v) { return br(v / 100, 2); });
-    pr("milho", "abhMilho", function (v) { return br(v / 100, 2); });
-    pr("milho_b3", "abhMb3", function (v) { return br(v, 2); });
-    pr("usdbrl", "abhUsd", function (v) { return "R$ " + br(v, 4); });
-    $("abhD").textContent = rot;
-  }).catch(function () { $("abhD").textContent = "indisponível no momento"; });
   // curva de fundo: soja CBOT desde 2019
   pega(0, "home_curva.json").then(function (c) {
     var v = c.valores, n = v.length; if (n < 2) return;
@@ -166,15 +148,7 @@
       $("abhTm" + x[1] + "i").style.left = Math.max(2, Math.min(98, n)) + "%";
       $("abhTm" + x[1] + "f").textContent = f[0]; $("abhTm" + x[1] + "f").style.color = f[1];
     });
-    $("abhTm").hidden = false;
-  }).catch(function () {});
-  // dólar em tempo real durante o pregão
-  fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL").then(function (r) { return r.json(); }).then(function (j) {
-    var q = j && j.USDBRL; if (!q) return;
-    var v = +q.bid, p = +q.pctChange; if (!v) return;
-    $("abhUsd").textContent = "R$ " + br(v, 4); varia("abhUsdV", p);
-    var h = new Date(), hj = h.getFullYear() + "-" + String(h.getMonth() + 1).padStart(2, "0") + "-" + String(h.getDate()).padStart(2, "0");
-    if ((q.create_date || "").slice(0, 10) === hj) $("abhUsdV").title = "dólar ao vivo";
-  }).catch(function () {});
+    var r = t.referencia_mercado || ""; if (r) $("abhD").textContent = "mercado de " + r.slice(8, 10) + "/" + r.slice(5, 7);
+  }).catch(function () { $("abhD").textContent = "indisponível no momento"; });
 })();
 </script>
