@@ -32,3 +32,29 @@ body.admin-bar .elementor-location-header,body.admin-bar [data-elementor-type=he
 .ab-rolou .elementor-24 .elementor-element-7054b37{max-height:0!important;opacity:0;padding-top:0!important;padding-bottom:0!important;margin:0!important}
 .abw-sec{padding:44px 0 52px}
 @media (max-width:760px){.abw-sec{padding:28px 0 36px}}
+
+/* ---- painéis no celular: menos texto antes do primeiro gráfico ---- */
+@media (max-width:560px){
+/* indicadores: lista compacta, nome à esquerda e número à direita, sem a linha de explicação */
+.abc-kpis{display:block!important;background:#fff;border:1px solid var(--ln,#E7ECE8);border-radius:14px;padding:0 14px;margin-bottom:12px!important}
+.abc-k{display:flex!important;justify-content:space-between;align-items:baseline;gap:12px;background:none!important;border:0!important;border-bottom:1px solid #EEF1EE!important;border-radius:0!important;padding:9px 0!important;min-width:0}
+.abc-k:last-child{border-bottom:0!important}
+.abc-k span{font-size:12.5px!important;letter-spacing:0!important;text-transform:none!important;color:#3f4842!important;font-weight:500!important;white-space:normal!important;min-width:0}
+.abc-k b{margin:0!important;font-size:18px!important;text-align:right;white-space:nowrap;flex:none}
+.abc-k b small{font-size:11px!important}
+.abc-k em{display:none!important}
+/* no painel da Argentina a linha de baixo é a comparação com o ano passado: fica, ao lado do número */
+#arKpis .abc-k{flex-wrap:wrap}#arKpis .abc-k em{display:block!important;width:100%;margin-top:1px!important;font-size:11.5px!important}
+/* resumo em texto: 3 linhas, toque para ler tudo */
+.abc>.abc-lead{cursor:pointer;position:relative}
+.abc>.abc-lead:not(.ab-aberto)>span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.abc>.abc-lead:not(.ab-aberto):after{content:"ler mais";position:absolute;right:12px;bottom:6px;font-size:11.5px;font-weight:600;color:#1E4812;background:#f6f8f4;padding-left:8px;box-shadow:-10px 0 8px #f6f8f4}
+/* cartões de escolha (produto, fertilizante, mercado): viram botões numa linha */
+.abc-board{display:flex!important;gap:6px!important;overflow-x:auto;scrollbar-width:none;margin-bottom:12px!important;padding-bottom:2px}
+.abc-board::-webkit-scrollbar{display:none}
+.abc-board .abc-c{flex:none!important;padding:7px 14px!important;border-radius:999px!important;box-shadow:none!important}
+.abc-board .abc-c>:not(.n){display:none!important}
+.abc-board .abc-c .n{font-size:13px!important;color:#3f4842!important;overflow:visible!important}
+.abc-board .abc-c[aria-pressed=true]{background:#1E4812!important;border-color:#1E4812!important}
+.abc-board .abc-c[aria-pressed=true] .n{color:#fff!important}
+}

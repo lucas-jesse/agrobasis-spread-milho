@@ -12,6 +12,7 @@ while(c.parentElement){var p=c.parentElement.closest(".e-con");if(!p)break;var f
 var s=document.createElement("section");s.className="abw-sec";s.innerHTML=FAIXA;c.dataset.abw="1";c.replaceWith(s);});
 // páginas sem o bloco antigo (painéis, ferramentas, clima, artigos): a faixa entra logo antes do rodapé
 if(!document.querySelector(".abw-sec")&&location.pathname!=="/"&&!/\/wp-admin|preview=|elementor-preview/.test(location.href)){var ft=document.querySelector("[data-elementor-type=footer],footer");if(ft&&ft.parentNode){var s2=document.createElement("section");s2.className="abw-sec";s2.innerHTML=FAIXA;ft.parentNode.insertBefore(s2,ft);}}}
+document.addEventListener("click",function(e){var l=e.target.closest(".abc>.abc-lead");if(l&&window.innerWidth<=560&&!e.target.closest("a"))l.classList.toggle("ab-aberto");});
 if(document.readyState!=="loading")troca();else document.addEventListener("DOMContentLoaded",troca);})();</script>""" % json.dumps(faixa, ensure_ascii=False).replace("</", "<\\/")
 html = ('<style id="ab-menu-resp">\n' + css +
         ".elementor-24 .elementor-element-ab0menu{position:absolute!important;width:0!important;height:0!important;overflow:hidden!important;margin:0!important;padding:0!important}\n</style>\n" + js)
