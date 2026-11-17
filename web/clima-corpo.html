@@ -255,7 +255,8 @@
   function local() {
     var p = pt(st.p), a = p.acc, pv = p.prev;
     $("abcLn").textContent = p.nome + " (" + p.uf + ")";
-    $("abcLm").textContent = "Polo de " + p.culturas + " · chuva observada até " + ddmm(p.ultimo);
+    var ar = p.area && p.area.celulas > 1 ? " · média de " + p.area.celulas + " pontos na área do município" + (p.area.km2 ? " (" + br(p.area.km2, 0) + " km²)" : "") : "";
+    $("abcLm").textContent = "Polo de " + p.culturas + " · chuva observada até " + ddmm(p.ultimo) + ar;
     function pc(x) { return x[1] ? x[0] / x[1] * 100 - 100 : null; }
     $("k1").innerHTML = br(a.safra[0], 0) + "<small>mm</small>"; $("k1s").innerHTML = '<i class="' + cls(pc(a.safra)) + '" style="font-style:normal">' + sn(pc(a.safra), 0) + "%</i> frente à normal (" + br(a.safra[1], 0) + " mm)";
     $("k2").innerHTML = br(a.d30[0], 0) + "<small>mm</small>"; $("k2s").innerHTML = '<i class="' + cls(pc(a.d30)) + '" style="font-style:normal">' + sn(pc(a.d30), 0) + "%</i> frente à normal (" + br(a.d30[1], 0) + " mm)";

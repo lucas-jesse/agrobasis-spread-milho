@@ -8,7 +8,12 @@ Fontes:
   - Previsão: ensemble do ECMWF IFS (51 membros), 15 dias, via Open-Meteo.
   - Produtividade: série histórica da Conab por UF (SerieHistoricaGraos), para medir o efeito do ENSO.
 
-Normais climatológicas: média 1991-2020 do ERA5 no próprio ponto (mesma base usada pelo CPC para as anomalias).
+Área de cada município: a chuva é a média diária de células da grade de 0,25° (a mesma do ERA5) que caem dentro
+do limite oficial do município (malha do IBGE), mais a célula da sede, até MAX_CEL células espalhadas pela área.
+O histórico completo de cada célula nova é baixado aos poucos (NOVAS_POR_RODADA por execução, para respeitar o
+limite gratuito da Open-Meteo); enquanto isso o município usa as células que já estão completas, sempre com
+observado, normal e previsão calculados sobre o mesmo conjunto de células.
+Normais climatológicas: média 1991-2020 do ERA5 na mesma área (mesma base usada pelo CPC para as anomalias).
 Saídas: dados/clima/clima.json (painel) e dados/clima/enso_produtividade.json (estudo histórico).
 """
 import html as htmlmod
@@ -16,6 +21,7 @@ import json
 import math
 import re
 import time
+import unicodedata
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -161,28 +167,217 @@ def chuva_ponto(pid, lat, lon):
     return dias
 
 
-def previsao(lat, lon):
-    e = get("https://ensemble-api.open-meteo.com/v1/ensemble", {"latitude": lat, "longitude": lon, "daily": "precipitation_sum",
-            "forecast_days": 15, "models": "ecmwf_ifs025", "timezone": "America/Sao_Paulo"}).json()["daily"]
-    membros = [k for k in e if k.startswith("precipitation_sum")]
-    datas = e["time"]
-    mat = [[e[k][i] for k in membros if e[k][i] is not None] for i in range(len(datas))]
-    tot = [sum(e[k][i] or 0 for i in range(len(datas))) for k in membros]
-    t = get("https://api.open-meteo.com/v1/forecast", {"latitude": lat, "longitude": lon, "daily": "temperature_2m_max",
-            "forecast_days": 15, "models": "ecmwf_ifs025", "timezone": "America/Sao_Paulo"}).json()["daily"]
-    tmax = t.get("temperature_2m_max_ecmwf_ifs025") or t.get("temperature_2m_max") or []
+def _q(xs, p):
+    xs = sorted(xs)
+    if not xs:
+        return None
+    k = (len(xs) - 1) * p; a = math.floor(k); b = min(a + 1, len(xs) - 1)
+    return xs[a] + (xs[b] - xs[a]) * (k - a)
 
-    def q(xs, p):
-        xs = sorted(xs)
-        if not xs:
-            return None
-        k = (len(xs) - 1) * p; a = math.floor(k); b = min(a + 1, len(xs) - 1)
-        return xs[a] + (xs[b] - xs[a]) * (k - a)
+
+def _media(vals):
+    v = [x for x in vals if x is not None]
+    return sum(v) / len(v) if v else None
+
+
+def _resumo_prev(e_lista, t_lista):
+    """estatísticas da previsão a partir das respostas do ensemble (uma por célula): cada membro é a média das células"""
+    e0 = e_lista[0]
+    datas = e0["time"]
+    membros = [k for k in e0 if k.startswith("precipitation_sum")]
+    ser = {k: [_media([e[k][i] for e in e_lista if k in e]) for i in range(len(datas))] for k in membros}
+    mat = [[ser[k][i] for k in membros if ser[k][i] is not None] for i in range(len(datas))]
+    tot = [sum(ser[k][i] or 0 for i in range(len(datas))) for k in membros]
+    tm = [t.get("temperature_2m_max_ecmwf_ifs025") or t.get("temperature_2m_max") or [] for t in t_lista]
+    tmax = [_media([x[i] for x in tm if i < len(x)]) for i in range(len(datas))]
     return {"d": datas, "media": [round(sum(x) / len(x), 1) if x else None for x in mat],
-            "p10": [round(q(x, .1), 1) if x else None for x in mat], "p90": [round(q(x, .9), 1) if x else None for x in mat],
-            "tot": {"media": round(sum(tot) / len(tot), 1), "p10": round(q(tot, .1), 1), "p90": round(q(tot, .9), 1),
+            "p10": [round(_q(x, .1), 1) if x else None for x in mat], "p90": [round(_q(x, .9), 1) if x else None for x in mat],
+            "tot": {"media": round(sum(tot) / len(tot), 1), "p10": round(_q(tot, .1), 1), "p90": round(_q(tot, .9), 1),
                     "seco": round(sum(1 for x in tot if x < 25) / len(tot) * 100)},
-            "tmax": [None if v is None else round(v, 1) for v in tmax][:len(datas)]}
+            "tmax": [None if v is None else round(v, 1) for v in tmax]}
+
+
+PREV_ENS = {"daily": "precipitation_sum", "forecast_days": 15, "models": "ecmwf_ifs025", "timezone": "America/Sao_Paulo"}
+PREV_TMAX = {"daily": "temperature_2m_max", "forecast_days": 15, "models": "ecmwf_ifs025", "timezone": "America/Sao_Paulo"}
+
+
+def previsao(lat, lon):
+    """previsão de 15 dias num ponto (usada também pelo painel da Argentina)"""
+    e = get("https://ensemble-api.open-meteo.com/v1/ensemble", dict(PREV_ENS, latitude=lat, longitude=lon)).json()["daily"]
+    t = get("https://api.open-meteo.com/v1/forecast", dict(PREV_TMAX, latitude=lat, longitude=lon)).json()["daily"]
+    return _resumo_prev([e], [t])
+
+
+# ---------------------------------------------------------------- área do município (malha oficial do IBGE)
+IBGE = "https://servicodados.ibge.gov.br/api"
+GRADE = PASTA / "grade_municipios.json"
+PASSO = 0.25            # espaçamento da grade do ERA5, em graus
+MAX_CEL = 9             # células por município, contando a sede
+NOVAS_POR_RODADA = 6    # históricos completos (desde 1980) baixados por execução
+LOTE = 20               # pontos por chamada agrupada à Open-Meteo
+
+
+def _sem_acento(s):
+    return unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode().lower().strip()
+
+
+def _poligonos(geom):
+    """GeoJSON Polygon ou MultiPolygon -> lista de polígonos, cada um uma lista de anéis [[lon, lat], ...]"""
+    if geom["type"] == "Polygon":
+        return [geom["coordinates"]]
+    if geom["type"] == "MultiPolygon":
+        return list(geom["coordinates"])
+    if geom["type"] == "GeometryCollection":
+        return [p for g in geom["geometries"] for p in _poligonos(g)]
+    return []
+
+
+def _no_anel(x, y, anel):
+    dentro = False
+    for (x1, y1), (x2, y2) in zip(anel, anel[1:] + anel[:1]):
+        if (y1 > y) != (y2 > y) and x < (x2 - x1) * (y - y1) / (y2 - y1) + x1:
+            dentro = not dentro
+    return dentro
+
+
+def _dentro(lon, lat, polys):
+    return any(_no_anel(lon, lat, pol[0]) and not any(_no_anel(lon, lat, h) for h in pol[1:]) for pol in polys)
+
+
+def _area_km2(polys):
+    tot = 0.0
+    for pol in polys:
+        for k, anel in enumerate(pol):
+            lat0 = math.radians(sum(p[1] for p in anel) / len(anel))
+            a = sum(x1 * y2 - x2 * y1 for (x1, y1), (x2, y2) in zip(anel, anel[1:] + anel[:1])) / 2
+            tot += (1 if k == 0 else -1) * abs(a) * 111.32 ** 2 * math.cos(lat0)
+    return tot
+
+
+def cel_id(la, lo):
+    return "cel/" + f"{la:+.2f}{lo:+.2f}".replace("+", "p").replace("-", "m")
+
+
+def montar_grade():
+    """células de 0,25° dentro de cada município, calculadas uma vez a partir da malha do IBGE e guardadas no repositório"""
+    grade = json.loads(GRADE.read_text()) if GRADE.exists() else {}
+    mudou = False
+    for pid, nome, uf, lat, lon, _ in PONTOS:
+        if pid in grade:
+            continue
+        try:
+            muns = get(f"{IBGE}/v1/localidades/estados/{uf}/municipios").json()
+            cod = next(m["id"] for m in muns if _sem_acento(m["nome"]) == _sem_acento(nome))
+            geo = get(f"{IBGE}/v3/malhas/municipios/{cod}",
+                      {"formato": "application/vnd.geo+json", "qualidade": "intermediaria"}).json()
+        except Exception as e:
+            print(f"  malha do IBGE indisponível para {nome} ({e}); segue só com a sede")
+            continue
+        geom = geo["features"][0]["geometry"] if geo.get("type") == "FeatureCollection" else geo.get("geometry", geo)
+        polys = _poligonos(geom)
+        lons = [p[0] for pol in polys for p in pol[0]]; lats = [p[1] for pol in polys for p in pol[0]]
+        cand = []
+        la = math.ceil(min(lats) / PASSO) * PASSO
+        while la <= max(lats):
+            lo = math.ceil(min(lons) / PASSO) * PASSO
+            while lo <= max(lons):
+                perto_sede = abs(la - lat) < PASSO / 2 and abs(lo - lon) < PASSO / 2
+                if _dentro(lo, la, polys) and not perto_sede:
+                    cand.append((round(la, 2), round(lo, 2)))
+                lo += PASSO
+            la += PASSO
+        n_area = len(cand)
+        # amostragem pelo ponto mais distante, a partir da sede: espalha as células por todo o município
+        esc = [(lat, lon)]
+        cosl = math.cos(math.radians(lat))
+        while cand and len(esc) < MAX_CEL:
+            c = max(cand, key=lambda c: min((c[0] - e[0]) ** 2 + ((c[1] - e[1]) * cosl) ** 2 for e in esc))
+            esc.append(c); cand.remove(c)
+        grade[pid] = {"ibge": cod, "area_km2": round(_area_km2(polys)), "celulas_na_area": n_area,
+                      "celulas": [list(c) for c in esc[1:]]}
+        print(f"  {nome}: {grade[pid]['area_km2']} km², {n_area} células na área, {len(esc) - 1} usadas além da sede")
+        mudou = True
+    if mudou:
+        GRADE.write_text(json.dumps(grade, ensure_ascii=False, indent=1))
+    return grade
+
+
+def _lote(url, coords, params, timeout=240):
+    """uma chamada para vários pontos (a Open-Meteo aceita listas de coordenadas); devolve uma resposta por ponto"""
+    r = get(url, dict(params, latitude=",".join(str(a) for a, _ in coords),
+                      longitude=",".join(str(b) for _, b in coords)), timeout=timeout).json()
+    return r if isinstance(r, list) else [r]
+
+
+def atualizar_celulas(cels):
+    """cels: [(id, lat, lon)]. Quem já tem histórico recebe os últimos 120 dias em chamadas agrupadas;
+    quem não tem baixa o histórico completo, no máximo NOVAS_POR_RODADA por execução (o resto fica para as próximas)."""
+    hoje = date.today()
+    dados, novas = {}, []
+    for cid, la, lo in cels:
+        c = carregar_cache(cid)
+        if c:
+            dados[cid] = {d: v for a in c.values() for d, v in a.items()}
+        else:
+            novas.append((cid, la, lo))
+    recem = set()
+    for cid, la, lo in novas[:NOVAS_POR_RODADA]:
+        try:
+            dados[cid] = chuva_ponto(cid, la, lo); recem.add(cid); time.sleep(3)
+            print(f"  histórico completo de {cid}")
+        except Exception as e:
+            print(f"  histórico de {cid} fica para a próxima rodada ({e})")
+            break
+    if len(novas) > len(recem):
+        print(f"  {len(novas) - len(recem)} células ainda sem histórico")
+    velhas = [c for c in cels if c[0] in dados and c[0] not in recem]
+    ini = (hoje - timedelta(days=120)).isoformat(); fim = (hoje - timedelta(days=1)).isoformat()
+    for i in range(0, len(velhas), LOTE):
+        bloco = velhas[i:i + LOTE]
+        coords = [(la, lo) for _, la, lo in bloco]
+        try:
+            arq = _lote("https://archive-api.open-meteo.com/v1/archive", coords,
+                        {"start_date": ini, "end_date": fim, "daily": "precipitation_sum", "timezone": "America/Sao_Paulo"})
+            time.sleep(2)
+            fc = _lote("https://api.open-meteo.com/v1/forecast", coords,
+                       {"past_days": 10, "forecast_days": 1, "daily": "precipitation_sum", "timezone": "America/Sao_Paulo"})
+            time.sleep(2)
+        except Exception as e:
+            print(f"  lote de chuva falhou ({e}); essas células ficam com o cache")
+            continue
+        for (cid, _, _), r, f in zip(bloco, arq, fc):
+            d = dados[cid]
+            for t, v in zip(r["daily"]["time"], r["daily"]["precipitation_sum"]):
+                if v is not None:
+                    d[t] = round(v, 1)
+            for t, v in zip(f["daily"]["time"], f["daily"]["precipitation_sum"]):
+                if v is not None and t < hoje.isoformat() and t not in d:
+                    d[t] = round(v, 1)
+            salvar_cache(cid, d)
+    return dados
+
+
+def media_area(series):
+    """média diária das células; entra só o dia que todas têm valor"""
+    comuns = set.intersection(*(set(s) for s in series))
+    return {d: round(sum(s[d] for s in series) / len(series), 1) for d in sorted(comuns)}
+
+
+def previsoes_area(conjuntos):
+    """conjuntos: {pid: [(lat, lon), ...]}. Ensemble e temperatura em chamadas agrupadas; média das células por município."""
+    todos = [(pid, c) for pid, cs in conjuntos.items() for c in cs]
+    ens, tmp = [], []
+    for i in range(0, len(todos), LOTE):
+        coords = [c for _, c in todos[i:i + LOTE]]
+        ens += [r["daily"] for r in _lote("https://ensemble-api.open-meteo.com/v1/ensemble", coords, PREV_ENS)]
+        time.sleep(2)
+        tmp += [r["daily"] for r in _lote("https://api.open-meteo.com/v1/forecast", coords, PREV_TMAX)]
+        time.sleep(2)
+    out = {}
+    for pid in conjuntos:
+        idx = [k for k, (p, _) in enumerate(todos) if p == pid]
+        out[pid] = _resumo_prev([ens[k] for k in idx], [tmp[k] for k in idx])
+    return out
 
 
 def doy(d):
@@ -352,7 +547,7 @@ def produtividade(rn):
 
 
 def main():
-    PASTA.mkdir(parents=True, exist_ok=True); CACHE.mkdir(parents=True, exist_ok=True)
+    PASTA.mkdir(parents=True, exist_ok=True); (CACHE / "cel").mkdir(parents=True, exist_ok=True)
     rn = roni(); sem = nino34_semanal(); prob = probabilidades(); disc = discussao()
     djf = {r["ano"]: r["v"] for r in rn if r["s"] == "DJF"}
     fases = {y - 1: fase(v) for y, v in djf.items()}  # safra que começa em set/(y-1) tem o DJF de y
@@ -366,18 +561,37 @@ def main():
             "roni": [[r["s"], r["ano"], r["v"]] for r in rn], "prob": prob,
             "nino34": {"ultimo": [ult.isoformat(), sem[-1][1]], "comparacao": comp,
                        "recente": [[d.isoformat(), v] for d, v in sem[-104:]]}}
+    grade = montar_grade()
+    # células de cada município: a sede (cache antigo, já com histórico) e as células da grade dentro da área
+    cels = {p[0]: [(p[0], p[3], p[4])] + [(cel_id(a, b), a, b) for a, b in (grade.get(p[0]) or {}).get("celulas", [])]
+            for p in PONTOS}
+    # ordem de download dos históricos novos: uma célula de cada município por vez
+    fila = []
+    for k in range(MAX_CEL):
+        fila += [cs[k] for cs in cels.values() if k < len(cs)]
+    dados = atualizar_celulas(fila)
+    usados = {pid: [c for c in cs if c[0] in dados] for pid, cs in cels.items()}
+    try:
+        prevs = previsoes_area({pid: [(la, lo) for _, la, lo in cs] for pid, cs in usados.items()})
+    except Exception as e:
+        print(f"  previsão agrupada falhou ({e}); tenta ponto a ponto")
+        prevs = {}
     pontos = []
     for p in PONTOS:
         print(p[1], p[2])
-        dias = chuva_ponto(p[0], p[3], p[4]); time.sleep(1.5)
+        cs = usados[p[0]]
+        dias = media_area([dados[c[0]] for c in cs])
         norm = normal_diaria(dias)
         a = analisar_ponto(p, dias, norm, fases)
-        a["prev"] = previsao(p[3], p[4]); time.sleep(1.5)
+        g = grade.get(p[0]) or {}
+        a["area"] = {"km2": g.get("area_km2"), "celulas": len(cs), "previstas": 1 + len(g.get("celulas", [])),
+                     "na_area": g.get("celulas_na_area")}
+        a["prev"] = prevs.get(p[0]) or previsao(p[3], p[4])
         ini = date.fromisoformat(a["prev"]["d"][0]); fim = date.fromisoformat(a["prev"]["d"][-1])
         a["prev"]["tot"]["normal"] = round(normal_periodo(norm, ini, fim))
         a["prev"]["normal_dia"] = [round(norm[doy(date.fromisoformat(d))], 1) for d in a["prev"]["d"]]
         pontos.append(a)
-        print(f"  safra {a['acc']['safra']} | 30d {a['acc']['d30']} | prev 15d {a['prev']['tot']}")
+        print(f"  {len(cs)} células | safra {a['acc']['safra']} | 30d {a['acc']['d30']} | prev 15d {a['prev']['tot']}")
     saida = {"atualizado_em": datetime.now().strftime("%Y-%m-%d %H:%M"), "enso": enso, "pontos": pontos,
              "fases_safra": {str(k): v for k, v in fases.items() if k >= 1980}}
     (PASTA / "clima.json").write_text(json.dumps(saida, ensure_ascii=False, separators=(",", ":")))
