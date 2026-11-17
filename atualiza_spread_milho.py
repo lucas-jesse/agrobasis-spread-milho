@@ -16,8 +16,18 @@ headers = {
     "Accept-Language": "pt-BR,pt;q=0.9,en;q=0.8",
 }
 
-# Data no horário do Brasil
-data_hoje = datetime.now(ZoneInfo("America/Sao_Paulo")).strftime("%d/%m/%y")
+# Data do pregão no horário do Brasil. O cron do GitHub atrasa com frequência e
+# às vezes roda depois da meia-noite: antes das 9h (B3 fechada) o ajuste lido
+# ainda é o do pregão anterior, então a linha recebe a data do último dia útil.
+from datetime import timedelta
+agora = datetime.now(ZoneInfo("America/Sao_Paulo"))
+pregao = agora.date()
+if agora.hour < 9:
+    pregao -= timedelta(days=1)
+while pregao.weekday() >= 5:
+    pregao -= timedelta(days=1)
+data_hoje = pregao.strftime("%d/%m/%y")
+data_calendario = agora.strftime("%d/%m/%y")
 
 resposta = requests.get(URL, headers=headers, timeout=20)
 resposta.raise_for_status()
@@ -60,8 +70,17 @@ nova_linha = [linha.get(coluna, "") for coluna in cabecalho]
 
 datas_existentes = aba.col_values(1)
 
-# Procura a data de hoje na coluna A
+# Procura a data do pregão na coluna A
 numero_linha = None
+
+# Corrige linha gravada com a data do calendário por uma execução de madrugada
+if data_calendario != data_hoje and data_hoje not in [str(d).strip() for d in datas_existentes]:
+    for i, data in enumerate(datas_existentes, start=1):
+        if str(data).strip() == data_calendario:
+            aba.update(range_name=f"A{i}", values=[[data_hoje]])
+            datas_existentes[i - 1] = data_hoje
+            print(f"Linha {data_calendario} renomeada para {data_hoje}.")
+            break
 
 for i, data in enumerate(datas_existentes, start=1):
     if str(data).strip() == data_hoje:
