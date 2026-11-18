@@ -45,6 +45,7 @@ jobs:
         continue-on-error: true
         env:
           FONTE_BALCAO: ${{ secrets.FONTE_BALCAO }}
+          FONTE_BALCAO_SR: ${{ secrets.FONTE_BALCAO_SR }}
         run: python basis_balcao.py
       - name: Commit
         run: |

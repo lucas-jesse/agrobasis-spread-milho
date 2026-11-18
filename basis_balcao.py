@@ -41,6 +41,7 @@ PRACAS = {
     "Rio Verde GO": ("Rio Verde/GO", None),
     "Brasília DF": ("Brasília/DF", None),
     "Luís Eduardo Magalhães BA": ("Luís Eduardo Magalhães/BA", None),
+    "Santa Rosa RS": ("\x00", None),  # vem da segunda fonte (FONTE_BALCAO_SR), não da tabela geral
 }
 PRODUTOS = {"soja": "soja", "milho": "milho"}
 
@@ -121,6 +122,52 @@ def coletar(hist):
     return novos > 0
 
 
+def coletar_sr(hist):
+    """Santa Rosa RS: histórico mensal publicado num formulário (ASP.NET) cuja URL fica no segredo FONTE_BALCAO_SR.
+    Na primeira vez busca desde nov/2019; depois, só o mês corrente e o anterior. Vale a última cotação de cada dia."""
+    url = os.environ.get("FONTE_BALCAO_SR", "").strip()
+    if not url:
+        print("coleta SR: segredo FONTE_BALCAO_SR ausente")
+        return 0
+    import requests
+    s = requests.Session()
+    s.headers["User-Agent"] = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36"
+    hoje = datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+    ja = len(hist["soja"].get("Santa Rosa RS", {}))
+    ini = date(2019, 11, 1) if ja < 300 else date(hoje.year, hoje.month, 1) - timedelta(days=1)
+    meses, d = [], date(ini.year, ini.month, 1)
+    while d <= hoje:
+        meses.append((d.month, d.year))
+        d = (d + timedelta(days=32)).replace(day=1)
+    novos = 0
+    for mes, ano in meses:
+        try:
+            h = s.get(url, timeout=40).text
+            f = dict(re.findall(r'<input type="hidden" name="([^"]+)" id="[^"]*" value="([^"]*)"', h))
+            f.update({"ddlMes": str(mes), "ddlAno": str(ano), "btnSend": "Consultar"})
+            h = s.post(url, data=f, timeout=40).text
+        except Exception as e:
+            print(f"coleta SR {mes}/{ano}: {e}")
+            continue
+        for bloco in re.findall(r'<div class="cotacoes">(.*?)</ul>', h, re.S):
+            m = re.search(r"<h2>\s*([^<]+?)\s*</h2>", bloco)
+            prod = {"milho": "milho", "soja": "soja"}.get(m.group(1).strip().lower()) if m else None
+            if not prod:
+                continue
+            serie = hist[prod].setdefault("Santa Rosa RS", {})
+            for dt, val in re.findall(r'class="indice">\s*(\d{2}/\d{2}/\d{4})\s*</div>\s*<div class="valor">\s*R\$\s*([\d.,]+)', bloco):
+                v = num_br(val)
+                if v is None:
+                    continue
+                k = datetime.strptime(dt, "%d/%m/%Y").strftime("%Y-%m-%d")
+                if serie.get(k) != v:  # várias cotações no dia: fica a última (tarde)
+                    serie[k] = v
+                    novos += 1
+        time.sleep(1.5)
+    print(f"coleta SR: {len(meses)} meses, {novos} valores novos ou alterados")
+    return novos
+
+
 def ref_por_data(datas, *cols):
     return {d: tuple(c[i] for c in cols) for i, d in enumerate(datas)}
 
@@ -177,7 +224,9 @@ def exportar(hist):
 
 def main():
     hist = json.loads(HIST.read_text(encoding="utf-8")) if HIST.exists() else {"soja": {}, "milho": {}}
-    if coletar(hist):
+    n = coletar(hist)
+    n += coletar_sr(hist)
+    if n:
         HIST.write_text(json.dumps(hist, ensure_ascii=False, separators=(",", ":"), sort_keys=True), encoding="utf-8")
     exportar(hist)
 
