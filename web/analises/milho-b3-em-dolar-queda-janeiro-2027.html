@@ -1,0 +1,480 @@
+<!--
+============================================================
+AGROBASIS · ANÁLISE: MILHO B3 EM DÓLAR, QUEDA DO CONTRATO JANEIRO/2027
+============================================================
+URL: /analises/milho-b3-em-dolar-queda-janeiro-2027/
+
+CONFIGURAÇÃO NO PLUGIN DE SEO:
+  Title (SEO): Milho B3 em dólar cai 22% e vai a US$ 12,29 por saca | AgroBasis
+  Meta description: O milho janeiro/27 da B3 caiu de US$ 15,79 para US$ 12,29 por saca em oito semanas. Quanto foi milho, quanto foi dólar e o que o histórico mostra.
+  Slug: milho-b3-em-dolar-queda-janeiro-2027
+  Frase-chave de foco: milho B3 em dólar
+
+NOTA DE DADOS (todos os números conferidos em 18/11/2026, referência ao fechamento de 17/11/2026):
+  Milho B3 (CCMF27, CCMH27, CCMK27): ajustes diários da B3, base do dashboard Milho B3 x Dólar (dados/ccm_historico.json).
+  Dólar: PTAX de venda do Banco Central (SGS), mesma base do dashboard (dados/cambio.json). Dólar futuro DOLF27: B3.
+  Milho em dólar = ajuste B3 em R$/sc dividido pela PTAX do dia. Contratos janeiro de 2021 a 2027: dashboard (aba sazonal).
+  Milho CBOT: contínuo do 1º vencimento (CBOT:ZC1!) via TradingView, mesma série usada no prêmio do dashboard.
+  Conversão: 1 saca de 60 kg = 2,36209 bushels de milho (1 bu = 25,4012 kg).
+  Fundos: CFTC Disaggregated COT, Managed Money, posição líquida em milho até 10/11/2026 (dashboard Posição dos Fundos).
+  Descolamentos: histórico do sinal do dashboard (z do descolamento de 21 pregões <= -1,5; 12 episódios com resultado de 21 pregões, nov/2020 a out/2026).
+  Conab: 2º levantamento da safra 2026/27 (13/11/2026): milho 148,0 mi t, exportação ~43 mi t, estoques 19,0 mi t (jan/2027) e 20,9 mi t (jan/2028).
+  Câmbio no período: dólar no maior nível desde abril de 2025 e leilões de linha de até US$ 1 bilhão anunciados pelo BC para 18/11/2026 (imprensa, 17/11/2026).
+
+NOTA DE ESTILO: sem travessão em H1/H2 e na prosa, tom sóbrio e direto.
+NOTA DE DESIGN: Design System AgroBasis, Geist + Sora, Lucide, gráficos em SVG puro.
+============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<style>
+  .abp-article {
+    font-family:'Geist', Arial, sans-serif;
+    color:#222222;
+    padding:36px 0 56px 0;
+    box-sizing:border-box;
+    background:#ffffff;
+  }
+  .abp-narrow { max-width:800px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+
+  .abp-breadcrumb { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+  .abp-breadcrumb a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-breadcrumb a:hover { text-decoration:underline; }
+
+  .abp-badge {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Sora', Arial, sans-serif;
+    background:#EEF4E7; color:#1E4812; border:1px solid #d7e6c9;
+    border-radius:999px; padding:6px 14px 6px 10px;
+    font-size:12px; font-weight:700; letter-spacing:.2px;
+    margin-bottom:18px;
+  }
+  .abp-badge svg { width:13px; height:13px; stroke-width:2.2; }
+
+  .abp-h1 { font-size:35px; line-height:1.22; color:#222222; font-weight:800; margin:0 0 14px 0; }
+  .abp-lead { font-size:17px; line-height:1.7; color:#4a4a4a; margin:0 0 8px 0; }
+  .abp-meta { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#9a9a9a; margin:14px 0 30px 0; padding-bottom:20px; border-bottom:1px solid #eef1ed; }
+
+  .abp-h2 {
+    font-size:24px; color:#222222; font-weight:800;
+    margin:44px 0 14px 0; padding-left:12px; border-left:4px solid #1E4812;
+  }
+  .abp-h3 { font-size:17px; color:#222222; font-weight:700; margin:26px 0 10px 0; }
+  .abp-p { font-size:15.5px; line-height:1.8; color:#333333; margin:0 0 16px 0; }
+  .abp-p b { color:#1E4812; font-weight:700; }
+  .abp-list { margin:0 0 18px 0; padding-left:22px; }
+  .abp-list li { font-size:15.5px; line-height:1.8; color:#333333; margin-bottom:8px; }
+  .abp-list b { color:#222222; }
+
+  .abp-pullquote {
+    background:#fafbf9; border-left:3px solid #A17149; border-radius:0 14px 14px 0;
+    padding:18px 22px; margin:24px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:16px; line-height:1.6; color:#3f3f3f; font-style:italic;
+  }
+
+  .abp-note {
+    background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px;
+    padding:18px 20px; font-size:14px; line-height:1.65; color:#5b4636; margin:20px 0;
+  }
+  .abp-note b { color:#8a5a34; }
+
+  .abp-table {
+    width:100%; border-collapse:separate; border-spacing:0;
+    margin:14px 0 20px 0; font-size:14px;
+    border:1px solid #e5e7eb; border-radius:14px; overflow:hidden;
+  }
+  .abp-table th, .abp-table td {
+    padding:11px 14px; text-align:left; border-bottom:1px solid #eef1ed;
+  }
+  .abp-table tr:last-child td { border-bottom:none; }
+  .abp-table th {
+    background:#1E4812; color:#ffffff; font-weight:700;
+    font-family:'Sora', Arial, sans-serif; font-size:11.5px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+  .abp-table td { color:#3f3f3f; }
+  .abp-table tr:nth-child(even) td { background:#fafbf9; }
+
+  .abp-formula-box {
+    background:#fafbf9; border:1px solid #e5e7eb; border-left:3px solid #A17149;
+    border-radius:12px; padding:18px 20px; margin:18px 0 22px 0;
+  }
+  .abp-formula-code {
+    font-family:"Courier New", monospace; font-size:14.5px; color:#1E4812;
+    background:#EEF4E7; border-radius:8px; padding:12px 16px; display:block; margin-bottom:4px;
+    text-align:center; font-weight:600;
+  }
+
+  .abp-chart-card {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:18px;
+    padding:22px; margin:22px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05);
+  }
+  .abp-chart-title { font-family:'Geist', Arial, sans-serif; font-size:15px; font-weight:700; color:#222222; margin-bottom:2px; }
+  .abp-chart-sub { font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; margin-bottom:14px; }
+  .abp-chart-caption { font-family:'Sora', Arial, sans-serif; font-size:11px; color:#9a9a9a; text-align:right; margin-top:8px; }
+  .abp-legend { display:flex; gap:18px; flex-wrap:wrap; font-family:'Sora', Arial, sans-serif; font-size:12px; color:#5b5b5b; margin-bottom:10px; }
+  .abp-legend-item { display:flex; align-items:center; gap:6px; }
+  .abp-legend-dot { width:14px; height:3px; border-radius:2px; display:inline-block; }
+
+  .abp-toc {
+    background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px;
+    padding:18px 22px; margin:24px 0 8px 0;
+  }
+  .abp-toc-title { font-family:'Sora', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:10px; }
+  .abp-toc ol { margin:0; padding-left:20px; }
+  .abp-toc li { font-size:14px; line-height:1.9; }
+  .abp-toc a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-toc a:hover { text-decoration:underline; }
+
+  .abp-cta-box {
+    background:#1E4812; border-radius:20px; padding:32px 28px; margin:36px 0;
+    text-align:center;
+  }
+  .abp-cta-box h3 { color:#ffffff; font-size:20px; font-weight:800; margin:0 0 8px 0; }
+  .abp-cta-box p { color:#d7e6c9; font-size:14.5px; line-height:1.6; margin:0 0 20px 0; max-width:480px; margin-left:auto; margin-right:auto; }
+  .abp-cta-btn {
+    display:inline-flex; align-items:center; gap:8px;
+    background:#ffffff; color:#1E4812 !important; font-family:'Geist', Arial, sans-serif;
+    font-size:14.5px; font-weight:700; padding:13px 24px; border-radius:10px;
+    text-decoration:none !important; transition:background .15s ease;
+  }
+  .abp-cta-btn:hover { background:#EEF4E7; }
+  .abp-cta-btn svg { width:16px; height:16px; stroke-width:2.2; }
+
+  .abp-faq-item {
+    background:#ffffff; border:1px solid #e5e7eb; border-radius:12px;
+    margin-bottom:10px; overflow:hidden;
+  }
+  .abp-faq-item summary {
+    list-style:none; cursor:pointer; padding:16px 18px;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    font-size:15px; font-weight:700; color:#222222;
+  }
+  .abp-faq-item summary::-webkit-details-marker { display:none; }
+  .abp-faq-item summary svg { width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+  .abp-faq-item[open] summary svg { transform:rotate(180deg); }
+  .abp-faq-a { padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+
+  .abp-sources {
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px;
+    padding:16px 20px; margin:30px 0; font-family:'Sora', Arial, sans-serif;
+    font-size:12.5px; line-height:1.8; color:#7a7a7a;
+  }
+  .abp-sources b { color:#5b5b5b; }
+
+  .abp-disclaimer {
+    margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0;
+    font-family:'Sora', Arial, sans-serif;
+    font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6;
+  }
+
+  .abp-author-box {
+    display:flex; align-items:center; gap:12px; margin:30px 0;
+    background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 18px;
+  }
+  .abp-author-icon { width:38px; height:38px; border-radius:50%; background:#EEF4E7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .abp-author-icon svg { width:19px; height:19px; color:#1E4812; }
+  .abp-author-text { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; line-height:1.5; }
+  .abp-author-text b { color:#222222; }
+
+  @media (max-width:768px) {
+    .abp-h1 { font-size:25px; }
+    .abp-lead { font-size:15px; }
+    .abp-h2 { font-size:20px; }
+    .abp-narrow { padding:0 14px; }
+    .abp-chart-card { padding:14px; }
+    .abp-cta-box { padding:24px 18px; }
+    .abp-table { font-size:12.5px; }
+    .abp-table th, .abp-table td { padding:8px 10px; }
+  }
+</style>
+
+<div class="abp-article">
+<div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/analises/">Análises</a> &nbsp;›&nbsp;
+    Milho B3 em dólar
+  </div>
+
+  <div class="abp-badge"><i data-lucide="trending-down"></i> Milho · B3 e Câmbio</div>
+  <h1 class="abp-h1">Milho da B3 em dólar cai de US$ 15,79 para US$ 12,29 por saca: o que explica a queda</h1>
+  <p class="abp-lead">Em oito semanas, o contrato de janeiro de 2027 do milho na B3 perdeu 22% do valor em dólar. Em reais, a queda foi bem menor, porque o dólar subiu 13% no mesmo período. Com os dados do painel Milho B3 x Dólar, separamos quanto da queda veio do milho, quanto veio do câmbio, quanto veio de Chicago e o que o histórico mostra depois de movimentos parecidos.</p>
+  <div class="abp-meta">Por Equipe AgroBasis · Publicado em 18 de novembro de 2026 · Dados até 17/11/2026 · Leitura de 11 min</div>
+
+  <div class="abp-toc">
+    <div class="abp-toc-title">Neste artigo</div>
+    <ol>
+      <li><a href="#numeros">A queda em 5 números</a></li>
+      <li><a href="#calculo">Como o milho da B3 vira dólar</a></li>
+      <li><a href="#metade">Metade foi o milho, metade foi o dólar</a></li>
+      <li><a href="#chicago">Chicago explica dois terços da queda</a></li>
+      <li><a href="#historico">O menor valor para a época desde o início da série</a></li>
+      <li><a href="#descolamento">O que aconteceu depois de descolamentos parecidos</a></li>
+      <li><a href="#pratica">O que isso muda na prática</a></li>
+      <li><a href="#monitorar">O que monitorar nas próximas semanas</a></li>
+      <li><a href="#faq">Perguntas frequentes</a></li>
+    </ol>
+  </div>
+
+  <h2 class="abp-h2" id="numeros">A queda em 5 números</h2>
+  <p class="abp-p">O contrato de milho com vencimento em janeiro de 2027 (código CCMF27) é hoje o primeiro vencimento da B3 e a principal referência de preço futuro do cereal no Brasil. Medido em dólar, ele saiu de <b>US$ 15,79 por saca em 21 de setembro</b> para <b>US$ 12,29 em 17 de novembro de 2026</b>.</p>
+
+  <table class="abp-table">
+    <thead><tr><th>Indicador</th><th>21/09/2026</th><th>17/11/2026</th><th>Variação</th></tr></thead>
+    <tbody>
+      <tr><td>Milho B3 janeiro/27 (R$/sc)</td><td>80,71</td><td>71,10</td><td>-11,9%</td></tr>
+      <tr><td>Dólar PTAX (R$)</td><td>5,1117</td><td>5,7851</td><td>+13,2%</td></tr>
+      <tr><td><b>Milho B3 janeiro/27 (US$/sc)</b></td><td><b>15,79</b></td><td><b>12,29</b></td><td><b>-22,2%</b></td></tr>
+      <tr><td>Milho CBOT, 1º vencimento (US$/bushel)</td><td>5,43</td><td>4,47</td><td>-17,8%</td></tr>
+      <tr><td>Prêmio da B3 sobre Chicago (US$/sc)</td><td>2,96</td><td>1,74</td><td>US$ -1,22</td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">A tabela já mostra o centro da história: o produtor que olha o preço em reais viu o janeiro cair cerca de R$ 9,60 por saca, um ajuste relevante, mas longe de um colapso. Quem olha em dólar, que é a moeda em que o milho brasileiro compete no mundo, viu uma das maiores quedas da série do painel.</p>
+
+  <h2 class="abp-h2" id="calculo">Como o milho da B3 vira dólar</h2>
+  <p class="abp-p">O contrato de milho da B3 é cotado em reais por saca de 60 kg. Para colocá-lo na mesma moeda de Chicago e dos portos, o painel divide o ajuste diário pela PTAX do mesmo dia, a taxa oficial de câmbio do Banco Central.</p>
+  <div class="abp-formula-box">
+    <span class="abp-formula-code">Milho B3 em US$/sc = ajuste B3 (R$/sc) ÷ PTAX (R$/US$)</span>
+  </div>
+  <p class="abp-p">Em 17 de novembro, a conta foi R$ 71,10 ÷ 5,7851 = US$ 12,29 por saca. Convertido para a unidade de Chicago, isso equivale a cerca de US$ 5,20 por bushel, contra US$ 4,47 do milho na CBOT. A diferença entre os dois é o prêmio que o mercado brasileiro paga sobre Chicago, influenciado por frete, demanda interna, etanol de milho e oferta regional.</p>
+
+  <h2 class="abp-h2" id="metade">Metade foi o milho, metade foi o dólar</h2>
+  <p class="abp-p">Como o preço em dólar é uma divisão, a queda pode ser separada em duas partes: o que o milho fez em reais e o que o dólar fez contra o real. Usando a variação logarítmica, que permite somar os efeitos, o resultado é quase um empate.</p>
+  <ul class="abp-list">
+    <li><b>Milho em reais:</b> o janeiro caiu de R$ 80,71 para R$ 71,10 (-11,9%). Responde por cerca de <b>51%</b> da queda em dólar.</li>
+    <li><b>Dólar:</b> a PTAX subiu de R$ 5,1117 para R$ 5,7851 (+13,2%). Responde por cerca de <b>49%</b>.</li>
+  </ul>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Milho B3, dólar e Chicago desde agosto</div>
+    <div class="abp-chart-sub">Índice, base 100 em 21/09/2026 · milho B3 janeiro/27 em reais e em dólar, PTAX e milho CBOT (1º vencimento)</div>
+    <div class="abp-legend">
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;"></span> Milho B3 jan/27 em US$</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#54931B;"></span> Milho B3 jan/27 em R$</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#A17149;"></span> Dólar (PTAX)</span>
+      <span class="abp-legend-item"><span class="abp-legend-dot" style="background:#8A8F87;"></span> Milho CBOT</span>
+    </div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Milho B3 em reais, dólar, milho CBOT e milho B3 em dólar, base 100 em 21 de setembro"><line x1="52" x2="622" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="46" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">75</text><line x1="52" x2="622" y1="250.9" y2="250.9" stroke="#EEF1ED"/><text x="46" y="254.9" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">80</text><line x1="52" x2="622" y1="221.8" y2="221.8" stroke="#EEF1ED"/><text x="46" y="225.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">85</text><line x1="52" x2="622" y1="192.7" y2="192.7" stroke="#EEF1ED"/><text x="46" y="196.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">90</text><line x1="52" x2="622" y1="163.6" y2="163.6" stroke="#EEF1ED"/><text x="46" y="167.6" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">95</text><line x1="52" x2="622" y1="134.4" y2="134.4" stroke="#EEF1ED"/><text x="46" y="138.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">100</text><line x1="52" x2="622" y1="105.3" y2="105.3" stroke="#EEF1ED"/><text x="46" y="109.3" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">105</text><line x1="52" x2="622" y1="76.2" y2="76.2" stroke="#EEF1ED"/><text x="46" y="80.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">110</text><line x1="52" x2="622" y1="47.1" y2="47.1" stroke="#EEF1ED"/><text x="46" y="51.1" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">115</text><line x1="52" x2="622" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="46" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">120</text><line x1="290.5" x2="290.5" y1="18" y2="280" stroke="#bbb" stroke-dasharray="4 4"/><text x="294.5" y="28" font-size="11" fill="#7a7a7a" font-family="Sora, Arial, sans-serif">21/09 = 100</text><polyline fill="none" stroke="#54931B" stroke-width="2.4" points="52.0,161.9 56.9,165.8 61.7,166.6 66.6,161.8 71.5,162.4 86.1,158.2 90.9,159.8 95.8,158.5 100.7,164.5 105.5,158.0 120.2,153.0 125.0,146.2 129.9,146.8 134.8,142.2 139.6,137.0 154.2,129.2 159.1,132.7 164.0,129.1 173.7,135.6 188.3,132.7 193.2,125.2 198.0,125.6 202.9,128.7 207.8,132.6 227.2,136.7 232.1,139.4 237.0,135.4 241.8,137.8 256.5,138.8 261.3,138.8 266.2,137.5 271.1,137.8 275.9,136.6 290.5,134.4 295.4,141.7 300.3,141.8 305.1,142.5 310.0,142.0 324.6,149.7 329.5,149.1 334.3,165.0 339.2,164.7 344.1,167.3 358.7,175.3 363.5,180.0 368.4,180.8 373.3,183.9 378.2,191.5 397.6,191.0 402.5,203.0 407.4,202.3 412.2,204.3 426.8,213.4 431.7,212.4 436.6,212.3 441.4,209.0 446.3,212.4 460.9,197.6 465.8,208.0 470.6,207.4 475.5,207.2 480.4,202.3 499.8,197.8 504.7,199.8 509.6,204.1 514.5,202.5 533.9,200.4 538.8,206.3 543.7,205.2 548.5,206.6 563.1,200.9 568.0,203.8"/><text x="573.0" y="207.8" font-size="11.5" font-weight="700" fill="#54931B" font-family="Sora, Arial, sans-serif">88</text><polyline fill="none" stroke="#A17149" stroke-width="2.4" points="52.0,138.9 56.9,135.2 61.7,134.0 66.6,135.6 71.5,136.8 86.1,136.2 90.9,132.5 95.8,128.5 100.7,126.0 105.5,121.7 120.2,124.2 125.0,123.9 129.9,127.6 134.8,126.0 139.6,128.7 154.2,129.9 159.1,130.2 164.0,128.9 173.7,124.3 188.3,126.5 193.2,129.3 198.0,132.7 202.9,136.2 207.8,132.9 227.2,137.4 232.1,136.0 237.0,134.1 241.8,136.7 256.5,127.8 261.3,130.2 266.2,129.8 271.1,129.8 275.9,129.2 290.5,134.4 295.4,133.9 300.3,131.1 305.1,126.7 310.0,124.5 324.6,122.9 329.5,122.1 334.3,126.6 339.2,123.5 344.1,121.7 358.7,148.8 363.5,150.6 368.4,147.9 373.3,145.8 378.2,148.4 397.6,146.1 402.5,142.1 407.4,141.2 412.2,137.8 426.8,140.7 431.7,145.6 436.6,144.0 441.4,142.8 446.3,142.9 460.9,90.1 465.8,109.1 470.6,108.2 475.5,104.5 480.4,99.2 499.8,91.0 504.7,92.7 509.6,94.5 514.5,90.1 533.9,80.6 538.8,83.3 543.7,77.2 548.5,72.9 563.1,63.7 568.0,57.7"/><text x="573.0" y="61.7" font-size="11.5" font-weight="700" fill="#A17149" font-family="Sora, Arial, sans-serif">113</text><polyline fill="none" stroke="#8A8F87" stroke-width="2.2" points="52.0,235.2 56.9,242.9 61.7,248.3 66.6,246.1 71.5,246.1 86.1,246.5 90.9,248.3 95.8,226.6 100.7,236.5 105.5,224.8 120.2,218.4 125.0,220.2 129.9,209.8 134.8,203.4 139.6,198.0 154.2,189.8 159.1,179.8 164.0,165.8 173.7,141.3 188.3,140.3 193.2,131.3 198.0,134.0 202.9,137.2 207.8,141.3 227.2,144.4 232.1,150.8 237.0,144.4 241.8,148.1 256.5,144.9 261.3,142.2 266.2,144.0 271.1,148.1 275.9,151.2 290.5,134.4 295.4,141.3 300.3,149.4 305.1,151.2 310.0,150.3 324.6,156.2 329.5,157.1 334.3,179.8 339.2,178.5 344.1,183.0 358.7,183.5 363.5,172.1 368.4,178.5 373.3,180.3 378.2,202.5 397.6,199.3 402.5,201.6 407.4,204.3 412.2,208.0 426.8,216.1 431.7,221.1 436.6,220.2 441.4,222.9 446.3,227.9 460.9,228.8 465.8,235.6 470.6,232.5 475.5,232.9 480.4,237.0 499.8,242.4 504.7,240.6 509.6,244.7 514.5,243.4 533.9,235.2 538.8,236.5 543.7,242.4 548.5,239.3 563.1,235.6 568.0,237.9"/><text x="573.0" y="241.9" font-size="11.5" font-weight="700" fill="#8A8F87" font-family="Sora, Arial, sans-serif">82</text><polyline fill="none" stroke="#1E4812" stroke-width="3.4" points="52.0,157.6 56.9,165.1 61.7,167.0 66.6,160.7 71.5,160.1 86.1,156.6 90.9,161.7 95.8,164.1 100.7,172.4 105.5,170.0 120.2,162.7 125.0,156.4 129.9,153.4 134.8,150.5 139.6,142.7 154.2,133.7 159.1,136.9 164.0,134.7 173.7,145.5 188.3,140.6 193.2,130.4 198.0,127.4 202.9,127.0 207.8,134.1 227.2,133.7 232.1,137.9 237.0,135.7 241.8,135.6 256.5,145.3 261.3,143.0 266.2,142.1 271.1,142.4 275.9,141.8 290.5,134.4 295.4,142.2 300.3,145.1 305.1,150.0 310.0,151.7 324.6,160.7 329.5,160.9 334.3,172.3 339.2,174.9 344.1,179.1 358.7,161.6 363.5,164.6 368.4,168.1 373.3,173.3 378.2,178.6 397.6,180.3 402.5,196.2 407.4,196.3 412.2,201.3 426.8,207.9 431.7,202.6 436.6,203.9 441.4,201.6 446.3,205.0 460.9,234.3 465.8,229.2 470.6,229.3 475.5,232.1 480.4,231.7 499.8,233.8 504.7,234.3 509.6,237.0 514.5,238.9 533.9,244.0 538.8,247.5 543.7,251.0 548.5,255.3 563.1,256.7 568.0,263.5"/><text x="573.0" y="267.5" font-size="11.5" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">78</text><text x="52.0" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">ago</text><text x="193.2" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">set</text><text x="339.2" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">out</text><text x="499.8" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">nov</text></svg>
+    <div class="abp-chart-caption">Fonte: B3, Banco Central (PTAX), CME/CBOT via TradingView · Elaboração: AgroBasis, painel Milho B3 x Dólar</div>
+  </div>
+
+  <p class="abp-p">O gráfico mostra dois momentos diferentes. Até meados de outubro, o dólar ficou praticamente parado e a queda veio do milho: Chicago devolvia a alta de setembro e a B3 acompanhava. A partir do fim de outubro, o milho em reais parou de cair e oscilou entre R$ 70 e R$ 72, mas o dólar disparou, de cerca de R$ 5,05 para R$ 5,79, com a piora da percepção sobre as contas públicas. Nessa segunda fase, o milho caiu em dólar só porque o real se desvalorizou.</p>
+  <div class="abp-note"><b>O câmbio protegeu o preço em reais.</b> Se o dólar estivesse no nível de 21 de setembro, o milho janeiro em dólar a US$ 12,29 valeria cerca de R$ 62,82 por saca, e não os R$ 71,10 do fechamento de 17/11.</div>
+
+  <div class="abp-cta-box">
+    <h3>Acompanhe o milho B3 em dólar todo dia</h3>
+    <p>Preço em US$/sc, descolamento entre milho e dólar, prêmio sobre Chicago e comparação com os contratos de janeiro de anos anteriores.</p>
+    <a href="/dashboards/milho-b3-x-dolar/" class="abp-cta-btn">Acessar o dashboard <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="chicago">Chicago explica dois terços da queda</h2>
+  <p class="abp-p">A outra forma de olhar o mesmo movimento é comparar com Chicago, já em dólar. Em 21 de setembro, o milho da CBOT valia US$ 12,83 por saca de 60 kg, e o janeiro da B3 tinha um prêmio de US$ 2,96 sobre ele. Em 17 de novembro, Chicago estava em US$ 10,55 por saca e o prêmio tinha caído para US$ 1,74.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">De onde veio a queda de US$ 3,50 por saca</div>
+    <div class="abp-chart-sub">Milho B3 janeiro/27 em US$ por saca de 60 kg, 21/09 a 17/11/2026</div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Decomposição da queda do milho B3 janeiro 2027 em dólar por saca"><line x1="52" x2="622" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="46" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 0</text><line x1="52" x2="622" y1="236.3" y2="236.3" stroke="#EEF1ED"/><text x="46" y="240.3" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 3</text><line x1="52" x2="622" y1="192.7" y2="192.7" stroke="#EEF1ED"/><text x="46" y="196.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 6</text><line x1="52" x2="622" y1="149.0" y2="149.0" stroke="#EEF1ED"/><text x="46" y="153.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 9</text><line x1="52" x2="622" y1="105.3" y2="105.3" stroke="#EEF1ED"/><text x="46" y="109.3" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 12</text><line x1="52" x2="622" y1="61.7" y2="61.7" stroke="#EEF1ED"/><text x="46" y="65.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 15</text><line x1="52" x2="622" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="46" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 18</text><rect x="77.7" y="50.2" width="91.2" height="229.8" rx="3" fill="#1E4812"/><text x="123.2" y="44.2" text-anchor="middle" font-size="14" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">15,79</text><text x="123.2" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">21/09</text><rect x="220.2" y="50.2" width="91.2" height="33.2" rx="3" fill="#8A8F87"/><text x="265.8" y="44.2" text-anchor="middle" font-size="14" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">-2,28</text><text x="265.8" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Queda de Chicago</text><rect x="362.6" y="83.4" width="91.2" height="17.7" rx="3" fill="#A17149"/><text x="408.2" y="77.4" text-anchor="middle" font-size="14" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">-1,22</text><text x="408.2" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">Prêmio da B3 encolheu</text><rect x="505.1" y="101.1" width="91.2" height="178.9" rx="3" fill="#1E4812"/><text x="550.8" y="95.1" text-anchor="middle" font-size="14" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">12,29</text><text x="550.8" y="296" text-anchor="middle" font-size="11.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">17/11</text></svg>
+    <div class="abp-chart-caption">Fonte: B3, Banco Central (PTAX), CME/CBOT via TradingView · Elaboração: AgroBasis</div>
+  </div>
+
+  <p class="abp-p">Dos US$ 3,50 perdidos por saca, <b>US$ 2,28 (65%) vieram da queda de Chicago</b> e US$ 1,22 (35%) vieram do encolhimento do prêmio brasileiro. Ou seja, a maior parte do movimento é internacional, e não um problema específico do milho no Brasil.</p>
+  <p class="abp-p">E por que Chicago caiu? O motor principal foi a saída dos fundos. Em meados de setembro, os fundos gestores tinham a maior posição comprada em milho em cinco anos. Desde então, venderam sem parar e, na posição de 10 de novembro, já estavam vendidos.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Posição líquida dos fundos em milho na CBOT</div>
+    <div class="abp-chart-sub">Mil contratos · gestores de recursos (Managed Money), comprados menos vendidos, posições semanais desde maio de 2026</div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Posição líquida dos fundos em milho na CBOT, em mil contratos"><line x1="52" x2="622" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="46" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">-100 mil</text><line x1="52" x2="622" y1="232.4" y2="232.4" stroke="#EEF1ED"/><text x="46" y="236.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">0 mil</text><line x1="52" x2="622" y1="184.7" y2="184.7" stroke="#EEF1ED"/><text x="46" y="188.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">100 mil</text><line x1="52" x2="622" y1="137.1" y2="137.1" stroke="#EEF1ED"/><text x="46" y="141.1" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">200 mil</text><line x1="52" x2="622" y1="89.5" y2="89.5" stroke="#EEF1ED"/><text x="46" y="93.5" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">300 mil</text><line x1="52" x2="622" y1="41.8" y2="41.8" stroke="#EEF1ED"/><text x="46" y="45.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">400 mil</text><rect x="53.5" y="68.2" width="17.4" height="164.2" fill="#1E4812"/><text x="63.7" y="296" text-anchor="middle" font-size="10.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">05/05</text><rect x="73.9" y="91.5" width="17.4" height="140.8" fill="#1E4812"/><rect x="94.2" y="92.6" width="17.4" height="139.7" fill="#1E4812"/><rect x="114.6" y="131.7" width="17.4" height="100.7" fill="#1E4812"/><rect x="134.9" y="175.1" width="17.4" height="57.2" fill="#1E4812"/><text x="145.1" y="296" text-anchor="middle" font-size="10.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">02/06</text><rect x="155.3" y="232.4" width="17.4" height="0.6" fill="#A17149"/><rect x="175.6" y="232.4" width="17.4" height="23.6" fill="#A17149"/><rect x="196.0" y="232.4" width="17.4" height="35.6" fill="#A17149"/><rect x="216.4" y="232.4" width="17.4" height="31.9" fill="#A17149"/><text x="226.5" y="296" text-anchor="middle" font-size="10.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">30/06</text><rect x="236.7" y="232.4" width="17.4" height="7.1" fill="#A17149"/><rect x="257.1" y="227.0" width="17.4" height="5.4" fill="#1E4812"/><rect x="277.4" y="205.3" width="17.4" height="27.0" fill="#1E4812"/><rect x="297.8" y="172.0" width="17.4" height="60.4" fill="#1E4812"/><text x="308.0" y="296" text-anchor="middle" font-size="10.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">28/07</text><rect x="318.1" y="163.4" width="17.4" height="69.0" fill="#1E4812"/><rect x="338.5" y="172.4" width="17.4" height="60.0" fill="#1E4812"/><rect x="358.9" y="145.8" width="17.4" height="86.6" fill="#1E4812"/><rect x="379.2" y="81.1" width="17.4" height="151.2" fill="#1E4812"/><text x="389.4" y="296" text-anchor="middle" font-size="10.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">25/08</text><rect x="399.6" y="41.3" width="17.4" height="191.0" fill="#1E4812"/><rect x="419.9" y="34.9" width="17.4" height="197.4" fill="#1E4812"/><rect x="440.3" y="34.9" width="17.4" height="197.4" fill="#1E4812"/><rect x="460.6" y="39.9" width="17.4" height="192.5" fill="#1E4812"/><text x="470.8" y="296" text-anchor="middle" font-size="10.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">22/09</text><rect x="481.0" y="50.8" width="17.4" height="181.6" fill="#1E4812"/><rect x="501.4" y="75.2" width="17.4" height="157.1" fill="#1E4812"/><rect x="521.7" y="115.0" width="17.4" height="117.4" fill="#1E4812"/><rect x="542.1" y="154.0" width="17.4" height="78.3" fill="#1E4812"/><text x="552.2" y="296" text-anchor="middle" font-size="10.5" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">20/10</text><rect x="562.4" y="193.7" width="17.4" height="38.6" fill="#1E4812"/><rect x="582.8" y="228.2" width="17.4" height="4.2" fill="#1E4812"/><rect x="603.1" y="232.4" width="17.4" height="10.8" fill="#A17149"/><text x="449.0" y="28.9" text-anchor="middle" font-size="12" font-weight="700" fill="#1E4812" font-family="Sora, Arial, sans-serif">414 mil</text><text x="607.8" y="259.1" text-anchor="end" font-size="12" font-weight="700" fill="#A17149" font-family="Sora, Arial, sans-serif">-22,6 mil</text><line x1="52" x2="622" y1="232.4" y2="232.4" stroke="#9a9a9a"/></svg>
+    <div class="abp-chart-caption">Fonte: CFTC, Commitments of Traders (Disaggregated) · Elaboração: AgroBasis, painel Posição dos Fundos</div>
+  </div>
+
+  <p class="abp-p">A virada foi de 437 mil contratos em oito semanas, de 414 mil comprados em 15/09/2026 para 22,6 mil vendidos em 10/11/2026. Esse período coincide quase exatamente com o pico e a queda do milho janeiro da B3 em dólar, que chegou a US$ 15,99 em 3 de setembro.</p>
+  <p class="abp-p">O prêmio brasileiro também cedeu. O prêmio do primeiro vencimento da B3 sobre Chicago tem mediana de US$ 2,30 por saca desde novembro de 2020; hoje está em US$ 1,74, abaixo de 63% dos dias da série. Não é um prêmio historicamente baixo, mas deixou de ser alto. Em reais, Chicago caiu só 6,9% no período, porque o dólar compensou a queda em dólar, enquanto a B3 caiu 11,9%: a bolsa brasileira ajustou mais do que a paridade internacional.</p>
+  <p class="abp-p">Esse ajuste do prêmio conversa com a oferta doméstica. No 2º levantamento da safra 2026/27, a Conab estimou a produção de milho em 148,0 milhões de toneladas, 2,4% acima da safra anterior, com estoque de passagem de 19,0 milhões de toneladas em janeiro de 2027 e 20,9 milhões em janeiro de 2028. É um quadro de oferta confortável no curto prazo, o que limita o espaço para a B3 sustentar um prêmio alto sobre Chicago enquanto a exportação não acelera.</p>
+
+  <h2 class="abp-h2" id="historico">O menor valor para a época desde o início da série</h2>
+  <p class="abp-p">O painel acompanha cada contrato de janeiro em dólar, de agosto até o vencimento. Isso permite comparar safra com safra no mesmo ponto do calendário.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Contratos de janeiro do milho B3 em dólar, safra a safra</div>
+    <div class="abp-chart-sub">US$ por saca de 60 kg, de agosto até o vencimento · janeiro de 2027 em destaque</div>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Contratos de janeiro do milho B3 em dólar por saca, safra a safra"><line x1="52" x2="622" y1="280.0" y2="280.0" stroke="#EEF1ED"/><text x="46" y="284.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 10</text><line x1="52" x2="622" y1="227.6" y2="227.6" stroke="#EEF1ED"/><text x="46" y="231.6" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 12</text><line x1="52" x2="622" y1="175.2" y2="175.2" stroke="#EEF1ED"/><text x="46" y="179.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 14</text><line x1="52" x2="622" y1="122.8" y2="122.8" stroke="#EEF1ED"/><text x="46" y="126.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 16</text><line x1="52" x2="622" y1="70.4" y2="70.4" stroke="#EEF1ED"/><text x="46" y="74.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 18</text><line x1="52" x2="622" y1="18.0" y2="18.0" stroke="#EEF1ED"/><text x="46" y="22.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">US$ 20</text><polyline fill="none" stroke="#C9D3C3" stroke-width="1.8" points="54.9,33.2 57.9,48.9 60.8,52.3 63.7,32.1 66.7,43.9 75.4,45.8 78.4,38.2 81.3,34.0 84.2,34.2 87.2,34.8 96.0,34.2 98.9,39.7 101.8,52.3 104.7,63.9 107.7,68.8 116.5,64.1 119.4,58.1 122.3,52.6 125.3,52.6 128.2,52.3 137.0,62.0 139.9,63.3 142.8,70.4 145.8,68.6 148.7,67.5 157.5,65.4 163.3,72.5 166.3,77.2 169.2,72.5 178.0,67.0 180.9,61.2 183.9,67.3 186.8,73.0 189.7,75.6 198.5,79.8 201.4,77.2 204.4,76.9 207.3,80.1 210.2,89.8 219.0,82.7 222.0,86.9 224.9,85.6 227.8,94.2 230.7,93.7 239.5,101.3 242.5,107.1 245.4,114.2 248.3,119.9 251.3,119.9 260.0,119.7 265.9,123.1 268.8,119.7 271.8,114.9 280.6,117.0 283.5,121.5 286.4,124.4 289.3,131.4 292.3,136.7 301.1,132.5 304.0,132.2 306.9,129.9 309.9,131.2 312.8,129.6 321.6,124.4 327.4,129.9 330.4,126.2 333.3,129.6 342.1,131.7 345.0,131.4 348.0,128.0 350.9,131.4 353.8,127.0 365.5,134.9 368.5,139.6 383.1,132.0 386.0,128.3 389.0,131.7 391.9,125.2 394.8,125.2 403.6,124.9 406.6,128.0 409.5,120.4 412.4,114.9 415.3,109.7 424.1,106.0 427.1,103.1 430.0,102.9 432.9,102.4 435.9,105.5 444.7,106.3 447.6,108.9 450.5,123.6 453.4,124.9 456.4,130.9 465.2,128.8 468.1,116.5 471.0,118.1 474.0,113.1 485.7,110.7 488.6,127.0 491.5,129.1 494.5,125.7 506.2,117.8 509.1,108.9 512.0,109.7 515.0,112.3 517.9,107.3 526.7,106.6 529.6,100.5 532.6,90.6 535.5,87.4 538.4,84.3 547.2,81.4"/><text x="552.2" y="85.4" font-size="11" font-weight="500" fill="#6b7a64" font-family="Sora, Arial, sans-serif">jan/22</text><polyline fill="none" stroke="#B7C6AF" stroke-width="1.8" points="52.0,82.2 54.9,89.3 57.9,88.0 60.8,80.9 63.7,76.9 72.5,74.3 75.4,68.0 78.4,62.3 81.3,59.4 84.2,58.9 93.0,62.3 96.0,67.8 98.9,71.7 101.8,71.4 104.7,75.6 113.5,83.0 116.5,72.8 119.4,71.7 122.3,70.9 125.3,58.9 134.0,53.1 137.0,55.5 139.9,66.5 142.8,73.0 145.8,72.5 154.6,70.7 157.5,74.9 163.3,74.9 166.3,71.2 175.1,64.9 178.0,69.4 180.9,72.2 183.9,71.4 186.8,78.8 195.6,76.9 198.5,70.4 201.4,69.6 204.4,68.3 207.3,74.3 216.1,82.7 219.0,84.5 222.0,85.6 224.9,86.6 227.8,84.8 236.6,72.8 239.5,74.3 242.5,79.6 245.4,82.2 248.3,83.0 257.1,77.5 260.0,76.9 265.9,80.9 268.8,79.6 277.6,82.2 280.6,84.5 283.5,85.3 286.4,82.7 289.3,82.2 298.1,90.1 301.1,92.4 304.0,93.2 306.9,90.6 309.9,95.3 318.7,85.9 321.6,79.0 327.4,83.8 330.4,78.5 339.2,84.3 342.1,95.8 345.0,96.3 348.0,107.1 350.9,110.7 359.7,113.6 365.5,112.8 368.5,120.2 371.4,105.0 380.2,105.5 383.1,102.6 386.0,106.3 389.0,97.6 391.9,99.2 400.7,103.1 403.6,104.7 406.6,104.2 409.5,96.3 412.4,101.3 421.2,106.3 424.1,104.5 427.1,104.5 430.0,101.6 432.9,104.2 441.7,106.8 444.7,105.5 447.6,110.7 450.5,108.9 453.4,105.2 462.2,108.1 465.2,102.6 468.1,98.7 471.0,97.1 474.0,93.7 482.7,97.4 485.7,104.2 488.6,97.6 491.5,90.8 503.3,106.0 506.2,113.1 509.1,119.7 512.0,117.3 515.0,105.2 523.8,105.0 526.7,101.8 529.6,100.5 532.6,96.1 535.5,96.3 544.3,97.6"/><text x="549.3" y="101.6" font-size="11" font-weight="500" fill="#6b7a64" font-family="Sora, Arial, sans-serif">jan/23</text><polyline fill="none" stroke="#A3B897" stroke-width="1.8" points="52.0,196.2 54.9,199.3 57.9,205.6 60.8,206.4 69.6,209.8 72.5,206.6 75.4,210.0 78.4,203.2 81.3,213.2 90.1,218.2 93.0,225.5 96.0,221.3 98.9,221.6 101.8,217.4 110.6,222.4 113.5,217.1 116.5,214.5 119.4,211.9 122.3,212.7 131.1,212.1 134.0,212.9 137.0,215.3 139.9,218.7 142.8,218.4 151.6,215.8 154.6,216.9 157.5,212.1 163.3,215.8 172.1,211.6 175.1,218.4 178.0,217.4 180.9,213.2 183.9,209.8 192.7,211.9 195.6,213.5 198.5,211.4 201.4,218.4 204.4,217.4 213.2,214.8 216.1,216.1 219.0,216.1 222.0,216.9 224.9,216.1 233.7,214.0 236.6,215.0 239.5,217.1 242.5,213.7 245.4,216.1 254.2,210.6 257.1,209.5 260.0,203.8 265.9,200.6 274.7,201.7 277.6,206.6 280.6,208.7 283.5,204.8 286.4,206.6 295.2,207.4 298.1,213.5 301.1,214.0 304.0,215.0 306.9,207.9 315.7,205.3 318.7,206.6 321.6,207.7 327.4,201.1 336.2,198.0 339.2,201.1 342.1,199.3 345.0,200.4 348.0,196.4 356.7,179.4 359.7,174.2 365.5,179.7 368.5,182.5 377.3,177.6 380.2,172.1 383.1,173.9 386.0,179.4 389.0,184.6 397.8,189.9 400.7,176.2 403.6,178.3 406.6,171.0 409.5,169.7 418.3,168.4 421.2,168.6 424.1,167.3 427.1,162.1 430.0,161.3 438.8,163.7 441.7,155.0 444.7,155.6 447.6,155.0 450.5,154.2 459.3,157.4 462.2,162.6 465.2,157.9 468.1,158.2 471.0,162.6 482.7,161.8 485.7,164.7 488.6,157.1 503.3,157.1 506.2,156.9 509.1,156.1 512.0,152.4 520.8,159.7 523.8,162.4 526.7,168.9 529.6,172.3 532.6,175.7 541.3,181.5"/><text x="546.3" y="185.5" font-size="11" font-weight="500" fill="#6b7a64" font-family="Sora, Arial, sans-serif">jan/24</text><polyline fill="none" stroke="#8FAA80" stroke-width="1.8" points="52.0,230.7 54.9,231.3 63.7,233.9 66.7,232.3 69.6,229.4 72.5,230.7 75.4,224.7 84.2,223.9 87.2,225.8 90.1,226.3 93.0,225.2 96.0,226.6 104.7,222.6 107.7,223.7 110.6,225.8 113.5,229.7 116.5,228.9 125.3,226.6 128.2,226.3 131.1,228.4 134.0,230.0 137.0,230.0 145.8,226.8 148.7,223.1 151.6,220.8 154.6,220.3 157.5,216.1 166.3,212.9 169.2,214.5 172.1,215.8 175.1,219.2 178.0,210.0 186.8,207.9 189.7,209.5 192.7,211.9 195.6,206.9 198.5,205.9 207.3,207.2 210.2,202.4 213.2,204.3 216.1,201.4 219.0,199.3 227.8,199.3 230.7,198.3 233.7,193.5 236.6,198.5 239.5,201.7 248.3,204.8 251.3,203.5 254.2,204.0 257.1,202.2 260.0,207.9 268.8,210.8 271.8,207.9 274.7,210.8 277.6,210.6 280.6,209.8 289.3,207.4 292.3,204.3 295.2,202.7 298.1,198.3 301.1,194.1 309.9,193.8 312.8,188.8 315.7,193.0 318.7,194.9 321.6,195.9 330.4,196.2 333.3,200.1 336.2,198.5 339.2,189.1 342.1,193.0 350.9,191.4 353.8,193.5 356.7,199.6 359.7,204.3 371.4,206.4 374.3,211.1 380.2,216.1 383.1,217.4 391.9,220.0 394.8,224.5 397.8,224.5 400.7,232.8 403.6,232.8 412.4,228.6 415.3,230.0 418.3,234.4 421.2,225.5 424.1,220.5 432.9,218.2 435.9,213.5 438.8,210.3 441.7,209.0 444.7,219.2 453.4,221.6 456.4,225.2 459.3,224.5 462.2,228.9 465.2,226.0 474.0,230.0 482.7,231.0 485.7,232.3 494.5,229.7 503.3,232.8 506.2,232.6 515.0,225.2 517.9,224.5 520.8,225.5 523.8,223.9 526.7,223.4 535.5,220.0 538.4,218.4 541.3,217.1"/><text x="546.3" y="226.1" font-size="11" font-weight="500" fill="#6b7a64" font-family="Sora, Arial, sans-serif">jan/25</text><polyline fill="none" stroke="#7A9A6A" stroke-width="1.8" points="52.0,198.5 60.8,195.9 63.7,203.0 66.7,205.1 69.6,204.0 72.5,203.0 81.3,202.7 84.2,202.7 87.2,201.9 90.1,202.4 93.0,199.0 101.8,198.8 104.7,199.8 107.7,203.2 110.6,199.8 113.5,196.9 122.3,196.7 125.3,195.1 128.2,195.1 131.1,195.9 134.0,194.6 142.8,195.1 145.8,197.2 148.7,196.4 151.6,198.3 154.6,196.2 163.3,197.7 166.3,198.0 169.2,197.2 172.1,196.9 175.1,194.6 183.9,195.1 186.8,194.1 189.7,195.1 192.7,195.1 195.6,197.5 204.4,202.4 207.3,200.1 210.2,201.7 213.2,202.2 216.1,203.2 224.9,202.2 227.8,205.3 230.7,205.9 233.7,207.4 236.6,206.6 245.4,204.8 248.3,205.3 251.3,204.5 254.2,202.2 257.1,205.1 265.9,209.0 268.8,207.2 271.8,203.0 274.7,201.4 277.6,197.5 286.4,193.3 289.3,195.1 292.3,194.3 295.2,197.7 298.1,197.7 306.9,194.6 309.9,195.4 312.8,190.7 315.7,195.9 318.7,194.1 327.4,188.3 330.4,192.5 333.3,192.5 336.2,191.4 339.2,194.6 348.0,193.8 350.9,192.0 353.8,191.4 356.7,189.9 359.7,190.9 368.5,189.3 371.4,192.0 374.3,193.8 380.2,195.9 389.0,196.2 391.9,191.7 394.8,184.4 397.8,182.0 400.7,182.3 409.5,178.3 412.4,169.7 415.3,172.1 418.3,174.2 421.2,178.6 430.0,182.3 432.9,183.8 435.9,192.2 438.8,192.8 441.7,192.8 450.5,194.9 453.4,196.7 456.4,200.1 459.3,204.8 462.2,205.1 471.0,206.1 474.0,208.5 482.7,210.6 491.5,211.9 494.5,207.4 503.3,204.8 512.0,206.4 515.0,203.8 517.9,206.4 520.8,207.2 523.8,206.6 532.6,206.6 535.5,207.9 538.4,207.4 541.3,208.7"/><text x="546.3" y="205.7" font-size="11" font-weight="500" fill="#6b7a64" font-family="Sora, Arial, sans-serif">jan/26</text><polyline fill="none" stroke="#A17149" stroke-width="3.4" points="57.9,144.8 60.8,150.0 63.7,151.4 66.7,146.9 69.6,146.6 78.4,144.0 81.3,147.7 84.2,149.5 87.2,155.3 90.1,153.5 98.9,148.5 101.8,143.8 104.7,141.7 107.7,139.8 110.6,134.1 119.4,127.8 122.3,130.1 125.3,128.6 131.1,136.2 139.9,132.8 142.8,125.4 145.8,123.3 148.7,123.1 151.6,128.0 163.3,127.8 166.3,130.7 169.2,129.4 172.1,129.1 180.9,136.2 183.9,134.3 186.8,133.8 189.7,134.1 192.7,133.5 201.4,128.3 204.4,133.8 207.3,135.9 210.2,139.3 213.2,140.6 222.0,146.9 224.9,147.2 227.8,155.3 230.7,157.1 233.7,160.0 242.5,147.7 245.4,149.8 248.3,152.1 251.3,156.1 254.2,159.7 265.9,160.8 268.8,172.1 271.8,172.3 274.7,175.7 283.5,180.4 286.4,176.8 289.3,177.6 292.3,176.0 295.2,178.3 304.0,199.3 306.9,195.6 309.9,195.6 312.8,197.7 315.7,197.5 327.4,199.0 330.4,199.3 333.3,201.1 336.2,202.4 348.0,206.1 350.9,208.7 353.8,211.1 356.7,214.2 365.5,215.3 368.5,220.0"/><circle cx="201.4" cy="128.3" r="5" fill="#fff" stroke="#A17149" stroke-width="2.5"/><text x="201.4" y="116.3" text-anchor="middle" font-size="12.5" font-weight="700" fill="#A17149" font-family="Sora, Arial, sans-serif">21/09: US$ 15,79</text><circle cx="368.5" cy="220.0" r="5" fill="#fff" stroke="#A17149" stroke-width="2.5"/><text x="368.5" y="242.0" text-anchor="middle" font-size="12.5" font-weight="700" fill="#A17149" font-family="Sora, Arial, sans-serif">jan/27 em 17/11: US$ 12,29</text><text x="52.0" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">ago</text><text x="142.8" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">set</text><text x="230.7" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">out</text><text x="321.6" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">nov</text><text x="409.5" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">dez</text><text x="500.3" y="296" text-anchor="middle" font-size="11" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">jan</text></svg>
+    <div class="abp-chart-caption">Fonte: B3 e Banco Central (PTAX) · Elaboração: AgroBasis, painel Milho B3 x Dólar</div>
+  </div>
+
+  <table class="abp-table">
+    <thead><tr><th>Contrato</th><th>21 de setembro</th><th>17 de novembro</th><th>Variação</th></tr></thead>
+    <tbody>
+      <tr><td>Janeiro/2022</td><td>US$ 17,74</td><td>US$ 15,36</td><td>-13,4%</td></tr>
+      <tr><td>Janeiro/2023</td><td>US$ 18,03</td><td>US$ 16,10</td><td>-10,7%</td></tr>
+      <tr><td>Janeiro/2024</td><td>US$ 12,35</td><td>US$ 13,72</td><td>+11,1%</td></tr>
+      <tr><td>Janeiro/2025</td><td>US$ 12,83</td><td>US$ 12,89</td><td>+0,5%</td></tr>
+      <tr><td>Janeiro/2026</td><td>US$ 13,15</td><td>US$ 13,46</td><td>+2,4%</td></tr>
+      <tr><td><b>Janeiro/2027</b></td><td><b>US$ 15,79</b></td><td><b>US$ 12,29</b></td><td><b>-22,2%</b></td></tr>
+    </tbody>
+  </table>
+  <p class="abp-p">Dois pontos se destacam. Primeiro, os US$ 12,29 de 17 de novembro são o menor valor para a data entre todos os contratos de janeiro da série, que começa no janeiro de 2021 (em 19 de novembro de 2020, aquele contrato valia US$ 14,78). Segundo, a queda de 22,2% em oito semanas é a maior para esse trecho do calendário: nos outros anos, o movimento entre setembro e novembro variou de uma queda de 13,4% a uma alta de 11,1%.</p>
+  <p class="abp-p">É importante não ler isso como sinal automático de compra. O janeiro de 2027 partiu de um nível alto em setembro, puxado pela alta de Chicago no fim de agosto, e parte da queda é só a devolução desse movimento. Em dólar, ele está hoje pouco abaixo dos contratos de janeiro de 2025 e 2026 na mesma data.</p>
+
+  <h2 class="abp-h2" id="descolamento">O que aconteceu depois de descolamentos parecidos</h2>
+  <p class="abp-p">O painel mede o descolamento entre o milho em reais e o dólar em uma janela de 21 pregões, cerca de um mês. Hoje, o milho janeiro rende 13,8% a menos que o dólar nesse período, um desvio de -1,76 em relação à média histórica (medido em desvios-padrão). Em três meses, a diferença chega a 21,8%.</p>
+  <p class="abp-p">Desde novembro de 2020, o desvio passou de -1,5 em 13 ocasiões, contando o episódio atual, iniciado em 16 de outubro. Em 12 delas já é possível medir o que aconteceu nos 21 pregões seguintes com a diferença entre o milho e o dólar, que é o resultado de quem compra milho na B3 e vende dólar futuro na mesma proporção.</p>
+
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Resultado 21 pregões depois de cada descolamento</div>
+    <div class="abp-chart-sub">% · variação do milho B3 menos variação do dólar, a partir de cada data em que o descolamento passou de -1,5 desvio-padrão (mês/ano)</div>
+    <svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img" aria-label="Resultado em 21 pregões após descolamentos entre milho B3 e dólar"><line x1="52" x2="622" y1="300.0" y2="300.0" stroke="#EEF1ED"/><text x="46" y="304.0" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">-25%</text><line x1="52" x2="622" y1="261.9" y2="261.9" stroke="#EEF1ED"/><text x="46" y="265.9" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">-20%</text><line x1="52" x2="622" y1="223.8" y2="223.8" stroke="#EEF1ED"/><text x="46" y="227.8" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">-15%</text><line x1="52" x2="622" y1="185.7" y2="185.7" stroke="#EEF1ED"/><text x="46" y="189.7" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">-10%</text><line x1="52" x2="622" y1="147.6" y2="147.6" stroke="#EEF1ED"/><text x="46" y="151.6" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">-5%</text><line x1="52" x2="622" y1="109.5" y2="109.5" stroke="#EEF1ED"/><text x="46" y="113.5" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">0%</text><line x1="52" x2="622" y1="71.4" y2="71.4" stroke="#EEF1ED"/><text x="46" y="75.4" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">5%</text><line x1="52" x2="622" y1="33.2" y2="33.2" stroke="#EEF1ED"/><text x="46" y="37.2" text-anchor="end" font-size="11" fill="#8a8a8a" font-family="Sora, Arial, sans-serif">10%</text><rect x="60.5" y="109.5" width="30.4" height="18.3" rx="2" fill="#A17149"/><text x="75.8" y="140.8" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">-2,4</text><text x="75.8" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">05/21</text><rect x="108.0" y="92.7" width="30.4" height="16.8" rx="2" fill="#54931B"/><text x="123.2" y="87.7" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">2,2</text><text x="123.2" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">10/21</text><rect x="155.6" y="109.5" width="30.4" height="93.7" rx="2" fill="#A17149"/><text x="170.8" y="216.2" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">-12,3</text><text x="170.8" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">06/22</text><rect x="203.1" y="56.1" width="30.4" height="53.4" rx="2" fill="#54931B"/><text x="218.2" y="51.1" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">7,0</text><text x="218.2" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">07/22</text><rect x="250.6" y="109.5" width="30.4" height="167.7" rx="2" fill="#A17149"/><text x="265.8" y="290.1" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">-22,0</text><text x="265.8" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">04/23</text><rect x="298.1" y="55.3" width="30.4" height="54.1" rx="2" fill="#54931B"/><text x="313.2" y="50.3" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">7,1</text><text x="313.2" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">05/23</text><rect x="345.6" y="85.1" width="30.4" height="24.4" rx="2" fill="#54931B"/><text x="360.8" y="80.1" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">3,2</text><text x="360.8" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">08/23</text><rect x="393.1" y="109.5" width="30.4" height="37.3" rx="2" fill="#A17149"/><text x="408.2" y="159.8" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">-4,9</text><text x="408.2" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">01/24</text><rect x="440.6" y="90.4" width="30.4" height="19.1" rx="2" fill="#54931B"/><text x="455.8" y="85.4" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">2,5</text><text x="455.8" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">03/24</text><rect x="488.1" y="82.0" width="30.4" height="27.4" rx="2" fill="#54931B"/><text x="503.2" y="77.0" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">3,6</text><text x="503.2" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">04/24</text><rect x="535.5" y="103.4" width="30.4" height="6.1" rx="2" fill="#54931B"/><text x="550.8" y="98.4" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">0,8</text><text x="550.8" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">11/24</text><rect x="583.0" y="109.5" width="30.4" height="28.2" rx="2" fill="#A17149"/><text x="598.2" y="150.7" text-anchor="middle" font-size="10.5" font-weight="700" fill="#222" font-family="Sora, Arial, sans-serif">-3,7</text><text x="598.2" y="316" text-anchor="middle" font-size="10" fill="#5b5b5b" font-family="Sora, Arial, sans-serif">04/25</text><line x1="52" x2="622" y1="109.5" y2="109.5" stroke="#9a9a9a"/></svg>
+    <div class="abp-chart-caption">Fonte: B3 e Banco Central (PTAX) · Elaboração: AgroBasis, histórico do sinal do painel Milho B3 x Dólar · Desempenho passado não garante resultado futuro</div>
+  </div>
+
+  <ul class="abp-list">
+    <li><b>Em 21 pregões:</b> o milho superou o dólar em 7 dos 12 casos (58%). A mediana foi de +1,5%, mas a média ficou negativa, em -1,6%, por causa de dois tombos fortes, em junho de 2022 e abril de 2023.</li>
+    <li><b>Em 42 pregões:</b> o acerto cai para 50%, com média de +1,1%.</li>
+    <li><b>Amplitude:</b> de -22,0% a +7,1% em 21 pregões. O resultado depende mais do que acontece com o milho e com o câmbio depois do sinal do que do sinal em si.</li>
+  </ul>
+  <div class="abp-pullquote">O histórico mostra uma tendência leve de reaproximação, não uma regra. Descolamento grande indica oportunidade para estudar, e não garantia de reversão.</div>
+
+  <h2 class="abp-h2" id="pratica">O que isso muda na prática</h2>
+  <h3 class="abp-h3">Para quem produz e vende milho</h3>
+  <p class="abp-p">O preço em reais é o que paga a conta. Com o janeiro em R$ 71,10 e o março em R$ 75,50, a curva da B3 ainda paga carrego entre o primeiro trimestre de 2027 e o vencimento atual. O dólar alto segurou o preço em reais e, por isso, quem tem custo em reais e vende em reais sentiu bem menos do que o gráfico em dólar sugere.</p>
+  <p class="abp-p">O risco está do outro lado: se o câmbio devolver parte da alta, por exemplo com uma resposta fiscal que acalme o mercado, o milho em reais pode cair junto, mesmo sem mudança em Chicago. Quem quer proteger o preço atual precisa olhar as duas pernas, o preço do milho e o câmbio, e não só a cotação em reais.</p>
+
+  <h3 class="abp-h3">Para quem compra milho</h3>
+  <p class="abp-p">Para indústrias, granjas e usinas de etanol, o milho brasileiro nunca esteve tão barato em dólar para a época nesta série. Em reais, o custo caiu cerca de 12% desde setembro. Para quem tem receita atrelada ao dólar, como exportadores de proteína animal, a relação ficou ainda mais favorável.</p>
+
+  <h3 class="abp-h3">A leitura de mercado: milho comprado e dólar vendido</h3>
+  <p class="abp-p">Comprar milho na B3 e vender dólar futuro na mesma proporção é, na prática, uma aposta na alta do milho medido em dólar. A operação ganha se o milho em dólar subir, seja porque o milho em reais sobe, seja porque o dólar cai. Com o contrato de janeiro no menor nível para a época e o prêmio sobre Chicago abaixo da mediana, o painel mostra por que essa estratégia entrou no radar. O histórico de descolamentos, porém, mostra que ela pode perder bastante se o milho seguir caindo ou se o dólar continuar subindo.</p>
+  <div class="abp-note"><b>Estratégia com derivativos, sujeita a perdas. Não é recomendação individual. O autor tem posição nessa operação.</b> Cada contrato de milho da B3 tem 450 sacas e o minicontrato de dólar (WDO) tem US$ 10 mil; o tamanho das pernas precisa ser calculado antes de qualquer decisão, assim como a margem exigida pela bolsa.</div>
+
+  <h2 class="abp-h2" id="monitorar">O que monitorar nas próximas semanas</h2>
+  <ul class="abp-list">
+    <li><b>Câmbio e fiscal:</b> o dólar chegou ao maior nível desde abril de 2025 com as dúvidas sobre o ajuste fiscal. O Banco Central anunciou leilões de linha de até US$ 1 bilhão para 18 de novembro. Qualquer alívio no câmbio pesa no milho em reais e alivia o milho em dólar.</li>
+    <li><b>Fundos em Chicago:</b> com os fundos já vendidos, a pressão de venda especulativa diminuiu. Uma notícia de clima ou demanda pode provocar recompra rápida. A próxima posição sai na sexta-feira, no painel Posição dos Fundos.</li>
+    <li><b>Demanda chinesa e negociações comerciais:</b> a agenda entre Estados Unidos e China pode incluir grãos além da soja, o que mexeria com o milho em Chicago.</li>
+    <li><b>Safrinha e El Niño:</b> a segunda safra de 2027 depende da janela de plantio da soja no Centro-Oeste. Atrasos no plantio mudam a expectativa de oferta para o segundo semestre de 2027.</li>
+    <li><b>Conab de dezembro:</b> o 3º levantamento da safra 2026/27 sai em 15 de dezembro, com nova estimativa de produção, exportação e estoques.</li>
+  </ul>
+
+  <div class="abp-cta-box">
+    <h3>Veja o descolamento e o histórico do sinal ao vivo</h3>
+    <p>O painel Milho B3 x Dólar atualiza todo dia útil, depois do fechamento da B3 e da PTAX.</p>
+    <a href="/dashboards/milho-b3-x-dolar/" class="abp-cta-btn">Abrir o painel <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <p class="abp-p">Para acompanhar os outros elementos da análise, use o painel <a href="/dashboards/posicao-fundos-cftc/" style="color:#1E4812;font-weight:600;">Posição dos Fundos CFTC</a>, a <a href="/dashboards/curva-do-dolar/" style="color:#1E4812;font-weight:600;">Curva do Dólar</a> e o <a href="/dashboards/spread-milho-b3/" style="color:#1E4812;font-weight:600;">Spread Milho B3</a>, que mostra a diferença entre os vencimentos.</p>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item">
+    <summary>Quanto o milho da B3 caiu em dólar? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">O contrato de janeiro de 2027 caiu de US$ 15,79 por saca em 21 de setembro para US$ 12,29 em 17 de novembro de 2026, queda de 22,2%. Em reais, a queda foi de 11,9%, de R$ 80,71 para R$ 71,10, porque o dólar subiu 13,2% no período.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>A queda do milho em dólar foi causada pelo câmbio? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Em parte. Cerca de 49% da queda veio da alta do dólar e cerca de 51% da queda do milho em reais. Comparando com Chicago, 65% da queda em dólar acompanhou a CBOT e 35% veio da redução do prêmio da B3 sobre Chicago.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Por que o milho caiu em Chicago? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Principalmente pela saída dos fundos. Os gestores de recursos tinham 414 mil contratos comprados em 15/09/2026, a maior posição em cinco anos, e passaram a 22,6 mil contratos vendidos em 10/11/2026. No mesmo período, o milho na CBOT caiu de US$ 5,43 para US$ 4,47 por bushel.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O milho da B3 está barato em dólar? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Para a época do ano, sim: US$ 12,29 por saca é o menor valor em 17 de novembro entre os contratos de janeiro desde 2021. Mas o prêmio sobre Chicago, de US$ 1,74 por saca, está apenas um pouco abaixo da mediana histórica de US$ 2,30, e parte da queda é devolução da alta de setembro.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Comprar milho na B3 e vender dólar costuma dar certo depois de quedas assim? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">O histórico é misto. Em 12 episódios de descolamento forte desde 2020, a diferença entre milho e dólar foi positiva em 58% dos casos nos 21 pregões seguintes, com mediana de +1,5%, mas média de -1,6% por causa de perdas de até 22%. É uma estratégia com derivativos, sujeita a perdas, e não uma recomendação individual.</p>
+  </details>
+
+  <div class="abp-sources">
+    <b>Fontes consultadas para este artigo:</b> B3 (ajustes do milho CCM e dólar futuro); Banco Central do Brasil (PTAX); CME Group/CBOT via TradingView (milho, 1º vencimento); CFTC Commitments of Traders (posição até 10/11/2026); Conab, 2º levantamento da safra 2026/27 (13/11/2026); imprensa econômica sobre câmbio e leilões do Banco Central (17/11/2026); painel Milho B3 x Dólar (AgroBasis).
+  </div>
+
+  <div class="abp-author-box">
+    <div class="abp-author-icon"><i data-lucide="pen-line"></i></div>
+    <div class="abp-author-text"><b>Equipe AgroBasis</b><br>Inteligência de mercado para o agronegócio: dashboards, análises e conteúdo educacional com dados oficiais. Análise de Lucas Jesse · CNPI-P | CFP | Ancord Agro 100.</div>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fonte dos dados: B3, Banco Central, CME Group, CFTC e Conab. Conteúdo referencial para acompanhamento de mercado, elaborado pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda. Operações com derivativos envolvem risco de perdas.
+  </div>
+
+</div>
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); } else { window.addEventListener('load', () => lucide.createIcons()); }
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Milho da B3 em dólar cai de US$ 15,79 para US$ 12,29 por saca: o que explica a queda",
+  "description": "O milho janeiro/27 da B3 caiu de US$ 15,79 para US$ 12,29 por saca em oito semanas. Quanto foi milho, quanto foi dólar e o que o histórico mostra.",
+  "author": {
+    "@type": "Person",
+    "name": "Lucas Jesse"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AgroBasis"
+  },
+  "datePublished": "2026-11-18",
+  "dateModified": "2026-11-18",
+  "mainEntityOfPage": "https://agrobasis.com.br/analises/milho-b3-em-dolar-queda-janeiro-2027/"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Quanto o milho da B3 caiu em dólar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O contrato de janeiro de 2027 caiu de US$ 15,79 por saca em 21 de setembro para US$ 12,29 em 17 de novembro de 2026, queda de 22,2%. Em reais, a queda foi de 11,9%, de R$ 80,71 para R$ 71,10, porque o dólar subiu 13,2% no período."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "A queda do milho em dólar foi causada pelo câmbio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Em parte. Cerca de 49% da queda veio da alta do dólar e cerca de 51% da queda do milho em reais. Comparando com Chicago, 65% da queda em dólar acompanhou a CBOT e 35% veio da redução do prêmio da B3 sobre Chicago."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Por que o milho caiu em Chicago?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Principalmente pela saída dos fundos. Os gestores de recursos tinham 414 mil contratos comprados em 15/09/2026, a maior posição em cinco anos, e passaram a 22,6 mil contratos vendidos em 10/11/2026. No mesmo período, o milho na CBOT caiu de US$ 5,43 para US$ 4,47 por bushel."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "O milho da B3 está barato em dólar?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Para a época do ano, sim: US$ 12,29 por saca é o menor valor em 17 de novembro entre os contratos de janeiro desde 2021. Mas o prêmio sobre Chicago, de US$ 1,74 por saca, está apenas um pouco abaixo da mediana histórica de US$ 2,30, e parte da queda é devolução da alta de setembro."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Comprar milho na B3 e vender dólar costuma dar certo depois de quedas assim?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "O histórico é misto. Em 12 episódios de descolamento forte desde 2020, a diferença entre milho e dólar foi positiva em 58% dos casos nos 21 pregões seguintes, com mediana de +1,5%, mas média de -1,6% por causa de perdas de até 22%. É uma estratégia com derivativos, sujeita a perdas, e não uma recomendação individual."
+      }
+    }
+  ]
+}
+</script>
