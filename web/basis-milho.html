@@ -171,7 +171,7 @@
     });
   }
   // média móvel dos últimos N pregões (suaviza o vai e vem diário nas linhas anuais)
-  var SUAVE = 5;
+  var SUAVE = CFG.suave || 5;
   function suavizar(pts) { return pts.map(function (x, i) { var j = pts.slice(Math.max(0, i - SUAVE + 1), i + 1).map(function (y) { return y.v; }); return [x.d, +(media(j)).toFixed(CFG.dec)]; }); }
   function ultimo(p) { var a = P[p]; return a && a.length ? a[a.length - 1] : null; }
 
@@ -342,7 +342,7 @@
     $("abbTit").textContent = st.praca;
     $("abbMeta").textContent = "fechamento de " + dataBR(u.t) + " · basis em " + CFG.unLongo;
     $("abbH1").textContent = "Basis nas praças em " + dataBR(u.t).slice(0, 5);
-    $("abbH2").textContent = "Preço projetado em " + st.praca.replace(/ (RS|PR|MT|MS|GO|SP|MG|RO)$/, "");
+    $("abbH2").textContent = "Preço projetado em " + st.praca.replace(/ (RS|SC|PR|MT|MS|GO|SP|MG|RO|DF|BA)$/, "");
     kpis();
     charts[0].setOption(g0(), true);
     var o1 = g1(); charts[1]._lista = o1._lista; delete o1._lista; charts[1].setOption(o1, true);
@@ -370,11 +370,11 @@
     ch.setOption(opt, true);
     var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
     render();
-    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-basis-" + CFG.pagina + "-" + ["anual", "pracas", "projecao"][i] + ".png";
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-basis-" + (CFG.arquivo || CFG.pagina) + "-" + ["anual", "pracas", "projecao"][i] + ".png";
     document.body.appendChild(a); a.click(); a.remove();
   }
 
-  Promise.all([carregarLib(), json("dados/basis/" + CFG.pagina + ".json"), json(CFG.curva)]).then(function (r) {
+  Promise.all([carregarLib(), json(CFG.dados || ("dados/basis/" + CFG.pagina + ".json")), json(CFG.curva)]).then(function (r) {
     D = r[1]; CURVA = r[2]; preparar();
     charts = [0, 1, 2].map(function (i) { return echarts.init($("abbG" + i), null, { renderer: "canvas" }); });
     var lista = Object.keys(P).filter(function (p) { return P[p].length; }).sort(function (a, b) { return a.localeCompare(b, "pt-BR"); });

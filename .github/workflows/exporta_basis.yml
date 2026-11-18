@@ -8,6 +8,7 @@ on:
   push:
     paths:
       - exporta_basis.py
+      - basis_balcao.py
       - .github/workflows/exporta_basis.yml
 
 permissions:
@@ -40,6 +41,11 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
         run: python exporta_basis.py
+      - name: Basis de balcão (coleta, se houver segredo, e exportação)
+        continue-on-error: true
+        env:
+          FONTE_BALCAO: ${{ secrets.FONTE_BALCAO }}
+        run: python basis_balcao.py
       - name: Commit
         run: |
           git config user.name "AgroBasis Bot"

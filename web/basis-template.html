@@ -75,7 +75,7 @@
   <nav class="abb-bc" aria-label="Navegação"><a href="/">Início</a><span>/</span><a href="/dashboards/">Painéis</a></nav>
   <div class="abb-top">
     <div>
-      <h1 class="abb-kick">Basis __PRODUTO__ Brasil</h1>
+      <h1 class="abb-kick">__KICK__</h1>__TOPO_EXTRA__
       <div class="abb-tit" id="abbTit">Carregando</div>
       <div class="abb-meta"><span id="abbMeta">&nbsp;</span><span class="abb-old" id="abbOld"></span></div>
     </div>
@@ -89,10 +89,10 @@
     <div class="abb-k"><span>Preço físico</span><b id="kF">-</b><em id="kFs">&nbsp;</em></div>
   </div>
 
-  <p class="abb-aviso"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Preços e basis do <b>mercado disponível</b> (negociação entre empresas nas praças de referência). Não equivalem ao preço de balcão pago ao produtor por cooperativas e cerealistas, que costuma vir com desconto de frete, armazenagem e margem.</span></p>
+  <p class="abb-aviso"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>__AVISO__</span></p>
 
   <div class="abb-card">
-    <div class="abb-ch"><h3>Basis ao longo do ano <small class="abb-sub">média móvel de 5 pregões</small></h3><button class="abb-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="abb-ch"><h3>Basis ao longo do ano <small class="abb-sub">__SUAVE_TXT__</small></h3><button class="abb-dl" data-dl="0" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
     <div class="abb-anos" id="abbAnos"></div>
     <div class="abb-chart" id="abbG0"></div>
   </div>
@@ -105,7 +105,7 @@
     <div class="abb-card">
       <div class="abb-ch"><h3 id="abbH2">Preço projetado</h3><div class="abb-cen" id="abbCen" aria-label="Cenário de basis"><button data-c="baixo">Basis baixo</button><button data-c="medio" aria-pressed="true">Médio</button><button data-c="alto">Alto</button></div><button class="abb-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
       <div class="abb-chart sm" id="abbG2"></div>
-      <p class="abb-nota">Referência teórica para o grão disponível: curva futura de hoje mais o basis dos últimos 5 anos no mesmo período (baixo: percentil 20; médio: média; alto: percentil 80). A faixa mostra o intervalo entre o basis baixo e o alto. Não é preço de balcão nem cotação negociável.</p>
+      <p class="abb-nota">Referência teórica para o grão disponível: curva futura de hoje mais o basis dos últimos 5 anos no mesmo período (baixo: percentil 20; médio: média; alto: percentil 80). A faixa mostra o intervalo entre o basis baixo e o alto. __NOTA_PROJ__</p>
     </div>
   </div>
 
@@ -171,7 +171,7 @@
     });
   }
   // média móvel dos últimos N pregões (suaviza o vai e vem diário nas linhas anuais)
-  var SUAVE = 5;
+  var SUAVE = CFG.suave || 5;
   function suavizar(pts) { return pts.map(function (x, i) { var j = pts.slice(Math.max(0, i - SUAVE + 1), i + 1).map(function (y) { return y.v; }); return [x.d, +(media(j)).toFixed(CFG.dec)]; }); }
   function ultimo(p) { var a = P[p]; return a && a.length ? a[a.length - 1] : null; }
 
@@ -342,7 +342,7 @@
     $("abbTit").textContent = st.praca;
     $("abbMeta").textContent = "fechamento de " + dataBR(u.t) + " · basis em " + CFG.unLongo;
     $("abbH1").textContent = "Basis nas praças em " + dataBR(u.t).slice(0, 5);
-    $("abbH2").textContent = "Preço projetado em " + st.praca.replace(/ (RS|PR|MT|MS|GO|SP|MG|RO)$/, "");
+    $("abbH2").textContent = "Preço projetado em " + st.praca.replace(/ (RS|SC|PR|MT|MS|GO|SP|MG|RO|DF|BA)$/, "");
     kpis();
     charts[0].setOption(g0(), true);
     var o1 = g1(); charts[1]._lista = o1._lista; delete o1._lista; charts[1].setOption(o1, true);
@@ -370,11 +370,11 @@
     ch.setOption(opt, true);
     var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
     render();
-    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-basis-" + CFG.pagina + "-" + ["anual", "pracas", "projecao"][i] + ".png";
+    var a = document.createElement("a"); a.href = url; a.download = "agrobasis-basis-" + (CFG.arquivo || CFG.pagina) + "-" + ["anual", "pracas", "projecao"][i] + ".png";
     document.body.appendChild(a); a.click(); a.remove();
   }
 
-  Promise.all([carregarLib(), json("dados/basis/" + CFG.pagina + ".json"), json(CFG.curva)]).then(function (r) {
+  Promise.all([carregarLib(), json(CFG.dados || ("dados/basis/" + CFG.pagina + ".json")), json(CFG.curva)]).then(function (r) {
     D = r[1]; CURVA = r[2]; preparar();
     charts = [0, 1, 2].map(function (i) { return echarts.init($("abbG" + i), null, { renderer: "canvas" }); });
     var lista = Object.keys(P).filter(function (p) { return P[p].length; }).sort(function (a, b) { return a.localeCompare(b, "pt-BR"); });
