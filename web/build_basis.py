@@ -45,11 +45,11 @@ FAQ_BALCAO = [
 BAL = {
  "soja": dict(produto="Soja", slug="basis-balcao-soja", un="c/bu", unLongo="cents de dólar por bushel", dec=1, curva="dados/curva_soja.json",
    fonte="Fonte: preços de balcão coletados pelo AgroBasis · CBOT · PTAX/BCB", curta="Balcão AgroBasis · CBOT · PTAX",
-   desc="Basis de balcão da soja: preço pago ao produtor em praças de referência de 7 estados e do DF contra a CBOT, com média de 5 anos, percentil e preço projetado.",
+   desc="Basis de balcão da soja: preço pago ao produtor em praças de referência de 8 estados e do DF contra a CBOT, com média de 5 anos, percentil e preço projetado.",
    links=[("/dashboards/basis-balcao-milho/","Basis de Balcão Milho"),("/dashboards/basis-soja-brasil/","Basis Soja (disponível)"),("/dashboards/termometro-de-venda/","Termômetro de Venda"),("/simulador-de-soja/","Simulador de Soja"),("/dashboards/","Todos os dashboards")]),
  "milho": dict(produto="Milho", slug="basis-balcao-milho", un="R$/sc", unLongo="reais por saca", dec=2, curva="dados/curva_ccm.json",
    fonte="Fonte: preços de balcão coletados pelo AgroBasis · B3", curta="Balcão AgroBasis · B3",
-   desc="Basis de balcão do milho: preço pago ao produtor em praças de referência de 7 estados e do DF contra a B3, com média de 5 anos, percentil e preço projetado.",
+   desc="Basis de balcão do milho: preço pago ao produtor em praças de referência de 8 estados e do DF contra a B3, com média de 5 anos, percentil e preço projetado.",
    links=[("/dashboards/basis-balcao-soja/","Basis de Balcão Soja"),("/dashboards/basis-milho-brasil/","Basis Milho (disponível)"),("/dashboards/milho-b3-x-dolar/","Milho B3 x Dólar"),("/dashboards/spread-milho-b3/","Spread Milho B3"),("/dashboards/","Todos os dashboards")]),
 }
 def pilulas(atual):
