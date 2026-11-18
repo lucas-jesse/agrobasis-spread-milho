@@ -122,7 +122,7 @@
 <script>
 (function () {
   "use strict";
-  var CFG = {"pagina": "milho", "produto": "Milho", "curva": "dados/curva_ccm.json", "un": "R$/sc", "unLongo": "reais por saca", "dec": 2, "padrao": "Não-Me-Toque RS", "fonteCurta": "Balcão AgroBasis · B3", "dados": "dados/basis/balcao_milho.json", "suave": 3, "arquivo": "balcao-milho"};
+  var CFG = {"pagina": "milho", "produto": "Milho", "curva": "dados/curva_ccm.json", "un": "R$/sc", "unLongo": "reais por saca", "dec": 2, "padrao": "Não-Me-Toque RS", "fonteCurta": "Balcão AgroBasis · B3", "dados": "dados/basis/balcao_milho.json", "suave": 3, "janela": 10, "centrada": 7, "arquivo": "balcao-milho"};
   var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
   var LIBS = ["https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js", "https://unpkg.com/echarts@5.5.1/dist/echarts.min.js"];
   var COR = { vd: "#1E4812", vc: "#54931B", mr: "#C0782F", cz: "#6E7B8F", tx: "#1d2420", mt: "#6b756d", ln: "#E7ECE8", grade: "rgba(29,36,32,.07)" };
@@ -180,8 +180,12 @@
     var porDia = {};
     P[p].forEach(function (x) { if (x.ano >= anoBase - 5 && x.ano < anoBase) (porDia[x.d] = porDia[x.d] || []).push(x.v); });
     var dias = Object.keys(porDia).map(Number).sort(function (a, b) { return a - b; });
-    var m = centrada(dias.map(function (d) { return media(porDia[d]); }), 21);
-    var s = centrada(dias.map(function (d) { return desvio(porDia[d]); }), 21);
+    if (CFG.janela) { // séries semanais: junta as observações a até CFG.janela dias de cada data, para ter várias por ano
+      var viz = {}; dias.forEach(function (d) { var a = []; dias.forEach(function (x) { if (Math.abs(x - d) <= CFG.janela) a = a.concat(porDia[x]); }); viz[d] = a; }); porDia = viz;
+    }
+    var JC = CFG.centrada || 21;
+    var m = centrada(dias.map(function (d) { return media(porDia[d]); }), JC);
+    var s = centrada(dias.map(function (d) { return desvio(porDia[d]); }), JC);
     var out = {}; dias.forEach(function (d, k) { out[d] = { m: m[k], s: s[k] }; });
     return { dias: dias, mapa: out };
   }

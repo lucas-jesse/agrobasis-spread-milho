@@ -180,8 +180,12 @@
     var porDia = {};
     P[p].forEach(function (x) { if (x.ano >= anoBase - 5 && x.ano < anoBase) (porDia[x.d] = porDia[x.d] || []).push(x.v); });
     var dias = Object.keys(porDia).map(Number).sort(function (a, b) { return a - b; });
-    var m = centrada(dias.map(function (d) { return media(porDia[d]); }), 21);
-    var s = centrada(dias.map(function (d) { return desvio(porDia[d]); }), 21);
+    if (CFG.janela) { // séries semanais: junta as observações a até CFG.janela dias de cada data, para ter várias por ano
+      var viz = {}; dias.forEach(function (d) { var a = []; dias.forEach(function (x) { if (Math.abs(x - d) <= CFG.janela) a = a.concat(porDia[x]); }); viz[d] = a; }); porDia = viz;
+    }
+    var JC = CFG.centrada || 21;
+    var m = centrada(dias.map(function (d) { return media(porDia[d]); }), JC);
+    var s = centrada(dias.map(function (d) { return desvio(porDia[d]); }), JC);
     var out = {}; dias.forEach(function (d, k) { out[d] = { m: m[k], s: s[k] }; });
     return { dias: dias, mapa: out };
   }

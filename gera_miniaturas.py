@@ -37,6 +37,8 @@ ALVOS = {
     "spread-milho-b3": ("spread-milho.html", "#absG1", ""),
     "basis-milho-brasil": ("basis-milho.html", "#abbG0", PRACA.format("Passo Fundo RS")),
     "basis-soja-brasil": ("basis-soja.html", "#abbG2", PRACA.format("Paranaguá")),
+    "basis-balcao-soja": ("basis-balcao-soja.html", "#abbG0", PRACA.format("Sorriso MT")),
+    "basis-balcao-milho": ("basis-balcao-milho.html", "#abbG0", PRACA.format("Rio Verde GO")),
     "posicao-fundos-cftc": ("cot.html", "#abcG0", ""),
     "curva-do-dolar": ("curva-dolar.html", "#abdG0", ""),
     "safra-brasil-conab": ("conab.html", "#abcG0", ""),

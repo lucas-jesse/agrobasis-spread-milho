@@ -57,7 +57,7 @@ def pilulas(atual):
     return est + '<div class="abb-prod">' + "".join(f'<a href="/dashboards/basis-balcao-{p}/"{" aria-current=\"page\"" if p == atual else ""}>{n}</a>' for p, n in (("soja", "Soja"), ("milho", "Milho"))) + "</div>"
 for pag, c in BAL.items():
     cfg = {"pagina": pag, "produto": c["produto"], "curva": c["curva"], "un": c["un"], "unLongo": c["unLongo"], "dec": c["dec"], "padrao": "Não-Me-Toque RS",
-           "fonteCurta": c["curta"], "dados": f"dados/basis/balcao_{pag}.json", "suave": 3, "arquivo": f"balcao-{pag}"}
+           "fonteCurta": c["curta"], "dados": f"dados/basis/balcao_{pag}.json", "suave": 3, "janela": 10, "centrada": 7, "arquivo": f"balcao-{pag}"}
     faq = "".join(f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in FAQ_BALCAO)
     links = "".join(f'<a href="{h}">{t}</a>' for h, t in c["links"])
     ld = {"@context":"https://schema.org","@graph":[{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in FAQ_BALCAO]},
