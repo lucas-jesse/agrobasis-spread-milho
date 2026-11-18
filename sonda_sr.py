@@ -8,3 +8,8 @@ for m in re.finditer(r"<(input|select|button)[^>]*>", h, re.I):
     print(m.group(0)[:220])
 for m in re.finditer(r"<select[^>]*name=\"([^\"]+)\"[^>]*>(.*?)</select>", h, re.S | re.I):
     print("SELECT", m.group(1), re.findall(r'value="([^"]*)"', m.group(2))[:30])
+f = {n: v for n, v in re.findall(r'<input type="hidden" name="([^"]+)" id="[^"]*" value="([^"]*)"', h)}
+f.update({"ddlMes": "1", "ddlAno": "2026", "btnSend": "Consultar"})
+r = s.post(U, data=f, timeout=30); h2 = r.text
+print("POST", r.status_code, len(h2))
+i = h2.find("02/01/2026"); print(h2[max(0, i - 1500):i + 1200])
