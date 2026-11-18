@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -21,8 +22,11 @@ jobs:
           FONTE_BALCAO_SR: ${{ inputs.u }}
         run: python basis_balcao.py
       - name: Commit
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dados/basis
-          git diff --cached --quiet || (git commit -m "Basis de balcão: carga do histórico" && git pull --rebase && git push)
+          git add dados/basis/balcao_hist.json
+          git checkout -- dados/basis/balcao_soja.json dados/basis/balcao_milho.json
+          git diff --cached --quiet || (git commit -m "Basis de balcão: carga do histórico" && git pull --rebase && git push && gh workflow run exporta_basis.yml)
