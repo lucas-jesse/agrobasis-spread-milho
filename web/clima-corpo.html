@@ -80,6 +80,20 @@
     </div>
   </div>
 
+  <!-- ===================== AO VIVO (Windy) ===================== -->
+  <h2 class="cl-sec" id="ao-vivo">Satélite, radar e chuva prevista ao vivo</h2>
+  <div class="abc-card">
+    <div class="abc-ch"><h3>Mapa ao vivo <small id="clWyS">imagem de satélite das nuvens, atualizada a cada 10 a 15 minutos</small></h3>
+      <div class="abc-tools"><div class="abc-seg" id="clWy">
+        <button data-o="satellite" data-p="satellite" data-t="imagem de satélite das nuvens, atualizada a cada 10 a 15 minutos" aria-pressed="true">Satélite</button>
+        <button data-o="radar" data-p="radar" data-t="radares meteorológicos: onde está chovendo agora" aria-pressed="false">Radar</button>
+        <button data-o="rainAccu" data-p="ecmwf" data-t="chuva acumulada prevista pelo modelo europeu ECMWF" aria-pressed="false">Chuva prevista</button>
+      </div></div></div>
+    <div class="cl-wy"><iframe id="clWyF" title="Mapa ao vivo de satélite, radar e chuva do Windy" loading="lazy" allowfullscreen
+      src="https://embed.windy.com/embed.html?type=map&amp;location=coordinates&amp;metricRain=mm&amp;metricTemp=%C2%B0C&amp;metricWind=km/h&amp;zoom=4&amp;overlay=satellite&amp;product=satellite&amp;level=surface&amp;lat=-15.8&amp;lon=-52.5"></iframe></div>
+    <p class="abc-nota">Mapa interativo: arraste, aproxime e use a linha do tempo no rodapé para animar. No radar, a cobertura depende dos radares disponíveis em cada região. Fonte: <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a>.</p>
+  </div>
+
   <!-- ===================== PRODUTIVIDADE ===================== -->
   <h2 class="cl-sec" id="produtividade">O que o El Niño fez com a produtividade</h2>
   <div class="abc-card">
@@ -434,6 +448,21 @@
   }).catch(function (e) {
     if (window.console) console.error("AgroBasis Clima:", e);
     $("abc").innerHTML = '<div class="abc-err">Não foi possível carregar os dados agora. Tente novamente em instantes.</div>';
+  });
+})();
+</script>
+
+<script>
+(function () {
+  var seg = document.getElementById("clWy"), fr = document.getElementById("clWyF"), sub = document.getElementById("clWyS");
+  if (!seg) return;
+  var base = "https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km/h&zoom=4&level=surface&lat=-15.8&lon=-52.5";
+  Array.prototype.forEach.call(seg.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      Array.prototype.forEach.call(seg.querySelectorAll("button"), function (x) { x.setAttribute("aria-pressed", x === b); });
+      fr.src = base + "&overlay=" + b.getAttribute("data-o") + "&product=" + b.getAttribute("data-p");
+      sub.textContent = b.getAttribute("data-t");
+    });
   });
 })();
 </script>
