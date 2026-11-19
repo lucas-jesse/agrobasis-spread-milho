@@ -1,0 +1,131 @@
+{
+ "atualizado_em": "2026-11-19",
+ "inicio": "2026-11-19",
+ "total": 8,
+ "resumo": {
+  "4s": {
+   "avaliados": 0,
+   "acertos": 0,
+   "taxa": null
+  },
+  "13s": {
+   "avaliados": 0,
+   "acertos": 0,
+   "taxa": null
+  }
+ },
+ "sinais": [
+  {
+   "id": "dolar",
+   "nome": "Dólar (PTAX)",
+   "unidade": "R$/US$",
+   "casas": 4,
+   "data": "2026-11-18",
+   "valor": 5.8102,
+   "alvo": 5.216,
+   "lado": "alto",
+   "percentil": 94.9,
+   "regra": "extremo em 5 anos",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "carrego_ccm",
+   "nome": "Carrego do milho B3 (2º menos 1º vencimento)",
+   "unidade": "R$/sc",
+   "casas": 2,
+   "data": "2026-11-18",
+   "valor": 4.75,
+   "alvo": 2.6252,
+   "lado": "alto",
+   "percentil": 96.9,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "basis_milho_itapeva_sp",
+   "nome": "Basis do milho em Itapeva SP",
+   "unidade": "R$/sc",
+   "casas": 1,
+   "data": "2026-11-13",
+   "valor": -9.71,
+   "alvo": -4.9084,
+   "lado": "baixo",
+   "percentil": 2.2,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "basis_milho_rio_verde_go",
+   "nome": "Basis do milho em Rio Verde GO",
+   "unidade": "R$/sc",
+   "casas": 1,
+   "data": "2026-11-13",
+   "valor": -17.71,
+   "alvo": -13.6748,
+   "lado": "baixo",
+   "percentil": 9.5,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "basis_milho_santa_rosa_rs",
+   "nome": "Basis do milho em Santa Rosa RS",
+   "unidade": "R$/sc",
+   "casas": 1,
+   "data": "2026-11-13",
+   "valor": -7.71,
+   "alvo": -1.3391,
+   "lado": "baixo",
+   "percentil": 3.6,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "basis_balcao_soja_não-me-toque_rs",
+   "nome": "Basis de balcão da soja em Não-Me-Toque RS",
+   "unidade": "c/bu",
+   "casas": 1,
+   "data": "2026-11-11",
+   "valor": -113.1,
+   "alvo": -23.9,
+   "lado": "baixo",
+   "percentil": 0.0,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "basis_balcao_milho_maracaju_ms",
+   "nome": "Basis de balcão do milho em Maracaju MS",
+   "unidade": "R$/sc",
+   "casas": 1,
+   "data": "2026-11-11",
+   "valor": -22.75,
+   "alvo": -16.0378,
+   "lado": "baixo",
+   "percentil": 8.7,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "cbot_soja/cbot_milho",
+   "nome": "Relação soja/milho em Chicago",
+   "unidade": "",
+   "casas": 2,
+   "data": "2026-11-13",
+   "valor": 2.735,
+   "alvo": 2.4472,
+   "lado": "alto",
+   "percentil": 88.1,
+   "regra": "relação esticada em 5 anos",
+   "registrado_em": "2026-11-19",
+   "resultado": {}
+  }
+ ]
+}

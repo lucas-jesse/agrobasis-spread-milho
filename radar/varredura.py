@@ -25,6 +25,8 @@ import pandas as pd
 RAIZ = Path(__file__).resolve().parent.parent
 DADOS = RAIZ / "dados"
 SAIDA = DADOS / "radar" / "sinais.json"
+HIST = DADOS / "radar" / "placar.json"
+HORIZ_PLACAR = {"4s": 28, "13s": 91}  # dias corridos
 BRT = ZoneInfo("America/Sao_Paulo")
 
 ANOS_REF = 5            # janela do percentil
@@ -346,6 +348,85 @@ def agrupar_basis(series) -> list[dict]:
     return out
 
 
+# --------------------------------------------------------------------------- placar
+def valor_em(sid: str, data: pd.Timestamp):
+    """Primeiro valor disponível a partir de 'data' (série simples ou razão 'a/b')."""
+    if "/" in sid:
+        a, b = sid.split("/")
+        if a not in SERIES or b not in SERIES:
+            return None
+        df = _par_df(a, b)
+        s = df[a] / df[b]
+    else:
+        if sid not in SERIES:
+            return None
+        s = SERIES[sid]["s"]
+    s = s[s.index >= data]
+    return (s.index[0], float(s.iloc[0])) if len(s) else None
+
+
+def atualizar_placar(series, pares, hoje: str):
+    hist = json.loads(HIST.read_text(encoding="utf-8")) if HIST.exists() else {"sinais": []}
+    sinais = hist["sinais"]
+    abertos = {}
+    for x in sinais:
+        abertos[x["id"]] = x  # o mais recente de cada id
+
+    novos = []
+    for o in series:
+        if o["tipo"] == "posicao":
+            continue
+        pe = o.get("pct_epoca")
+        p = pe if pe is not None else o["pct_5a"]
+        if EXTREMO < p < 100 - EXTREMO:
+            continue
+        alvo = o.get("media_epoca") if pe is not None else None
+        if alvo is None:
+            s = SERIES[o["id"]]["s"]
+            alvo = float(s[s.index > s.index[-1] - pd.DateOffset(years=ANOS_REF)].median())
+        novos.append(dict(id=o["id"], nome=o["nome"], unidade=o["unidade"], casas=o["casas"], data=o["data"],
+                          valor=o["valor"], alvo=round(alvo, 4), lado="alto" if p >= 50 else "baixo",
+                          percentil=p, regra="extremo para a época" if pe is not None else "extremo em 5 anos"))
+    for o in pares:
+        if o["tipo"] != "razao" or EXTREMO_PAR < o["pct_5a"] < 100 - EXTREMO_PAR:
+            continue
+        novos.append(dict(id=f"{o['a']}/{o['b']}", nome=o["nome"], unidade="", casas=2, data=o["data"],
+                          valor=o["valor"], alvo=o["media_5a"], lado="alto" if o["pct_5a"] >= 50 else "baixo",
+                          percentil=o["pct_5a"], regra="relação esticada em 5 anos"))
+    for n in novos:
+        ant = abertos.get(n["id"])
+        # mesmo sinal ainda em curso (menos de 28 dias e mesmo lado): não registra de novo
+        if ant and ant["lado"] == n["lado"] and (pd.Timestamp(n["data"]) - pd.Timestamp(ant["data"])).days < 28:
+            continue
+        n["registrado_em"] = hoje
+        n["resultado"] = {}
+        sinais.append(n)
+
+    # avaliação
+    for x in sinais:
+        for h, dias in HORIZ_PLACAR.items():
+            if h in x["resultado"]:
+                continue
+            v = valor_em(x["id"], pd.Timestamp(x["data"]) + pd.Timedelta(days=dias))
+            if not v:
+                continue
+            d, val = v
+            mov = val - x["valor"]
+            certo = mov < 0 if x["lado"] == "alto" else mov > 0
+            gap = x["alvo"] - x["valor"]
+            x["resultado"][h] = dict(data=d.strftime("%Y-%m-%d"), valor=round(val, 4), acertou=bool(certo),
+                                     fechou_pct=round(100 * mov / gap, 0) if gap else None)
+
+    resumo = {}
+    for h in HORIZ_PLACAR:
+        av = [x["resultado"][h]["acertou"] for x in sinais if h in x["resultado"]]
+        resumo[h] = dict(avaliados=len(av), acertos=int(sum(av)), taxa=round(100 * sum(av) / len(av)) if av else None)
+    hist = dict(atualizado_em=hoje, inicio=sinais[0]["registrado_em"] if sinais else hoje,
+                total=len(sinais), resumo=resumo, sinais=sinais)
+    HIST.write_text(json.dumps(hist, ensure_ascii=False, indent=1), encoding="utf-8")
+    return resumo
+
+
 # --------------------------------------------------------------------------- principal
 def main():
     carregar()
@@ -373,6 +454,8 @@ def main():
         n_series=len(series), n_pares=len(pares),
         destaques=destaques, series=series, pares=pares,
     ), ensure_ascii=False, indent=1), encoding="utf-8")
+    resumo = atualizar_placar(series, pares, agora.strftime("%Y-%m-%d"))
+    print("placar:", resumo)
     print(f"radar: {len(series)} séries, {len(pares)} pares, {len(destaques)} destaques")
 
 
