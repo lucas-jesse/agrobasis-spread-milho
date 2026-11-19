@@ -31,10 +31,8 @@ extra = """.cl-status{display:flex;flex-direction:column;align-items:flex-end;ga
 .cn-t tr.sel td{background:#FFF6DF}
 .cn-t tr.tot td{font-weight:700;border-bottom:1px solid #cfd9d1}
 .cl-cel{display:inline-block;min-width:54px;padding:3px 6px;border-radius:6px;font-weight:600;text-align:center}
-.cl-wy{position:relative;width:100%;height:560px;border-radius:12px;overflow:hidden;background:#e9eeea;margin:6px 0 4px}
-.cl-wy iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 @media (max-width:860px){.cl-mapa{grid-template-columns:1fr}}
-@media (max-width:560px){.cl-wy{height:440px}.cl-mapa .abc-chart{height:430px}.cl-status{align-self:flex-start;align-items:flex-start;margin-top:8px}.cl-local{padding:12px;margin:0 -6px}.cl-ln{font-size:19px}}"""
+@media (max-width:560px){.cl-mapa .abc-chart{height:430px}.cl-status{align-self:flex-start;align-items:flex-start;margin-top:8px}.cl-local{padding:12px;margin:0 -6px}.cl-ln{font-size:19px}}"""
 css = "\n".join(cot[ini:fim]) + "\n" + extra + "\n</style>"
 cab = ("<!-- AgroBasis · Clima e El Niño nas regiões produtoras · dashboard em HTML\n"
        "     Dados: dados/clima/*.json no GitHub, gerados por exporta_clima.py (NOAA CPC, ERA5, ECMWF, Conab). -->\n")
@@ -43,7 +41,6 @@ faq = [("O que é o El Niño e por que ele importa para a safra?", "É o aquecim
        ("De onde vêm os dados de chuva?", "A chuva observada vem da reanálise ERA5 do Copernicus, produzida pelo centro europeu ECMWF, com dados diários desde 1980. O valor de cada município é a média de vários pontos da grade de 0,25° (cerca de 27 km) espalhados dentro do limite oficial do município, pela malha do IBGE, e não só do centro da cidade. A normal climatológica é a média de 1991 a 2020 da mesma área, e a previsão também é a média desses pontos. A previsão de 15 dias é o conjunto de 51 cenários do modelo do ECMWF. Os dados chegam pela plataforma Open-Meteo."),
        ("Como foi calculado o efeito do El Niño na produtividade?", "Com a série histórica da Conab por estado, desde a safra 1990/91. Para cada estado e cultura, o painel calcula a tendência de produtividade (que cresce com a tecnologia) e mede quanto cada safra ficou acima ou abaixo dela. Depois agrupa as safras pela fase do ENSO no verão, medida pelo RONI de dezembro a fevereiro. Para o trigo, vale a fase de agosto a outubro do ano da colheita."),
        ("O El Niño garante quebra no Matopiba e safra cheia no Sul?", "Não. Ele aumenta a chance desses resultados, mas cada evento é diferente e outros fatores pesam, como o Atlântico, a distribuição da chuva ao longo do ciclo e o manejo. Por isso o painel mostra a chuva observada e a previsão para cada região, além da média histórica. Há poucas safras de El Niño forte na série, e as médias por fase devem ser lidas como tendência."),
-       ("O que mostra o mapa ao vivo?", "Três camadas do Windy: a imagem de satélite das nuvens, os radares meteorológicos que mostram onde está chovendo agora e a chuva acumulada prevista pelo modelo europeu ECMWF para as próximas horas e dias. O mapa é interativo e tem uma linha do tempo para animar a imagem."),
        ("Com que frequência o painel é atualizado?", "Duas vezes por dia. A chuva observada e a previsão de 15 dias são atualizadas de manhã e à noite. Os índices da NOAA entram assim que são publicados: o Niño 3.4 toda segunda-feira, o RONI e as probabilidades uma vez por mês, na segunda quinta-feira.")]
 fh = "".join(f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in faq)
 ld = {"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},

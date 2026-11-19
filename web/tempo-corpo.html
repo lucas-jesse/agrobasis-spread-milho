@@ -67,6 +67,18 @@
     <p class="abc-nota" id="tpN3">Clique num polo, no mapa ou na lista, para abrir a previsão completa. Azul: chuva acima do normal; marrom: abaixo. O efeito do El Niño sobre a safra está no painel <a href="/dashboards/clima-el-nino/">Clima e El Niño</a>.</p>
   </div>
 
+  <div class="abc-card" id="ao-vivo">
+    <div class="abc-ch"><h3>Satélite, radar e chuva prevista ao vivo <small id="tpWyS">imagem de satélite das nuvens, atualizada a cada 10 a 15 minutos</small></h3>
+      <div class="abc-tools"><div class="abc-seg" id="tpWy">
+        <button data-o="satellite" data-p="satellite" data-t="imagem de satélite das nuvens, atualizada a cada 10 a 15 minutos" aria-pressed="true">Satélite</button>
+        <button data-o="radar" data-p="radar" data-t="radares meteorológicos: onde está chovendo agora" aria-pressed="false">Radar</button>
+        <button data-o="rainAccu" data-p="ecmwf" data-t="chuva acumulada prevista pelo modelo europeu ECMWF" aria-pressed="false">Chuva prevista</button>
+      </div>
+      <div class="abc-seg" id="tpWyZ"><button data-z="7" aria-pressed="true">Minha região</button><button data-z="4" aria-pressed="false">Brasil</button></div></div></div>
+    <div class="tp-wy"><iframe id="tpWyF" title="Mapa ao vivo de satélite, radar e chuva do Windy" loading="lazy" allowfullscreen></iframe></div>
+    <p class="abc-nota">Mapa interativo: arraste, aproxime e use a linha do tempo no rodapé para animar. No radar, a cobertura depende dos radares disponíveis em cada região; onde não há radar, o satélite mostra as nuvens de chuva. Fonte: <a href="https://www.windy.com/" target="_blank" rel="noopener">Windy.com</a>.</p>
+  </div>
+
   <div class="abc-foot"><span>Previsão: Open-Meteo, a partir dos modelos ECMWF, GFS e outros serviços meteorológicos (CC BY 4.0) · Normal: reanálise ERA5, 1991 a 2020 · Elaboração: AgroBasis</span></div>
 
   <section class="abc-faq" aria-label="Perguntas frequentes">
@@ -447,6 +459,7 @@
   function abrir(m, inicial) {
     if (!m) return;
     atual = m; $("tpCidade").value = rot(m);
+    if (window.tpWindy) window.tpWindy(m);
     $("tpTit").textContent = rot(m); $("tpMeta").textContent = "Carregando a previsão…";
     try { history.replaceState(null, "", location.pathname + "?cidade=" + slug(m)); } catch (e) {}
     var rec = (ler("ab_tempo_rec") || []).filter(function (s) { return s !== slug(m); }); rec.unshift(slug(m)); guardar("ab_tempo_rec", rec.slice(0, 4)); desenharChips();
@@ -488,5 +501,33 @@
     if (window.console) console.error("AgroBasis Tempo:", e);
     $("tpMeta").textContent = "Não foi possível carregar a página agora. Tente novamente em instantes.";
   });
+})();
+</script>
+
+<script>
+(function () {
+  var seg = document.getElementById("tpWy"), zs = document.getElementById("tpWyZ"), fr = document.getElementById("tpWyF"), sub = document.getElementById("tpWyS");
+  if (!seg) return;
+  var o = "satellite", p = "satellite", z = 7, lat = -15.8, lon = -52.5;
+  function atualiza() {
+    var la = z >= 6 ? lat : -15.8, lo = z >= 6 ? lon : -52.5;
+    var u = "https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km/h&level=surface" +
+      "&zoom=" + z + "&overlay=" + o + "&product=" + p + "&lat=" + la.toFixed(3) + "&lon=" + lo.toFixed(3) + "&detailLat=" + lat.toFixed(3) + "&detailLon=" + lon.toFixed(3) + "&marker=true";
+    if (fr.src !== u) fr.src = u;
+  }
+  window.tpWindy = function (m) { if (m && m.lat != null) { lat = +m.lat; lon = +m.lon; atualiza(); } };
+  Array.prototype.forEach.call(seg.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      Array.prototype.forEach.call(seg.querySelectorAll("button"), function (x) { x.setAttribute("aria-pressed", x === b); });
+      o = b.getAttribute("data-o"); p = b.getAttribute("data-p"); sub.textContent = b.getAttribute("data-t"); atualiza();
+    });
+  });
+  Array.prototype.forEach.call(zs.querySelectorAll("button"), function (b) {
+    b.addEventListener("click", function () {
+      Array.prototype.forEach.call(zs.querySelectorAll("button"), function (x) { x.setAttribute("aria-pressed", x === b); });
+      z = +b.getAttribute("data-z"); atualiza();
+    });
+  });
+  atualiza();
 })();
 </script>
