@@ -1,0 +1,154 @@
+<!-- AgroBasis · Radar de Distorções · varredura automática de todos os painéis
+     Dados: dados/radar/sinais.json (radar/varredura.py, GitHub Actions às 8h15 e 19h45 de Brasília). -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<style>
+.rdr{--vd:#1E4812;--vc:#54931B;--mr:#C0782F;--tx:#1d2420;--mt:#6b756d;--ln:#E7ECE8;--bg:#F8FAF8;
+  font-family:Geist,system-ui,sans-serif;color:var(--tx);max-width:1180px;margin:0 auto;font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased}
+.rdr *{box-sizing:border-box}
+.rdr-bc{font-size:12.5px;color:var(--mt);margin-bottom:14px;display:flex;gap:6px}
+.rdr-bc a{color:var(--mt);text-decoration:none}
+.rdr-kick{margin:0;font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;color:var(--vc);text-transform:uppercase}
+.rdr-tit{font-family:Sora,sans-serif;font-weight:700;font-size:30px;line-height:1.1;color:var(--vd);margin:6px 0 4px;letter-spacing:-.01em}
+.rdr-meta{font-size:13px;color:var(--mt);margin-bottom:16px}
+.rdr-aviso{display:flex;gap:10px;align-items:flex-start;margin:0 0 18px;padding:10px 14px;background:#f6f8f4;border:1px solid var(--ln);border-radius:12px;font-size:13px;line-height:1.5;color:#4a524c}
+.rdr-aviso svg{flex:none;margin-top:2px;color:var(--vc)}
+.rdr h2{font:600 17px Geist,sans-serif;margin:26px 0 10px;color:var(--tx)}
+.rdr h2 small{font-weight:500;font-size:12.5px;color:var(--mt);margin-left:6px}
+.rdr-dest{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.rdr-d{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.rdr-d .t{display:flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;color:var(--mt)}
+.rdr-d .t i{width:8px;height:8px;border-radius:50%;background:var(--vc);flex:none}
+.rdr-d .t i.q{background:var(--mr)}
+.rdr-d p{margin:0;font-size:14.5px;line-height:1.55}
+.rdr-d a{align-self:flex-start;font-size:12.5px;font-weight:600;color:var(--vd);text-decoration:none;border-bottom:1px solid var(--vc)}
+.rdr-int{height:4px;border-radius:2px;background:#eef1ef;overflow:hidden}.rdr-int b{display:block;height:100%;background:linear-gradient(90deg,var(--vc),var(--vd))}
+.rdr-tw{background:#fff;border:1px solid var(--ln);border-radius:14px;overflow-x:auto}
+.rdr table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+.rdr th{text-align:left;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--mt);font-weight:600;padding:10px 12px;border-bottom:1px solid var(--ln);white-space:nowrap;cursor:pointer;user-select:none}
+.rdr td{padding:9px 12px;border-bottom:1px solid var(--ln);vertical-align:middle}
+.rdr tr:last-child td{border-bottom:0}
+.rdr td.n{text-align:right;white-space:nowrap}
+.rdr td:first-child{min-width:190px}
+.rdr td a{color:var(--tx);text-decoration:none}.rdr td a:hover{color:var(--vd);text-decoration:underline}
+.rdr-pc{position:relative;width:110px;height:6px;border-radius:3px;background:linear-gradient(90deg,#e9d3bd,#eef1ef 50%,#c9dcb3);display:inline-block;vertical-align:middle;margin-right:8px}
+.rdr-pc i{position:absolute;top:-4px;width:4px;height:14px;border-radius:2px;background:var(--vd);transform:translateX(-50%)}
+.rdr-ctl{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.rdr-ctl button{font:500 12.5px Geist,sans-serif;border:1px solid var(--ln);background:#fff;color:var(--mt);padding:6px 12px;border-radius:999px;cursor:pointer}
+.rdr-ctl button[aria-pressed=true]{background:var(--vd);border-color:var(--vd);color:#fff}
+.rdr-faq{margin-top:34px;border-top:1px solid var(--ln);padding-top:18px}
+.rdr-faq details{border-bottom:1px solid var(--ln)}
+.rdr-faq summary{list-style:none;cursor:pointer;padding:14px 28px 14px 0;font-size:14.5px;font-weight:500;position:relative}
+.rdr-faq summary::-webkit-details-marker{display:none}
+.rdr-faq summary:after{content:"+";position:absolute;right:4px;top:11px;font-size:20px;color:var(--mt)}
+.rdr-faq details[open] summary:after{content:"−"}
+.rdr-faq p{margin:0 0 14px;font-size:14px;line-height:1.6;color:#4a524c;max-width:760px}
+.rdr-vazio{color:var(--mt);font-size:14px;padding:14px}
+@media (max-width:760px){.rdr-tit{font-size:24px}.rdr-dest{grid-template-columns:1fr}}
+</style>
+
+<div class="rdr" id="rdr">
+  <nav class="rdr-bc"><a href="/">Início</a><span>/</span><a href="/dashboards/">Painéis</a><span>/</span><span>Radar</span></nav>
+  <p class="rdr-kick">Inteligência AgroBasis</p>
+  <h1 class="rdr-tit">Radar de Distorções</h1>
+  <div class="rdr-meta" id="rdrMeta">Carregando…</div>
+  <div class="rdr-aviso"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <div>Varredura automática de todos os painéis do AgroBasis. Cada série é comparada com o próprio histórico e cada relação entre preços passa por um teste nos dados desde 2010. Aparece aqui só o que está fora do normal. É uma leitura de mercado, não uma recomendação de compra ou venda.</div></div>
+
+  <h2>Destaques de hoje <small id="rdrN"></small></h2>
+  <div class="rdr-dest" id="rdrDest"></div>
+
+  <h2>Relações entre preços <small>percentil nos últimos 5 anos</small></h2>
+  <div class="rdr-tw"><table id="rdrPares"></table></div>
+
+  <h2>Todas as séries monitoradas</h2>
+  <div class="rdr-ctl" id="rdrFil"></div>
+  <div class="rdr-tw"><table id="rdrSeries"></table></div>
+
+  <div class="rdr-faq">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>O que é o Radar de Distorções?</summary><p>Um programa que roda duas vezes por dia sobre os mesmos dados dos painéis do site. Ele mede onde cada preço, basis, spread e posição dos fundos está em relação ao seu histórico, e compara os preços entre si. Quando algo chega a um extremo, vira um destaque.</p></details>
+    <details><summary>O que quer dizer percentil?</summary><p>É a posição do valor de hoje dentro dos últimos 5 anos. Percentil 90 quer dizer que o valor atual é maior do que 90% dos registros do período. Perto de 0 ou de 100 é extremo; perto de 50 é normal.</p></details>
+    <details><summary>E o percentil para a época do ano?</summary><p>Basis e spreads têm sazonalidade: na colheita o basis costuma enfraquecer. Por isso, nessas séries, o radar compara o valor de hoje só com a mesma época (21 dias para cada lado) dos anos anteriores.</p></details>
+    <details><summary>Como funciona o teste histórico das relações?</summary><p>Quando uma relação, como soja dividida por milho, chega a um extremo, o radar procura todas as vezes desde 2010 em que ela chegou ao mesmo ponto e mostra em quantas delas a relação voltou para a média nas 13 semanas seguintes. Resultado passado não garante resultado futuro, mas mostra se o padrão é forte ou fraco.</p></details>
+    <details><summary>Com que frequência o radar é atualizado?</summary><p>Nos dias úteis, às 8h15 e às 19h45 de Brasília, depois das rotinas que atualizam os painéis.</p></details>
+  </div>
+</div>
+
+<script>
+(function () {
+  var REPO = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/"];
+  function json(p) {
+    var i = 0;
+    return new Promise(function (ok, erro) {
+      (function tenta() {
+        if (i >= REPO.length) return erro(new Error("sem dados"));
+        fetch(REPO[i++] + p + "?t=" + Date.now()).then(function (r) { if (!r.ok) throw 0; return r.json(); }).then(ok).catch(tenta);
+      })();
+    });
+  }
+  function f(v, c) {
+    if (v === null || v === undefined || isNaN(v)) return "-";
+    return Number(v).toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c });
+  }
+  function pc(p) { return p == null ? "-" : '<span class="rdr-pc"><i style="left:' + p + '%"></i></span>' + f(p, 0); }
+  function dt(s) { var a = s.split("-"); return a[2] + "/" + a[1] + "/" + a[0]; }
+  var ROT = { serie: "Série no extremo", basis: "Basis", razao: "Relação entre preços", correlacao: "Correlação" };
+  var GRUPOS = [["todas", "Todas"], ["preco", "Preços"], ["basis", "Basis"], ["spread", "Spreads e margens"], ["posicao", "Fundos"]];
+
+  json("dados/radar/sinais.json").then(function (d) {
+    document.getElementById("rdrMeta").textContent = "Atualizado em " + d.gerado_em.split(" ")[0].split("-").reverse().join("/") + " às " + d.gerado_em.split(" ")[1] +
+      " · " + d.n_series + " séries e " + d.pares.length + " relações monitoradas";
+    document.getElementById("rdrN").textContent = d.destaques.length + (d.destaques.length === 1 ? " sinal" : " sinais");
+    var mx = Math.max.apply(null, d.destaques.map(function (x) { return x.intensidade; }).concat([1]));
+    document.getElementById("rdrDest").innerHTML = d.destaques.length ? d.destaques.map(function (x) {
+      return '<div class="rdr-d"><div class="t"><i class="' + (x.tipo === "razao" || x.tipo === "correlacao" ? "q" : "") + '"></i>' + (ROT[x.tipo] || "Sinal") + " · " + dt(x.data) + '</div>' +
+        '<div class="rdr-int"><b style="width:' + Math.round(100 * x.intensidade / mx) + '%"></b></div><p>' + x.texto + "</p>" +
+        (x.painel ? '<a href="' + x.painel + '">Ver painel</a>' : "") + "</div>";
+    }).join("") : '<div class="rdr-vazio">Nenhuma distorção relevante hoje: os dados estão dentro do intervalo normal.</div>';
+
+    var razoes = d.pares.filter(function (p) { return p.tipo === "razao"; });
+    var corr = d.pares.filter(function (p) { return p.tipo === "correlacao"; });
+    document.getElementById("rdrPares").innerHTML = "<tr><th>Relação</th><th>Hoje</th><th>Média 5 anos</th><th>Percentil</th><th>Teste histórico</th></tr>" +
+      razoes.map(function (p) {
+        var t = p.teste && p.teste.n >= 6 ? p.teste.acerto + "% voltou em 13 semanas (" + p.teste.n + " casos)" : "-";
+        return "<tr><td>" + p.nome + '</td><td class="n">' + f(p.valor, 2) + '</td><td class="n">' + f(p.media_5a, 2) + "</td><td>" + pc(p.pct_5a) + "</td><td>" + t + "</td></tr>";
+      }).join("") +
+      "<tr><th>Correlação semanal</th><th>6 meses</th><th>3 anos</th><th colspan=2></th></tr>" +
+      corr.map(function (p) {
+        return "<tr><td>" + p.nome.charAt(0).toUpperCase() + p.nome.slice(1) + '</td><td class="n">' + f(p.corr_6m, 2) + '</td><td class="n">' + f(p.corr_3a, 2) + "</td><td colspan=2>" + (p.quebra_corr ? "<b>mudou de comportamento</b>" : "estável") + "</td></tr>";
+      }).join("");
+
+    var filtro = "todas", ordem = "ext";
+    function desenha() {
+      var ls = d.series.filter(function (s) { return filtro === "todas" || s.tipo === filtro; });
+      ls.sort(function (a, b) {
+        if (ordem === "nome") return a.nome.localeCompare(b.nome, "pt-BR");
+        var ea = Math.abs((a.pct_epoca != null ? a.pct_epoca : a.pct_5a) - 50), eb = Math.abs((b.pct_epoca != null ? b.pct_epoca : b.pct_5a) - 50);
+        return eb - ea;
+      });
+      document.getElementById("rdrSeries").innerHTML = '<tr><th data-o="nome">Série</th><th>Último</th><th>Data</th><th data-o="ext">Percentil 5 anos</th><th>Para a época</th><th>4 semanas</th></tr>' +
+        ls.map(function (s) {
+          var v4 = s.var_4s == null ? "-" : (s.var_4s > 0 ? "+" : "") + f(s.var_4s, s.casas);
+          return '<tr><td><a href="' + s.painel + '">' + s.nome + '</a></td><td class="n">' + f(s.valor, s.casas) + " <small>" + s.unidade + '</small></td><td class="n">' + dt(s.data) +
+            "</td><td>" + pc(s.pct_5a) + "</td><td>" + (s.pct_epoca != null ? pc(s.pct_epoca) : "-") + '</td><td class="n">' + v4 + "</td></tr>";
+        }).join("");
+      Array.prototype.forEach.call(document.querySelectorAll("#rdrSeries th[data-o]"), function (th) {
+        th.onclick = function () { ordem = th.getAttribute("data-o"); desenha(); };
+      });
+    }
+    document.getElementById("rdrFil").innerHTML = GRUPOS.map(function (g) {
+      return '<button data-g="' + g[0] + '" aria-pressed="' + (g[0] === filtro) + '">' + g[1] + "</button>";
+    }).join("");
+    Array.prototype.forEach.call(document.querySelectorAll("#rdrFil button"), function (b) {
+      b.onclick = function () {
+        filtro = b.getAttribute("data-g");
+        Array.prototype.forEach.call(document.querySelectorAll("#rdrFil button"), function (x) { x.setAttribute("aria-pressed", x === b); });
+        desenha();
+      };
+    });
+    desenha();
+  }).catch(function () { document.getElementById("rdrMeta").textContent = "Não foi possível carregar o radar agora. Tente de novo em alguns minutos."; });
+})();
+</script>

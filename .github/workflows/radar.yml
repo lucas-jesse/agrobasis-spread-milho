@@ -1,0 +1,39 @@
+name: Radar AgroBasis
+
+on:
+  schedule:
+    # 19:45 de Brasília nos dias úteis (depois de todas as rotinas de fechamento) e 08:15 (pega PTAX, COT e basis da noite)
+    - cron: '45 22 * * 1-5'
+    - cron: '15 11 * * 1-6'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['radar/**']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: radar
+  cancel-in-progress: true
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -q pandas numpy
+      - name: Varredura
+        run: python radar/varredura.py
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/radar
+          git diff --staged --quiet && exit 0
+          git commit -m "Radar $(TZ=America/Sao_Paulo date +'%F %H:%M')"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 7; done
