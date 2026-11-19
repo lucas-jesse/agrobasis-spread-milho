@@ -605,7 +605,7 @@
   function abrir(m, inicial) {
     if (!m) return;
     atual = m; $("tpCidade").value = rot(m);
-    if (window.tpWindy) window.tpWindy(m);
+    window.tpAtual = m; if (window.tpWindy) window.tpWindy(m);
     $("tpTit").textContent = rot(m); $("tpMeta").textContent = "Carregando a previsão…";
     try { history.replaceState(null, "", location.pathname + "?cidade=" + slug(m)); } catch (e) {}
     var rec = (ler("ab_tempo_rec") || []).filter(function (s) { return s !== slug(m); }); rec.unshift(slug(m)); guardar("ab_tempo_rec", rec.slice(0, 4)); desenharChips();
@@ -658,7 +658,7 @@
   function atualiza() {
     var la = z >= 6 ? lat : -15.8, lo = z >= 6 ? lon : -52.5;
     var u = "https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=mm&metricTemp=%C2%B0C&metricWind=km/h&level=surface" +
-      "&zoom=" + z + "&overlay=" + o + "&product=" + p + "&lat=" + la.toFixed(3) + "&lon=" + lo.toFixed(3) + "&detailLat=" + lat.toFixed(3) + "&detailLon=" + lon.toFixed(3) + "&marker=true";
+      "&zoom=" + z + "&overlay=" + o + "&product=" + p + "&lat=" + la.toFixed(3) + "&lon=" + lo.toFixed(3);
     if (fr.src !== u) fr.src = u;
   }
   window.tpWindy = function (m) { if (m && m.lat != null) { lat = +m.lat; lon = +m.lon; atualiza(); } };
@@ -674,6 +674,6 @@
       z = +b.getAttribute("data-z"); atualiza();
     });
   });
-  atualiza();
+  if (window.tpAtual) window.tpWindy(window.tpAtual); else atualiza();
 })();
 </script>
