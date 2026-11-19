@@ -348,6 +348,106 @@ def agrupar_basis(series) -> list[dict]:
     return out
 
 
+# --------------------------------------------------------------------------- leitura do dia
+def _s(series, sid):
+    return next((o for o in series if o["id"] == sid), None)
+
+
+def leitura(series, pares, destaques, anterior) -> dict:
+    """Texto curto que junta os sinais em temas. Só usa números já calculados."""
+    pars = []
+
+    # 1. Câmbio
+    d = _s(series, "dolar")
+    if d:
+        t = f"O dólar está em R$ {fmt(d['valor'], 4)}, percentil {fmt(d['pct_5a'], 0)} dos últimos 5 anos"
+        if d.get("var_4s") is not None:
+            t += f", com {'alta' if d['var_4s'] > 0 else 'queda'} de R$ {fmt(abs(d['var_4s']), 2)} em 4 semanas"
+        t += "."
+        if d["pct_5a"] >= 90:
+            t += " Para quem vende em dólar, é um patamar historicamente favorável para travar parte do câmbio; para quem tem custo em dólar a pagar, é o lado caro."
+        elif d["pct_5a"] <= 10:
+            t += " Para quem tem insumo a comprar em dólar, é um patamar historicamente barato."
+        pars.append(("Câmbio", t))
+
+    # 2. Fundos: direção conjunta no complexo
+    fun = [o for o in series if o["tipo"] == "posicao" and o.get("var_4s") is not None]
+    if fun:
+        vend = [o for o in fun if o["var_4s"] < 0]
+        comp = [o for o in fun if o["var_4s"] > 0]
+        fortes = [o for o in fun if (o.get("pct_var_4s") or 50) <= 2 or (o.get("pct_var_4s") or 50) >= 98]
+        nome = lambda o: o["nome"].replace("Posição dos fundos em ", "")
+        if len(vend) >= 4 or len(comp) >= 4:
+            lado = vend if len(vend) >= len(comp) else comp
+            verbo = "vendendo" if lado is vend else "comprando"
+            lista = ", ".join(f"{nome(o)} {fmt(o['var_4s'], 0)}" for o in sorted(lado, key=lambda o: o["var_4s"]))
+            t = f"Os fundos estão {verbo} em quase todo o complexo de grãos nas últimas 4 semanas (contratos): {lista}."
+            if fortes:
+                nf = [nome(o) for o in fortes]
+                lista_f = nf[0] if len(nf) == 1 else ", ".join(nf[:-1]) + " e " + nf[-1]
+                t += f" Em {lista_f}, o movimento está entre os 2% mais fortes dos últimos 10 anos."
+            mil = _s(series, "fundos_milho"); soj = _s(series, "fundos_soja")
+            if mil and soj and soj["valor"] > 0 and mil["valor"] <= 0:
+                t += (f" Mesmo assim, ainda há {fmt(soj['valor'], 0)} contratos comprados em soja, enquanto o milho já está "
+                      f"{'vendido' if mil['valor'] < 0 else 'zerado'}: se a liquidação continuar, a soja tem mais a devolver.")
+            pars.append(("Fundos", t))
+
+    # 3. Relações entre preços
+    for o in pares:
+        if o["tipo"] != "razao" or EXTREMO_PAR < o["pct_5a"] < 100 - EXTREMO_PAR:
+            continue
+        a, b = o["nome"].replace("Relação ", "").split("/", 1)
+        b_curto = b.split(" em ")[0].strip()
+        caro, barato = (a, b_curto) if o["pct_5a"] >= 50 else (b_curto, a)
+        t = (f"A relação {a}/{b} está em {fmt(o['valor'], 2)}, contra média de {fmt(o['media_5a'], 2)} em 5 anos: "
+             f"a {caro} está cara em relação ao {barato}.")
+        te = o.get("teste")
+        if te and te["n"] >= 6:
+            forca = "forte" if te["acerto"] >= 70 else ("moderado" if te["acerto"] >= 55 else "fraco")
+            t += (f" Historicamente o padrão é {forca}: em {te['acerto']}% das {te['n']} vezes anteriores, a relação voltou "
+                  f"nas 13 semanas seguintes.")
+        pars.append(("Relação entre preços", t))
+
+    # 4. Basis: placar de praças por produto
+    for prod, rot in (("milho", "do milho"), ("soja", "da soja")):
+        bs = [o for o in series if o["tipo"] == "basis" and f"_{prod}_" in o["id"] and o.get("pct_epoca") is not None]
+        if len(bs) < 4:
+            continue
+        fracos = [o for o in bs if o["pct_epoca"] <= 25]
+        fortes = [o for o in bs if o["pct_epoca"] >= 75]
+        pr = lambda o: o["nome"].split(" em ", 1)[1]
+        if len(fracos) >= 3 and len(fracos) >= len(fortes):
+            t = (f"O basis {rot} está abaixo do normal para a época (no quarto mais fraco dos últimos 5 anos) em {len(fracos)} de {len(bs)} praças acompanhadas, "
+                 f"com destaque para {', '.join(pr(o) for o in sorted(fracos, key=lambda o: o['pct_epoca'])[:3])}. "
+                 f"O físico está pagando menos que o normal em relação à bolsa. Se o basis voltar à média, quem pode esperar sai ganhando; "
+                 f"para quem compra o grão, é um momento melhor do que a média.")
+            pars.append((f"Basis {rot}", t))
+        elif len(fortes) >= 3:
+            t = (f"O basis {rot} está acima do normal para a época em {len(fortes)} de {len(bs)} praças, "
+                 f"com destaque para {', '.join(pr(o) for o in sorted(fortes, key=lambda o: -o['pct_epoca'])[:3])}. "
+                 f"O físico está pagando bem em relação à bolsa, uma janela melhor do que a média para vender.")
+            pars.append((f"Basis {rot}", t))
+
+    # 5. Curva do milho B3
+    c = _s(series, "carrego_ccm")
+    if c and c.get("pct_epoca") is not None and (c["pct_epoca"] >= 85 or c["pct_epoca"] <= 15):
+        if c["pct_epoca"] >= 85:
+            t = (f"Na B3, o segundo vencimento do milho paga R$ {fmt(c['valor'], 2)}/sc a mais que o primeiro, contra R$ "
+                 f"{fmt(c['media_epoca'], 2)} em média para a época: o mercado remunera bem quem consegue guardar o milho e vender mais à frente.")
+        else:
+            t = (f"Na B3, o carrego entre o primeiro e o segundo vencimento do milho está em R$ {fmt(c['valor'], 2)}/sc, abaixo da média "
+                 f"da época (R$ {fmt(c['media_epoca'], 2)}): o mercado paga pouco para esperar, e a venda no disponível ganha atratividade.")
+        pars.append(("Curva do milho", t))
+
+    # Novidades contra a rodada anterior
+    ant = {x["id"] for x in (anterior or {}).get("destaques", [])}
+    novos = [x for x in destaques if x["id"] not in ant]
+    sairam = [x for x in (anterior or {}).get("destaques", []) if x["id"] not in {d["id"] for d in destaques}]
+    return dict(paragrafos=[dict(tema=a, texto=b) for a, b in pars],
+                novidades=[x["texto"] for x in novos][:5] if anterior else [],
+                sairam=[x["texto"] for x in sairam][:5])
+
+
 # --------------------------------------------------------------------------- placar
 def valor_em(sid: str, data: pd.Timestamp):
     """Primeiro valor disponível a partir de 'data' (série simples ou razão 'a/b')."""
@@ -446,12 +546,17 @@ def main():
             destaques.append(dict(tipo=o["tipo"], id=f"{o['a']}/{o['b']}", painel=SERIES[o["a"]]["painel"], data=o["data"], intensidade=round(i, 1), texto=t))
     destaques.sort(key=lambda d: -d["intensidade"])
     agora = datetime.now(BRT)
+    anterior = json.loads(SAIDA.read_text(encoding="utf-8")) if SAIDA.exists() else None
+    if anterior and anterior.get("gerado_em", "")[:10] == agora.strftime("%Y-%m-%d"):
+        anterior = anterior.get("anterior_do_dia") or anterior  # comparar sempre com a rodada do dia anterior
+    lt = leitura(series, pares, destaques, anterior)
     SAIDA.parent.mkdir(parents=True, exist_ok=True)
     SAIDA.write_text(json.dumps(dict(
         gerado_em=agora.strftime("%Y-%m-%d %H:%M"),
         metodo=dict(anos_ref=ANOS_REF, extremo=EXTREMO, horizonte_semanas=HORIZ_SEM,
                     corr_semanas=[CORR_CURTA, CORR_LONGA], quebra_corr=QUEBRA_CORR),
-        n_series=len(series), n_pares=len(pares),
+        n_series=len(series), n_pares=len(pares), leitura=lt,
+        anterior_do_dia=dict(gerado_em=anterior["gerado_em"], destaques=anterior["destaques"]) if anterior else None,
         destaques=destaques, series=series, pares=pares,
     ), ensure_ascii=False, indent=1), encoding="utf-8")
     resumo = atualizar_placar(series, pares, agora.strftime("%Y-%m-%d"))
