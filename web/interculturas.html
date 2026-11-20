@@ -252,7 +252,7 @@
     function rot(d) { var t = new Date(Date.UTC(2001, 0, 1) + d * 864e5); return MESES[t.getUTCMonth()]; }
     plot(1, { grid: grid(56), legend: { top: 0, left: 0, itemWidth: 12, itemGap: 6, textStyle: { fontSize: 10.5 }, type: "scroll" },
       xAxis: { type: "value", min: x0, max: x1, interval: 30.4, axisLine: { lineStyle: { color: COR.ln } }, splitLine: { show: false }, axisTick: { show: false }, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return rot(v); } } },
-      yAxis: eixoY(function (x) { return st.saf === "tm" ? br(x, 0) : br(x, 1); }),
+      yAxis: eixoY(function (x) { return st.saf === "tm" ? br(x, 0) : br(x, 1); }, { axisLine: { show: false, onZero: false } }),
       tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { var d = p[0].axisValue, t = new Date(Date.UTC(2001, 0, 1) + d * 864e5), s = t.getUTCDate() + " " + MESES[t.getUTCMonth()] + (d < 0 ? " (ano anterior)" : ""); p.slice().sort(function (a, b) { return b.value[1] - a.value[1]; }).forEach(function (q) { s += "<br>" + q.marker + q.seriesName + ": " + fmt(st.saf, q.value[1]); }); return s; } }),
       series: ser });
     $("icS1").textContent = st.saf === "sm" ? "soja novembro ÷ milho dezembro" : "trigo dezembro − milho dezembro, US$/t";
@@ -280,7 +280,7 @@
     var C = D.curva, X = C.map(function (c) { return nomeK(c.soja) + (c.soja.charAt(2) !== c.milho.charAt(2) ? "*" : ""); });
     plot(3, { grid: Object.assign(grid(44), { right: mobile() ? 40 : 58 }), legend: { top: 0, left: 0, itemWidth: 14, textStyle: { fontSize: 12 } },
       xAxis: { type: "category", data: X, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, axisLabel: { color: COR.mt, fontSize: 11, interval: 0, rotate: mobile() ? 40 : 0 } },
-      yAxis: [eixoY(function (x) { return br(x, 2); }), eixoY(function (x) { return br(x, 0); }, { splitLine: { show: false }, name: "US$/t", nameTextStyle: { color: COR.mt, fontSize: 10.5 } })],
+      yAxis: [eixoY(function (x) { return br(x, 2); }), eixoY(function (x) { return br(x, 0); }, { scale: false, min: 0, splitLine: { show: false }, name: "US$/t", nameTextStyle: { color: COR.mt, fontSize: 10.5 } })],
       tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { var c = C[p[0].dataIndex]; return "<b>" + c.soja + " · " + c.milho + (c.trigo ? " · " + c.trigo : "") + "</b><br>Soja/milho: " + br(c.sm, 2) + (c.tm != null ? "<br>Trigo − milho: US$ " + br(c.tm, 0) + "/t<br>Soja/trigo: " + br(c.st, 2) : ""); } }),
       series: [{ name: "Soja/milho", type: "line", data: C.map(function (c) { return c.sm; }), symbol: "circle", symbolSize: 8, lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd }, label: { show: !mobile(), position: "top", fontSize: 10.5, formatter: function (p) { return br(p.value, 2); } } },
                { name: "Trigo − milho (US$/t)", type: "bar", yAxisIndex: 1, barMaxWidth: 26, data: C.map(function (c) { return c.tm; }), itemStyle: { color: "rgba(217,162,59,.55)", borderRadius: [4, 4, 0, 0] } }] });
@@ -306,7 +306,7 @@
   function kpis() {
     var H = D.hoje;
     $("k1").textContent = br(H.safra_sm, 2);
-    $("k1s").textContent = "ZSX" + String(H.safra_ano).slice(2) + " ÷ ZCZ" + String(H.safra_ano).slice(2) + " · média na mesma época " + br(H.safra_sm_media, 2);
+    $("k1s").textContent = "ZSX" + String(H.safra_ano).slice(2) + "/ZCZ" + String(H.safra_ano).slice(2) + " · média da época " + br(H.safra_sm_media, 2);
     $("k2").textContent = br(H.sm.v, 2);
     $("k2s").textContent = "percentil " + br(H.sm.pct10, 0) + " em 10 anos · mediana " + br(H.sm.med10, 2);
     $("k3").textContent = "US$ " + br(H.tm.v, 0) + "/t";
