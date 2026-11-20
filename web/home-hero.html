@@ -116,8 +116,20 @@
   var M = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
   function esc(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
   // próximos relatórios lidos da própria página da agenda (mesma origem, sem custo)
+  // A agenda é calculada por um script da página /agenda/ (datas oficiais e regras de feriado). Para não manter duas cópias
+  // da regra, a home baixa essa página, roda o mesmo script numa caixa oculta e lê os próximos eventos.
+  function rodaAgenda(h) {
+    var i = h.indexOf("var T = {"), a = h.lastIndexOf("<script", i), b = h.indexOf("</script>", i);
+    if (i < 0 || a < 0 || b < 0) throw 0;
+    var box = document.createElement("div"); box.hidden = true;
+    box.innerHTML = '<div class="agd"><div id="agdDestaque"></div><input type="checkbox" id="agdAlto"><div id="agdLista"></div><button id="agdMais"></button><a id="agdIcs"></a></div>';
+    document.body.appendChild(box);
+    var sc = document.createElement("script"); sc.textContent = h.slice(h.indexOf(">", a) + 1, b); document.body.appendChild(sc);
+    return box;
+  }
+  function carrega() {
   fetch("/agenda/").then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (h) {
-    var doc = new DOMParser().parseFromString(h, "text/html"), agora = new Date(), lista = [];
+    var doc = rodaAgenda(h), agora = new Date(), lista = [];
     var hoje0 = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
     doc.querySelectorAll(".agd-dia").forEach(function (dia) {
       var sm = dia.querySelectorAll(".agd-data small"), dd = dia.querySelector(".agd-data b");
@@ -148,6 +160,9 @@
         '<div class="abh-x">' + quando + (e.imp === 2 ? "<i>Alto impacto</i>" : "") + '</div></a>';
     }).join("");
     document.getElementById("abhAg").hidden = false;
+    doc.remove();
   }).catch(function () {});
+  }
+  if (document.readyState === "complete") carrega(); else window.addEventListener("load", carrega);
 })();
 </script>
