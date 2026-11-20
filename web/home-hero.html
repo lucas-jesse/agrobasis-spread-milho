@@ -11,25 +11,26 @@
 .abh h1{font:700 48px/1.08 Sora,Geist,sans-serif;color:#fff;margin:0 0 16px;letter-spacing:-.02em;max-width:560px}
 .abh-sub{font-size:18px;line-height:1.5;color:rgba(255,255,255,.86);margin:0 0 30px;max-width:460px}
 .abh-bt{display:flex;gap:12px;flex-wrap:wrap}
-.abh-bt a{display:inline-flex;align-items:center;justify-content:center;border-radius:4px;padding:14px 24px;font:600 15px Geist,sans-serif;text-decoration:none!important;transition:background .15s}
+.abh-bt a{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:4px;padding:14px 24px;font:600 15px Geist,sans-serif;text-decoration:none!important;transition:background .15s}
 .abh-b1{background:#fff;color:var(--vd)!important}.abh-b1:hover{background:#EEF4E8}
 .abh-b2{color:#fff!important;border:1px solid rgba(255,255,255,.7)}.abh-b2:hover{background:rgba(255,255,255,.1)}
 .abh-tx>*{opacity:0;transform:translateY(14px);animation:abhUp .7s cubic-bezier(.2,.7,.2,1) forwards}
 .abh-tx>*:nth-child(2){animation-delay:.12s}.abh-tx>*:nth-child(3){animation-delay:.24s}
 @keyframes abhUp{to{opacity:1;transform:none}}
+.abh-ah{font:600 12px Geist,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8);margin:0 0 10px;opacity:0;animation:abhUp .6s .35s forwards}
 .abh-cs{display:grid;gap:10px}
-.abh-c{background:rgba(255,255,255,.94);backdrop-filter:blur(6px);border-radius:8px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;column-gap:14px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.22);opacity:0;transform:translateX(36px);animation:abhIn .8s cubic-bezier(.2,.7,.2,1) forwards;text-decoration:none!important;color:var(--tx)!important}
-.abh-c:nth-child(1){animation-delay:.45s}.abh-c:nth-child(2){animation-delay:.6s}.abh-c:nth-child(3){animation-delay:.75s}
+.abh-c{background:rgba(255,255,255,.95);backdrop-filter:blur(6px);border-radius:8px;padding:12px 16px 12px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.22);opacity:0;transform:translateX(36px);animation:abhIn .8s cubic-bezier(.2,.7,.2,1) forwards;text-decoration:none!important;color:var(--tx)!important}
+.abh-c:nth-child(1){animation-delay:.5s}.abh-c:nth-child(2){animation-delay:.65s}.abh-c:nth-child(3){animation-delay:.8s}
 @keyframes abhIn{to{opacity:1;transform:none}}
-.abh-c span{grid-row:1/3;grid-column:1;font-size:13px;color:var(--t2)}.abh-c span i{font-style:normal}.abh-c span b{display:block;font:600 14.5px Geist,sans-serif;color:var(--tx);margin-bottom:1px}
-.abh-c strong{font:600 24px/1 Geist,system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em;text-align:right}
-.abh-c em{grid-column:2;text-align:right;font-style:normal;font-size:12.5px;font-weight:600;margin-top:4px}
-.abh-c em.up{color:#2E7D1E}.abh-c em.dn{color:#B4441F}.abh-c em.eq{color:#6b756d}
-.abh-c svg{grid-row:1/3;grid-column:1;justify-self:end;margin-right:4px;width:96px;height:34px;overflow:visible}
-.abh-c path{fill:none;stroke:var(--vc);stroke-width:1.8;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;animation:abhL 1.6s ease-out forwards;animation-delay:inherit}
-.abh-c:nth-child(1) path{animation-delay:.9s}.abh-c:nth-child(2) path{animation-delay:1.05s}.abh-c:nth-child(3) path{animation-delay:1.2s}
-@keyframes abhL{to{stroke-dashoffset:0}}
-.abh-cf{font-size:11.5px;color:rgba(255,255,255,.75);margin:4px 2px 0;opacity:0;animation:abhUp .6s 1s forwards}
+.abh-d{width:50px;text-align:center;border-right:1px solid var(--ln);padding-right:12px;line-height:1.1}
+.abh-d small{display:block;font-size:11px;font-weight:600;text-transform:uppercase;color:#6b756d}
+.abh-d b{display:block;font:700 22px/1.1 Sora,sans-serif;color:var(--tx)}
+.abh-e b{display:block;font:600 14.5px/1.3 Geist,sans-serif;color:var(--tx)}
+.abh-e span{display:block;font-size:12.5px;color:var(--t2);margin-top:2px}
+.abh-x{text-align:right;font-size:12.5px;font-weight:600;color:var(--vd);white-space:nowrap}
+.abh-x i{display:block;font-style:normal;font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;margin-top:3px;color:#B4441F}
+.abh-c.hoje .abh-x{color:#B4441F}
+.abh-cf{display:inline-block;margin:10px 2px 0;font-size:13px;font-weight:600;color:#fff!important;text-decoration:none!important;opacity:0;animation:abhUp .6s 1s forwards}.abh-cf:hover{text-decoration:underline!important}
 .abh-cr{position:absolute;z-index:1;right:12px;bottom:8px;margin:0;font-size:10.5px;color:rgba(255,255,255,.55)}
 .abh-cr a{color:inherit!important}
 .abh-p{max-width:1140px;margin:0 auto;padding:0 20px}
@@ -39,7 +40,7 @@
 .abh-pg b{font:700 15.5px/1.25 Sora,sans-serif;color:var(--tx)}
 .abh-pg a:hover b{color:var(--vd);text-decoration:underline;text-underline-offset:3px}
 .abh-pg span{font-size:13.5px;line-height:1.5;color:var(--t2)}
-@media (max-width:980px){.abh-in{grid-template-columns:1fr;gap:34px}.abh-cs{max-width:520px}.abh-pg{grid-template-columns:repeat(3,1fr)}.abh-pg a:nth-child(3){border-right:0}}
+@media (max-width:980px){.abh-in{grid-template-columns:1fr;gap:34px}.abh-ag{max-width:520px}.abh-pg{grid-template-columns:repeat(3,1fr)}.abh-pg a:nth-child(3){border-right:0}}
 @media (max-width:640px){
 .abh-top{min-height:0;align-items:flex-end}
 .abh-ft{object-position:35% 50%}
@@ -47,7 +48,7 @@
 .abh-in{padding:56px 16px 30px;gap:24px}
 .abh h1{font-size:31px;margin-bottom:12px}.abh-sub{font-size:15.5px;margin-bottom:22px}
 .abh-bt{display:grid;grid-template-columns:1fr 1fr;gap:10px}.abh-bt a{padding:13px 10px}
-.abh-c{padding:11px 13px;transform:translateY(18px)}.abh-c strong{font-size:20px}.abh-c svg{width:70px;height:28px}.abh-c span{font-size:12px}.abh-c span b{font-size:13.5px}
+.abh-c{padding:10px 12px 10px 10px;gap:11px;transform:translateY(18px)}.abh-d{width:42px;padding-right:10px}.abh-d b{font-size:19px}.abh-e b{font-size:13.5px}.abh-e span{font-size:11.5px}.abh-x{font-size:11.5px}.abh-bt a{font-size:14px}
 .abh-cr{font-size:9.5px;bottom:6px}
 .abh-p{padding:0 16px}
 .abh-pg{grid-template-columns:1fr 1fr}
@@ -57,7 +58,7 @@
 .abh-pg a:last-child{grid-column:1/-1;border-bottom:0}
 .abh-pg b{font-size:14.5px}.abh-pg span{display:none}
 }
-@media (prefers-reduced-motion:reduce){.abh-ft,.abh-tx>*,.abh-c,.abh-c path,.abh-cf{animation:none!important;opacity:1!important;stroke-dashoffset:0!important}.abh-ft{transform:scaleX(-1)}.abh-c,.abh-tx>*{transform:none}}
+@media (prefers-reduced-motion:reduce){.abh-ft,.abh-tx>*,.abh-c,.abh-cf,.abh-ah{animation:none!important;opacity:1!important}.abh-ft{transform:scaleX(-1)}.abh-c,.abh-tx>*{transform:none}}
 /* ---- ajustes da página inicial ---- */
 /* cards de atalho: compactos, 2 por linha no celular */
 @media (max-width:767px){
@@ -87,16 +88,13 @@
         <p class="abh-sub">Soja, milho e câmbio com dados oficiais, atualizados todos os dias.</p>
         <div class="abh-bt">
           <a class="abh-b1" href="/dashboards/">Ver os painéis</a>
-          <a class="abh-b2" href="/analises/">Análises</a>
+          <a class="abh-b2" href="https://chat.whatsapp.com/HqNKK5KqNqqLuewxeJHOeI" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Grupo do WhatsApp</a>
         </div>
       </div>
-      <div>
-        <div class="abh-cs" id="abhCs">
-          <a class="abh-c" href="/dashboards/basis-soja-brasil/"><span><b>Soja CBOT</b><i id="abhC0n">&nbsp;</i></span><svg viewBox="0 0 100 34" aria-hidden="true"><path id="abhC0s" d=""/></svg><strong id="abhC0p">&nbsp;</strong><em id="abhC0v">&nbsp;</em></a>
-          <a class="abh-c" href="/dashboards/milho-b3-x-dolar/"><span><b>Milho B3</b><i id="abhC1n">&nbsp;</i></span><svg viewBox="0 0 100 34" aria-hidden="true"><path id="abhC1s" d=""/></svg><strong id="abhC1p">&nbsp;</strong><em id="abhC1v">&nbsp;</em></a>
-          <a class="abh-c" href="/dashboards/curva-do-dolar/"><span><b>Dólar PTAX</b><i id="abhC2n">&nbsp;</i></span><svg viewBox="0 0 100 34" aria-hidden="true"><path id="abhC2s" d=""/></svg><strong id="abhC2p">&nbsp;</strong><em id="abhC2v">&nbsp;</em></a>
-        </div>
-        <p class="abh-cf" id="abhCf">&nbsp;</p>
+      <div class="abh-ag" id="abhAg" hidden>
+        <p class="abh-ah">Próximos relatórios</p>
+        <div class="abh-cs" id="abhCs"></div>
+        <a class="abh-cf" href="/agenda/">Ver a agenda completa&nbsp;→</a>
       </div>
     </div>
     <p class="abh-cr">Foto: James Baltz / <a href="https://unsplash.com/photos/_pBBkarmFTs" target="_blank" rel="noopener nofollow">Unsplash</a></p>
@@ -115,41 +113,41 @@
 <script>
 (function () {
   "use strict";
-  var R = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/dados/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/dados/"];
-  var $ = function (i) { return document.getElementById(i); };
-  function br(v, c) { return v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); }
-  function pega(i, arq) {
-    return fetch(R[i] + arq + "?v=" + Math.floor(Date.now() / 3e5)).then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .catch(function () { if (i + 1 < R.length) return pega(i + 1, arq); throw 0; });
-  }
-  function linha(id, v) {
-    v = v.filter(function (x) { return x != null; }); if (v.length < 2) return;
-    var lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), n = v.length, d = "";
-    v.forEach(function (x, i) { d += (i ? "L" : "M") + (i * 100 / (n - 1)).toFixed(1) + "," + (32 - (hi > lo ? (x - lo) / (hi - lo) : .5) * 30).toFixed(1); });
-    $(id).setAttribute("d", d);
-  }
-  function card(k, it, cas, pre, suf, comp) {
-    if (!it) return;
-    $("abhC" + k + "p").textContent = pre + br(it.preco, cas) + suf;
-    $("abhC" + k + "n").textContent = comp;
-    var v = it.var_pct, e = $("abhC" + k + "v");
-    e.textContent = (v > 0 ? "▲ " : v < 0 ? "▼ " : "") + br(Math.abs(v), 2) + "%";
-    e.className = v > 0.005 ? "up" : v < -0.005 ? "dn" : "eq";
-  }
-  pega(0, "fechamento.json").then(function (f) {
-    var ch = function (l, c) { return (l || []).filter(function (x) { return x.chave === c; })[0]; };
-    var s = ch(f.cbot, "soja"), m = ch(f.brasil, "milho_b3");
-    card(0, s, 2, "", "", "US$/bu · " + (s ? s.compl : ""));
-    if (s) $("abhC0p").textContent = br(s.preco / 100, 2);
-    card(1, m, 2, "R$ ", "", "R$/saca · " + (m ? m.compl : ""));
-    if (m) $("abhC1p").textContent = br(m.preco, 2);
-    var dt = f.data || ""; $("abhCf").textContent = "Fechamento de " + dt.slice(8, 10) + "/" + dt.slice(5, 7) + " · CME, B3 e Banco Central · linha: últimos 6 meses";
-  }).catch(function () { $("abhCs").style.display = "none"; });
-  pega(0, "home_curva.json").then(function (c) { linha("abhC0s", c.valores.slice(-26)); }).catch(function () {});
-  pega(0, "milho_dolar.json").then(function (m) { linha("abhC1s", m.serie.b3.slice(-126)); }).catch(function () {});
-  pega(0, "cambio.json").then(function (c) {
-    var v = c.ptax.valores, n = v.length; linha("abhC2s", v.slice(-126));
-    card(2, { preco: v[n - 1], var_pct: (v[n - 1] / v[n - 2] - 1) * 100 }, 4, "", "", "R$ · Banco Central");
+  var M = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  function esc(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+  // próximos relatórios lidos da própria página da agenda (mesma origem, sem custo)
+  fetch("/agenda/").then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (h) {
+    var doc = new DOMParser().parseFromString(h, "text/html"), agora = new Date(), lista = [];
+    var hoje0 = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+    doc.querySelectorAll(".agd-dia").forEach(function (dia) {
+      var sm = dia.querySelectorAll(".agd-data small"), dd = dia.querySelector(".agd-data b");
+      if (!dd || sm.length < 2) return;
+      var mes = M.indexOf(sm[1].textContent.trim().toLowerCase().slice(0, 3)); if (mes < 0) return;
+      var ano = agora.getFullYear(); if (mes < agora.getMonth() - 6) ano++; else if (mes > agora.getMonth() + 6) ano--;
+      dia.querySelectorAll(".agd-ev").forEach(function (ev) {
+        var t = ev.querySelector(".agd-ev-t"), o = ev.querySelector(".agd-ev-o"), hr = ev.querySelector(".agd-hora");
+        var imp = ev.querySelector(".agd-imp-alto") ? 2 : ev.querySelector(".agd-imp-medio") ? 1 : 0;
+        if (!t || !imp) return;
+        var hm = (hr ? hr.textContent.trim() : "00:00").split(":");
+        var quando = new Date(ano, mes, +dd.textContent, +hm[0] || 0, +hm[1] || 0);
+        if (quando < agora) return;
+        lista.push({ q: quando, t: t.textContent.trim(), o: o ? o.textContent.trim() : "", h: hr ? hr.textContent.trim() : "", imp: imp, sem: sm[0].textContent.trim() });
+      });
+    });
+    lista.sort(function (a, b) { return a.q - b.q; });
+    var alto = lista.filter(function (e) { return e.imp === 2; })[0];
+    var esc3 = lista.filter(function (e) { return e !== alto; }).slice(0, alto ? 2 : 3);
+    if (alto) esc3.push(alto);
+    esc3.sort(function (a, b) { return a.q - b.q; });
+    if (!esc3.length) return;
+    document.getElementById("abhCs").innerHTML = esc3.map(function (e) {
+      var d0 = new Date(e.q.getFullYear(), e.q.getMonth(), e.q.getDate()), n = Math.round((d0 - hoje0) / 864e5);
+      var quando = n === 0 ? "hoje, " + e.h : n === 1 ? "amanhã, " + e.h : "em " + n + " dias";
+      return '<a class="abh-c' + (n === 0 ? " hoje" : "") + '" href="/agenda/"><div class="abh-d"><small>' + esc(e.sem) + '</small><b>' + e.q.getDate() + '</b><small>' + M[e.q.getMonth()] + '</small></div>' +
+        '<div class="abh-e"><b>' + esc(e.t) + '</b><span>' + esc(e.o) + (e.h ? " · " + esc(e.h) : "") + '</span></div>' +
+        '<div class="abh-x">' + quando + (e.imp === 2 ? "<i>Alto impacto</i>" : "") + '</div></a>';
+    }).join("");
+    document.getElementById("abhAg").hidden = false;
   }).catch(function () {});
 })();
 </script>
