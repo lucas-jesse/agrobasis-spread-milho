@@ -119,7 +119,7 @@
   // A agenda é calculada por um script da página /agenda/ (datas oficiais e regras de feriado). Para não manter duas cópias
   // da regra, a home baixa essa página, roda o mesmo script numa caixa oculta e lê os próximos eventos.
   function rodaAgenda(h) {
-    var i = h.indexOf("var T = {"), a = h.lastIndexOf("<script", i), b = h.indexOf("</script>", i);
+    var i = h.indexOf("var T = {"), a = h.lastIndexOf("<scr" + "ipt", i), b = h.indexOf("<\/script>", i);
     if (i < 0 || a < 0 || b < 0) throw 0;
     var box = document.createElement("div"); box.hidden = true;
     box.innerHTML = '<div class="agd"><div id="agdDestaque"></div><input type="checkbox" id="agdAlto"><div id="agdLista"></div><button id="agdMais"></button><a id="agdIcs"></a></div>';
