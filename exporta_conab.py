@@ -20,7 +20,7 @@ import io
 import json
 import re
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 import openpyxl
@@ -227,7 +227,16 @@ def montar(slug, levs_atuais, hist, rev):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--local"); args = ap.parse_args()
     LEV.mkdir(parents=True, exist_ok=True)
-    lista = descobrir(args.local)
+    try:
+        lista = descobrir(args.local)
+    except RuntimeError as e:
+        # O site da Conab às vezes recusa conexões vindas do GitHub por algumas horas. Como o boletim é mensal, os dados
+        # atuais seguem válidos: só acusa erro se o último levantamento salvo tiver mais de 40 dias.
+        lv = json.loads((PASTA / "resumo.json").read_text(encoding="utf-8"))["levantamento"] if (PASTA / "resumo.json").exists() else None
+        if lv and (date.today() - date(lv["ano"], lv["mes"], 1)).days <= 40:
+            print("aviso: Conab fora do ar para o GitHub; mantidos os dados do levantamento", lv, "|", e)
+            return
+        raise
     if not lista:
         raise SystemExit("nenhum levantamento encontrado na página do boletim")
     safra_atual = max(l[0] for l in lista)
