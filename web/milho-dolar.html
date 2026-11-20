@@ -304,7 +304,7 @@
     var X = L6.map(function (v) { return nomeCt(v.contrato); });
     plot(6, { grid: Object.assign(grid(), { top: 40 }), legend: { top: 0, left: 0, itemWidth: 14, textStyle: { fontSize: 12 } },
       xAxis: { type: "category", data: X, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, axisLabel: { color: COR.mt, fontSize: 11.5 } },
-      yAxis: eixoY(function (x) { return br(x, 0); }),
+      yAxis: Object.assign(eixoY(function (x) { return br(x, 0); }), { scale: false, min: 0 }),
       tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { var v = L6[p[0].dataIndex], s = "<b>" + v.contrato + "</b> · vence em " + dmY(v.vencimento) + "<br>R$ " + br(v.preco, 2) + " ÷ " + br(v.dolar, 4) + " = <b>US$ " + br(v.usd, 2) + "</b>/sc";
         if (v.media_ant != null) s += "<br>Pela PTAX: US$ " + br(v.usd_ptax, 2) + " · anos anteriores, mesma época: US$ " + br(v.media_ant, 2); return s; } }),
       series: [{ name: "US$/saca (dólar futuro)", type: "bar", barMaxWidth: 46, data: L6.map(function (v) { return v.usd; }), itemStyle: { color: COR.vd, borderRadius: [5, 5, 0, 0] },
