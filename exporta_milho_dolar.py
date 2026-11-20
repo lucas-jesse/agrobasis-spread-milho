@@ -126,7 +126,10 @@ def por_vencimento(C, ptax, ult_d):
         preco = float(ult[k]) if k in C.columns and pd.notna(ult[k]) else curva.get(k)
         if preco is None:
             continue
-        if len(s):
+        if len(s):  # último ponto = preço de hoje (ajuste da B3), para o gráfico bater com a tabela
+            s = s.copy()
+            s.loc[pd.Timestamp(ult_d)] = preco
+            s = s.sort_index()
             series[k] = s
         vd = venc_ccm(k)
         dol, ref = dolar_em(pts, vd)
@@ -147,7 +150,7 @@ def por_vencimento(C, ptax, ult_d):
         venc.append({"contrato": k, "vencimento": vd.isoformat(), "preco": r(preco), "dolar": r(dol, 4), "dolar_ref": ref,
                      "usd": r(usd), "usd_ptax": r(preco / p_hoje), "anteriores": ant, "media_ant": med,
                      "vs_media": r((preco / p_hoje / med - 1) * 100, 1) if med else None})
-        u = (s / ptax.reindex(s.index).ffill(limit=3)).dropna()
+        u = (s / ptax.reindex(s.index).ffill(limit=3)).dropna() if len(s) else s
         u = u[u.index >= ult_d - pd.Timedelta(days=550)]
         if len(u) > 5:
             hist[k] = {"d": [d.strftime("%Y-%m-%d") for d in u.index], "u": [r(x) for x in u], "r": [r(x) for x in s.reindex(u.index)]}

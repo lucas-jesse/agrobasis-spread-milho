@@ -164,7 +164,7 @@
       $("mdS1").textContent = sel + " (" + nomeCt(sel) + "), dólar pela PTAX do dia";
       $("mdN1").textContent = "Hoje US$ " + br(hoje, 2) + " por saca no " + sel + ". No período do gráfico: mínimo US$ " + br(mn, 2) + " e máximo US$ " + br(mx, 2) + ".";
     }
-    plot(1, { grid: grid(), xAxis: eixoX(X), yAxis: eixoY(function (x) { return br(x, 0); }),
+    plot(1, { grid: grid(), xAxis: eixoX(X), yAxis: eixoY(function (x) { return br(x, 1); }),
       tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { return tip(p[0].dataIndex); } }),
       series: [{ type: "line", showSymbol: false, data: Y, lineStyle: { width: 2, color: COR.vd }, areaStyle: { color: "rgba(30,72,18,.06)" },
         markLine: { silent: true, symbol: "none", label: { position: "insideEndTop", color: COR.mt, fontSize: 11, formatter: "hoje US$ {c}" }, lineStyle: { color: COR.mr, type: "dashed" }, data: [{ yAxis: hoje }] } }] });
