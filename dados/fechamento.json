@@ -1,15 +1,15 @@
 {
  "data": "2026-11-19",
- "gerado_em_brt": "2026-11-19 22:52",
+ "gerado_em_brt": "2026-11-19 22:54",
  "fonte": "TradingView (CBOT, B3, câmbio e índices)",
  "cbot": [
   {
    "nome": "Soja",
    "compl": "jan/27",
-   "preco": 1207.75,
+   "preco": 1209.25,
    "anterior": 1207.5,
    "formato": "usbu",
-   "var_pct": 0.0207,
+   "var_pct": 0.1449,
    "chave": "soja"
   },
   {
@@ -24,19 +24,19 @@
   {
    "nome": "Trigo",
    "compl": "dez/26",
-   "preco": 577.25,
+   "preco": 577.75,
    "anterior": 578.25,
    "formato": "usbu",
-   "var_pct": -0.1729,
+   "var_pct": -0.0865,
    "chave": "trigo"
   },
   {
    "nome": "Farelo de soja",
    "compl": "dez/26",
-   "preco": 333.9,
+   "preco": 334.2,
    "anterior": 332.3,
    "formato": "ust",
-   "var_pct": 0.4815,
+   "var_pct": 0.5718,
    "chave": "farelo"
   },
   {
@@ -82,19 +82,19 @@
   {
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 103.921,
+   "preco": 103.922,
    "anterior": 103.924,
    "formato": "pts2",
-   "var_pct": -0.0029,
+   "var_pct": -0.0019,
    "chave": "dxy"
   },
   {
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 92.51,
+   "preco": 92.61,
    "anterior": 91.98,
    "formato": "usd",
-   "var_pct": 0.5762,
+   "var_pct": 0.6849,
    "chave": "brent"
   }
  ]
