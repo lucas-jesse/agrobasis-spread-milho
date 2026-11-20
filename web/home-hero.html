@@ -1,70 +1,64 @@
-<!-- AgroBasis · abertura da página inicial (sem foto) + mercado hoje + ajustes de layout da home no celular -->
+<!-- AgroBasis · abertura da página inicial: foto de colheita em tela cheia, cotações do fechamento entrando em cartões + ajustes de layout da home no celular.
+     Foto: James Baltz (Unsplash, licença Unsplash, uso comercial livre). Arquivo na biblioteca de mídia do WordPress (ID 2315). -->
 <style>
-.abh{--vd:#1E4812;--vc:#54931B;font-family:Geist,system-ui,sans-serif;color:#1d2420;position:relative;background:#fff}
-.abh-top{position:relative;background:#14240F;overflow:hidden}
-.abh-cv{position:absolute;left:0;right:0;bottom:56px;width:100%;height:62%;pointer-events:none}
-.abh-cv .a{fill:#1E3A16;opacity:.55}.abh-cv .l{fill:none;stroke:#7FB547;stroke-width:2;opacity:.45;vector-effect:non-scaling-stroke}
-.abh-cl{position:absolute;right:20px;bottom:66px;margin:0;font:500 11px 'Geist Mono',ui-monospace,monospace;color:#7FB547;opacity:.85}
-.abh-in{position:relative;max-width:1140px;margin:0 auto;padding:60px 20px 120px;display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
-.abh-k{font:600 12px/1.3 Geist,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#A9D27A;margin:0 0 14px}
-.abh h1{font:700 44px/1.08 Sora,Geist,sans-serif;color:#fff;margin:0 0 16px;letter-spacing:-.015em}
-.abh-sub{font-size:17px;line-height:1.55;color:#E7ECE8;margin:0 0 26px;max-width:520px}
+.abh{--vd:#1E4812;--vc:#54931B;--tx:#1b211d;--t2:#4a524c;--ln:#E1E5DE;font-family:Geist,system-ui,sans-serif;color:var(--tx);background:#fff}
+.abh *{box-sizing:border-box}
+.abh-top{position:relative;overflow:hidden;background:#1a2414;min-height:560px;display:flex;align-items:center}
+.abh-ft{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%;transform:scaleX(-1) scale(1.08);animation:abhZ 16s ease-out forwards}
+@keyframes abhZ{to{transform:scaleX(-1) scale(1)}}
+.abh-top:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,18,8,.86) 0%,rgba(10,18,8,.62) 42%,rgba(10,18,8,.18) 75%,rgba(10,18,8,.05) 100%),linear-gradient(0deg,rgba(10,18,8,.45),rgba(10,18,8,0) 40%)}
+.abh-in{position:relative;z-index:1;width:100%;max-width:1140px;margin:0 auto;padding:72px 20px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:56px;align-items:center}
+.abh h1{font:700 48px/1.08 Sora,Geist,sans-serif;color:#fff;margin:0 0 16px;letter-spacing:-.02em;max-width:560px}
+.abh-sub{font-size:18px;line-height:1.5;color:rgba(255,255,255,.86);margin:0 0 30px;max-width:460px}
 .abh-bt{display:flex;gap:12px;flex-wrap:wrap}
-.abh-bt a{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:6px;padding:14px 22px;font:600 15.5px Geist,sans-serif;text-decoration:none!important;transition:transform .15s,background .15s}
-.abh-bt a:hover{transform:translateY(-1px)}
-.abh-b1{background:#fff;color:var(--vd)!important}.abh-b1:hover{background:#F1F7EA}
-.abh-b2{color:#fff!important;border:1.5px solid rgba(255,255,255,.85)}.abh-b2:hover{background:rgba(255,255,255,.08)}
-.abh-m{background:#fff;color:#1d2420;border-radius:6px;padding:20px 22px;box-shadow:0 16px 40px rgba(0,0,0,.25)}
-.abh-mh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:6px}
-.abh-mh b{font:700 16px Sora,sans-serif;color:#1d2420}.abh-mh small{font-size:12px;color:#6b756d}
-.abh-t{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
-.abh-t td{padding:9px 0;border-top:1px solid #E7ECE8;font-size:14.5px;white-space:nowrap}
-.abh-t tr:last-child td{border-bottom:1px solid #E7ECE8}
-.abh-t td small{font-size:11.5px;color:#6b756d;margin-left:4px}
-.abh-t td:nth-child(2){text-align:right;font-weight:700;font-family:'Geist Mono',ui-monospace,monospace}
-.abh-t td:nth-child(3){text-align:right;width:84px;font-size:12.5px;font-weight:600}
-.abh-t .up{color:#2E7D1E}.abh-t .dn{color:#B4441F}.abh-t .eq{color:#6b756d}
-.abh-tm{display:block;margin-top:14px;text-decoration:none!important;color:#1d2420!important}
-.abh-tmh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
-.abh-tmh b{font:700 14px Sora,sans-serif}.abh-tmh small{font-size:12px;color:var(--vd);font-weight:600}
-.abh-tmg{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.abh-tmi span{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
-.abh-tmi span b{font:600 30px/1 'Geist Mono',ui-monospace,monospace;letter-spacing:0}
-.abh-tmb{position:relative;height:8px;margin:8px 0 6px;display:grid;grid-template-columns:30fr 15fr 10fr 15fr 30fr;gap:2px}
-.abh-tmb s{display:block;text-decoration:none}
-.abh-tmb s:nth-child(1){background:#A35A1E}.abh-tmb s:nth-child(2){background:#C07A2E}.abh-tmb s:nth-child(3){background:#D9A23B}.abh-tmb s:nth-child(4){background:#54931B}.abh-tmb s:nth-child(5){background:#1E4812}
-.abh-tmb i{position:absolute;top:-4px;width:3px;height:16px;background:#1d2420;box-shadow:0 0 0 2px #fff;transform:translateX(-50%)}
-.abh-tmi em{font-style:normal;font-size:12.5px;font-weight:600}
-.abh-mf{margin:12px 0 0;font-size:11px;color:#6b756d;line-height:1.4}
-.abh-p{position:relative;max-width:1140px;margin:-64px auto 0;padding:0 20px}
-.abh-pg{background:#fff;border:1px solid #E3E8E2;box-shadow:0 10px 28px rgba(20,36,15,.12);display:grid;grid-template-columns:repeat(5,1fr)}
-.abh-pg a{display:flex;flex-direction:column;gap:7px;padding:22px 20px;text-decoration:none!important;color:#1d2420!important;border-right:1px solid #E3E8E2;transition:background .15s}
-.abh-pg a:last-child{border-right:0}.abh-pg a:hover{background:#F6F8F4}
-.abh-pg b{font:700 16px/1.25 Sora,sans-serif;color:var(--vd)}
-.abh-pg span{font-size:13.5px;line-height:1.5;color:#4a524c}
-@media (max-width:980px){.abh-pg{grid-template-columns:repeat(3,1fr)}.abh-pg a:nth-child(3){border-right:0}.abh-pg a:nth-child(-n+3){border-bottom:1px solid #E3E8E2}}
-@media (max-width:860px){.abh-in{grid-template-columns:1fr;gap:28px;padding:36px 18px 96px}.abh h1{font-size:32px}.abh-sub{font-size:15.5px;margin-bottom:20px}.abh-cv{height:40%}}
+.abh-bt a{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:4px;padding:14px 24px;font:600 15px Geist,sans-serif;text-decoration:none!important;transition:background .15s}
+.abh-b1{background:#fff;color:var(--vd)!important}.abh-b1:hover{background:#EEF4E8}
+.abh-b2{color:#fff!important;border:1px solid rgba(255,255,255,.7)}.abh-b2:hover{background:rgba(255,255,255,.1)}
+.abh-tx>*{opacity:0;transform:translateY(14px);animation:abhUp .7s cubic-bezier(.2,.7,.2,1) forwards}
+.abh-tx>*:nth-child(2){animation-delay:.12s}.abh-tx>*:nth-child(3){animation-delay:.24s}
+@keyframes abhUp{to{opacity:1;transform:none}}
+.abh-ah{font:600 12px Geist,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.8);margin:0 0 10px;opacity:0;animation:abhUp .6s .35s forwards}
+.abh-cs{display:grid;gap:10px}
+.abh-c{background:rgba(255,255,255,.95);backdrop-filter:blur(6px);border-radius:8px;padding:12px 16px 12px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.22);opacity:0;transform:translateX(36px);animation:abhIn .8s cubic-bezier(.2,.7,.2,1) forwards;text-decoration:none!important;color:var(--tx)!important}
+.abh-c:nth-child(1){animation-delay:.5s}.abh-c:nth-child(2){animation-delay:.65s}.abh-c:nth-child(3){animation-delay:.8s}
+@keyframes abhIn{to{opacity:1;transform:none}}
+.abh-d{width:50px;text-align:center;border-right:1px solid var(--ln);padding-right:12px;line-height:1.1}
+.abh-d small{display:block;font-size:11px;font-weight:600;text-transform:uppercase;color:#6b756d}
+.abh-d b{display:block;font:700 22px/1.1 Sora,sans-serif;color:var(--tx)}
+.abh-e b{display:block;font:600 14.5px/1.3 Geist,sans-serif;color:var(--tx)}
+.abh-e span{display:block;font-size:12.5px;color:var(--t2);margin-top:2px}
+.abh-x{text-align:right;font-size:12.5px;font-weight:600;color:var(--vd);white-space:nowrap}
+.abh-x i{display:block;font-style:normal;font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;margin-top:3px;color:#B4441F}
+.abh-c.hoje .abh-x{color:#B4441F}
+.abh-cf{display:inline-block;margin:10px 2px 0;font-size:13px;font-weight:600;color:#fff!important;text-decoration:none!important;opacity:0;animation:abhUp .6s 1s forwards}.abh-cf:hover{text-decoration:underline!important}
+.abh-cr{position:absolute;z-index:1;right:12px;bottom:8px;margin:0;font-size:10.5px;color:rgba(255,255,255,.55)}
+.abh-cr a{color:inherit!important}
+.abh-p{max-width:1140px;margin:0 auto;padding:0 20px}
+.abh-pg{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:1px solid var(--ln)}
+.abh-pg a{display:flex;flex-direction:column;gap:6px;padding:22px 20px 22px 0;margin-right:20px;text-decoration:none!important;color:var(--tx)!important;border-right:1px solid var(--ln)}
+.abh-pg a:last-child{border-right:0;margin-right:0}
+.abh-pg b{font:700 15.5px/1.25 Sora,sans-serif;color:var(--tx)}
+.abh-pg a:hover b{color:var(--vd);text-decoration:underline;text-underline-offset:3px}
+.abh-pg span{font-size:13.5px;line-height:1.5;color:var(--t2)}
+@media (max-width:980px){.abh-in{grid-template-columns:1fr;gap:34px}.abh-ag{max-width:520px}.abh-pg{grid-template-columns:repeat(3,1fr)}.abh-pg a:nth-child(3){border-right:0}}
 @media (max-width:640px){
-.abh-in{padding:26px 16px 84px;gap:22px}.abh h1{font-size:27px;margin-bottom:18px}.abh-k{font-size:11px;margin-bottom:10px}.abh-sub{display:none}
-.abh-bt{flex-direction:column;gap:9px}.abh-bt a{width:100%;padding:13px 16px}
-.abh-m{padding:16px}.abh-t td{font-size:14px;padding:8px 0}.abh-t td:nth-child(3){width:70px}.abh-tmi span b{font-size:26px}.abh-tmg{gap:16px}
-.abh-cl{right:16px;bottom:62px;font-size:10px}
-.abh-p{margin-top:-48px;padding:0 16px}
+.abh-top{min-height:0;align-items:flex-end}
+.abh-ft{object-position:35% 50%}
+.abh-top:after{background:linear-gradient(0deg,rgba(10,18,8,.92) 0%,rgba(10,18,8,.7) 55%,rgba(10,18,8,.35) 100%)}
+.abh-in{padding:56px 16px 30px;gap:24px}
+.abh h1{font-size:31px;margin-bottom:12px}.abh-sub{font-size:15.5px;margin-bottom:22px}
+.abh-bt{display:grid;grid-template-columns:1fr;gap:10px}.abh-bt a{padding:13px 10px}
+.abh-c{padding:10px 12px 10px 10px;gap:11px;transform:translateY(18px)}.abh-d{width:42px;padding-right:10px}.abh-d b{font-size:19px}.abh-e b{font-size:13.5px}.abh-e span{font-size:11.5px}.abh-x{font-size:11.5px}.abh-bt a{font-size:14px}
+.abh-cr{font-size:9.5px;bottom:6px}
+.abh-p{padding:0 16px}
 .abh-pg{grid-template-columns:1fr 1fr}
-.abh-pg a{padding:13px 14px;border-right:1px solid #E3E8E2!important;border-bottom:1px solid #E3E8E2!important}
-.abh-pg a:nth-child(2n){border-right:0!important}.abh-pg a:last-child{grid-column:1/-1;border-bottom:0!important;border-right:0!important}
+.abh-pg a{padding:14px 12px 14px 0;margin-right:12px;border-bottom:1px solid var(--ln)}
+.abh-pg a:nth-child(2n){border-right:0;margin-right:0}
+.abh-pg a:nth-child(3){border-right:1px solid var(--ln)}
+.abh-pg a:last-child{grid-column:1/-1;border-bottom:0}
 .abh-pg b{font-size:14.5px}.abh-pg span{display:none}
 }
-
-.abh-m{display:block;text-decoration:none!important;color:#1d2420!important;transition:transform .15s}.abh-m:hover{transform:translateY(-2px)}
-.abh-mh b{font-size:19px!important}
-.abh-q{font-size:14px;line-height:1.5;color:#4a524c;margin:6px 0 16px}
-.abh-m .abh-tmi{padding:14px 0;border-top:1px solid #E7ECE8}
-.abh-m .abh-tmi span{font-size:13px}.abh-m .abh-tmi span b{font-size:44px}
-.abh-m .abh-tmb{height:12px;margin:10px 0 8px}.abh-m .abh-tmb i{top:-5px;height:22px;width:4px}
-.abh-tme{display:flex;justify-content:space-between;align-items:baseline;gap:8px}.abh-tme em{font-size:14px}.abh-tme small{font-size:11.5px;color:#6b756d}
-.abh-mv{border-top:1px solid #E7ECE8;padding-top:12px;font:600 14px Geist,sans-serif;color:#1E4812}
-@media (max-width:640px){.abh-q{display:none}.abh-mh{margin-bottom:4px}.abh-m .abh-tmi{padding:10px 0}.abh-m .abh-tmi span b{font-size:36px}}
+@media (prefers-reduced-motion:reduce){.abh-ft,.abh-tx>*,.abh-c,.abh-cf,.abh-ah{animation:none!important;opacity:1!important}.abh-ft{transform:scaleX(-1)}.abh-c,.abh-tx>*{transform:none}}
 /* ---- ajustes da página inicial ---- */
 /* cards de atalho: compactos, 2 por linha no celular */
 @media (max-width:767px){
@@ -80,39 +74,38 @@
 /* últimas análises: 3 no celular */
 .hla .hla-list .hla-row:nth-child(n+3){display:none!important}
 }
+
 </style>
 
 <section class="abh" aria-label="AgroBasis">
   <div class="abh-top">
-    <svg class="abh-cv" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true"><path class="a" id="abhCa" d=""/><path class="l" id="abhCl" d=""/></svg>
+    <img class="abh-ft" src="https://agrobasis.com.br/wp-content/uploads/2026/11/colheita-soja-aerea-agrobasis-1536x864.jpg"
+      srcset="https://agrobasis.com.br/wp-content/uploads/2026/11/colheita-soja-aerea-agrobasis-768x432.jpg 768w, https://agrobasis.com.br/wp-content/uploads/2026/11/colheita-soja-aerea-agrobasis-1536x864.jpg 1536w, https://agrobasis.com.br/wp-content/uploads/2026/11/colheita-soja-aerea-agrobasis-2048x1152.jpg 2048w"
+      sizes="100vw" alt="Colheitadeiras colhendo soja, vista aérea" fetchpriority="high">
     <div class="abh-in">
-      <div>
-        <p class="abh-k">Soja · Milho · Trigo · Câmbio</p>
-        <h1>Gestão de risco e inteligência de mercado para o agronegócio</h1>
-        <p class="abh-sub">Basis, hedge, câmbio e clima transformados em indicadores para produtores, cooperativas e tradings protegerem a margem da safra.</p>
+      <div class="abh-tx">
+        <h1>Inteligência de mercado para o agronegócio</h1>
+        <p class="abh-sub">Soja, milho e câmbio com dados oficiais, atualizados todos os dias.</p>
         <div class="abh-bt">
-          <a class="abh-b1" href="/dashboards/">Explorar os painéis</a>
+          <a class="abh-b1" href="/dashboards/">Ver os painéis</a>
           <a class="abh-b2" href="https://chat.whatsapp.com/HqNKK5KqNqqLuewxeJHOeI" target="_blank" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>Grupo do WhatsApp</a>
         </div>
       </div>
-      <a class="abh-m" id="abhM" href="/dashboards/termometro-de-venda/">
-        <div class="abh-mh"><b>Termômetro de venda</b><small id="abhD">&nbsp;</small></div>
-        <p class="abh-q">O momento está bom para vender? Nota de 0 a 100, calculada todo dia com preço, basis, sazonalidade e fundos.</p>
-        <div class="abh-tmi"><span>Soja<b id="abhTmS">-</b></span><div class="abh-tmb"><s></s><s></s><s></s><s></s><s></s><i id="abhTmSi"></i></div><div class="abh-tme"><em id="abhTmSf">&nbsp;</em><small>0 segurar · 100 vender</small></div></div>
-        <div class="abh-tmi"><span>Milho<b id="abhTmM">-</b></span><div class="abh-tmb"><s></s><s></s><s></s><s></s><s></s><i id="abhTmMi"></i></div><div class="abh-tme"><em id="abhTmMf">&nbsp;</em><small>0 segurar · 100 vender</small></div></div>
-        <div class="abh-mv">Ver por praça e método&nbsp;→</div>
-        <p class="abh-mf">Média das praças acompanhadas · Indicador de mercado, não recomendação individual</p>
-      </a>
+      <div class="abh-ag" id="abhAg" hidden>
+        <p class="abh-ah">Próximos relatórios</p>
+        <div class="abh-cs" id="abhCs"></div>
+        <a class="abh-cf" href="/agenda/">Ver a agenda completa&nbsp;→</a>
+      </div>
     </div>
-    <p class="abh-cl" id="abhCt" hidden></p>
+    <p class="abh-cr">Foto: James Baltz / <a href="https://unsplash.com/photos/_pBBkarmFTs" target="_blank" rel="noopener nofollow">Unsplash</a></p>
   </div>
   <nav class="abh-p" aria-label="Áreas do AgroBasis">
     <div class="abh-pg">
-      <a href="/ferramentas/"><b>Hedge e derivativos&nbsp;→</b><span>Simuladores de trava em CBOT, B3, NDF e opções.</span></a>
-      <a href="/dashboards/termometro-de-venda/"><b>Basis e comercialização&nbsp;→</b><span>Basis por praça, spreads e termômetro de venda.</span></a>
-      <a href="/dashboards/curva-do-dolar/"><b>Câmbio e macro&nbsp;→</b><span>Dólar, juros e fluxo dos fundos na CBOT.</span></a>
-      <a href="/clima/"><b>Risco climático&nbsp;→</b><span>Chuva nos polos do Brasil, EUA e Argentina.</span></a>
-      <a href="/educacional/"><b>Educação em risco&nbsp;→</b><span>Série de derivativos: basis, hedge, opções e NDF.</span></a>
+      <a href="/dashboards/basis-soja-brasil/"><b>Basis e comercialização</b><span>Basis por praça, spreads e termômetro de venda.</span></a>
+      <a href="/ferramentas/"><b>Hedge e derivativos</b><span>Simuladores de trava em CBOT, B3, NDF e opções.</span></a>
+      <a href="/dashboards/curva-do-dolar/"><b>Câmbio e macro</b><span>Dólar, juros e fluxo dos fundos na CBOT.</span></a>
+      <a href="/clima/"><b>Clima</b><span>Previsão por município e chuva nas regiões produtoras.</span></a>
+      <a href="/educacional/"><b>Educação</b><span>Série de derivativos: basis, hedge, opções e NDF.</span></a>
     </div>
   </nav>
 </section>
@@ -120,35 +113,56 @@
 <script>
 (function () {
   "use strict";
-  var R = ["https://raw.githubusercontent.com/lucas-jesse/agrobasis-spread-milho/main/dados/", "https://cdn.jsdelivr.net/gh/lucas-jesse/agrobasis-spread-milho@main/dados/"];
-  var $ = function (i) { return document.getElementById(i); };
-  function br(v, c) { return v.toLocaleString("pt-BR", { minimumFractionDigits: c, maximumFractionDigits: c }); }
-  function pega(i, arq) {
-    return fetch(R[i] + arq + "?v=" + Math.floor(Date.now() / 3e5)).then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .catch(function () { if (i + 1 < R.length) return pega(i + 1, arq); throw 0; });
+  var M = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+  function esc(t) { var d = document.createElement("div"); d.textContent = t; return d.innerHTML; }
+  // próximos relatórios lidos da própria página da agenda (mesma origem, sem custo)
+  // A agenda é calculada por um script da página /agenda/ (datas oficiais e regras de feriado). Para não manter duas cópias
+  // da regra, a home baixa essa página, roda o mesmo script numa caixa oculta e lê os próximos eventos.
+  function rodaAgenda(h) {
+    var i = h.indexOf("var T = {"), a = h.lastIndexOf("<scr" + "ipt", i), b = h.indexOf("<\/script>", i);
+    if (i < 0 || a < 0 || b < 0) throw 0;
+    var box = document.createElement("div"); box.hidden = true;
+    box.innerHTML = '<div class="agd"><div id="agdDestaque"></div><input type="checkbox" id="agdAlto"><div id="agdLista"></div><button id="agdMais"></button><a id="agdIcs"></a></div>';
+    document.body.appendChild(box);
+    var sc = document.createElement("script"); sc.textContent = h.slice(h.indexOf(">", a) + 1, b); document.body.appendChild(sc);
+    return box;
   }
-  function hojeBR() { var h = new Date(); return h.getFullYear() + "-" + String(h.getMonth() + 1).padStart(2, "0") + "-" + String(h.getDate()).padStart(2, "0"); }
-  // curva de fundo: soja CBOT desde 2019
-  pega(0, "home_curva.json").then(function (c) {
-    var v = c.valores, n = v.length; if (n < 2) return;
-    var lo = Math.min.apply(null, v), hi = Math.max.apply(null, v), d = "";
-    v.forEach(function (x, i) { d += (i ? "L" : "M") + (i * 1000 / (n - 1)).toFixed(1) + "," + (290 - (x - lo) / (hi - lo) * 260).toFixed(1); });
-    $("abhCl").setAttribute("d", d); $("abhCa").setAttribute("d", d + "L1000,300L0,300Z");
-    var m = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-    function mm(s) { return m[+s.slice(5, 7) - 1] + "/" + s.slice(0, 4); }
-    $("abhCt").textContent = "Soja CBOT, contrato de referência, " + mm(c.inicio) + " a " + mm(c.fim) + " · " + c.fonte; $("abhCt").hidden = false;
-  }).catch(function () {});
-  // mini termômetro de venda (média das praças)
-  pega(0, "termometro.json").then(function (t) {
-    function faixa(n) { return n >= 70 ? ["Muito favorável", "#1E4812"] : n >= 55 ? ["Favorável", "#3d7a14"] : n >= 45 ? ["Neutro", "#B07F1E"] : n >= 30 ? ["Pouco favorável", "#B0662A"] : ["Desfavorável", "#A35A1E"]; }
-    function med(P) { var v = Object.keys(P).map(function (k) { return P[k].nota; }).filter(function (x) { return x != null; }); return v.length ? v.reduce(function (a, b) { return a + b; }, 0) / v.length : null; }
-    [["soja", "S"], ["milho", "M"]].forEach(function (x) {
-      var n = med(t[x[0]] || {}); if (n == null) return; var f = faixa(n);
-      $("abhTm" + x[1]).textContent = Math.round(n); $("abhTm" + x[1]).style.color = f[1];
-      $("abhTm" + x[1] + "i").style.left = Math.max(2, Math.min(98, n)) + "%";
-      $("abhTm" + x[1] + "f").textContent = f[0]; $("abhTm" + x[1] + "f").style.color = f[1];
+  function carrega() {
+  fetch("/agenda/").then(function (r) { if (!r.ok) throw 0; return r.text(); }).then(function (h) {
+    var doc = rodaAgenda(h), agora = new Date(), lista = [];
+    var hoje0 = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+    doc.querySelectorAll(".agd-dia").forEach(function (dia) {
+      var sm = dia.querySelectorAll(".agd-data small"), dd = dia.querySelector(".agd-data b");
+      if (!dd || sm.length < 2) return;
+      var mes = M.indexOf(sm[1].textContent.trim().toLowerCase().slice(0, 3)); if (mes < 0) return;
+      var ano = agora.getFullYear(); if (mes < agora.getMonth() - 6) ano++; else if (mes > agora.getMonth() + 6) ano--;
+      dia.querySelectorAll(".agd-ev").forEach(function (ev) {
+        var t = ev.querySelector(".agd-ev-t"), o = ev.querySelector(".agd-ev-o"), hr = ev.querySelector(".agd-hora");
+        var imp = ev.querySelector(".agd-imp-alto") ? 2 : ev.querySelector(".agd-imp-medio") ? 1 : 0;
+        if (!t || !imp) return;
+        var hm = (hr ? hr.textContent.trim() : "00:00").split(":");
+        var quando = new Date(ano, mes, +dd.textContent, +hm[0] || 0, +hm[1] || 0);
+        if (quando < agora) return;
+        lista.push({ q: quando, t: t.textContent.trim(), o: o ? o.textContent.trim() : "", h: hr ? hr.textContent.trim() : "", imp: imp, sem: sm[0].textContent.trim() });
+      });
     });
-    var r = t.referencia_mercado || ""; if (r) $("abhD").textContent = "mercado de " + r.slice(8, 10) + "/" + r.slice(5, 7);
-  }).catch(function () { $("abhD").textContent = "indisponível no momento"; });
+    lista.sort(function (a, b) { return a.q - b.q; });
+    var alto = lista.filter(function (e) { return e.imp === 2; })[0];
+    var esc3 = lista.filter(function (e) { return e !== alto; }).slice(0, alto ? 2 : 3);
+    if (alto) esc3.push(alto);
+    esc3.sort(function (a, b) { return a.q - b.q; });
+    if (!esc3.length) return;
+    document.getElementById("abhCs").innerHTML = esc3.map(function (e) {
+      var d0 = new Date(e.q.getFullYear(), e.q.getMonth(), e.q.getDate()), n = Math.round((d0 - hoje0) / 864e5);
+      var quando = n === 0 ? "hoje, " + e.h : n === 1 ? "amanhã, " + e.h : "em " + n + " dias";
+      return '<a class="abh-c' + (n === 0 ? " hoje" : "") + '" href="/agenda/"><div class="abh-d"><small>' + esc(e.sem) + '</small><b>' + e.q.getDate() + '</b><small>' + M[e.q.getMonth()] + '</small></div>' +
+        '<div class="abh-e"><b>' + esc(e.t) + '</b><span>' + esc(e.o) + (e.h ? " · " + esc(e.h) : "") + '</span></div>' +
+        '<div class="abh-x">' + quando + (e.imp === 2 ? "<i>Alto impacto</i>" : "") + '</div></a>';
+    }).join("");
+    document.getElementById("abhAg").hidden = false;
+    doc.remove();
+  }).catch(function () {});
+  }
+  if (document.readyState === "complete") carrega(); else window.addEventListener("load", carrega);
 })();
 </script>
