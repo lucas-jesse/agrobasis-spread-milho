@@ -22,7 +22,7 @@
 .abh-c:nth-child(1){animation-delay:.45s}.abh-c:nth-child(2){animation-delay:.6s}.abh-c:nth-child(3){animation-delay:.75s}
 @keyframes abhIn{to{opacity:1;transform:none}}
 .abh-c span{grid-row:1/3;grid-column:1;font-size:13px;color:var(--t2)}.abh-c span i{font-style:normal}.abh-c span b{display:block;font:600 14.5px Geist,sans-serif;color:var(--tx);margin-bottom:1px}
-.abh-c strong{font:600 24px/1 'Geist Mono',ui-monospace,monospace;letter-spacing:-.02em;text-align:right}
+.abh-c strong{font:600 24px/1 Geist,system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.01em;text-align:right}
 .abh-c em{grid-column:2;text-align:right;font-style:normal;font-size:12.5px;font-weight:600;margin-top:4px}
 .abh-c em.up{color:#2E7D1E}.abh-c em.dn{color:#B4441F}.abh-c em.eq{color:#6b756d}
 .abh-c svg{grid-row:1/3;grid-column:1;justify-self:end;margin-right:4px;width:96px;height:34px;overflow:visible}
@@ -94,7 +94,7 @@
         <div class="abh-cs" id="abhCs">
           <a class="abh-c" href="/dashboards/basis-soja-brasil/"><span><b>Soja CBOT</b><i id="abhC0n">&nbsp;</i></span><svg viewBox="0 0 100 34" aria-hidden="true"><path id="abhC0s" d=""/></svg><strong id="abhC0p">&nbsp;</strong><em id="abhC0v">&nbsp;</em></a>
           <a class="abh-c" href="/dashboards/milho-b3-x-dolar/"><span><b>Milho B3</b><i id="abhC1n">&nbsp;</i></span><svg viewBox="0 0 100 34" aria-hidden="true"><path id="abhC1s" d=""/></svg><strong id="abhC1p">&nbsp;</strong><em id="abhC1v">&nbsp;</em></a>
-          <a class="abh-c" href="/dashboards/curva-do-dolar/"><span><b>Dólar</b><i id="abhC2n">&nbsp;</i></span><svg viewBox="0 0 100 34" aria-hidden="true"><path id="abhC2s" d=""/></svg><strong id="abhC2p">&nbsp;</strong><em id="abhC2v">&nbsp;</em></a>
+          <a class="abh-c" href="/dashboards/curva-do-dolar/"><span><b>Dólar PTAX</b><i id="abhC2n">&nbsp;</i></span><svg viewBox="0 0 100 34" aria-hidden="true"><path id="abhC2s" d=""/></svg><strong id="abhC2p">&nbsp;</strong><em id="abhC2v">&nbsp;</em></a>
         </div>
         <p class="abh-cf" id="abhCf">&nbsp;</p>
       </div>
@@ -138,16 +138,18 @@
   }
   pega(0, "fechamento.json").then(function (f) {
     var ch = function (l, c) { return (l || []).filter(function (x) { return x.chave === c; })[0]; };
-    var s = ch(f.cbot, "soja"), m = ch(f.brasil, "milho_b3"), d = ch(f.brasil, "usdbrl");
+    var s = ch(f.cbot, "soja"), m = ch(f.brasil, "milho_b3");
     card(0, s, 2, "", "", "US$/bu · " + (s ? s.compl : ""));
     if (s) $("abhC0p").textContent = br(s.preco / 100, 2);
     card(1, m, 2, "R$ ", "", "R$/saca · " + (m ? m.compl : ""));
     if (m) $("abhC1p").textContent = br(m.preco, 2);
-    card(2, d, 4, "", "", "R$ · comercial");
-    var dt = f.data || ""; $("abhCf").textContent = "Fechamento de " + dt.slice(8, 10) + "/" + dt.slice(5, 7) + " · CBOT, B3 e câmbio · últimos 6 meses";
+    var dt = f.data || ""; $("abhCf").textContent = "Fechamento de " + dt.slice(8, 10) + "/" + dt.slice(5, 7) + " · CME, B3 e Banco Central · linha: últimos 6 meses";
   }).catch(function () { $("abhCs").style.display = "none"; });
   pega(0, "home_curva.json").then(function (c) { linha("abhC0s", c.valores.slice(-26)); }).catch(function () {});
   pega(0, "milho_dolar.json").then(function (m) { linha("abhC1s", m.serie.b3.slice(-126)); }).catch(function () {});
-  pega(0, "cambio.json").then(function (c) { linha("abhC2s", c.ptax.valores.slice(-126)); }).catch(function () {});
+  pega(0, "cambio.json").then(function (c) {
+    var v = c.ptax.valores, n = v.length; linha("abhC2s", v.slice(-126));
+    card(2, { preco: v[n - 1], var_pct: (v[n - 1] / v[n - 2] - 1) * 100 }, 4, "", "", "R$ · Banco Central");
+  }).catch(function () {});
 })();
 </script>
