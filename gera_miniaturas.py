@@ -49,6 +49,7 @@ ALVOS = {
     "termometro-de-venda": ("termometro.html", ".tm-gauge-card", ""),
     "safra-argentina": ("argentina.html", "#arG0", ""),
     "milho-b3-x-dolar": ("milho-dolar.html", "#mdG0", ""),
+    "relacao-entre-culturas": ("interculturas.html", "#icG0", ""),
 }
 
 
