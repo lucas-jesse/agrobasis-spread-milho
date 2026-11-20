@@ -55,6 +55,121 @@ def zc_chicago():
         return None
 
 
+MES_LETRA = {"F": 1, "G": 2, "H": 3, "J": 4, "K": 5, "M": 6, "N": 7, "Q": 8, "U": 9, "V": 10, "X": 11, "Z": 12}
+
+
+def venc_ccm(k):
+    """Vencimento do milho B3: dia 15 do mês do contrato (aproximação suficiente para o painel)."""
+    return date(2000 + int(k[-2:]), MES_LETRA[k[3]], 15)
+
+
+def curva_dolar():
+    """Última curva do dólar futuro (todos os vencimentos) gravada por exporta_cambio.py: [(data de vencimento, preço)]."""
+    try:
+        hist = ler("dados/cambio_curvas.json")
+        dia = max(hist)
+        pts = sorted((date(2000 + int(k[-2:]), MES_LETRA[k[3]], 1), float(v), k) for k, v in hist[dia]["dol"].items() if v)
+        return dia, pts
+    except Exception as e:
+        print("aviso: sem curva do dólar", e)
+        return None, []
+
+
+def dolar_em(pts, d):
+    """Dólar futuro para a data d, interpolando linearmente entre os vencimentos da curva."""
+    if not pts:
+        return None, None
+    for v, p, k in pts:
+        if v == d:
+            return p, k
+    antes = [x for x in pts if x[0] < d]
+    depois = [x for x in pts if x[0] > d]
+    if antes and depois:
+        (d0, p0, k0), (d1, p1, k1) = antes[-1], depois[0]
+        return p0 + (p1 - p0) * (d - d0).days / (d1 - d0).days, f"entre {k0} e {k1}"
+    a, b = (pts[-2], pts[-1]) if not depois else (pts[0], pts[1])
+    return a[1] + (b[1] - a[1]) * (d - a[0]).days / (b[0] - a[0]).days, "extrapolado"
+
+
+def serie_tv_ccm(k):
+    """Histórico diário de um contrato de milho B3 no TradingView (para vencimentos que a planilha ainda não tem)."""
+    try:
+        from tv_historico import historico
+        s = historico(f"BMFBOVESPA:CCM{k[3]}20{k[-2:]}", "D", 700)
+        s.index = pd.to_datetime(s.index).normalize()
+        return s.astype(float)
+    except Exception as e:
+        print("aviso: sem histórico TradingView de", k, e)
+        return None
+
+
+def por_vencimento(C, ptax, ult_d):
+    """Todos os contratos de milho em aberto convertidos para dólar, com o dólar futuro do mesmo vencimento."""
+    try:
+        curva = ler("dados/curva_ccm.json")["curva"]
+    except Exception:
+        curva = {}
+    ult = C.iloc[-1]
+    ks = set(k for k, v in ult.items() if pd.notna(v)) | set(curva)
+    ordem = "FGHJKMNQUVXZ"
+    ks = sorted(ks, key=lambda k: (int(k[-2:]), ordem.index(k[3])))
+    ks = [k for k in ks if venc_ccm(k) >= ult_d.date()]
+    dia_dol, pts = curva_dolar()
+    p_hoje = float(ptax.dropna().iloc[-1])
+    venc, hist, series = [], {}, {}
+    for k in ks:
+        s = C[k].dropna() if k in C.columns else pd.Series(dtype=float, index=pd.DatetimeIndex([]))
+        if len(s) < 120:  # planilha sem o contrato (ou com pouco histórico): completa com o TradingView
+            tv = serie_tv_ccm(k)
+            if tv is not None and len(tv):
+                s = s.combine_first(tv) if len(s) else tv
+        preco = float(ult[k]) if k in C.columns and pd.notna(ult[k]) else curva.get(k)
+        if preco is None:
+            continue
+        if len(s):
+            series[k] = s
+        vd = venc_ccm(k)
+        dol, ref = dolar_em(pts, vd)
+        # mesma distância do vencimento nos contratos do mesmo mês dos anos anteriores (preço / PTAX daquele dia)
+        dias = (vd - ult_d.date()).days
+        ant = []
+        for k2 in sorted(c for c in C.columns if c[3] == k[3] and c != k and venc_ccm(c) < ult_d.date()):
+            alvo = pd.Timestamp(venc_ccm(k2)) - pd.Timedelta(days=dias)
+            s2 = C[k2].dropna()
+            s2 = s2[(s2.index >= alvo - pd.Timedelta(days=7)) & (s2.index <= alvo + pd.Timedelta(days=7))]
+            if len(s2):
+                d2 = min(s2.index, key=lambda x: abs((x - alvo).days))
+                px = ptax.get(d2)
+                if px is not None and pd.notna(px):
+                    ant.append({"ano": 2000 + int(k2[-2:]), "contrato": k2, "usd": r(s2[d2] / px)})
+        usd = preco / dol if dol else None
+        med = r(np.mean([a["usd"] for a in ant])) if ant else None
+        venc.append({"contrato": k, "vencimento": vd.isoformat(), "preco": r(preco), "dolar": r(dol, 4), "dolar_ref": ref,
+                     "usd": r(usd), "usd_ptax": r(preco / p_hoje), "anteriores": ant, "media_ant": med,
+                     "vs_media": r((preco / p_hoje / med - 1) * 100, 1) if med else None})
+        u = (s / ptax.reindex(s.index).ffill(limit=3)).dropna()
+        u = u[u.index >= ult_d - pd.Timedelta(days=550)]
+        if len(u) > 5:
+            hist[k] = {"d": [d.strftime("%Y-%m-%d") for d in u.index], "u": [r(x) for x in u], "r": [r(x) for x in s.reindex(u.index)]}
+    # sazonal por mês de contrato: US$/sc nos 300 dias antes do vencimento, ano a ano (amostra a cada 3 pregões)
+    saz = {}
+    for letra in sorted(set(k[3] for k in series), key=lambda l: MES_LETRA[l]):
+        por_ano = {}
+        cands = {c: C[c].dropna() for c in C.columns if c[3] == letra}
+        cands.update({k: v for k, v in series.items() if k[3] == letra})
+        for c, s in cands.items():
+            vd = pd.Timestamp(venc_ccm(c))
+            s = s[(s.index >= vd - pd.Timedelta(days=300)) & (s.index <= vd)]
+            u = (s / ptax.reindex(s.index).ffill(limit=3)).dropna()
+            if len(u) < 15:
+                continue
+            u = u.iloc[::3] if len(u) > 40 else u
+            por_ano[str(2000 + int(c[-2:]))] = [[int((d - vd).days), r(x)] for d, x in u.items()]
+        if por_ano:
+            saz[letra] = dict(sorted(por_ano.items())[-7:])
+    return {"dia_dolar": dia_dol, "lista": venc, "historico": hist, "sazonal": saz}
+
+
 def main():
     h = ler("dados/ccm_historico.json")
     cam = ler("dados/cambio.json")
@@ -201,6 +316,7 @@ def main():
                   "media21": r(np.mean(f21), 1) if f21 else None, "mediana21": r(np.median(f21), 1) if f21 else None,
                   "n42": len(f42), "acerto42": r(np.mean([x > 0 for x in f42]) * 100, 0) if f42 else None, "media42": r(np.mean(f42), 1) if f42 else None},
         "dolar_futuro": dol[:4], "carrego": carrego, "milho_abertos": abertos[:6],
+        "vencimentos": por_vencimento(C, ptax, ult_d),
     }
     (RAIZ / "dados/milho_dolar.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print("ok", out["referencia"], out["hoje"], out["sinal"]["n21"], out["sinal"]["acerto21"], out["sinal"]["media21"])

@@ -96,9 +96,12 @@
 .md-out div{background:#F6F8F4;border-radius:12px;padding:12px 14px}
 .md-out span{display:block;font-size:12px;color:var(--mt);font-weight:600}.md-out b{display:block;font:700 22px Sora,sans-serif;margin:3px 0}.md-out em{font-style:normal;font-size:12.5px;color:var(--mt)}
 .md-cen th{background:#F6F8F4}.md-cen td,.md-cen th{text-align:center!important}
+.md-sel{font:600 13px Geist,sans-serif;border:1px solid var(--ln);border-radius:8px;padding:6px 8px;background:#fff;color:var(--tx);max-width:170px}
+.abc-ch .abc-tools{display:flex;gap:8px;align-items:center}
+#abc #mdG6{height:300px}.md-vc{margin-top:6px}.md-vc tbody tr{cursor:pointer}.md-vc tbody tr:hover{background:#F6F8F4}.md-vc td b{font-weight:700}.md-vc .md-mt{font-size:12px;text-align:left}
 .tm-aviso{background:#FFF8EC;border:1px solid #F1E2C4;border-radius:12px;padding:12px 14px;font-size:13px;line-height:1.55;color:#6b5a3b;margin:4px 0 12px}
 @media (max-width:900px){.md-in{grid-template-columns:repeat(2,minmax(0,1fr))}.md-res{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:560px){#abc .abc-chart,#abc .abc-chart.md{height:300px}.md-out{grid-template-columns:1fr}.md-res b,.md-out b{font-size:19px}.md-t{font-size:12.5px}.md-t th,.md-t td{padding:7px 6px}#mdEp th:nth-child(2),#mdEp td:nth-child(2),#mdEp th:nth-child(4),#mdEp td:nth-child(4),#mdEp th:nth-child(5),#mdEp td:nth-child(5){display:none}.md-cen{font-size:11.5px}}
+@media (max-width:560px){#abc .abc-chart,#abc .abc-chart.md{height:300px}.md-out{grid-template-columns:1fr}.md-res b,.md-out b{font-size:19px}.md-t{font-size:12.5px}.md-t th,.md-t td{padding:7px 6px}#mdEp th:nth-child(2),#mdEp td:nth-child(2),#mdEp th:nth-child(4),#mdEp td:nth-child(4),#mdEp th:nth-child(5),#mdEp td:nth-child(5){display:none}.md-cen{font-size:11.5px}#mdVc th:nth-child(2),#mdVc td:nth-child(2),#mdVc th:nth-child(4),#mdVc td:nth-child(4),#mdVc th:nth-child(6),#mdVc td:nth-child(6){display:none}#abc #mdG6{height:260px}.md-sel{max-width:130px}}
 </style>
 
 <div class="abc" id="abc">
@@ -118,6 +121,13 @@
     <div class="abc-k"><span>Carrego do dólar futuro</span><b id="kC">-</b><em id="kCs">&nbsp;</em></div>
   </div>
 
+  <div class="abc-card" id="mdVcCard" hidden>
+    <div class="abc-ch"><h3>Milho B3 em dólar, todos os vencimentos <small>cada contrato convertido pelo dólar futuro do mesmo mês</small></h3><button class="abc-dl" data-dl="6" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+    <div class="abc-chart" id="mdG6"></div>
+    <div class="md-tw"><table class="md-t md-vc" id="mdVc"><thead><tr><th>Contrato</th><th>Vencimento</th><th>R$/saca</th><th>Dólar futuro</th><th>US$/saca</th><th>US$/saca na PTAX</th><th>Mesma época, anos anteriores</th><th>Diferença</th></tr></thead><tbody></tbody></table></div>
+    <p class="abc-nota" id="mdNvc">&nbsp;</p>
+  </div>
+
   <div class="abc-card">
     <div class="abc-ch"><h3>Milho B3 e dólar <small>base 100 no início do período</small></h3>
       <div class="abc-tools"><div class="abc-seg" id="mdRange"><button data-r="63" aria-pressed="true">3M</button><button data-r="126">6M</button><button data-r="252">1A</button><button data-r="756">3A</button><button data-r="0">Tudo</button></div>
@@ -128,14 +138,14 @@
 
   <div class="abc-row">
     <div class="abc-card">
-      <div class="abc-ch"><h3>Milho B3 em US$ por saca <small>contrato de referência</small></h3><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-ch"><h3>Milho B3 em US$ por saca <small id="mdS1">contrato de referência</small></h3><div class="abc-tools"><select class="md-sel" id="mdC1" aria-label="Contrato"></select><button class="abc-dl" data-dl="1" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
       <div class="abc-chart" id="mdG1"></div>
       <p class="abc-nota" id="mdN1">&nbsp;</p>
     </div>
     <div class="abc-card">
-      <div class="abc-ch"><h3>Contrato janeiro em US$, ano a ano <small>de agosto ao vencimento</small></h3><button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+      <div class="abc-ch"><h3>Mesmo contrato em US$, ano a ano <small id="mdS2">10 meses até o vencimento</small></h3><div class="abc-tools"><select class="md-sel" id="mdC2" aria-label="Mês do contrato"></select><button class="abc-dl" data-dl="2" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div></div>
       <div class="abc-chart" id="mdG2"></div>
-      <p class="abc-nota">Cada linha é um contrato janeiro (o de 2027 é o atual, em destaque).</p>
+      <p class="abc-nota" id="mdN2">&nbsp;</p>
     </div>
   </div>
 
@@ -242,31 +252,83 @@
       series: [{ name: "Milho B3", type: "line", showSymbol: false, data: mi.map(function (v) { return +v.toFixed(2); }), lineStyle: { width: 2.4, color: COR.vd }, itemStyle: { color: COR.vd } },
                { name: "Dólar (PTAX)", type: "line", showSymbol: false, data: us.map(function (v) { return +v.toFixed(2); }), lineStyle: { width: 2.4, color: COR.az }, itemStyle: { color: COR.az } }] });
   }
+  var MESES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"], LETRA = { F: 0, G: 1, H: 2, J: 3, K: 4, M: 5, N: 6, Q: 7, U: 8, V: 9, X: 10, Z: 11 };
+  function nomeCt(k) { return MESES[LETRA[k.charAt(3)]] + "/" + k.slice(-2); }
+  function V() { return D.vencimentos || { lista: [], historico: {}, sazonal: {} }; }
   function g1() {
-    var S = D.serie, n = S.datas.length, ini = Math.max(0, n - 756);
-    var v = S.b3_usd.slice(ini), H = D.hoje;
-    plot(1, { grid: grid(), xAxis: eixoX(S.datas.slice(ini)), yAxis: eixoY(function (x) { return br(x, 0); }),
-      tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { var j = ini + p[0].dataIndex; return dmY(S.datas[j]) + " · " + S.contrato[j] + "<br><b>US$ " + br(S.b3_usd[j], 2) + "</b>/sc<br>R$ " + br(S.b3[j], 2) + " ÷ " + br(S.ptax[j], 4); } }),
-      series: [{ type: "line", showSymbol: false, data: v, lineStyle: { width: 2, color: COR.vd }, areaStyle: { color: "rgba(30,72,18,.06)" },
-        markLine: { silent: true, symbol: "none", label: { position: "insideEndTop", color: COR.mt, fontSize: 11, formatter: "hoje US$ {c}" }, lineStyle: { color: COR.mr, type: "dashed" }, data: [{ yAxis: H.b3_usd }] } }] });
-    $("mdN1").textContent = "Hoje US$ " + br(H.b3_usd, 2) + " por saca no " + H.contrato + ". Nos últimos 12 meses: mínimo US$ " + br(H.min_usd_1a, 2) + " e máximo US$ " + br(H.max_usd_1a, 2) + ". Últimos 3 anos no gráfico.";
+    var sel = $("mdC1").value || "ref", H = D.hoje, X, Y, tip, hoje;
+    if (sel === "ref" || !V().historico[sel]) {
+      var S = D.serie, n = S.datas.length, ini = Math.max(0, n - 756);
+      X = S.datas.slice(ini); Y = S.b3_usd.slice(ini); hoje = H.b3_usd;
+      tip = function (j) { j += ini; return dmY(S.datas[j]) + " · " + S.contrato[j] + "<br><b>US$ " + br(S.b3_usd[j], 2) + "</b>/sc<br>R$ " + br(S.b3[j], 2) + " ÷ " + br(S.ptax[j], 4); };
+      $("mdS1").textContent = "contrato de referência"; 
+      $("mdN1").textContent = "Hoje US$ " + br(H.b3_usd, 2) + " por saca no " + H.contrato + ". Nos últimos 12 meses: mínimo US$ " + br(H.min_usd_1a, 2) + " e máximo US$ " + br(H.max_usd_1a, 2) + ". Últimos 3 anos no gráfico.";
+    } else {
+      var h = V().historico[sel]; X = h.d; Y = h.u; hoje = Y[Y.length - 1];
+      tip = function (j) { return dmY(h.d[j]) + " · " + sel + "<br><b>US$ " + br(h.u[j], 2) + "</b>/sc<br>R$ " + br(h.r[j], 2) + " (dólar pela PTAX do dia)"; };
+      var mn = Math.min.apply(null, Y), mx = Math.max.apply(null, Y);
+      $("mdS1").textContent = sel + " (" + nomeCt(sel) + "), dólar pela PTAX do dia";
+      $("mdN1").textContent = "Hoje US$ " + br(hoje, 2) + " por saca no " + sel + ". No período do gráfico: mínimo US$ " + br(mn, 2) + " e máximo US$ " + br(mx, 2) + ".";
+    }
+    plot(1, { grid: grid(), xAxis: eixoX(X), yAxis: eixoY(function (x) { return br(x, 0); }),
+      tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { return tip(p[0].dataIndex); } }),
+      series: [{ type: "line", showSymbol: false, data: Y, lineStyle: { width: 2, color: COR.vd }, areaStyle: { color: "rgba(30,72,18,.06)" },
+        markLine: { silent: true, symbol: "none", label: { position: "insideEndTop", color: COR.mt, fontSize: 11, formatter: "hoje US$ {c}" }, lineStyle: { color: COR.mr, type: "dashed" }, data: [{ yAxis: hoje }] } }] });
   }
   function g2() {
-    var Z = D.sazonal, anos = Object.keys(Z).sort(), cores = ["#C9D6C4", "#B9C8B2", "#A6B99D", "#8FA885", "#78966D", "#5E7F54", COR.vd];
-    var dias = {}; anos.forEach(function (a) { Z[a].forEach(function (p) { dias[p[0]] = 1; }); });
-    var X = Object.keys(dias).sort();
+    var Sz = V().sazonal, L = $("mdC2").value, Z, venc = null, anos, cores = ["#C9D6C4", "#B9C8B2", "#A6B99D", "#8FA885", "#78966D", "#5E7F54", COR.vd];
+    if (!L || !Sz[L]) {  // dados antigos: só o contrato janeiro
+      L = "F"; Z = {}; Object.keys(D.sazonal).forEach(function (a) { Z[a] = D.sazonal[a]; });
+    } else Z = Sz[L];
+    var atualK = V().lista.filter(function (v) { return v.contrato.charAt(3) === L; })[0];
+    if (atualK) venc = new Date(atualK.vencimento + "T12:00:00");
+    anos = Object.keys(Z).sort();
+    var antigo = !Sz[L];
     var ser = anos.map(function (a, i) {
-      var m = {}; Z[a].forEach(function (p) { m[p[0]] = p[1]; });
-      var atual = i === anos.length - 1;
-      return { name: "jan/" + a.slice(2), type: "line", showSymbol: false, connectNulls: true, data: X.map(function (x) { return m[x] == null ? null : m[x]; }),
-        lineStyle: { width: atual ? 3 : 1.4, color: atual ? COR.mr : cores[Math.max(0, cores.length - 1 - (anos.length - 1 - i))] }, itemStyle: { color: atual ? COR.mr : cores[Math.max(0, cores.length - 1 - (anos.length - 1 - i))] }, z: atual ? 5 : 1 };
+      var atual = atualK ? a === "20" + atualK.contrato.slice(-2) : i === anos.length - 1, cor = atual ? COR.mr : cores[Math.max(0, cores.length - 2 - (anos.length - 1 - i))];
+      return { name: MESES[LETRA[L]] + "/" + a.slice(2), type: "line", showSymbol: false, connectNulls: true, data: antigo ? [] : Z[a],
+        lineStyle: { width: atual ? 3 : 1.4, color: cor }, itemStyle: { color: cor }, z: atual ? 5 : 1 };
     });
-    var mes = { "08": "ago", "09": "set", "10": "out", "11": "nov", "12": "dez", "13": "jan" };
+    function rot(d) { if (!venc) return br(d, 0) + " d"; var x = new Date(venc.getTime() + d * 864e5); return MESES[x.getMonth()]; }
     plot(2, { grid: Object.assign(grid(), { top: 48 }), legend: { top: 0, left: 0, itemWidth: 12, textStyle: { fontSize: 11 } },
-      xAxis: { type: "category", data: X, boundaryGap: false, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, axisLabel: { color: COR.mt, fontSize: 11, interval: function (i, v) { return v.slice(3) === "01"; }, formatter: function (v) { return mes[v.slice(0, 2)]; } } },
+      xAxis: { type: "value", min: -300, max: 0, interval: 30.4, axisLine: { lineStyle: { color: COR.ln } }, splitLine: { show: false }, axisTick: { show: false }, axisLabel: { color: COR.mt, fontSize: 11, formatter: function (v) { return rot(v); } } },
       yAxis: eixoY(function (x) { return br(x, 0); }),
-      tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { var d = p[0].axisValue; var s = d.slice(3) + "/" + mes[d.slice(0, 2)]; p.forEach(function (q) { if (q.value != null) s += "<br>" + q.marker + q.seriesName + ": US$ " + br(q.value, 2); }); return s; } }),
+      tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { var d = p[0].axisValue, s = br(-d, 0) + " dias antes do vencimento" + (venc ? " (" + rot(d) + ")" : ""); p.forEach(function (q) { if (q.value != null) s += "<br>" + q.marker + q.seriesName + ": US$ " + br(q.value[1], 2); }); return s; } }),
       series: ser });
+    $("mdS2").textContent = "contratos " + MESES[LETRA[L]] + ", 10 meses até o vencimento";
+    $("mdN2").textContent = "Cada linha é um contrato " + MESES[LETRA[L]] + " de um ano, em US$ por saca (preço da B3 dividido pela PTAX do dia)" + (atualK ? ". Em destaque o " + atualK.contrato + ", que vence em " + MESES[LETRA[L]] + "/" + atualK.contrato.slice(-2) + "." : ".");
+  }
+  function g6() {
+    var L6 = V().lista; if (!L6.length) return;
+    $("mdVcCard").hidden = false;
+    var X = L6.map(function (v) { return nomeCt(v.contrato); });
+    plot(6, { grid: Object.assign(grid(), { top: 40 }), legend: { top: 0, left: 0, itemWidth: 14, textStyle: { fontSize: 12 } },
+      xAxis: { type: "category", data: X, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false }, axisLabel: { color: COR.mt, fontSize: 11.5 } },
+      yAxis: eixoY(function (x) { return br(x, 0); }),
+      tooltip: Object.assign({}, base.tooltip, { formatter: function (p) { var v = L6[p[0].dataIndex], s = "<b>" + v.contrato + "</b> · vence em " + dmY(v.vencimento) + "<br>R$ " + br(v.preco, 2) + " ÷ " + br(v.dolar, 4) + " = <b>US$ " + br(v.usd, 2) + "</b>/sc";
+        if (v.media_ant != null) s += "<br>Pela PTAX: US$ " + br(v.usd_ptax, 2) + " · anos anteriores, mesma época: US$ " + br(v.media_ant, 2); return s; } }),
+      series: [{ name: "US$/saca (dólar futuro)", type: "bar", barMaxWidth: 46, data: L6.map(function (v) { return v.usd; }), itemStyle: { color: COR.vd, borderRadius: [5, 5, 0, 0] },
+                 label: { show: true, position: "top", color: COR.tx, fontSize: 11.5, fontWeight: 600, formatter: function (p) { return br(p.value, 2); } } },
+               { name: "Mesma época, média dos anos anteriores (PTAX)", type: "line", symbol: "circle", symbolSize: 8, data: L6.map(function (v) { return v.media_ant; }), lineStyle: { width: 0 }, itemStyle: { color: COR.mr } }] });
+    $("mdVc").querySelector("tbody").innerHTML = L6.map(function (v) {
+      var anos = v.anteriores.map(function (a) { return a.ano; }), per = anos.length ? (anos.length > 1 ? Math.min.apply(null, anos) + " a " + Math.max.apply(null, anos) : anos[0]) : "";
+      return '<tr data-k="' + v.contrato + '"><td><b>' + v.contrato + '</b> <span class="md-mt">' + nomeCt(v.contrato) + '</span></td><td>' + dmY(v.vencimento).slice(0, 5) + "/" + v.vencimento.slice(2, 4) + '</td><td>' + br(v.preco, 2) + '</td><td title="' + (v.dolar_ref || "") + '">' + br(v.dolar, 4) + '</td><td><b>' + br(v.usd, 2) + '</b></td><td>' + br(v.usd_ptax, 2) + '</td><td title="' + per + '">' + (v.media_ant == null ? "-" : br(v.media_ant, 2)) + '</td><td class="' + (v.vs_media == null ? "" : v.vs_media < 0 ? "md-dn" : "md-up") + '">' + (v.vs_media == null ? "-" : sinal(v.vs_media, 1) + "%") + '</td></tr>';
+    }).join("");
+    [].forEach.call($("mdVc").querySelectorAll("tbody tr"), function (tr) {
+      tr.onclick = function () { var k = tr.dataset.k; if (V().historico[k]) { $("mdC1").value = k; g1(); } if (V().sazonal[k.charAt(3)]) { $("mdC2").value = k.charAt(3); g2(); } $("mdG1").scrollIntoView({ behavior: "smooth", block: "center" }); };
+    });
+    var n = L6.filter(function (v) { return v.contrato.charAt(3) === "N"; })[0];
+    $("mdNvc").textContent = "Dólar futuro da B3 de " + dmY(V().dia_dolar || D.referencia) + ", no mês de cada vencimento (interpolado quando não há contrato de dólar naquele mês). \"Mesma época\": preço do contrato do mesmo mês nos anos anteriores, à mesma distância do vencimento, dividido pela PTAX daquele dia; a diferença compara com o US$/saca pela PTAX de hoje." +
+      (n ? " Toque em um contrato para ver o histórico dele nos gráficos abaixo." : "");
+  }
+  function montaSel() {
+    var h = V().historico, ks = Object.keys(h);
+    $("mdC1").innerHTML = '<option value="ref">Referência</option>' + V().lista.filter(function (v) { return h[v.contrato]; }).map(function (v) { return '<option value="' + v.contrato + '">' + v.contrato + " · " + nomeCt(v.contrato) + "</option>"; }).join("");
+    var Ls = Object.keys(V().sazonal).sort(function (a, b) { return LETRA[a] - LETRA[b]; });
+    $("mdC2").innerHTML = Ls.length ? Ls.map(function (l) { return '<option value="' + l + '">Contratos ' + MESES[LETRA[l]] + "</option>"; }).join("") : '<option value="">Contratos jan</option>';
+    var ref = D.hoje.contrato.charAt(3); if (V().sazonal[ref]) $("mdC2").value = ref;
+    $("mdC1").onchange = g1; $("mdC2").onchange = g2;
+    if (!ks.length) $("mdC1").hidden = true;
   }
   function g3() {
     var S = D.serie, n = S.datas.length, ini = Math.max(0, n - 756), ep = D.sinal.episodios.filter(function (e) { return e.data >= S.datas[ini]; });
@@ -347,7 +409,8 @@
   }
   function montaCalc() {
     var sel = $("cCt");
-    sel.innerHTML = D.milho_abertos.map(function (c) { return '<option value="' + c.preco + '"' + (c.contrato === D.hoje.contrato ? " selected" : "") + ">" + c.contrato + " · R$ " + br(c.preco, 2) + "</option>"; }).join("");
+    var ab = V().lista.length ? V().lista.map(function (v) { return { contrato: v.contrato, preco: v.preco }; }) : D.milho_abertos;
+    sel.innerHTML = ab.map(function (c) { return '<option value="' + c.preco + '"' + (c.contrato === D.hoje.contrato ? " selected" : "") + ">" + c.contrato + " · R$ " + br(c.preco, 2) + "</option>"; }).join("");
     $("cPm").value = sel.value;
     var dol = D.dolar_futuro && D.dolar_futuro[0];
     $("cPd").value = dol ? dol.preco : D.hoje.ptax;
@@ -356,7 +419,7 @@
     calc();
   }
 
-  function tudo() { kpis(); g0(); g1(); g2(); g3(); g4(); g5(); sinalHist(); }
+  function tudo() { kpis(); montaSel(); g6(); g0(); g1(); g2(); g3(); g4(); g5(); sinalHist(); }
   Promise.all([carregarLib(), json("dados/milho_dolar.json")]).then(function (r) {
     D = r[1]; tudo(); montaCalc();
     [].forEach.call($("mdRange").querySelectorAll("button"), function (b) {
