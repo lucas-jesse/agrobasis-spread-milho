@@ -1,5 +1,5 @@
 {
- "gerado_em": "2026-11-20 16:08",
+ "gerado_em": "2026-11-21 00:28",
  "metodo": {
   "anos_ref": 5,
   "extremo": 10,
@@ -20,11 +20,11 @@
    },
    {
     "tema": "Fundos",
-    "texto": "Os fundos estão vendendo em quase todo o complexo de grãos nas últimas 4 semanas (contratos): milho -269.053, farelo -137.990, soja -132.221, óleo de soja -68.410, trigo -48.495. Em soja, milho e óleo de soja, o movimento está entre os 2% mais fortes dos últimos 10 anos. Mesmo assim, ainda há 117.586 contratos comprados em soja, enquanto o milho já está vendido: se a liquidação continuar, a soja tem mais a devolver."
+    "texto": "Os fundos estão vendendo em quase todo o complexo de grãos nas últimas 4 semanas (contratos): milho -198.285, farelo -120.268, soja -107.695, óleo de soja -56.384, trigo -32.831. Em farelo, o movimento está entre os 2% mais fortes dos últimos 10 anos. Mesmo assim, ainda há 113.630 contratos comprados em soja, enquanto o milho já está vendido: se a liquidação continuar, a soja tem mais a devolver."
    },
    {
     "tema": "Relação entre preços",
-    "texto": "A relação soja/milho em Chicago está em 2,73, contra média de 2,45 em 5 anos: a soja está cara em relação ao milho. Historicamente o padrão é forte: em 85% das 13 vezes anteriores, a relação voltou nas 13 semanas seguintes."
+    "texto": "A relação soja/milho em Chicago está em 2,74, contra média de 2,45 em 5 anos: a soja está cara em relação ao milho. Historicamente o padrão é forte: em 85% das 13 vezes anteriores, a relação voltou nas 13 semanas seguintes."
    },
    {
     "tema": "Basis do milho",
@@ -36,16 +36,19 @@
    },
    {
     "tema": "Curva do milho",
-    "texto": "Na B3, o segundo vencimento do milho paga R$ 5,54/sc a mais que o primeiro, contra R$ 2,57 em média para a época: o mercado remunera bem quem consegue guardar o milho e vender mais à frente."
+    "texto": "Na B3, o segundo vencimento do milho paga R$ 5,54/sc a mais que o primeiro, contra R$ 2,53 em média para a época: o mercado remunera bem quem consegue guardar o milho e vender mais à frente."
    }
   ],
-  "novidades": [
-   "Milho B3 em dólar: 12,13 US$/sc, mínima de 52 semanas."
-  ],
-  "sairam": []
+  "novidades": [],
+  "sairam": [
+   "Posição dos fundos em soja: 117.586 contratos, variação de -132.221 em 4 semanas, movimento tão forte não acontecia desde 06/2026.",
+   "Posição dos fundos em milho: -22.628 contratos, variação de -269.053 em 4 semanas, movimento tão forte não acontecia desde 06/2026.",
+   "Posição dos fundos em óleo de soja: 19.562 contratos, variação de -68.410 em 4 semanas, movimento tão forte não acontecia desde 03/2025.",
+   "Margem de esmagamento em Chicago: 1,81 US$/bu, variação de -0,83 em 4 semanas, movimento tão forte não acontecia desde 07/2026."
+  ]
  },
  "anterior_do_dia": {
-  "gerado_em": "2026-11-19 09:06",
+  "gerado_em": "2026-11-20 16:08",
   "destaques": [
    {
     "tipo": "basis",
@@ -67,9 +70,17 @@
     "tipo": "serie",
     "id": "carrego_ccm",
     "painel": "/dashboards/spread-milho-b3/",
-    "data": "2026-11-18",
-    "intensidade": 46.9,
-    "texto": "Carrego do milho B3 (2º menos 1º vencimento): 4,75 R$/sc, percentil 97 para esta época do ano nos últimos 5 anos (média da época 2,63); percentil 93 em 5 anos."
+    "data": "2026-11-19",
+    "intensidade": 47.7,
+    "texto": "Carrego do milho B3 (2º menos 1º vencimento): 5,54 R$/sc, percentil 98 para esta época do ano nos últimos 5 anos (média da época 2,57); percentil 97 em 5 anos."
+   },
+   {
+    "tipo": "serie",
+    "id": "dolar",
+    "painel": "/dashboards/curva-do-dolar/",
+    "data": "2026-11-19",
+    "intensidade": 46.3,
+    "texto": "Dólar (PTAX): 5,8889 R$/US$, percentil 96 em 5 anos; variação de +0,8512 em 4 semanas, movimento tão forte não acontecia desde o início da série (12/2020); máxima de 52 semanas."
    },
    {
     "tipo": "serie",
@@ -105,14 +116,6 @@
    },
    {
     "tipo": "serie",
-    "id": "dolar",
-    "painel": "/dashboards/curva-do-dolar/",
-    "data": "2026-11-18",
-    "intensidade": 45,
-    "texto": "Dólar (PTAX): 5,8102 R$/US$, percentil 95 em 5 anos; variação de +0,7725 em 4 semanas, movimento tão forte não acontecia desde o início da série (12/2020); máxima de 52 semanas."
-   },
-   {
-    "tipo": "serie",
     "id": "margem_esmagamento",
     "painel": "/dashboards/posicao-fundos-cftc/",
     "data": "2026-11-10",
@@ -134,6 +137,14 @@
     "data": "2026-11-11",
     "intensidade": 42.3,
     "texto": "Basis de balcão do milho fraco para a época em 1 praça, em R$/sc: Maracaju MS -22,8 (média da época -16,0)."
+   },
+   {
+    "tipo": "serie",
+    "id": "milho_b3_usd",
+    "painel": "/dashboards/milho-b3-x-dolar/",
+    "data": "2026-11-19",
+    "intensidade": 42,
+    "texto": "Milho B3 em dólar: 12,13 US$/sc, mínima de 52 semanas."
    },
    {
     "tipo": "serie",
@@ -166,9 +177,9 @@
    "tipo": "serie",
    "id": "carrego_ccm",
    "painel": "/dashboards/spread-milho-b3/",
-   "data": "2026-11-19",
+   "data": "2026-11-20",
    "intensidade": 47.7,
-   "texto": "Carrego do milho B3 (2º menos 1º vencimento): 5,54 R$/sc, percentil 98 para esta época do ano nos últimos 5 anos (média da época 2,57); percentil 97 em 5 anos."
+   "texto": "Carrego do milho B3 (2º menos 1º vencimento): 5,54 R$/sc, percentil 98 para esta época do ano nos últimos 5 anos (média da época 2,53); percentil 97 em 5 anos."
   },
   {
    "tipo": "serie",
@@ -180,51 +191,19 @@
   },
   {
    "tipo": "serie",
-   "id": "fundos_soja",
-   "painel": "/dashboards/posicao-fundos-cftc/",
-   "data": "2026-11-10",
-   "intensidade": 45,
-   "texto": "Posição dos fundos em soja: 117.586 contratos, variação de -132.221 em 4 semanas, movimento tão forte não acontecia desde 06/2026."
-  },
-  {
-   "tipo": "serie",
-   "id": "fundos_milho",
-   "painel": "/dashboards/posicao-fundos-cftc/",
-   "data": "2026-11-10",
-   "intensidade": 45,
-   "texto": "Posição dos fundos em milho: -22.628 contratos, variação de -269.053 em 4 semanas, movimento tão forte não acontecia desde 06/2026."
-  },
-  {
-   "tipo": "serie",
    "id": "fundos_farelo",
    "painel": "/dashboards/posicao-fundos-cftc/",
-   "data": "2026-11-10",
+   "data": "2026-11-17",
    "intensidade": 45,
-   "texto": "Posição dos fundos em farelo: 66.653 contratos, variação de -137.990 em 4 semanas, o maior movimento em pelo menos 10 anos."
-  },
-  {
-   "tipo": "serie",
-   "id": "fundos_oleo",
-   "painel": "/dashboards/posicao-fundos-cftc/",
-   "data": "2026-11-10",
-   "intensidade": 45,
-   "texto": "Posição dos fundos em óleo de soja: 19.562 contratos, variação de -68.410 em 4 semanas, movimento tão forte não acontecia desde 03/2025."
-  },
-  {
-   "tipo": "serie",
-   "id": "margem_esmagamento",
-   "painel": "/dashboards/posicao-fundos-cftc/",
-   "data": "2026-11-10",
-   "intensidade": 45,
-   "texto": "Margem de esmagamento em Chicago: 1,81 US$/bu, variação de -0,83 em 4 semanas, movimento tão forte não acontecia desde 07/2026."
+   "texto": "Posição dos fundos em farelo: 80.610 contratos, variação de -120.268 em 4 semanas, movimento tão forte não acontecia desde 07/2026."
   },
   {
    "tipo": "razao",
    "id": "cbot_soja/cbot_milho",
    "painel": "/dashboards/posicao-fundos-cftc/",
-   "data": "2026-11-13",
-   "intensidade": 43.1,
-   "texto": "Relação soja/milho em Chicago em 2,73, percentil 88 em 5 anos (média 2,45), esticada para alta. Nas 13 vezes anteriores desde 2010 em que chegou a esse extremo, voltou em 85% dos casos nas 13 semanas seguintes (movimento médio da relação: -5,4%)."
+   "data": "2026-11-20",
+   "intensidade": 43.9,
+   "texto": "Relação soja/milho em Chicago em 2,74, percentil 89 em 5 anos (média 2,45), esticada para alta. Nas 13 vezes anteriores desde 2010 em que chegou a esse extremo, voltou em 85% dos casos nas 13 semanas seguintes (movimento médio da relação: -5,6%)."
   },
   {
    "tipo": "basis",
@@ -246,9 +225,9 @@
    "tipo": "serie",
    "id": "soja_reais",
    "painel": "/dashboards/termometro-de-venda/",
-   "data": "2026-11-10",
+   "data": "2026-11-17",
    "intensidade": 42,
-   "texto": "Soja Chicago em reais: 151,17 R$/sc, máxima de 52 semanas."
+   "texto": "Soja Chicago em reais: 156,30 R$/sc, máxima de 52 semanas."
   }
  ],
  "series": [
@@ -259,12 +238,12 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "preco",
    "casas": 2,
-   "data": "2026-11-10",
-   "valor": 12.28,
-   "pct_5a": 51.3,
-   "var_1s": 0.14,
-   "var_4s": -0.5575,
-   "pct_var_4s": 15.3,
+   "data": "2026-11-17",
+   "valor": 12.255,
+   "pct_5a": 50.6,
+   "var_1s": -0.025,
+   "var_4s": -0.38,
+   "pct_var_4s": 23.0,
    "var_4s_recorde_desde": "06/2026",
    "max_52s": false,
    "min_52s": false
@@ -276,13 +255,13 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "preco",
    "casas": 2,
-   "data": "2026-11-10",
-   "valor": 4.49,
-   "pct_5a": 36.4,
-   "var_1s": 0.065,
-   "var_4s": -0.3375,
-   "pct_var_4s": 11.1,
-   "var_4s_recorde_desde": "06/2026",
+   "data": "2026-11-17",
+   "valor": 4.4675,
+   "pct_5a": 34.1,
+   "var_1s": -0.0225,
+   "var_4s": -0.1525,
+   "pct_var_4s": 23.6,
+   "var_4s_recorde_desde": "10/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -293,12 +272,12 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "preco",
    "casas": 2,
-   "data": "2026-11-10",
-   "valor": 5.9275,
-   "pct_5a": 44.1,
-   "var_1s": -0.07,
-   "var_4s": -0.765,
-   "pct_var_4s": 4.6,
+   "data": "2026-11-17",
+   "valor": 6.1025,
+   "pct_5a": 52.1,
+   "var_1s": 0.175,
+   "var_4s": -0.33,
+   "pct_var_4s": 18.0,
    "var_4s_recorde_desde": "10/2026",
    "max_52s": false,
    "min_52s": false
@@ -310,13 +289,13 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "preco",
    "casas": 2,
-   "data": "2026-11-10",
-   "valor": 326.5,
-   "pct_5a": 39.5,
-   "var_1s": 8.5,
-   "var_4s": -36.7,
-   "pct_var_4s": 4.2,
-   "var_4s_recorde_desde": "11/2024",
+   "data": "2026-11-17",
+   "valor": 333.2,
+   "pct_5a": 44.8,
+   "var_1s": 6.7,
+   "var_4s": -15.5,
+   "pct_var_4s": 22.2,
+   "var_4s_recorde_desde": "07/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -327,12 +306,12 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "preco",
    "casas": 3,
-   "data": "2026-11-10",
-   "valor": 0.6277,
-   "pct_5a": 67.8,
-   "var_1s": -0.0251,
-   "var_4s": -0.0525,
-   "pct_var_4s": 6.3,
+   "data": "2026-11-17",
+   "valor": 0.6213,
+   "pct_5a": 65.9,
+   "var_1s": -0.0064,
+   "var_4s": -0.046,
+   "pct_var_4s": 8.0,
    "var_4s_recorde_desde": "07/2026",
    "max_52s": false,
    "min_52s": false
@@ -344,13 +323,13 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "posicao",
    "casas": 0,
-   "data": "2026-11-10",
-   "valor": 117586.0,
-   "pct_5a": 69.7,
-   "var_1s": -25141.0,
-   "var_4s": -132221.0,
-   "pct_var_4s": 1.5,
-   "var_4s_recorde_desde": "06/2026",
+   "data": "2026-11-17",
+   "valor": 113630.0,
+   "pct_5a": 68.6,
+   "var_1s": -3956.0,
+   "var_4s": -107695.0,
+   "pct_var_4s": 4.6,
+   "var_4s_recorde_desde": "07/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -361,12 +340,12 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "posicao",
    "casas": 0,
-   "data": "2026-11-10",
-   "valor": -22628.0,
-   "pct_5a": 43.3,
-   "var_1s": -31423.0,
-   "var_4s": -269053.0,
-   "pct_var_4s": 1.3,
+   "data": "2026-11-17",
+   "valor": -33862.0,
+   "pct_5a": 42.5,
+   "var_1s": -11234.0,
+   "var_4s": -198285.0,
+   "pct_var_4s": 4.0,
    "var_4s_recorde_desde": "06/2026",
    "max_52s": false,
    "min_52s": false
@@ -378,13 +357,13 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "posicao",
    "casas": 0,
-   "data": "2026-11-10",
-   "valor": -81050.0,
-   "pct_5a": 30.3,
-   "var_1s": 6076.0,
-   "var_4s": -48495.0,
-   "pct_var_4s": 5.0,
-   "var_4s_recorde_desde": "06/2026",
+   "data": "2026-11-17",
+   "valor": -84836.0,
+   "pct_5a": 26.4,
+   "var_1s": -3786.0,
+   "var_4s": -32831.0,
+   "pct_var_4s": 11.7,
+   "var_4s_recorde_desde": "10/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -395,13 +374,13 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "posicao",
    "casas": 0,
-   "data": "2026-11-10",
-   "valor": 66653.0,
-   "pct_5a": 56.7,
-   "var_1s": -41714.0,
-   "var_4s": -137990.0,
-   "pct_var_4s": 0.0,
-   "var_4s_recorde_desde": "pelo menos 10 anos",
+   "data": "2026-11-17",
+   "valor": 80610.0,
+   "pct_5a": 66.3,
+   "var_1s": 13957.0,
+   "var_4s": -120268.0,
+   "pct_var_4s": 0.4,
+   "var_4s_recorde_desde": "07/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -412,13 +391,13 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "posicao",
    "casas": 0,
-   "data": "2026-11-10",
-   "valor": 19562.0,
-   "pct_5a": 40.2,
-   "var_1s": -27851.0,
-   "var_4s": -68410.0,
-   "pct_var_4s": 1.3,
-   "var_4s_recorde_desde": "03/2025",
+   "data": "2026-11-17",
+   "valor": 15134.0,
+   "pct_5a": 37.5,
+   "var_1s": -4428.0,
+   "var_4s": -56384.0,
+   "pct_var_4s": 4.6,
+   "var_4s_recorde_desde": "07/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -468,7 +447,7 @@
    "pct_5a": 27.5,
    "var_1s": -0.38,
    "var_4s": -0.83,
-   "pct_var_4s": 22.0,
+   "pct_var_4s": 22.1,
    "var_4s_recorde_desde": "10/2026",
    "max_52s": false,
    "min_52s": true
@@ -485,7 +464,7 @@
    "pct_5a": 44.1,
    "var_1s": -0.23,
    "var_4s": -0.43,
-   "pct_var_4s": 33.7,
+   "pct_var_4s": 33.8,
    "var_4s_recorde_desde": "10/2026",
    "max_52s": false,
    "min_52s": false
@@ -497,7 +476,7 @@
    "painel": "/dashboards/spread-milho-b3/",
    "tipo": "spread",
    "casas": 2,
-   "data": "2026-11-19",
+   "data": "2026-11-20",
    "valor": 5.54,
    "pct_5a": 97.4,
    "var_1s": 2.27,
@@ -507,7 +486,7 @@
    "max_52s": false,
    "min_52s": false,
    "pct_epoca": 97.7,
-   "media_epoca": 2.5658
+   "media_epoca": 2.5349
   },
   {
    "id": "basis_soja_santa_rosa",
@@ -1485,12 +1464,12 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "spread",
    "casas": 2,
-   "data": "2026-11-10",
-   "valor": 1.8077,
-   "pct_5a": 59.0,
-   "var_1s": -0.2291,
-   "var_4s": -0.8274,
-   "pct_var_4s": 1.9,
+   "data": "2026-11-17",
+   "valor": 1.9097,
+   "pct_5a": 64.8,
+   "var_1s": 0.102,
+   "var_4s": -0.467,
+   "pct_var_4s": 5.0,
    "var_4s_recorde_desde": "07/2026",
    "max_52s": false,
    "min_52s": false
@@ -1502,13 +1481,13 @@
    "painel": "/dashboards/posicao-fundos-cftc/",
    "tipo": "spread",
    "casas": 1,
-   "data": "2026-11-10",
-   "valor": 49.0123,
-   "pct_5a": 84.7,
-   "var_1s": -1.6395,
-   "var_4s": 0.6545,
-   "pct_var_4s": 62.1,
-   "var_4s_recorde_desde": "06/2026",
+   "data": "2026-11-17",
+   "valor": 48.2488,
+   "pct_5a": 78.9,
+   "var_1s": -0.7634,
+   "var_4s": -0.6484,
+   "pct_var_4s": 31.6,
+   "var_4s_recorde_desde": "10/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -1519,12 +1498,12 @@
    "painel": "/dashboards/termometro-de-venda/",
    "tipo": "preco",
    "casas": 2,
-   "data": "2026-11-10",
-   "valor": 151.1741,
-   "pct_5a": 70.5,
-   "var_1s": 4.1456,
-   "var_4s": 9.3934,
-   "pct_var_4s": 88.9,
+   "data": "2026-11-17",
+   "valor": 156.2996,
+   "pct_5a": 71.3,
+   "var_1s": 5.1255,
+   "var_4s": 16.6328,
+   "pct_var_4s": 97.7,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": true,
    "min_52s": false
@@ -1536,15 +1515,15 @@
    "a": "cbot_soja",
    "b": "cbot_milho",
    "nome": "Relação soja/milho em Chicago",
-   "data": "2026-11-13",
-   "valor": 2.735,
-   "media_5a": 2.4472,
-   "pct_5a": 88.1,
+   "data": "2026-11-20",
+   "valor": 2.7431,
+   "media_5a": 2.4493,
+   "pct_5a": 88.9,
    "desde": "2010",
    "teste": {
     "n": 13,
     "acerto": 85,
-    "mov_medio_pct": -5.4
+    "mov_medio_pct": -5.6
    }
   },
   {
@@ -1552,10 +1531,10 @@
    "a": "cbot_soja",
    "b": "cbot_trigo",
    "nome": "Relação soja/trigo em Chicago",
-   "data": "2026-11-13",
-   "valor": 2.0717,
-   "media_5a": 1.9118,
-   "pct_5a": 78.2,
+   "data": "2026-11-20",
+   "valor": 2.0082,
+   "media_5a": 1.9136,
+   "pct_5a": 65.1,
    "desde": "2010"
   },
   {
@@ -1563,10 +1542,10 @@
    "a": "cbot_trigo",
    "b": "cbot_milho",
    "nome": "Relação trigo/milho em Chicago",
-   "data": "2026-11-13",
-   "valor": 1.3202,
-   "media_5a": 1.287,
-   "pct_5a": 57.5,
+   "data": "2026-11-20",
+   "valor": 1.366,
+   "media_5a": 1.2867,
+   "pct_5a": 73.6,
    "desde": "2010"
   },
   {
@@ -1574,10 +1553,10 @@
    "a": "soja_reais",
    "b": "milho_b3",
    "nome": "Relação soja em reais/milho B3",
-   "data": "2026-11-13",
-   "valor": 2.1379,
-   "media_5a": 1.9988,
-   "pct_5a": 78.2,
+   "data": "2026-11-20",
+   "valor": 2.1875,
+   "media_5a": 2.0003,
+   "pct_5a": 80.5,
    "desde": "2020"
   },
   {
@@ -1585,8 +1564,8 @@
    "a": "dolar",
    "b": "cbot_soja",
    "nome": "dólar e soja em Chicago",
-   "data": "2026-11-13",
-   "corr_6m": -0.27,
+   "data": "2026-11-20",
+   "corr_6m": -0.29,
    "corr_3a": -0.18,
    "quebra_corr": false
   },
@@ -1605,7 +1584,7 @@
    "a": "cbot_milho",
    "b": "milho_b3",
    "nome": "milho em Chicago e milho B3",
-   "data": "2026-11-13",
+   "data": "2026-11-20",
    "corr_6m": 0.48,
    "corr_3a": 0.31,
    "quebra_corr": false
@@ -1615,9 +1594,9 @@
    "a": "cbot_soja",
    "b": "cbot_milho",
    "nome": "soja e milho em Chicago",
-   "data": "2026-11-13",
-   "corr_6m": 0.85,
-   "corr_3a": 0.54,
+   "data": "2026-11-20",
+   "corr_6m": 0.86,
+   "corr_3a": 0.53,
    "quebra_corr": false
   },
   {
@@ -1625,8 +1604,8 @@
    "a": "cbot_oleo",
    "b": "cbot_soja",
    "nome": "óleo e soja em Chicago",
-   "data": "2026-11-13",
-   "corr_6m": 0.39,
+   "data": "2026-11-20",
+   "corr_6m": 0.4,
    "corr_3a": 0.56,
    "quebra_corr": false
   }
