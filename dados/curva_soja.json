@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "19/11/2026 23:41",
+  "atualizado_em": "20/11/2026 23:52",
   "fonte": "TradingView (CBOT-ZS1! e BMFBOVESPA-DOL1!), preços de fechamento do dia",
   "unidades": {
     "cbot": "cents de US$ por bushel",
@@ -9,95 +9,95 @@
   "cbot": {
     "ZSF27": {
       "vencimento": "2027-01-14",
-      "cents_bu": 1209.0
+      "cents_bu": 1220.75
     },
     "ZSH27": {
       "vencimento": "2027-03-12",
-      "cents_bu": 1214.0
+      "cents_bu": 1224.75
     },
     "ZSK27": {
       "vencimento": "2027-05-14",
-      "cents_bu": 1220.75
+      "cents_bu": 1230.5
     },
     "ZSN27": {
       "vencimento": "2027-07-14",
-      "cents_bu": 1225.75
+      "cents_bu": 1234.0
     },
     "ZSQ27": {
       "vencimento": "2027-08-13",
-      "cents_bu": 1209.0
+      "cents_bu": 1215.75
     },
     "ZSU27": {
       "vencimento": "2027-09-14",
-      "cents_bu": 1174.75
+      "cents_bu": 1178.75
     },
     "ZSX27": {
       "vencimento": "2027-11-12",
-      "cents_bu": 1167.75
+      "cents_bu": 1171.0
     },
     "ZSF28": {
       "vencimento": "2028-01-14",
-      "cents_bu": 1178.25
+      "cents_bu": 1182.0
     },
     "ZSH28": {
       "vencimento": "2028-03-14",
-      "cents_bu": 1178.0
+      "cents_bu": 1181.25
     },
     "ZSK28": {
       "vencimento": "2028-05-12",
-      "cents_bu": 1183.0
+      "cents_bu": 1184.0
     },
     "ZSN28": {
       "vencimento": "2028-07-14",
-      "cents_bu": 1187.75
+      "cents_bu": 1188.5
     },
     "ZSQ28": {
       "vencimento": "2028-08-14",
-      "cents_bu": 1177.0
+      "cents_bu": 1177.5
     },
     "ZSU28": {
       "vencimento": "2028-09-14",
-      "cents_bu": 1151.75
+      "cents_bu": 1152.25
     },
     "ZSX28": {
       "vencimento": "2028-11-14",
-      "cents_bu": 1147.25
+      "cents_bu": 1147.5
     },
     "ZSF29": {
       "vencimento": "2029-01-12",
-      "cents_bu": 1158.25
+      "cents_bu": 1158.5
     },
     "ZSH29": {
       "vencimento": "2029-03-14",
-      "cents_bu": 1157.0
+      "cents_bu": 1157.25
     },
     "ZSK29": {
       "vencimento": "2029-05-14",
-      "cents_bu": 1162.75
+      "cents_bu": 1162.25
     },
     "ZSN29": {
       "vencimento": "2029-07-13",
-      "cents_bu": 1165.75
+      "cents_bu": 1166.0
     },
     "ZSQ29": {
       "vencimento": "2029-08-14",
-      "cents_bu": 1154.25
+      "cents_bu": 1154.5
     },
     "ZSU29": {
       "vencimento": "2029-09-14",
-      "cents_bu": 1130.75
+      "cents_bu": 1131.0
     },
     "ZSX29": {
       "vencimento": "2029-11-14",
-      "cents_bu": 1138.75
+      "cents_bu": 1137.75
     },
     "ZSN30": {
       "vencimento": "2030-07-12",
-      "cents_bu": 1157.25
+      "cents_bu": 1156.25
     },
     "ZSX30": {
       "vencimento": "2030-11-14",
-      "cents_bu": 1130.75
+      "cents_bu": 1129.75
     }
   },
   "dolar": {
