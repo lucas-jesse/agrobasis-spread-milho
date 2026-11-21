@@ -1,6 +1,6 @@
 {
  "data": "2026-11-20",
- "gerado_em_brt": "2026-11-20 16:52",
+ "gerado_em_brt": "2026-11-20 22:17",
  "fonte": "TradingView (CBOT, B3, câmbio e índices), com 10 a 15 minutos de atraso",
  "cbot": [
   {
@@ -82,19 +82,19 @@
   {
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 103.807,
+   "preco": 103.84,
    "anterior": 103.924,
    "formato": "pts2",
-   "var_pct": -0.1126,
+   "var_pct": -0.0808,
    "chave": "dxy"
   },
   {
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 92.25,
+   "preco": 92.57,
    "anterior": 91.98,
    "formato": "usd",
-   "var_pct": 0.2935,
+   "var_pct": 0.6414,
    "chave": "brent"
   }
  ]
