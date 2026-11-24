@@ -1,7 +1,7 @@
 {
- "atualizado_em": "2026-11-23",
+ "atualizado_em": "2026-11-24",
  "inicio": "2026-11-19",
- "total": 8,
+ "total": 9,
  "resumo": {
   "4s": {
    "avaliados": 0,
@@ -125,6 +125,20 @@
    "percentil": 88.1,
    "regra": "relação esticada em 5 anos",
    "registrado_em": "2026-11-19",
+   "resultado": {}
+  },
+  {
+   "id": "basis_milho_ponta_grossa_pr",
+   "nome": "Basis do milho em Ponta Grossa PR",
+   "unidade": "R$/sc",
+   "casas": 1,
+   "data": "2026-11-20",
+   "valor": -10.17,
+   "alvo": -4.6243,
+   "lado": "baixo",
+   "percentil": 8.0,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-24",
    "resultado": {}
   }
  ]

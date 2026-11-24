@@ -1,5 +1,5 @@
 {
- "gerado_em": "2026-11-23 19:41",
+ "gerado_em": "2026-11-24 03:23",
  "metodo": {
   "anos_ref": 5,
   "extremo": 10,
@@ -16,7 +16,7 @@
   "paragrafos": [
    {
     "tema": "Câmbio",
-    "texto": "O dólar está em R$ 5,8889, percentil 96 dos últimos 5 anos, com alta de R$ 0,85 em 4 semanas. Para quem vende em dólar, é um patamar historicamente favorável para travar parte do câmbio; para quem tem custo em dólar a pagar, é o lado caro."
+    "texto": "O dólar está em R$ 5,9708, percentil 97 dos últimos 5 anos, com alta de R$ 0,55 em 4 semanas. Para quem vende em dólar, é um patamar historicamente favorável para travar parte do câmbio; para quem tem custo em dólar a pagar, é o lado caro."
    },
    {
     "tema": "Fundos",
@@ -28,7 +28,7 @@
    },
    {
     "tema": "Basis do milho",
-    "texto": "O basis do milho está abaixo do normal para a época (no quarto mais fraco dos últimos 5 anos) em 12 de 25 praças acompanhadas, com destaque para Itapeva SP, Santa Rosa RS, Maracaju MS. O físico está pagando menos que o normal em relação à bolsa. Se o basis voltar à média, quem pode esperar sai ganhando; para quem compra o grão, é um momento melhor do que a média."
+    "texto": "O basis do milho está abaixo do normal para a época (no quarto mais fraco dos últimos 5 anos) em 9 de 25 praças acompanhadas, com destaque para Ponta Grossa PR, Maracaju MS, Campo Novo do Parecis MT. O físico está pagando menos que o normal em relação à bolsa. Se o basis voltar à média, quem pode esperar sai ganhando; para quem compra o grão, é um momento melhor do que a média."
    },
    {
     "tema": "Basis da soja",
@@ -43,7 +43,7 @@
   "sairam": []
  },
  "anterior_do_dia": {
-  "gerado_em": "2026-11-21 15:00",
+  "gerado_em": "2026-11-23 19:41",
   "destaques": [
    {
     "tipo": "basis",
@@ -129,14 +129,6 @@
    "texto": "Basis de balcão da soja fraco para a época em 1 praça, em c/bu: Não-Me-Toque RS -113,1 (média da época -23,9)."
   },
   {
-   "tipo": "basis",
-   "id": "/dashboards/basis-milho-brasil/",
-   "painel": "/dashboards/basis-milho-brasil/",
-   "data": "2026-11-13",
-   "intensidade": 50.8,
-   "texto": "Basis do milho fraco para a época em 3 praças, em R$/sc: Itapeva SP -9,7 (média da época -4,9); Santa Rosa RS -7,7 (média da época -1,3); Rio Verde GO -17,7 (média da época -13,7)."
-  },
-  {
    "tipo": "serie",
    "id": "carrego_ccm",
    "painel": "/dashboards/spread-milho-b3/",
@@ -148,9 +140,9 @@
    "tipo": "serie",
    "id": "dolar",
    "painel": "/dashboards/curva-do-dolar/",
-   "data": "2026-11-19",
-   "intensidade": 46.3,
-   "texto": "Dólar (PTAX): 5,8889 R$/US$, percentil 96 em 5 anos; variação de +0,8512 em 4 semanas, movimento tão forte não acontecia desde o início da série (12/2020); máxima de 52 semanas."
+   "data": "2026-11-23",
+   "intensidade": 47.0,
+   "texto": "Dólar (PTAX): 5,9708 R$/US$, percentil 97 em 5 anos; variação de +0,5496 em 4 semanas, movimento tão forte não acontecia desde o início da série (12/2020); máxima de 52 semanas."
   },
   {
    "tipo": "serie",
@@ -167,6 +159,14 @@
    "data": "2026-11-20",
    "intensidade": 43.9,
    "texto": "Relação soja/milho em Chicago em 2,74, percentil 89 em 5 anos (média 2,45), esticada para alta. Nas 13 vezes anteriores desde 2010 em que chegou a esse extremo, voltou em 85% dos casos nas 13 semanas seguintes (movimento médio da relação: -5,6%)."
+  },
+  {
+   "tipo": "basis",
+   "id": "/dashboards/basis-milho-brasil/",
+   "painel": "/dashboards/basis-milho-brasil/",
+   "data": "2026-11-20",
+   "intensidade": 43.0,
+   "texto": "Basis do milho fraco para a época em 1 praça, em R$/sc: Ponta Grossa PR -10,2 (média da época -4,6)."
   },
   {
    "tipo": "basis",
@@ -371,12 +371,12 @@
    "painel": "/dashboards/curva-do-dolar/",
    "tipo": "preco",
    "casas": 4,
-   "data": "2026-11-19",
-   "valor": 5.8889,
-   "pct_5a": 96.3,
-   "var_1s": 0.2371,
-   "var_4s": 0.8512,
-   "pct_var_4s": 100.0,
+   "data": "2026-11-23",
+   "valor": 5.9708,
+   "pct_5a": 97.0,
+   "var_1s": 0.0819,
+   "var_4s": 0.5496,
+   "pct_var_4s": 99.4,
    "var_4s_recorde_desde": "o início da série (12/2020)",
    "max_52s": true,
    "min_52s": false
@@ -648,17 +648,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -9.71,
-   "pct_5a": 5.4,
-   "var_1s": 1.57,
-   "var_4s": -2.94,
-   "pct_var_4s": 25.7,
+   "data": "2026-11-20",
+   "valor": -7.77,
+   "pct_5a": 13.1,
+   "var_1s": 1.94,
+   "var_4s": -1.46,
+   "pct_var_4s": 35.8,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 2.2,
-   "media_epoca": -4.9084
+   "pct_epoca": 16.8,
+   "media_epoca": -5.1426
   },
   {
    "id": "basis_milho_maringá_pr",
@@ -667,17 +667,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -10.71,
-   "pct_5a": 9.4,
-   "var_1s": 1.07,
-   "var_4s": -3.94,
-   "pct_var_4s": 13.3,
+   "data": "2026-11-20",
+   "valor": -9.57,
+   "pct_5a": 14.9,
+   "var_1s": 1.14,
+   "var_4s": -3.26,
+   "pct_var_4s": 20.8,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 21.9,
-   "media_epoca": -7.4449
+   "pct_epoca": 36.5,
+   "media_epoca": -8.0039
   },
   {
    "id": "basis_milho_passo_fundo_rs",
@@ -686,17 +686,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -1.71,
-   "pct_5a": 41.2,
-   "var_1s": 1.57,
-   "var_4s": -1.94,
-   "pct_var_4s": 33.3,
+   "data": "2026-11-20",
+   "valor": -1.77,
+   "pct_5a": 41.0,
+   "var_1s": -0.06,
+   "var_4s": -4.46,
+   "pct_var_4s": 18.3,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 40.9,
-   "media_epoca": -0.2734
+   "pct_epoca": 49.6,
+   "media_epoca": -1.0258
   },
   {
    "id": "basis_milho_ponta_grossa_pr",
@@ -705,17 +705,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -3.21,
-   "pct_5a": 55.6,
-   "var_1s": 1.07,
-   "var_4s": -4.44,
-   "pct_var_4s": 11.6,
-   "var_4s_recorde_desde": "09/2026",
+   "data": "2026-11-20",
+   "valor": -10.17,
+   "pct_5a": 3.4,
+   "var_1s": -6.96,
+   "var_4s": -11.86,
+   "pct_var_4s": 0.3,
+   "var_4s_recorde_desde": "01/2021",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 54.7,
-   "media_epoca": -4.0361
+   "pct_epoca": 8.0,
+   "media_epoca": -4.6243
   },
   {
    "id": "basis_milho_rio_verde_go",
@@ -724,17 +724,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -17.71,
-   "pct_5a": 5.7,
-   "var_1s": -1.43,
-   "var_4s": -3.94,
-   "pct_var_4s": 15.3,
+   "data": "2026-11-20",
+   "valor": -14.97,
+   "pct_5a": 24.9,
+   "var_1s": 2.74,
+   "var_4s": -2.66,
+   "pct_var_4s": 24.5,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 9.5,
-   "media_epoca": -13.6748
+   "pct_epoca": 44.5,
+   "media_epoca": -14.0039
   },
   {
    "id": "basis_milho_rondonópolis_mt",
@@ -743,17 +743,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -22.21,
-   "pct_5a": 8.3,
-   "var_1s": 4.07,
-   "var_4s": -6.44,
-   "pct_var_4s": 9.3,
-   "var_4s_recorde_desde": "05/2026",
+   "data": "2026-11-20",
+   "valor": -21.57,
+   "pct_5a": 10.3,
+   "var_1s": 0.64,
+   "var_4s": -4.76,
+   "pct_var_4s": 16.3,
+   "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 18.2,
-   "media_epoca": -16.5734
+   "pct_epoca": 26.3,
+   "media_epoca": -17.0871
   },
   {
    "id": "basis_milho_santa_rosa_rs",
@@ -762,17 +762,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -7.71,
-   "pct_5a": 17.5,
-   "var_1s": 0.57,
-   "var_4s": -4.94,
-   "pct_var_4s": 14.1,
+   "data": "2026-11-20",
+   "valor": -3.57,
+   "pct_5a": 39.5,
+   "var_1s": 4.14,
+   "var_4s": -2.26,
+   "pct_var_4s": 31.3,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 3.6,
-   "media_epoca": -1.3391
+   "pct_epoca": 44.5,
+   "media_epoca": -2.2739
   },
   {
    "id": "basis_milho_sorriso_mt",
@@ -781,17 +781,17 @@
    "painel": "/dashboards/basis-milho-brasil/",
    "tipo": "basis",
    "casas": 1,
-   "data": "2026-11-13",
-   "valor": -25.21,
-   "pct_5a": 24.5,
-   "var_1s": 2.07,
-   "var_4s": -4.44,
-   "pct_var_4s": 19.8,
+   "data": "2026-11-20",
+   "valor": -24.57,
+   "pct_5a": 29.5,
+   "var_1s": 0.64,
+   "var_4s": -4.26,
+   "pct_var_4s": 20.3,
    "var_4s_recorde_desde": "07/2026",
    "max_52s": false,
    "min_52s": false,
-   "pct_epoca": 34.3,
-   "media_epoca": -23.3964
+   "pct_epoca": 48.9,
+   "media_epoca": -24.6382
   },
   {
    "id": "basis_milho_vilhena_ro",
