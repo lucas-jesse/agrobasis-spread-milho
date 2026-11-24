@@ -1,51 +1,51 @@
 {
  "data": "2026-11-24",
- "gerado_em_brt": "2026-11-24 02:03",
+ "gerado_em_brt": "2026-11-24 06:15",
  "fonte": "TradingView (CBOT, B3, câmbio e índices)",
  "cbot": [
   {
    "nome": "Soja",
    "compl": "jan/27",
-   "preco": 1228.25,
+   "preco": 1231.75,
    "anterior": 1228.75,
    "formato": "usbu",
-   "var_pct": -0.0407,
+   "var_pct": 0.2442,
    "chave": "soja"
   },
   {
    "nome": "Milho",
    "compl": "dez/26",
-   "preco": 433.0,
+   "preco": 433.75,
    "anterior": 434.25,
    "formato": "usbu",
-   "var_pct": -0.2879,
+   "var_pct": -0.1151,
    "chave": "milho"
   },
   {
    "nome": "Trigo",
    "compl": "dez/26",
-   "preco": 573.75,
+   "preco": 575.25,
    "anterior": 577.0,
    "formato": "usbu",
-   "var_pct": -0.5633,
+   "var_pct": -0.3033,
    "chave": "trigo"
   },
   {
    "nome": "Farelo de soja",
    "compl": "dez/26",
-   "preco": 347.3,
+   "preco": 346.2,
    "anterior": 345.7,
    "formato": "ust",
-   "var_pct": 0.4628,
+   "var_pct": 0.1446,
    "chave": "farelo"
   },
   {
    "nome": "Óleo de soja",
    "compl": "dez/26",
-   "preco": 58.87,
+   "preco": 58.94,
    "anterior": 59.36,
    "formato": "uslb",
-   "var_pct": -0.8255,
+   "var_pct": -0.7075,
    "chave": "oleo"
   }
  ],
@@ -62,10 +62,10 @@
   {
    "nome": "Dólar comercial",
    "compl": "venda",
-   "preco": 5.9293,
+   "preco": 5.9295,
    "anterior": 5.9301,
    "formato": "rs4",
-   "var_pct": -0.0135,
+   "var_pct": -0.0101,
    "chave": "usdbrl"
   },
   {
@@ -82,19 +82,19 @@
   {
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 104.273,
+   "preco": 104.247,
    "anterior": 104.318,
    "formato": "pts2",
-   "var_pct": -0.0431,
+   "var_pct": -0.0681,
    "chave": "dxy"
   },
   {
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 86.19,
+   "preco": 86.09,
    "anterior": 89.37,
    "formato": "usd",
-   "var_pct": -3.5582,
+   "var_pct": -3.6701,
    "chave": "brent"
   }
  ]
