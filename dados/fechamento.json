@@ -1,6 +1,6 @@
 {
  "data": "2026-11-24",
- "gerado_em_brt": "2026-11-24 01:56",
+ "gerado_em_brt": "2026-11-24 02:00",
  "fonte": "TradingView (CBOT, B3, câmbio e índices)",
  "cbot": [
   {
@@ -15,19 +15,19 @@
   {
    "nome": "Milho",
    "compl": "dez/26",
-   "preco": 432.75,
+   "preco": 433.25,
    "anterior": 434.25,
    "formato": "usbu",
-   "var_pct": -0.3454,
+   "var_pct": -0.2303,
    "chave": "milho"
   },
   {
    "nome": "Trigo",
    "compl": "dez/26",
-   "preco": 573.5,
+   "preco": 573.75,
    "anterior": 577.0,
    "formato": "usbu",
-   "var_pct": -0.6066,
+   "var_pct": -0.5633,
    "chave": "trigo"
   },
   {
@@ -82,19 +82,19 @@
   {
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 104.28,
+   "preco": 104.278,
    "anterior": 104.318,
    "formato": "pts2",
-   "var_pct": -0.0364,
+   "var_pct": -0.0383,
    "chave": "dxy"
   },
   {
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 86.19,
+   "preco": 86.18,
    "anterior": 89.37,
    "formato": "usd",
-   "var_pct": -3.5582,
+   "var_pct": -3.5694,
    "chave": "brent"
   }
  ]
