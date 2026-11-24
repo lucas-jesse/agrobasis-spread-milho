@@ -1,51 +1,51 @@
 {
- "data": "2026-11-23",
- "gerado_em_brt": "2026-11-23 20:42",
+ "data": "2026-11-24",
+ "gerado_em_brt": "2026-11-24 06:14",
  "fonte": "TradingView (CBOT, B3, câmbio e índices), com 10 a 15 minutos de atraso",
  "cbot": [
   {
    "nome": "Soja",
    "compl": "jan/27",
-   "preco": 1228.75,
-   "anterior": 1220.75,
+   "preco": 1231.5,
+   "anterior": 1228.75,
    "formato": "usbu",
-   "var_pct": 0.6553,
+   "var_pct": 0.2238,
    "chave": "soja"
   },
   {
    "nome": "Milho",
    "compl": "dez/26",
-   "preco": 434.25,
-   "anterior": 434.5,
+   "preco": 433.5,
+   "anterior": 434.25,
    "formato": "usbu",
-   "var_pct": -0.0575,
+   "var_pct": -0.1727,
    "chave": "milho"
   },
   {
    "nome": "Trigo",
    "compl": "dez/26",
-   "preco": 577.0,
-   "anterior": 574.25,
+   "preco": 575.25,
+   "anterior": 577.0,
    "formato": "usbu",
-   "var_pct": 0.4789,
+   "var_pct": -0.3033,
    "chave": "trigo"
   },
   {
    "nome": "Farelo de soja",
    "compl": "dez/26",
-   "preco": 345.7,
-   "anterior": 341.0,
+   "preco": 346.2,
+   "anterior": 345.7,
    "formato": "ust",
-   "var_pct": 1.3783,
+   "var_pct": 0.1446,
    "chave": "farelo"
   },
   {
    "nome": "Óleo de soja",
    "compl": "dez/26",
-   "preco": 59.36,
-   "anterior": 59.81,
+   "preco": 58.94,
+   "anterior": 59.36,
    "formato": "uslb",
-   "var_pct": -0.7524,
+   "var_pct": -0.7075,
    "chave": "oleo"
   }
  ],
@@ -62,10 +62,10 @@
   {
    "nome": "Dólar comercial",
    "compl": "venda",
-   "preco": 5.9293,
+   "preco": 5.9295,
    "anterior": 5.9301,
    "formato": "rs4",
-   "var_pct": -0.0135,
+   "var_pct": -0.0101,
    "chave": "usdbrl"
   },
   {
@@ -82,19 +82,19 @@
   {
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 104.318,
-   "anterior": 103.84,
+   "preco": 104.246,
+   "anterior": 104.318,
    "formato": "pts2",
-   "var_pct": 0.4603,
+   "var_pct": -0.069,
    "chave": "dxy"
   },
   {
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 89.37,
-   "anterior": 92.57,
+   "preco": 86.2,
+   "anterior": 89.37,
    "formato": "usd",
-   "var_pct": -3.4568,
+   "var_pct": -3.5471,
    "chave": "brent"
   }
  ]
