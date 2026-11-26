@@ -1,5 +1,5 @@
 {
-  "gerado_em_brt": "2026-11-26 14:54",
+  "gerado_em_brt": "2026-11-26 15:25",
   "fonte_cotacoes": "TradingView (atraso de 10 a 15 min)",
   "cbot": {
     "soja": {
@@ -162,10 +162,10 @@
     "usdbrl": {
       "ticker": "FX_IDC:USDBRL",
       "descricao": "U.S. DOLLAR / BRAZILIAN REAL",
-      "preco": 5.7509,
+      "preco": 5.7418,
       "ajuste_anterior": 5.8208,
-      "variacao": -0.0699,
-      "variacao_pct": -1.2,
+      "variacao": -0.079,
+      "variacao_pct": -1.36,
       "maxima": 5.8254,
       "minima": 5.7118,
       "modo": "streaming",
@@ -174,10 +174,10 @@
     "dxy": {
       "ticker": "TVC:DXY",
       "descricao": "U.S. Dollar Currency Index",
-      "preco": 103.773,
+      "preco": 103.775,
       "ajuste_anterior": 103.696,
-      "variacao": 0.077,
-      "variacao_pct": 0.07,
+      "variacao": 0.079,
+      "variacao_pct": 0.08,
       "maxima": 103.84,
       "minima": 103.625,
       "modo": "streaming",
@@ -186,10 +186,10 @@
     "brent": {
       "ticker": "ICEEUR:BRN1!",
       "descricao": "Brent Crude Futures",
-      "preco": 91.53,
+      "preco": 91.67,
       "ajuste_anterior": 90.64,
-      "variacao": 0.89,
-      "variacao_pct": 0.98,
+      "variacao": 1.03,
+      "variacao_pct": 1.14,
       "maxima": 92.08,
       "minima": 89.75,
       "modo": "delayed_streaming_600",
@@ -210,10 +210,10 @@
     "ibov": {
       "ticker": "BMFBOVESPA:IBOV",
       "descricao": "Bovespa Index",
-      "preco": 172250.87,
+      "preco": 172661,
       "ajuste_anterior": 166684.61,
-      "variacao": 5566.26,
-      "variacao_pct": 3.34,
+      "variacao": 5976.39,
+      "variacao_pct": 3.59,
       "maxima": 174331.96,
       "minima": 166695.79,
       "modo": "delayed_streaming_900",
