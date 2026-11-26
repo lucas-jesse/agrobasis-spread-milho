@@ -31,6 +31,20 @@ extra = """.cl-status{display:flex;flex-direction:column;align-items:flex-end;ga
 .cn-t tr.sel td{background:#FFF6DF}
 .cn-t tr.tot td{font-weight:700;border-bottom:1px solid #cfd9d1}
 .cl-cel{display:inline-block;min-width:54px;padding:3px 6px;border-radius:6px;font-weight:600;text-align:center}
+.cl-veredito{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--ln);border-left:4px solid var(--vc);border-radius:14px;padding:14px 16px;margin:2px 0 14px}
+.cl-veredito p{margin:0;font-size:14px;line-height:1.6;color:var(--tx)}
+.cl-nv{display:inline-block;white-space:nowrap;border-radius:999px;padding:4px 10px;font:600 12px Geist,sans-serif;text-transform:none}
+.cl-veredito .cl-nv{margin-top:1px}
+.cl-tm td .cl-nv{padding:3px 9px;font-size:11.5px}
+.cl-tm th small{font-weight:500}
+.abc-chart.cl-st{height:430px}
+.cl-lk{font:600 13px Geist,sans-serif;color:var(--vd);text-decoration:none;white-space:nowrap}
+.cl-lk:hover{text-decoration:underline}
+.cl-brw{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px;align-items:start;padding:4px 4px 12px}
+.cl-brw img{width:100%;height:auto;border-radius:10px;border:1px solid var(--ln);background:#fff}
+.cl-brt p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--tx)}
+.cl-brt .cl-src{font-size:12px;color:var(--mt)}
+@media (max-width:820px){.cl-brw{grid-template-columns:1fr}.cl-veredito{flex-direction:column;gap:8px}}
 @media (max-width:860px){.cl-mapa{grid-template-columns:1fr}}
 @media (max-width:560px){.cl-mapa .abc-chart{height:430px}.cl-status{align-self:flex-start;align-items:flex-start;margin-top:8px}.cl-local{padding:12px;margin:0 -6px}.cl-ln{font-size:19px}}"""
 css = "\n".join(cot[ini:fim]) + "\n" + extra + "\n</style>"
@@ -41,12 +55,14 @@ faq = [("O que é o El Niño e por que ele importa para a safra?", "É o aquecim
        ("De onde vêm os dados de chuva?", "A chuva observada vem da reanálise ERA5 do Copernicus, produzida pelo centro europeu ECMWF, com dados diários desde 1980. O valor de cada município é a média de vários pontos da grade de 0,25° (cerca de 27 km) espalhados dentro do limite oficial do município, pela malha do IBGE, e não só do centro da cidade. A normal climatológica é a média de 1991 a 2020 da mesma área, e a previsão também é a média desses pontos. A previsão de 15 dias é o conjunto de 51 cenários do modelo do ECMWF. Os dados chegam pela plataforma Open-Meteo."),
        ("Como foi calculado o efeito do El Niño na produtividade?", "Com a série histórica da Conab por estado, desde a safra 1990/91. Para cada estado e cultura, o painel calcula a tendência de produtividade (que cresce com a tecnologia) e mede quanto cada safra ficou acima ou abaixo dela. Depois agrupa as safras pela fase do ENSO no verão, medida pelo RONI de dezembro a fevereiro. Para o trigo, vale a fase de agosto a outubro do ano da colheita."),
        ("O El Niño garante quebra no Matopiba e safra cheia no Sul?", "Não. Ele aumenta a chance desses resultados, mas cada evento é diferente e outros fatores pesam, como o Atlântico, a distribuição da chuva ao longo do ciclo e o manejo. Por isso o painel mostra a chuva observada e a previsão para cada região, além da média histórica. Há poucas safras de El Niño forte na série, e as médias por fase devem ser lidas como tendência."),
-       ("Com que frequência o painel é atualizado?", "Duas vezes por dia. A chuva observada e a previsão de 15 dias são atualizadas de manhã e à noite. Os índices da NOAA entram assim que são publicados: o Niño 3.4 toda segunda-feira, o RONI e as probabilidades uma vez por mês, na segunda quinta-feira.")]
+       ("Por que comparar vários modelos de previsão?", "Cada centro meteorológico roda o próprio modelo, com física e dados diferentes, e as previsões podem divergir bastante, principalmente para chuva. O painel mostra lado a lado o ECMWF IFS e o AIFS (modelo de inteligência artificial do centro europeu), o GFS americano, o ICON alemão, o GEM canadense, o JMA japonês e o UKMO britânico. Quando todos apontam na mesma direção, a previsão é mais confiável; quando divergem, a incerteza é alta e a previsão tende a mudar nas rodadas seguintes."),
+       ("Como é medida a seca nos Estados Unidos e no Brasil?", "Nos EUA, pelo U.S. Drought Monitor, mapa semanal feito pela Universidade de Nebraska com o USDA e a NOAA, em cinco categorias, de D0 (anormalmente seco) a D4 (seca excepcional). O percentual de milho e soja em seca é a média dos maiores estados produtores, ponderada pela produção de cada estado segundo o USDA. No Brasil, pelo Monitor de Secas, mapa mensal oficial coordenado pela ANA com os órgãos estaduais."),
+       ("Com que frequência o painel é atualizado?", "Duas vezes por dia. A chuva observada e a previsão de 15 dias são atualizadas de manhã e à noite. Os índices da NOAA entram assim que são publicados: o Niño 3.4 toda segunda-feira, o RONI e as probabilidades uma vez por mês, na segunda quinta-feira. O mapa de seca dos EUA sai toda quinta-feira, e o do Brasil, uma vez por mês.")]
 fh = "".join(f"<details><summary>{q}</summary><p>{a}</p></details>" for q, a in faq)
 ld = {"@context": "https://schema.org", "@graph": [{"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq]},
       {"@type": "WebApplication", "name": "Clima e El Niño nas regiões produtoras · AgroBasis", "applicationCategory": "FinanceApplication", "operatingSystem": "Web",
        "url": "https://agrobasis.com.br/dashboards/clima-el-nino/",
-       "description": "El Niño em tempo real, chuva observada e prevista em 16 polos produtores de grãos e o efeito histórico do ENSO na produtividade de soja, milho e trigo por estado.",
+       "description": "El Niño em tempo real, chuva observada e prevista em 16 polos produtores de grãos com 7 modelos meteorológicos lado a lado, seca nos EUA e no Brasil e o efeito histórico do ENSO na produtividade de soja, milho e trigo por estado.",
        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "BRL"}, "publisher": {"@type": "Organization", "name": "AgroBasis", "url": "https://agrobasis.com.br"}}]}
 corpo = Path("clima-corpo.html").read_text().replace("__FAQ__", fh).replace("__LD__", json.dumps(ld, ensure_ascii=False))
 Path("clima.html").write_text(cab + css + "\n\n" + corpo)

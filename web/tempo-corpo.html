@@ -53,6 +53,22 @@
       </div>
     </div>
 
+    <div class="tp-mod" id="tpMod" hidden>
+      <div class="cl-veredito" id="tpVer"></div>
+      <div class="abc-row">
+        <div class="abc-card">
+          <div class="abc-ch"><h3>O que dizem os modelos <small>chuva nos próximos 7 dias, mm</small></h3><button class="abc-dl" data-dl="5" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+          <div class="abc-chart tp-sm" id="tpG5"></div>
+          <p class="abc-nota" id="tpN5"></p>
+        </div>
+        <div class="abc-card">
+          <div class="abc-ch"><h3>Chuva acumulada por modelo <small>mm, próximos 15 dias</small></h3><button class="abc-dl" data-dl="6" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
+          <div class="abc-chart tp-sm" id="tpG6"></div>
+          <p class="abc-nota">Cada linha soma a chuva prevista por um modelo, até o fim do horizonte dele. Tracejada: normal acumulada de 1991 a 2020.</p>
+        </div>
+      </div>
+    </div>
+
     <div class="abc-card">
       <div class="abc-ch"><h3>Janela de pulverização <small>próximos 5 dias, hora a hora</small></h3>
         <div class="tp-leg"><i class="b"></i>Boa<i class="a"></i>Atenção<i class="r"></i>Evitar</div></div>
@@ -65,6 +81,11 @@
     <div class="abc-ch"><h3>Chuva prevista nos polos produtores <small>próximos 15 dias, % do normal</small></h3><button class="abc-dl" data-dl="3" aria-label="Baixar gráfico em PNG"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg></button></div>
     <div class="tp-polos"><div class="abc-chart tp-mapa" id="tpG3"></div><div class="abc-chart tp-rank" id="tpG4"></div></div>
     <p class="abc-nota" id="tpN3">Clique num polo, no mapa ou na lista, para abrir a previsão completa. Azul: chuva acima do normal; marrom: abaixo. O efeito do El Niño sobre a safra está no painel <a href="/dashboards/clima-el-nino/">Clima e El Niño</a>.</p>
+  </div>
+
+  <div class="abc-card" id="tpSeca" hidden>
+    <div class="abc-ch"><h3>Seca no Brasil <small id="tpSecaS"></small></h3><a class="cl-lk" href="/dashboards/clima-el-nino/#seca">Seca nos EUA e no Brasil</a></div>
+    <div class="cl-brw"><img id="tpSecaImg" alt="Mapa do Monitor de Secas do Brasil" loading="lazy"><div class="cl-brt"><p>Mapa oficial da seca no Brasil, feito todo mês pela ANA com os órgãos de meteorologia e recursos hídricos dos estados. Vai de S0 (seca fraca) a S4 (seca excepcional) e mostra a seca acumulada, de curto e de longo prazo.</p><p>Para a seca no cinturão de milho e soja dos Estados Unidos, semana a semana, veja o painel <a href="/dashboards/clima-el-nino/#seca">Clima e El Niño</a>.</p><p class="cl-src">Fonte: ANA, Monitor de Secas do Brasil.</p></div></div>
   </div>
 
   <div class="abc-card" id="ao-vivo">
@@ -423,7 +444,94 @@
       _P: P
     });
   }
-  var FN = [g0, g1, g2, g3];
+
+  // ---------- vários modelos para o município ----------
+  var MODS = [["ecmwf_ifs025", "ECMWF IFS", "Europa", "#1E4812"], ["ecmwf_aifs025_single", "ECMWF AIFS (IA)", "Europa", "#7FB04A"], ["gfs_seamless", "GFS", "EUA", "#2F6FA8"],
+    ["icon_seamless", "ICON", "Alemanha", "#A17149"], ["gem_seamless", "GEM", "Canadá", "#8A6A4F"], ["jma_seamless", "JMA", "Japão", "#C0502E"], ["ukmo_seamless", "UKMO", "Reino Unido", "#7B6BA8"]];
+  var NIVEL = { alta: ["Concordância alta", "#2F6B1F", "#EAF3E3"], "média": ["Concordância média", "#8A5A1E", "#FBF1DF"], baixa: ["Concordância baixa", "#A33E20", "#FBEDE7"] };
+  var MD = null, chm = [];
+  function modelos(m) {
+    var u = API + "?latitude=" + m.lat + "&longitude=" + m.lon + "&timezone=America%2FSao_Paulo&forecast_days=16&daily=precipitation_sum&models=" + MODS.map(function (x) { return x[0]; }).join(",");
+    return fetch(u).then(function (r) { if (!r.ok) throw 0; return r.json(); });
+  }
+  function corChuva(v) {
+    if (v == null) return "#ccc";
+    var a = [[156, 91, 36], [217, 180, 141], [238, 238, 230], [140, 186, 222], [47, 111, 168]], t = Math.max(0, Math.min(1, (v - 40) / 120)) * 4, i = Math.min(3, Math.floor(t)), k = t - i;
+    return "rgb(" + a[i].map(function (c, j) { return Math.round(c + (a[i + 1][j] - c) * k); }).join(",") + ")";
+  }
+  function resumoMod(j, N) {
+    var d = j.daily, datas = d.time, out = { d: datas, s: {}, tot7: {}, tot15: {} };
+    MODS.forEach(function (x) {
+      var s = (d["precipitation_sum_" + x[0]] || []).slice(); while (s.length && s[s.length - 1] == null) s.pop();
+      if (!s.length) return; out.s[x[0]] = s;
+      out.tot7[x[0]] = s.length >= 7 && s.slice(0, 7).every(function (v) { return v != null; }) ? soma(s.slice(0, 7)) : null;
+      out.tot15[x[0]] = s.length >= 15 && s.slice(0, 15).every(function (v) { return v != null; }) ? soma(s.slice(0, 15)) : null;
+    });
+    out.n7 = N ? soma(datas.slice(0, 7).map(function (t) { return suave(N, t); })) : null;
+    out.n15 = N ? soma(datas.slice(0, 15).map(function (t) { return suave(N, t); })) : null;
+    out.nd = N ? datas.map(function (t) { return suave(N, t); }) : null;
+    var v = Object.keys(out.tot7).filter(function (k) { return out.tot7[k] != null; }).map(function (k) { return out.tot7[k]; }).sort(function (a, b) { return a - b; });
+    out.n = v.length; if (!v.length) return out;
+    out.med = v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2; out.min = v[0]; out.max = v[v.length - 1];
+    var r = (out.max - out.min) / Math.max(out.n7 || 0, 15); out.conc = r < 0.6 ? "alta" : r < 1.2 ? "média" : "baixa";
+    out.ab = out.n7 ? v.filter(function (x) { return x < out.n7 * 0.9; }).length : 0; out.ac = out.n7 ? v.filter(function (x) { return x > out.n7 * 1.1; }).length : 0;
+    return out;
+  }
+  function nomeMod(id) { var x = MODS.find(function (y) { return y[0] === id; }); return x ? x[1] : id; }
+  function renderMod() {
+    if (!MD || !MD.n) { $("tpMod").hidden = true; return; }
+    var r = MD, n = NIVEL[r.conc], dir, mu = null, ms = null;
+    Object.keys(r.tot7).forEach(function (k) { if (r.tot7[k] == null) return; if (mu == null || r.tot7[k] > r.tot7[mu]) mu = k; if (ms == null || r.tot7[k] < r.tot7[ms]) ms = k; });
+    if (r.n7 && r.ab >= Math.ceil(r.n * 0.7)) dir = r.ab + " de " + r.n + " modelos preveem chuva abaixo do normal";
+    else if (r.n7 && r.ac >= Math.ceil(r.n * 0.7)) dir = r.ac + " de " + r.n + " modelos preveem chuva acima do normal";
+    else if (r.n7) dir = "Os modelos estão divididos: " + r.ab + " abaixo do normal, " + r.ac + " acima e " + (r.n - r.ab - r.ac) + " perto dele";
+    else dir = "";
+    var t = "<b>Próximos 7 dias em " + rot(atual) + ":</b> o consenso dos " + r.n + " modelos é de <b>" + br(r.med, 0) + " mm</b>" + (r.n7 ? ", " + br(r.med / r.n7 * 100, 0) + "% do normal (" + br(r.n7, 0) + " mm)" : "") + ". " + (dir ? dir + ". " : "");
+    if (r.conc === "baixa") t += "A diferença entre eles é grande: o " + nomeMod(mu) + " prevê " + br(r.max, 0) + " mm e o " + nomeMod(ms) + ", " + br(r.min, 0) + " mm. Previsões assim costumam mudar nas próximas rodadas.";
+    else if (r.conc === "alta") t += "Os modelos concordam: todos entre " + br(r.min, 0) + " e " + br(r.max, 0) + " mm.";
+    else t += "Faixa entre os modelos: " + br(r.min, 0) + " a " + br(r.max, 0) + " mm.";
+    $("tpVer").innerHTML = '<span class="cl-nv" style="color:' + n[1] + ";background:" + n[2] + '">' + n[0] + "</span><p>" + t + "</p>";
+    var fora = Object.keys(r.s).filter(function (k) { return r.tot7[k] == null; }).map(nomeMod);
+    $("tpN5").textContent = (r.n7 ? "Linha tracejada: normal de 7 dias (" + br(r.n7, 0) + " mm). " : "") + "Linha dourada: consenso, a mediana entre os modelos (" + br(r.med, 0) + " mm)." + (fora.length ? " Sem os 7 dias completos nesta rodada: " + fora.join(", ") + "." : "");
+    $("tpMod").hidden = false;
+    if (!chm.length) chm = [$("tpG5"), $("tpG6")].map(function (el) { return echarts.init(el); });
+    chm[0].resize(); chm[1].resize(); chm[0].setOption(g5(), true); chm[1].setOption(g6(), true);
+  }
+  function g5() {
+    var r = MD, it = Object.keys(r.tot7).filter(function (k) { return r.tot7[k] != null; }).map(function (k) { return [k, r.tot7[k]]; }).sort(function (a, b) { return a[1] - b[1]; });
+    var ml = [{ xAxis: r.med, lineStyle: { color: "#C99A2E", width: 2.4, type: "solid" } }]; if (r.n7) ml.push({ xAxis: r.n7, lineStyle: { color: COR.tx, type: [5, 4], width: 1.5 } });
+    return { textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450, graphic: [marca()],
+      grid: { left: 6, right: 54, top: 12, bottom: 4, containLabel: true },
+      xAxis: Object.assign(eixoY(function (v) { return br(v, 0); }), { max: function (v) { return Math.ceil(Math.max(v.max, r.n7 || 0) * 1.12 / 10) * 10; } }),
+      yAxis: { type: "category", data: it.map(function (x) { return nomeMod(x[0]); }), axisLabel: { color: COR.tx, fontSize: 12, fontWeight: 600 }, axisLine: { show: false }, axisTick: { show: false } },
+      tooltip: { trigger: "axis", confine: true, axisPointer: { type: "shadow", shadowStyle: { color: "rgba(0,0,0,.03)" } }, backgroundColor: "#fff", borderColor: COR.ln, textStyle: { color: COR.tx, fontSize: 12.5 },
+        formatter: function (ps) { var x = it[ps[0].dataIndex], m = MODS.find(function (y) { return y[0] === x[0]; }); return "<b>" + m[1] + "</b> <small>" + m[2] + "</small>" + tl("", "7 dias", br(x[1], 0) + " mm") + (r.n7 ? tl("", "Frente ao normal", br(x[1] / r.n7 * 100, 0) + "%") : ""); } },
+      series: [{ type: "bar", barWidth: "58%", data: it.map(function (x) { return { value: Math.round(x[1] * 10) / 10, itemStyle: { color: corChuva(r.n7 ? x[1] / r.n7 * 100 : 100), borderRadius: [0, 4, 4, 0] } }; }),
+        label: { show: true, position: "right", color: COR.tx, fontSize: 11.5, fontWeight: 600, formatter: function (p) { return br(p.value, 0) + " mm"; } },
+        markLine: { silent: true, symbol: "none", label: { show: false }, data: ml } }] };
+  }
+  function g6() {
+    var r = MD, cats = r.d.map(function (t) { return dlab(t); }), ser = [];
+    MODS.forEach(function (x) {
+      var s = r.s[x[0]]; if (!s) return; var ac = 0;
+      ser.push({ name: x[1], type: "line", data: s.map(function (v) { ac += v || 0; return Math.round(ac * 10) / 10; }), symbol: "none", smooth: 0.15, lineStyle: { width: x[0] === "ecmwf_ifs025" ? 3 : 1.8, color: x[3] }, itemStyle: { color: x[3] } });
+    });
+    if (r.nd) { var an = 0; ser.push({ name: "Normal", type: "line", data: r.nd.map(function (v) { an += v || 0; return Math.round(an); }), symbol: "none", lineStyle: { width: 1.6, color: COR.tx, type: [5, 4] }, itemStyle: { color: COR.tx } }); }
+    return { textStyle: { fontFamily: "Geist, system-ui, sans-serif", color: COR.tx }, animationDuration: 450, graphic: [marca()],
+      legend: { top: 0, left: 0, itemWidth: 12, itemHeight: 8, itemGap: 10, textStyle: { color: COR.mt, fontSize: 11 } },
+      grid: { left: 6, right: 12, top: mobile() ? 78 : 56, bottom: 6, containLabel: true },
+      xAxis: { type: "category", data: cats, boundaryGap: false, axisLabel: { color: COR.mt, fontSize: 11, hideOverlap: true }, axisLine: { lineStyle: { color: COR.ln } }, axisTick: { show: false } },
+      yAxis: eixoY(function (v) { return br(v, 0); }),
+      tooltip: { trigger: "axis", confine: true, order: "valueDesc", backgroundColor: "#fff", borderColor: COR.ln, textStyle: { color: COR.tx, fontSize: 12.5 }, valueFormatter: function (v) { return v == null ? "-" : br(v, 0) + " mm"; } },
+      series: ser };
+  }
+  function secaBrasil(S) {
+    if (!S || !S.brasil) return;
+    $("tpSecaS").textContent = "mapa de " + S.brasil.rotulo;
+    $("tpSecaImg").src = REPO[1] + "dados/clima/seca_brasil.jpg?v=" + S.brasil.ano + S.brasil.mes;
+    $("tpSeca").hidden = false;
+  }
+  var FN = [g0, g1, g2, g3, null, g5, g6];
 
   // ---------- montagem ----------
   function render() {
@@ -463,28 +571,32 @@
     $("tpTit").textContent = rot(m); $("tpMeta").textContent = "Carregando a previsão…";
     try { history.replaceState(null, "", location.pathname + "?cidade=" + slug(m)); } catch (e) {}
     var rec = (ler("ab_tempo_rec") || []).filter(function (s) { return s !== slug(m); }); rec.unshift(slug(m)); guardar("ab_tempo_rec", rec.slice(0, 4)); desenharChips();
+    MD = null; $("tpMod").hidden = true;
+    var pm = modelos(m).catch(function () { return null; });
     Promise.all([previsao(m), normal(m)]).then(function (r) {
       if (atual !== m) return;
       dados = r[0]; dados.normal = r[1]; render();
+      pm.then(function (j) { if (atual !== m || !j) return; MD = resumoMod(j, dados.normal); renderMod(); });
       if (!inicial && window.innerWidth < 900) $("tpConteudo").scrollIntoView({ behavior: "smooth", block: "start" });
     }).catch(function () { $("tpMeta").textContent = "Não foi possível carregar a previsão agora. Tente novamente em instantes."; });
   }
   function baixar(i) {
-    var tit = ["Chuva dia a dia", "Chuva acumulada: previsão x normal", "Temperatura prevista", "Chuva prevista nos polos produtores (15 dias, % do normal)"][i];
-    var ch = i === 3 ? mapa : charts[i], opt = FN[i](); opt.animation = false;
+    var tit = ["Chuva dia a dia", "Chuva acumulada: previsão x normal", "Temperatura prevista", "Chuva prevista nos polos produtores (15 dias, % do normal)", "", "Chuva prevista por modelo, 7 dias", "Chuva acumulada por modelo, 15 dias"][i];
+    if (i >= 5 && !MD) return;
+    var ch = i === 3 ? mapa : i >= 5 ? chm[i - 5] : charts[i], opt = FN[i](); opt.animation = false;
     opt.title = { text: tit, subtext: (i === 3 ? "Brasil" : rot(atual)) + " · AgroBasis", left: 8, top: 6, textStyle: { fontFamily: "Sora, Geist, sans-serif", fontSize: 15, fontWeight: 700, color: COR.vd }, subtextStyle: { fontSize: 12, color: COR.mt } };
     if (opt.legend) opt.legend = Object.assign({}, opt.legend, { top: 54, left: 8 });
     if (opt.grid) opt.grid = Object.assign({}, opt.grid, { top: 84, bottom: 30 });
-    opt.graphic = (opt.graphic || []).concat([{ type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: Open-Meteo (CC BY 4.0), ERA5", fill: "#9aa39c", font: "11px Geist, sans-serif" } }]);
+    opt.graphic = (opt.graphic || []).concat([{ type: "text", right: 12, bottom: 8, style: { text: "agrobasis.com.br · Fonte: Open-Meteo (CC BY 4.0), " + (i >= 5 ? "ECMWF, NOAA, DWD, ECCC, JMA, UK Met Office" : "ERA5"), fill: "#9aa39c", font: "11px Geist, sans-serif" } }]);
     ch.setOption(opt, true);
     var url = ch.getDataURL({ type: "png", pixelRatio: 2, backgroundColor: "#fff" });
     ch.setOption(FN[i](), true);
     var a = document.createElement("a"); a.href = url; a.download = "agrobasis-tempo-" + (i === 3 ? "polos" : slug(atual)) + ".png"; document.body.appendChild(a); a.click(); a.remove();
   }
   var mapa, rank;
-  Promise.all([carregarLib(), json("dados/geo/municipios.json"), json("dados/clima/clima.json"), json("dados/conab/br_uf.json")]).then(function (r) {
+  Promise.all([carregarLib(), json("dados/geo/municipios.json"), json("dados/clima/clima.json"), json("dados/conab/br_uf.json"), json("dados/clima/seca.json").catch(function () { return null; })]).then(function (r) {
     MUN = r[1].municipios.map(function (m) { return { n: m[0], uf: m[1], lat: m[2], lon: m[3], k: norm(m[0]) }; });
-    CLIMA = r[2]; echarts.registerMap("BR", r[3]);
+    CLIMA = r[2]; echarts.registerMap("BR", r[3]); secaBrasil(r[4]);
     ligarBusca();
     mapa = echarts.init($("tpG3")); mapa.setOption(g3());
     mapa.on("click", function (p) { if (p.data) abrir(porNome(p.data.name, p.data.uf)); });
@@ -496,7 +608,7 @@
     var q = (location.search.match(/[?&]cidade=([a-z0-9-]+)/) || [])[1], rec = ler("ab_tempo_rec") || [];
     var m = (q && porSlug(q)) || (rec[0] && porSlug(rec[0])) || porNome("Sorriso", "MT");
     abrir(m, true);
-    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); mapa.resize(); rank.resize(); }, 150); });
+    var to; window.addEventListener("resize", function () { clearTimeout(to); to = setTimeout(function () { charts.forEach(function (c) { c.resize(); }); mapa.resize(); rank.resize(); if (MD) renderMod(); }, 150); });
   }).catch(function (e) {
     if (window.console) console.error("AgroBasis Tempo:", e);
     $("tpMeta").textContent = "Não foi possível carregar a página agora. Tente novamente em instantes.";

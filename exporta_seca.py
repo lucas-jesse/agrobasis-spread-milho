@@ -5,7 +5,7 @@ EUA: U.S. Drought Monitor (National Drought Mitigation Center, USDA e NOAA), map
      52 semanas. A área de milho e de soja em seca é a média dos estados ponderada pela produção de cada estado
      na última safra (USDA NASS Quick Stats, chave no secret NASS_API_KEY; sem chave, usa pesos de reserva).
 Brasil: mapa mensal oficial do Monitor de Secas (ANA), copiado para o repositório para exibição no painel.
-Saídas: dados/clima/seca.json e dados/clima/seca_brasil.png.
+Saídas: dados/clima/seca.json e dados/clima/seca_brasil.jpg.
 """
 import json
 import os
@@ -106,7 +106,12 @@ def mapa_ana():
         try:
             r = requests.get(url, headers={"User-Agent": UA["User-Agent"]}, timeout=60)
             if r.ok and r.content[:4] == b"\x89PNG":
-                (PASTA / "seca_brasil.png").write_bytes(r.content)
+                # versão leve para a web: 1000 px de largura, JPEG
+                from io import BytesIO
+                from PIL import Image
+                im = Image.open(BytesIO(r.content)).convert("RGB")
+                im = im.resize((1000, round(im.size[1] * 1000 / im.size[0])), Image.LANCZOS)
+                im.save(PASTA / "seca_brasil.jpg", "JPEG", quality=86, optimize=True, progressive=True)
                 print(f"  mapa da ANA: {MESES[m - 1]} de {a}")
                 return {"mes": m, "ano": a, "rotulo": f"{MESES[m - 1]} de {a}", "origem": url}
         except requests.RequestException as e:
