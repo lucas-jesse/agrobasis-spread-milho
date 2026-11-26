@@ -40,8 +40,8 @@ extra = """.cl-status{display:flex;flex-direction:column;align-items:flex-end;ga
 .abc-chart.cl-st{height:430px}
 .cl-lk{font:600 13px Geist,sans-serif;color:var(--vd);text-decoration:none;white-space:nowrap}
 .cl-lk:hover{text-decoration:underline}
-.cl-brw{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:18px;align-items:start;padding:4px 4px 12px}
-.cl-brw img{width:100%;height:auto;border-radius:10px;border:1px solid var(--ln);background:#fff}
+.cl-brw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start;padding:4px 4px 12px}
+.cl-brw img{width:100%;max-width:480px;height:auto;border-radius:10px;border:1px solid var(--ln);background:#fff;justify-self:center}
 .cl-brt p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--tx)}
 .cl-brt .cl-src{font-size:12px;color:var(--mt)}
 @media (max-width:820px){.cl-brw{grid-template-columns:1fr}.cl-veredito{flex-direction:column;gap:8px}}
