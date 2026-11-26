@@ -1,0 +1,41 @@
+name: Exporta seca nos EUA e no Brasil (painel Clima)
+
+on:
+  schedule:
+    # o U.S. Drought Monitor sai às quintas, 8h30 ET; a rodada diária pega também o mapa mensal da ANA
+    - cron: '23 15 * * *'
+  workflow_dispatch:
+  push:
+    paths:
+      - exporta_seca.py
+
+permissions:
+  contents: write
+
+concurrency:
+  group: seca
+  cancel-in-progress: false
+
+jobs:
+  seca:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Baixar e montar
+        run: python exporta_seca.py
+        env:
+          NASS_API_KEY: ${{ secrets.NASS_API_KEY }}
+      - name: Commit
+        run: |
+          git config user.name "AgroBasis Bot"
+          git config user.email "bot@agrobasis.com.br"
+          git add dados/clima/seca.json dados/clima/seca_brasil.png
+          git diff --staged --quiet && exit 0
+          git commit -m "Seca nos EUA e no Brasil"
+          for i in 1 2 3 4 5; do git pull --rebase origin main && git push && exit 0; sleep 15; done
+          exit 1

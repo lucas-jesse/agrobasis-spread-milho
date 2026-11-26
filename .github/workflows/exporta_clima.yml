@@ -8,6 +8,7 @@ on:
   push:
     paths:
       - exporta_clima.py
+      - exporta_clima_modelos.py
 
 permissions:
   contents: write
@@ -28,6 +29,9 @@ jobs:
       - run: pip install requests openpyxl
       - name: Baixar e montar
         run: python exporta_clima.py
+      - name: Previsão por vários modelos
+        run: python exporta_clima_modelos.py
+        continue-on-error: true
       - name: Commit
         run: |
           git config user.name "AgroBasis Bot"
