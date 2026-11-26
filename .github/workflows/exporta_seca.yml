@@ -25,7 +25,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install requests
+      - run: pip install requests pillow
       - name: Baixar e montar
         run: python exporta_seca.py
         env:
@@ -34,7 +34,7 @@ jobs:
         run: |
           git config user.name "AgroBasis Bot"
           git config user.email "bot@agrobasis.com.br"
-          git add dados/clima/seca.json dados/clima/seca_brasil.png
+          git add dados/clima/seca.json dados/clima/seca_brasil.jpg
           git diff --staged --quiet && exit 0
           git commit -m "Seca nos EUA e no Brasil"
           for i in 1 2 3 4 5; do git pull --rebase origin main && git push && exit 0; sleep 15; done
