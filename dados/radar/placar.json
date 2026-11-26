@@ -1,7 +1,7 @@
 {
- "atualizado_em": "2026-11-25",
+ "atualizado_em": "2026-11-26",
  "inicio": "2026-11-19",
- "total": 9,
+ "total": 10,
  "resumo": {
   "4s": {
    "avaliados": 0,
@@ -139,6 +139,20 @@
    "percentil": 8.0,
    "regra": "extremo para a época",
    "registrado_em": "2026-11-24",
+   "resultado": {}
+  },
+  {
+   "id": "basis_milho_vilhena_ro",
+   "nome": "Basis do milho em Vilhena RO",
+   "unidade": "R$/sc",
+   "casas": 1,
+   "data": "2026-11-20",
+   "valor": -10.17,
+   "alvo": -20.1936,
+   "lado": "alto",
+   "percentil": 91.2,
+   "regra": "extremo para a época",
+   "registrado_em": "2026-11-26",
    "resultado": {}
   }
  ]
