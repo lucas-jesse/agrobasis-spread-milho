@@ -11,6 +11,7 @@ import json
 import os
 import time
 from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import requests
@@ -156,7 +157,7 @@ def main():
                     "part_milho": round(pw["milho"].get(uf, 0) / tot["milho"] * 100, 1),
                     "part_soja": round(pw["soja"].get(uf, 0) / tot["soja"] * 100, 1)})
     ufs.sort(key=lambda x: -x["part_milho"])
-    saida = {"atualizado_em": datetime.now().strftime("%Y-%m-%d %H:%M"),
+    saida = {"atualizado_em": datetime.now(ZoneInfo("America/Sao_Paulo")).strftime("%Y-%m-%d %H:%M"),
              "eua": {"mapa": datas[-1], "serie": serie, "estados": ufs, "conus": conus[-1],
                      "pesos_fonte": fonte},
              "brasil": mapa_ana()}

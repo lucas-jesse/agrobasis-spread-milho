@@ -15,6 +15,7 @@ import json
 import statistics
 import time
 from datetime import datetime
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 from exporta_clima import PONTOS, _lote
@@ -108,7 +109,7 @@ def main():
         r7 = pontos[pid]["r7"]
         print(f"{nome} ({uf}): 7 dias mediana {r7['mediana']} mm, normal {n7}, faixa {r7['min']}-{r7['max']}, "
               f"concordância {r7['concordancia']}, modelos {r7['n']}")
-    saida = {"atualizado_em": datetime.now().strftime("%Y-%m-%d %H:%M"),
+    saida = {"atualizado_em": datetime.now(ZoneInfo("America/Sao_Paulo")).strftime("%Y-%m-%d %H:%M"),
              "modelos": [{"id": m, "nome": n, "origem": o} for m, n, o in MODELOS],
              "pontos": pontos}
     (PASTA / "modelos.json").write_text(json.dumps(saida, ensure_ascii=False, separators=(",", ":")))
