@@ -1,6 +1,6 @@
 {
  "data": "2026-11-26",
- "gerado_em_brt": "2026-11-26 00:43",
+ "gerado_em_brt": "2026-11-26 18:15",
  "fonte": "TradingView (CBOT, B3, câmbio e índices), com 10 a 15 minutos de atraso",
  "cbot": [
   {
@@ -53,28 +53,28 @@
   {
    "nome": "Milho B3",
    "compl": "jan/27",
-   "preco": 71.36,
-   "anterior": 71.47,
+   "preco": 70.45,
+   "anterior": 70.76,
    "formato": "rssc",
-   "var_pct": -0.1539,
+   "var_pct": -0.4381,
    "chave": "milho_b3"
   },
   {
    "nome": "Dólar comercial",
    "compl": "venda",
-   "preco": 5.821,
+   "preco": 5.644,
    "anterior": 5.8208,
    "formato": "rs4",
-   "var_pct": 0.0034,
+   "var_pct": -3.0374,
    "chave": "usdbrl"
   },
   {
    "nome": "Ibovespa",
    "compl": "pontos",
-   "preco": 166684.61,
-   "anterior": 164089.81,
+   "preco": 176707.23,
+   "anterior": 166684.61,
    "formato": "pts",
-   "var_pct": 1.5813,
+   "var_pct": 6.0129,
    "chave": "ibov"
   }
  ],
@@ -82,19 +82,19 @@
   {
    "nome": "Índice dólar (DXY)",
    "compl": "",
-   "preco": 103.834,
+   "preco": 103.782,
    "anterior": 103.696,
    "formato": "pts2",
-   "var_pct": 0.1331,
+   "var_pct": 0.0829,
    "chave": "dxy"
   },
   {
    "nome": "Petróleo Brent",
    "compl": "US$/barril",
-   "preco": 91.11,
+   "preco": 91.67,
    "anterior": 90.64,
    "formato": "usd",
-   "var_pct": 0.5185,
+   "var_pct": 1.1364,
    "chave": "brent"
   }
  ]
