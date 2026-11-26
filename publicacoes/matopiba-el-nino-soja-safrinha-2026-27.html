@@ -1,0 +1,277 @@
+<!--
+============================================================
+AGROBASIS · ANÁLISE: MATOPIBA, EL NIÑO E A SAFRA 2026/27
+============================================================
+URL: /analises/matopiba-el-nino-soja-safrinha-2026-27/
+
+CONFIGURAÇÃO NO PLUGIN DE SEO:
+  Title (SEO): Matopiba e El Niño: risco para a soja e a safrinha 2026/27 | AgroBasis
+  Meta description: O Matopiba deve colher 25,1 milhões de t de soja. Com El Niño forte, a história indica perda de 2,8 a 10,5 milhões de t. Plantio, chuva e safrinha.
+  Slug: matopiba-el-nino-soja-safrinha-2026-27
+  Frase-chave de foco: Matopiba El Niño soja
+
+NOTA DE DADOS (conferidos em 26/11/2026):
+  Produção e área: Conab, 2º levantamento da safra 2026/27 (nov/2026) e série histórica por UF.
+  Matopiba = soma de MA, TO, PI e BA (aproximação por estado; quase toda a soja desses estados está na região).
+  Plantio: Conab, Progresso de Safra, semana até 20/11/2026; média do Matopiba ponderada pela área de soja.
+  Chuva: Copernicus ERA5 via Open-Meteo, até 25/11/2026, normal 1991-2020; previsão ECMWF IFS ensemble, 15 dias.
+  ENSO: NOAA CPC. Produtividade em El Niño forte: desvio da tendência quadrática por UF, safras 1991/92, 1997/98 e 2015/16.
+  Arquivos: dados/clima/clima.json, dados/clima/enso_produtividade.json, dados/conab/*.json, dados/progresso/progresso.json.
+
+NOTA DE ESTILO: sem travessão, números em algarismos, tom sóbrio.
+============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest" defer></script>
+
+<style>
+  .abp-article { font-family:'Geist', Arial, sans-serif; color:#222222; padding:36px 0 56px 0; box-sizing:border-box; background:#ffffff; }
+  .abp-narrow { max-width:800px; margin:0 auto; padding:0 20px; box-sizing:border-box; }
+  .abp-breadcrumb { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; margin-bottom:16px; }
+  .abp-breadcrumb a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-breadcrumb a:hover { text-decoration:underline; }
+  .abp-badge { display:inline-flex; align-items:center; gap:6px; font-family:'Sora', Arial, sans-serif; background:#EEF4E7; color:#1E4812; border:1px solid #d7e6c9; border-radius:999px; padding:6px 14px 6px 10px; font-size:12px; font-weight:700; letter-spacing:.2px; margin-bottom:18px; }
+  .abp-badge svg { width:13px; height:13px; stroke-width:2.2; }
+  .abp-h1 { font-size:35px; line-height:1.22; color:#222222; font-weight:800; margin:0 0 14px 0; }
+  .abp-lead { font-size:17px; line-height:1.7; color:#4a4a4a; margin:0 0 8px 0; }
+  .abp-meta { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#9a9a9a; margin:14px 0 30px 0; padding-bottom:20px; border-bottom:1px solid #eef1ed; }
+  .abp-h2 { font-size:24px; color:#222222; font-weight:800; margin:44px 0 14px 0; padding-left:12px; border-left:4px solid #1E4812; }
+  .abp-h3 { font-size:17px; color:#222222; font-weight:700; margin:26px 0 10px 0; }
+  .abp-p { font-size:15.5px; line-height:1.8; color:#333333; margin:0 0 16px 0; }
+  .abp-p b { color:#1E4812; font-weight:700; }
+  .abp-list { margin:0 0 18px 0; padding-left:22px; }
+  .abp-list li { font-size:15.5px; line-height:1.8; color:#333333; margin-bottom:8px; }
+  .abp-list b { color:#222222; }
+  .abp-pullquote { background:#fafbf9; border-left:3px solid #A17149; border-radius:0 14px 14px 0; padding:18px 22px; margin:24px 0; font-family:'Sora', Arial, sans-serif; font-size:16px; line-height:1.6; color:#3f3f3f; font-style:italic; }
+  .abp-note { background:#fdf8f4; border:1px solid #ecdccb; border-radius:14px; padding:18px 20px; font-size:14px; line-height:1.65; color:#5b4636; margin:20px 0; }
+  .abp-note b { color:#8a5a34; }
+  .abp-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:14px 0 20px 0; }
+  .abp-table { width:100%; border-collapse:separate; border-spacing:0; margin:0; font-size:14px; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; }
+  .abp-table th, .abp-table td { padding:11px 14px; text-align:left; border-bottom:1px solid #eef1ed; }
+  .abp-table tr:last-child td { border-bottom:none; }
+  .abp-table th { background:#1E4812; color:#ffffff; font-weight:700; font-family:'Sora', Arial, sans-serif; font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; }
+  .abp-table td { color:#3f3f3f; }
+  .abp-table tr:nth-child(even) td { background:#fafbf9; }
+  .abp-chart-card { background:#ffffff; border:1px solid #e5e7eb; border-radius:18px; padding:22px; margin:22px 0; box-shadow:0 8px 24px rgba(30,72,18,0.05); }
+  .abp-chart-title { font-family:'Geist', Arial, sans-serif; font-size:15px; font-weight:700; color:#222222; margin-bottom:2px; }
+  .abp-chart-sub { font-family:'Sora', Arial, sans-serif; font-size:12px; color:#8a8a8a; margin-bottom:14px; }
+  .abp-chart-caption { font-family:'Sora', Arial, sans-serif; font-size:11px; color:#9a9a9a; text-align:right; margin-top:8px; }
+  .abp-legend { display:flex; gap:18px; flex-wrap:wrap; font-family:'Sora', Arial, sans-serif; font-size:12px; color:#5b5b5b; margin-bottom:10px; }
+  .abp-legend-item { display:flex; align-items:center; gap:6px; }
+  .abp-legend-dot { width:14px; height:3px; border-radius:2px; display:inline-block; }
+  .abp-kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:22px 0; }
+  .abp-kpi { background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px; padding:14px 16px; }
+  .abp-kpi-v { font-size:24px; font-weight:800; color:#1E4812; line-height:1.1; }
+  .abp-kpi-l { font-family:'Sora', Arial, sans-serif; font-size:11.5px; color:#7a7a7a; margin-top:6px; line-height:1.4; }
+  .abp-toc { background:#fafbf9; border:1px solid #e5e7eb; border-radius:14px; padding:18px 22px; margin:24px 0 8px 0; }
+  .abp-toc-title { font-family:'Sora', Arial, sans-serif; font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:#7a7a7a; margin-bottom:10px; }
+  .abp-toc ol { margin:0; padding-left:20px; }
+  .abp-toc li { font-size:14px; line-height:1.9; }
+  .abp-toc a { color:#1E4812; text-decoration:none; font-weight:600; }
+  .abp-toc a:hover { text-decoration:underline; }
+  .abp-cta-box { background:#1E4812; border-radius:20px; padding:32px 28px; margin:36px 0; text-align:center; }
+  .abp-cta-box h3 { color:#ffffff; font-size:20px; font-weight:800; margin:0 0 8px 0; }
+  .abp-cta-box p { color:#d7e6c9; font-size:14.5px; line-height:1.6; margin:0 0 20px 0; max-width:480px; margin-left:auto; margin-right:auto; }
+  .abp-cta-btn { display:inline-flex; align-items:center; gap:8px; background:#ffffff; color:#1E4812 !important; font-family:'Geist', Arial, sans-serif; font-size:14.5px; font-weight:700; padding:13px 24px; border-radius:10px; text-decoration:none !important; transition:background .15s ease; }
+  .abp-cta-btn:hover { background:#EEF4E7; }
+  .abp-cta-btn svg { width:16px; height:16px; stroke-width:2.2; }
+  .abp-faq-item { background:#ffffff; border:1px solid #e5e7eb; border-radius:12px; margin-bottom:10px; overflow:hidden; }
+  .abp-faq-item summary { list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:15px; font-weight:700; color:#222222; }
+  .abp-faq-item summary::-webkit-details-marker { display:none; }
+  .abp-faq-item summary svg { width:16px; height:16px; color:#A17149; stroke-width:2.2; flex-shrink:0; transition:transform .2s ease; }
+  .abp-faq-item[open] summary svg { transform:rotate(180deg); }
+  .abp-faq-a { padding:0 18px 16px 18px; font-size:14px; line-height:1.65; color:#5b5b5b; margin:0; }
+  .abp-sources { background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 20px; margin:30px 0; font-family:'Sora', Arial, sans-serif; font-size:12.5px; line-height:1.8; color:#7a7a7a; }
+  .abp-sources b { color:#5b5b5b; }
+  .abp-disclaimer { margin-top:30px; padding-top:14px; border-top:1px solid #f0f0f0; font-family:'Sora', Arial, sans-serif; font-size:11px; color:#a3a3a3; text-align:center; line-height:1.6; }
+  .abp-author-box { display:flex; align-items:center; gap:12px; margin:30px 0; background:#fafbf9; border:1px solid #eef1ed; border-radius:14px; padding:16px 18px; }
+  .abp-author-icon { width:38px; height:38px; border-radius:50%; background:#EEF4E7; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .abp-author-icon svg { width:19px; height:19px; color:#1E4812; }
+  .abp-author-text { font-family:'Sora', Arial, sans-serif; font-size:12.5px; color:#7a7a7a; line-height:1.5; }
+  .abp-author-text b { color:#222222; }
+  @media (max-width:768px) {
+    .abp-h1 { font-size:25px; } .abp-lead { font-size:15px; } .abp-h2 { font-size:20px; }
+    .abp-narrow { padding:0 14px; } .abp-chart-card { padding:14px; } .abp-cta-box { padding:24px 18px; }
+    .abp-table { font-size:12.5px; } .abp-table th, .abp-table td { padding:8px 10px; }
+    .abp-kpis { grid-template-columns:repeat(2,1fr); } .abp-kpi-v { font-size:20px; }
+  }
+
+</style>
+<div class="abp-article">
+<div class="abp-narrow">
+
+  <div class="abp-breadcrumb">
+    <a href="/">Início</a> &nbsp;›&nbsp;
+    <a href="/analises/">Análises</a> &nbsp;›&nbsp;
+    Matopiba e El Niño
+  </div>
+
+  <div class="abp-badge"><i data-lucide="cloud-sun"></i> Análise · Clima e safra</div>
+  <h1 class="abp-h1">Matopiba e El Niño: quanto a seca pode tirar da soja e da safrinha 2026/27</h1>
+  <p class="abp-lead">O Matopiba deve colher 25,1 milhões de toneladas de soja nesta safra, segundo a Conab. O plantio está no ritmo normal, mas o El Niño mais forte já medido coloca a região no lado perdedor da gangorra climática. Cruzamos produção, plantio, chuva observada, previsão e 35 anos de histórico para medir o tamanho do risco, inclusive para o milho safrinha e o sorgo.</p>
+  <div class="abp-meta">Por Equipe AgroBasis · Atualizado em 26 de novembro de 2026 · Leitura de 9 min</div>
+
+  <div class="abp-kpis">
+    <div class="abp-kpi"><div class="abp-kpi-v">25,1 mi t</div><div class="abp-kpi-l">Soja estimada no Matopiba, 13,8% do Brasil</div></div>
+    <div class="abp-kpi"><div class="abp-kpi-v">58%</div><div class="abp-kpi-l">Área plantada até 20/11; média de 5 anos: 59%</div></div>
+    <div class="abp-kpi"><div class="abp-kpi-v">48 a 64%</div><div class="abp-kpi-l">Chuva prevista para 15 dias, em % da normal</div></div>
+    <div class="abp-kpi"><div class="abp-kpi-v">−22%</div><div class="abp-kpi-l">Soja do Matopiba no cenário médio de El Niño forte</div></div>
+  </div>
+
+  <div class="abp-toc">
+    <div class="abp-toc-title">Neste artigo</div>
+    <ol>
+      <li><a href="#producao">Quanto o Matopiba produz</a></li>
+      <li><a href="#plantio">O plantio está atrasado?</a></li>
+      <li><a href="#chuva">Chuva observada e previsão</a></li>
+      <li><a href="#cenarios">Cenários para a soja</a></li>
+      <li><a href="#safrinha">Milho safrinha e sorgo: o risco maior</a></li>
+      <li><a href="#mercado">O que isso significa para o mercado</a></li>
+      <li><a href="#faq">Perguntas frequentes</a></li>
+    </ol>
+  </div>
+
+  <h2 class="abp-h2" id="producao">Quanto o Matopiba produz</h2>
+  <p class="abp-p">O Matopiba reúne o sul do Maranhão, o Tocantins, o sul do Piauí e o oeste da Bahia, a última grande fronteira agrícola do país. No 2º levantamento da safra 2026/27, a Conab estima <b>6,74 milhões de hectares</b> de soja nos 4 estados (+3,2% sobre a safra passada) e produção de <b>25,1 milhões de toneladas</b>, 13,8% dos 181,6 milhões previstos para o Brasil.</p>
+  <p class="abp-p">Mesmo com mais área, a Conab já projeta produção −1,2% menor que os 25,4 milhões da safra 2025/26, porque considera uma produtividade mais baixa em todos os estados. A Bahia segue como o maior produtor da região, seguida de Tocantins e Maranhão.</p>
+  <div class="abp-table-wrap"><table class="abp-table">
+    <thead><tr><th>Estado</th><th>Área (mi ha)</th><th>Produtiv. (sc/ha)</th><th>Produção (mi t)</th><th>Plantio 20/11</th><th>Ano passado</th><th>Média 5 anos</th></tr></thead>
+    <tbody><tr><td>Maranhão</td><td>1,60</td><td>58,1</td><td><b>5,6</b></td><td>35%</td><td>19%</td><td>35%</td></tr><tr><td>Tocantins</td><td>1,72</td><td>57,7</td><td><b>5,9</b></td><td>64%</td><td>72%</td><td>73%</td></tr><tr><td>Piauí</td><td>1,15</td><td>62,2</td><td><b>4,3</b></td><td>47%</td><td>35%</td><td>48%</td></tr><tr><td>Bahia</td><td>2,26</td><td>67,8</td><td><b>9,2</b></td><td>75%</td><td>65%</td><td>69%</td></tr><tr><td><b>Matopiba</b></td><td><b>6,74</b></td><td><b>62,0</b></td><td><b>25,1</b></td><td><b>58%</b></td><td><b>51%</b></td><td><b>59%</b></td></tr></tbody>
+  </table></div>
+  <p class="abp-p">Para ter dimensão do crescimento: na safra 2014/15, a última antes do El Niño forte de 2015/16, os 4 estados colheram 10,6 milhões de toneladas. Hoje a produção prevista é 2,4 vezes maior. Uma quebra no Matopiba pesa hoje muito mais no Brasil do que pesava há 10 anos.</p>
+  <div class="abp-note">Os números somam os 4 estados inteiros, uma aproximação usual: quase toda a soja do Maranhão, do Piauí, do Tocantins e da Bahia está dentro da região oficial do Matopiba.</div>
+
+  <h2 class="abp-h2" id="plantio">O plantio está atrasado?</h2>
+  <p class="abp-p">No agregado, não. Ponderando pela área de cada estado, o Matopiba tinha <b>58% da soja plantada</b> até 20/11, praticamente igual à média de 5 anos (59%) e acima do ano passado (51%), segundo o Progresso de Safra da Conab. O Brasil estava em 83%. A diferença é normal: o Matopiba planta mais tarde porque as chuvas chegam depois.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Plantio da soja por estado do Matopiba</div>
+    <div class="abp-chart-sub">% da área semeada até 20/11/2026</div>
+    <div class="abp-legend"><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#1E4812;height:10px;width:10px;border-radius:3px;"></span> 2026/27</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#C9A27E;height:10px;width:10px;border-radius:3px;"></span> Ano passado</span><span class="abp-legend-item"><span class="abp-legend-dot" style="background:#AEB7B0;height:10px;width:10px;border-radius:3px;"></span> Média 5 anos</span></div><svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img"><line x1="46" x2="630" y1="240.0" y2="240.0" stroke="#EEF1ED"/><text x="38" y="244.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">0%</text><line x1="46" x2="630" y1="185.0" y2="185.0" stroke="#EEF1ED"/><text x="38" y="189.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">25%</text><line x1="46" x2="630" y1="130.0" y2="130.0" stroke="#EEF1ED"/><text x="38" y="134.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">50%</text><line x1="46" x2="630" y1="75.0" y2="75.0" stroke="#EEF1ED"/><text x="38" y="79.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">75%</text><line x1="46" x2="630" y1="20.0" y2="20.0" stroke="#EEF1ED"/><text x="38" y="24.0" font-family="Geist,Arial" font-size="11" fill="#7a7a7a" text-anchor="end">100%</text><rect x="67.9" y="75.0" width="31.1" height="165.0" rx="3" fill="#1E4812"/><text x="83.4" y="70.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">75</text><rect x="102.0" y="97.0" width="31.1" height="143.0" rx="3" fill="#C9A27E"/><text x="117.5" y="92.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#C9A27E" text-anchor="middle">65</text><rect x="136.0" y="87.8" width="31.1" height="152.2" rx="3" fill="#AEB7B0"/><text x="151.6" y="82.8" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#AEB7B0" text-anchor="middle">69</text><text x="119.0" y="264" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">Bahia</text><rect x="213.9" y="99.2" width="31.1" height="140.8" rx="3" fill="#1E4812"/><text x="229.4" y="94.2" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">64</text><rect x="248.0" y="81.6" width="31.1" height="158.4" rx="3" fill="#C9A27E"/><text x="263.5" y="76.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#C9A27E" text-anchor="middle">72</text><rect x="282.0" y="79.0" width="31.1" height="161.0" rx="3" fill="#AEB7B0"/><text x="297.6" y="74.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#AEB7B0" text-anchor="middle">73</text><text x="265.0" y="264" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">Tocantins</text><rect x="359.9" y="136.6" width="31.1" height="103.4" rx="3" fill="#1E4812"/><text x="375.4" y="131.6" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">47</text><rect x="394.0" y="163.0" width="31.1" height="77.0" rx="3" fill="#C9A27E"/><text x="409.5" y="158.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#C9A27E" text-anchor="middle">35</text><rect x="428.0" y="134.4" width="31.1" height="105.6" rx="3" fill="#AEB7B0"/><text x="443.6" y="129.4" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#AEB7B0" text-anchor="middle">48</text><text x="411.0" y="264" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">Piauí</text><rect x="505.9" y="163.0" width="31.1" height="77.0" rx="3" fill="#1E4812"/><text x="521.4" y="158.0" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#1E4812" text-anchor="middle">35</text><rect x="540.0" y="198.2" width="31.1" height="41.8" rx="3" fill="#C9A27E"/><text x="555.5" y="193.2" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#C9A27E" text-anchor="middle">19</text><rect x="574.0" y="162.1" width="31.1" height="77.9" rx="3" fill="#AEB7B0"/><text x="589.6" y="157.1" font-family="Geist,Arial" font-size="11" font-weight="700" fill="#AEB7B0" text-anchor="middle">35</text><text x="557.0" y="264" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="middle">Maranhão</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab, Progresso de Safra · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">O ponto fora da curva é o <b>Tocantins</b>, com 64% contra 73% da média, justamente o estado com o pior quadro de chuva. A Bahia está adiantada (75% contra 69%) e o Maranhão está na média (35%). Isso significa que restam cerca de <b>2,8 milhões de hectares</b> a plantar na região, a maior parte no Maranhão. Essas áreas dependem das chuvas de dezembro.</p>
+
+  <h2 class="abp-h2" id="chuva">Chuva observada e previsão</h2>
+  <h3 class="abp-h3">Os últimos 30 dias</h3>
+  <p class="abp-p">A página de Clima do AgroBasis acompanha 4 polos da região. Nos últimos 30 dias até 25/11, o quadro é desigual. <b>Uruçuí (PI)</b> recebeu 150% da normal e <b>Luís Eduardo Magalhães (BA)</b>, 102%. <b>Balsas (MA)</b> ficou um pouco abaixo, com 90%. Já <b>Porto Nacional (TO)</b> recebeu só 61%, e acumula 75% da normal desde 1º de setembro.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Chuva dos últimos 30 dias, em % da normal</div>
+    <div class="abp-chart-sub">Polos do Matopiba, até 25/11/2026; normal 1991-2020</div>
+    <svg viewBox="0 0 640 142" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img"><line x1="434.9" x2="434.9" y1="6" y2="136" stroke="#999" stroke-dasharray="3 3"/><text x="190" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Uruçuí (PI)</text><rect x="200.0" y="12" width="352.4" height="21" rx="4" fill="#2F6FA8"/><text x="560.4" y="27" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8">150%</text><text x="190" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Luís Eduardo Magalhães (BA)</text><rect x="200.0" y="42" width="239.6" height="21" rx="4" fill="#2F6FA8"/><text x="447.6" y="57" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#2F6FA8">102%</text><text x="190" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Balsas (MA)</text><rect x="200.0" y="72" width="211.4" height="21" rx="4" fill="#A17149"/><text x="419.4" y="87" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149">90%</text><text x="190" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Porto Nacional (TO)</text><rect x="200.0" y="102" width="143.3" height="21" rx="4" fill="#A17149"/><text x="351.3" y="117" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149">61%</text><line x1="434.9" x2="434.9" y1="4" y2="138" stroke="#555" stroke-width="1.2" stroke-dasharray="4 3"/><text x="434.9" y="142" font-family="Geist,Arial" font-size="10" fill="#555" text-anchor="middle">normal</text></svg>
+    <div class="abp-chart-caption">Fonte: Copernicus ERA5 (ECMWF), via Open-Meteo · Elaboração: AgroBasis</div>
+  </div>
+  <h3 class="abp-h3">Os próximos 15 dias</h3>
+  <p class="abp-p">A previsão é o ponto de atenção imediato. O ensemble do modelo europeu (ECMWF) indica chuva entre <b>48% e 64% da normal</b> nos 4 polos até 10/12. A primeira semana deve ser praticamente seca, com máximas de 34 °C a 36 °C. A chuva volta a ganhar volume a partir de 3 ou 4 de dezembro.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Chuva prevista para 15 dias, em % da normal</div>
+    <div class="abp-chart-sub">Média do ensemble ECMWF IFS (51 membros), de 26/11 a 10/12</div>
+    <svg viewBox="0 0 640 142" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img"><line x1="552.4" x2="552.4" y1="6" y2="136" stroke="#999" stroke-dasharray="3 3"/><text x="190" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Uruçuí (PI)</text><rect x="200.0" y="12" width="225.5" height="21" rx="4" fill="#A17149"/><text x="433.5" y="27" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149">64%</text><text x="190" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Luís Eduardo Magalhães (BA)</text><rect x="200.0" y="42" width="172.7" height="21" rx="4" fill="#A17149"/><text x="380.7" y="57" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149">49%</text><text x="190" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Balsas (MA)</text><rect x="200.0" y="72" width="211.4" height="21" rx="4" fill="#A17149"/><text x="419.4" y="87" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149">60%</text><text x="190" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Porto Nacional (TO)</text><rect x="200.0" y="102" width="169.1" height="21" rx="4" fill="#A17149"/><text x="377.1" y="117" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149">48%</text><line x1="552.4" x2="552.4" y1="4" y2="138" stroke="#555" stroke-width="1.2" stroke-dasharray="4 3"/><text x="552.4" y="142" font-family="Geist,Arial" font-size="10" fill="#555" text-anchor="middle">normal</text></svg>
+    <div class="abp-chart-caption">Fonte: ECMWF, via Open-Meteo · Elaboração: AgroBasis</div>
+  </div>
+  <p class="abp-p">Para a soja já emergida, uma semana quente e seca no início do ciclo tende a pesar menos do que no florescimento. O risco maior é para quem ainda vai plantar: o atraso empurra a soja para janeiro e encurta a janela da safrinha, como mostra a seção de milho e sorgo abaixo.</p>
+  <h3 class="abp-h3">O padrão histórico do El Niño forte</h3>
+  <p class="abp-p">A tabela mostra a chuva de cada mês nas safras de El Niño forte desde 1980 (1982/83, 1991/92, 1997/98 e 2015/16), comparada à normal de cada polo. O padrão tem 3 fases: novembro e dezembro abaixo da normal, janeiro acima, e uma <b>queda forte em março e abril</b>, de 23% a 64% abaixo da normal.</p>
+  <div class="abp-table-wrap"><table class="abp-table">
+    <thead><tr><th>Polo</th><th>Nov</th><th>Dez</th><th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th></tr></thead>
+    <tbody><tr><td>Luís Eduardo Magalhães (BA)</td><td style="color:#A17149;font-weight:700;">−19%</td><td style="color:#A17149;font-weight:700;">−22%</td><td style="color:#2F6FA8;font-weight:700;">+82%</td><td style="color:#5b5b5b;font-weight:700;">−5%</td><td style="color:#A17149;font-weight:700;">−52%</td><td style="color:#A17149;font-weight:700;">−64%</td></tr><tr><td>Porto Nacional (TO)</td><td style="color:#5b5b5b;font-weight:700;">−7%</td><td style="color:#A17149;font-weight:700;">−21%</td><td style="color:#2F6FA8;font-weight:700;">+50%</td><td style="color:#5b5b5b;font-weight:700;">−6%</td><td style="color:#A17149;font-weight:700;">−23%</td><td style="color:#A17149;font-weight:700;">−55%</td></tr><tr><td>Balsas (MA)</td><td style="color:#A17149;font-weight:700;">−28%</td><td style="color:#A17149;font-weight:700;">−16%</td><td style="color:#2F6FA8;font-weight:700;">+43%</td><td style="color:#A17149;font-weight:700;">−28%</td><td style="color:#A17149;font-weight:700;">−28%</td><td style="color:#A17149;font-weight:700;">−53%</td></tr><tr><td>Uruçuí (PI)</td><td style="color:#A17149;font-weight:700;">−38%</td><td style="color:#A17149;font-weight:700;">−17%</td><td style="color:#2F6FA8;font-weight:700;">+39%</td><td style="color:#A17149;font-weight:700;">−31%</td><td style="color:#A17149;font-weight:700;">−34%</td><td style="color:#A17149;font-weight:700;">−56%</td></tr></tbody>
+  </table></div>
+  <p class="abp-p">Com só 4 safras na amostra, cada média depende muito de um ou dois anos, e o janeiro chuvoso pode ser reflexo de eventos isolados. O fim antecipado das chuvas, por outro lado, aparece de forma consistente nos 4 polos, e é ele que define o milho safrinha.</p>
+
+  <div class="abp-cta-box">
+    <h3>Chuva, previsão e El Niño em tempo real</h3>
+    <p>Chuva observada e prevista em 16 polos produtores, curvas da safra contra a normal e o estudo de produtividade por estado.</p>
+    <a href="/dashboards/clima-el-nino/" class="abp-cta-btn">Acessar a página de Clima <i data-lucide="arrow-right"></i></a>
+  </div>
+
+  <h2 class="abp-h2" id="cenarios">Cenários para a soja</h2>
+  <p class="abp-p">Para medir o tamanho do risco, aplicamos sobre a estimativa da Conab o desvio de produtividade que cada estado teve nas safras de El Niño forte desde 1990, calculado em relação à tendência. Nessas safras, a soja ficou em média −36% no Piauí, −29% no Maranhão, −16% no Tocantins e −15% na Bahia. Em 2015/16, o pior caso, as perdas chegaram a −60%, −47%, −35% e −34%.</p>
+  <div class="abp-chart-card">
+    <div class="abp-chart-title">Soja do Matopiba: Conab contra cenários de El Niño</div>
+    <div class="abp-chart-sub">Produção em milhões de toneladas, safra 2026/27</div>
+    <svg viewBox="0 0 640 142" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;" role="img"><line x1="200.0" x2="200.0" y1="6" y2="136" stroke="#999" stroke-dasharray="3 3"/><text x="190" y="27" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Conab, nov/26</text><rect x="200.0" y="12" width="352.4" height="21" rx="4" fill="#1E4812"/><text x="560.4" y="27" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#1E4812">25,1 mi t</text><text x="190" y="57" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Moderado</text><rect x="200.0" y="42" width="313.5" height="21" rx="4" fill="#C9A27E"/><text x="521.5" y="57" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#C9A27E">22,3 mi t</text><text x="190" y="87" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Média do El Niño forte</text><rect x="200.0" y="72" width="274.7" height="21" rx="4" fill="#A17149"/><text x="482.7" y="87" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#A17149">19,5 mi t</text><text x="190" y="117" font-family="Geist,Arial" font-size="12.5" font-weight="600" fill="#222222" text-anchor="end">Repetição de 2015/16</text><rect x="200.0" y="102" width="205.3" height="21" rx="4" fill="#7A4A28"/><text x="413.3" y="117" font-family="Geist,Arial" font-size="12" font-weight="700" fill="#7A4A28">14,6 mi t</text></svg>
+    <div class="abp-chart-caption">Fonte: Conab (2º levantamento e série histórica por UF), NOAA (RONI) · Elaboração: AgroBasis</div>
+  </div>
+  <div class="abp-table-wrap"><table class="abp-table">
+    <thead><tr><th>Cenário</th><th>MA</th><th>TO</th><th>PI</th><th>BA</th><th>Matopiba</th><th>Var.</th><th>Perda (% do Brasil)</th></tr></thead>
+    <tbody><tr><td>Moderado</td><td>4,8</td><td>5,5</td><td>3,5</td><td>8,5</td><td><b>22,3</b></td><td>−11%</td><td>2,8 mi t (1,5%)</td></tr><tr><td>Média do El Niño forte</td><td>4,0</td><td>5,0</td><td>2,8</td><td>7,8</td><td><b>19,5</b></td><td>−22%</td><td>5,5 mi t (3,0%)</td></tr><tr><td>Repetição de 2015/16</td><td>3,0</td><td>3,9</td><td>1,7</td><td>6,1</td><td><b>14,6</b></td><td>−42%</td><td>10,5 mi t (5,8%)</td></tr></tbody>
+  </table></div>
+  <p class="abp-p">O cenário moderado, com metade do desvio médio, tira <b>2,8 milhões de toneladas</b>, 1,5% da safra brasileira. A média histórica tira 5,5 milhões (3,0% do Brasil). Uma repetição de 2015/16, quando a soja dos 4 estados caiu de 10,6 para 6,8 milhões de toneladas (−36%), tiraria 10,5 milhões.</p>
+  <h3 class="abp-h3">Por que o cenário extremo é menos provável</h3>
+  <p class="abp-p">Os cenários são testes de estresse, não previsões. Três pontos pesam contra a repetição de 2015/16. Primeiro, naquela safra o plantio atrasou muito, e hoje ele está na média. Segundo, novembro trouxe chuva normal ou acima da normal em 3 dos 4 polos. Terceiro, a região tem hoje mais área irrigada, cultivares mais tolerantes e manejo de solo melhor. Por outro lado, o El Niño atual é mais intenso que o de 2015, e o Tocantins já tem chuva bem abaixo da normal.</p>
+  <div class="abp-pullquote">Nossa leitura: o cenário moderado é a referência mais razoável hoje, com perda de 2 a 3 milhões de toneladas. O Tocantins e o fim das chuvas em março são os dois pontos a acompanhar.</div>
+
+  <h2 class="abp-h2" id="safrinha">Milho safrinha e sorgo: o risco maior</h2>
+  <p class="abp-p">Se para a soja o risco está nas próximas semanas, para as culturas de 2ª safra ele é estrutural. A Conab estima no Matopiba <b>4,5 milhões de toneladas de milho 2ª safra</b>, em 0,92 milhão de hectares (+16% de área), e <b>1,5 milhão de toneladas de sorgo</b>. Somados, são 6 milhões de toneladas de grãos que dependem das chuvas de março e abril.</p>
+  <div class="abp-table-wrap"><table class="abp-table">
+    <thead><tr><th>Estado</th><th>Milho 2ª safra (mi t)</th><th>Sorgo (mi t)</th><th>Milho 2ª em El Niño forte</th><th>Chuva mar/abr em El Niño forte</th></tr></thead>
+    <tbody><tr><td>Maranhão</td><td>1,4</td><td>0,2</td><td>−53%</td><td>−28% / −53%</td></tr><tr><td>Tocantins</td><td>2,3</td><td>0,2</td><td>−24%</td><td>−23% / −55%</td></tr><tr><td>Piauí</td><td>0,6</td><td>0,3</td><td>-</td><td>−34% / −56%</td></tr><tr><td>Bahia</td><td>0,2</td><td>0,8</td><td>−18%</td><td>−52% / −64%</td></tr><tr><td><b>Matopiba</b></td><td><b>4,5</b></td><td><b>1,5</b></td><td>-</td><td>-</td></tr></tbody>
+  </table></div>
+  <p class="abp-p">A safrinha do Matopiba é plantada logo depois da colheita da soja, entre fevereiro e março, e enche grão em abril. Esse é exatamente o período em que o El Niño forte costuma reduzir as chuvas, sobretudo em abril, quando o déficit passou de 50% nos 4 polos. Em 2015/16, o milho 2ª safra dos 4 estados caiu de 1,8 para 1,0 milhão de toneladas (−47%). No Maranhão, a produtividade ficou 53% abaixo da tendência.</p>
+  <p class="abp-p">O risco se soma ao calendário. Cada semana de atraso na soja empurra a safrinha para mais perto do fim das chuvas. Por isso o Tocantins, com plantio atrasado e o maior volume de milho 2ª safra da região, é o estado mais exposto. O sorgo, mais tolerante à seca, é a alternativa natural para quem ficar fora da janela ideal do milho.</p>
+  <p class="abp-p">O <b>milho de verão</b> (6,6 milhões de toneladas na região) e o <b>algodão</b> (1,08 milhão de toneladas, a maior parte na Bahia) também estão no radar. O milho verão do Piauí teve produtividade 54% abaixo da tendência nas safras de El Niño forte.</p>
+
+  <h2 class="abp-h2" id="mercado">O que isso significa para o mercado</h2>
+  <h3 class="abp-h3">Brasil: perda regional, compensação no Sul</h3>
+  <p class="abp-p">Historicamente, o El Niño forte não derruba a safra brasileira de soja (efeito médio de −0,9% no país). As perdas do Norte e do Nordeste tendem a ser compensadas pelo Sul. No cenário moderado, a perda no Matopiba equivale a 1,5% da safra brasileira. Para Chicago, o efeito deve ser limitado enquanto o Sul e o Centro-Oeste seguirem bem.</p>
+  <h3 class="abp-h3">Regional: Arco Norte e milho para o Nordeste</h3>
+  <p class="abp-p">O impacto é mais forte no mercado regional. Os portos do Arco Norte, como Itaqui (MA), dependem da soja do Matopiba. Uma quebra local tende a aumentar a disputa pelo grão e a valorizar o produto disponível na região. No milho, o Nordeste é deficitário e depende da safrinha do Matopiba para abastecer a avicultura. Uma safrinha menor pode exigir mais milho do Centro-Oeste, com frete mais caro.</p>
+  <h3 class="abp-h3">O que acompanhar</h3>
+  <ul class="abp-list">
+    <li><b>Chuva de dezembro</b> no Tocantins e no Maranhão, que define o fim do plantio.</li>
+    <li><b>Progresso de Safra da Conab</b> toda segunda-feira, em especial a soja do Tocantins e do Piauí.</li>
+    <li><b>Previsão para fevereiro a abril</b>, que define o tamanho da safrinha.</li>
+    <li><b>Próximos levantamentos da Conab</b>: hoje a estimativa ainda não incorpora um cenário de El Niño.</li>
+  </ul>
+
+  <h2 class="abp-h2" id="faq">Perguntas frequentes</h2>
+  <details class="abp-faq-item">
+    <summary>Qual a produção de soja do Matopiba na safra 2026/27? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">A Conab estima 25,1 milhões de toneladas nos 4 estados (Maranhão, Tocantins, Piauí e Bahia), em 6,74 milhões de hectares. Isso representa 13,8% da safra brasileira, prevista em 181,6 milhões de toneladas.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O El Niño prejudica o Matopiba? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Historicamente, sim. Nas safras de El Niño forte desde 1990, a produtividade da soja ficou em média −36% no Piauí, −29% no Maranhão, −16% no Tocantins e −15% na Bahia, em relação à tendência. Em 2015/16, a produção dos 4 estados caiu −36%.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>O plantio da soja no Matopiba está atrasado? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">No conjunto da região, não. Até 20/11, 58% da área estava plantada, contra 59% na média de 5 anos. O Tocantins é a exceção, com 64% contra 73% da média.</p>
+  </details>
+  <details class="abp-faq-item">
+    <summary>Por que o milho safrinha é o mais exposto? <i data-lucide="chevron-down"></i></summary>
+    <p class="abp-faq-a">Porque é plantado em fevereiro e março e depende das chuvas de março e abril. Nas safras de El Niño forte, a chuva desses meses ficou de 23% a 64% abaixo da normal nos polos do Matopiba. Em 2015/16, o milho 2ª safra da região caiu −47%.</p>
+  </details>
+
+  <div class="abp-sources">
+    <b>Fontes consultadas para este artigo:</b> Conab, 2º levantamento da safra de grãos 2026/27 (novembro de 2026), série histórica por UF e Progresso de Safra (semana até 20/11/2026); NOAA Climate Prediction Center (ENSO e RONI); Copernicus ERA5 e ECMWF IFS ensemble, via Open-Meteo.
+  </div>
+
+  <div class="abp-author-box">
+    <div class="abp-author-icon"><i data-lucide="pen-line"></i></div>
+    <div class="abp-author-text"><b>Equipe AgroBasis</b><br>Inteligência de mercado para o agronegócio: dashboards, análises e conteúdo educacional com dados oficiais.</div>
+  </div>
+
+  <div class="abp-disclaimer">
+    Fonte dos dados: Conab, NOAA, Copernicus/ECMWF. Conteúdo referencial para acompanhamento de mercado, elaborado pela equipe AgroBasis. Não constitui recomendação de investimento, compra ou venda.
+  </div>
+
+</div>
+</div>
+
+<script>
+  if (window.lucide) { lucide.createIcons(); } else { window.addEventListener('load', () => lucide.createIcons()); }
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Matopiba e El Niño: quanto a seca pode tirar da soja e da safrinha 2026/27","description":"O Matopiba deve colher 25,1 milhões de t de soja. Com El Niño forte, a história indica perda de 2,8 a 10,5 milhões de t. Plantio, chuva e safrinha.","author":{"@type":"Organization","name":"AgroBasis"},"publisher":{"@type":"Organization","name":"AgroBasis"},"datePublished":"2026-11-26","dateModified":"2026-11-26","mainEntityOfPage":"https://agrobasis.com.br/analises/matopiba-el-nino-soja-safrinha-2026-27/"}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Qual a produção de soja do Matopiba na safra 2026/27?","acceptedAnswer":{"@type":"Answer","text":"A Conab estima 25,1 milhões de toneladas nos 4 estados (Maranhão, Tocantins, Piauí e Bahia), em 6,74 milhões de hectares, 13,8% da safra brasileira."}},
+{"@type":"Question","name":"O El Niño prejudica o Matopiba?","acceptedAnswer":{"@type":"Answer","text":"Historicamente, sim. Nas safras de El Niño forte desde 1990, a produtividade da soja ficou em média −36% no Piauí, −29% no Maranhão, −16% no Tocantins e −15% na Bahia, em relação à tendência."}},
+{"@type":"Question","name":"O plantio da soja no Matopiba está atrasado?","acceptedAnswer":{"@type":"Answer","text":"No conjunto da região, não. Até 20/11, 58% da área estava plantada, contra 59% na média de 5 anos. O Tocantins é a exceção."}},
+{"@type":"Question","name":"Por que o milho safrinha é o mais exposto?","acceptedAnswer":{"@type":"Answer","text":"Porque é plantado em fevereiro e março e depende das chuvas de março e abril, que nas safras de El Niño forte ficaram de 23% a 64% abaixo da normal nos polos do Matopiba."}}
+]}
+</script>
