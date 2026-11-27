@@ -1,5 +1,5 @@
 {
- "gerado_em": "2026-11-26 17:13",
+ "gerado_em": "2026-11-27 01:31",
  "metodo": {
   "anos_ref": 5,
   "extremo": 10,
@@ -16,7 +16,7 @@
   "paragrafos": [
    {
     "tema": "Câmbio",
-    "texto": "O dólar está em R$ 5,8825, percentil 96 dos últimos 5 anos, com alta de R$ 0,46 em 4 semanas. Para quem vende em dólar, é um patamar historicamente favorável para travar parte do câmbio; para quem tem custo em dólar a pagar, é o lado caro."
+    "texto": "O dólar está em R$ 5,7446, percentil 92 dos últimos 5 anos, com alta de R$ 0,32 em 4 semanas. Para quem vende em dólar, é um patamar historicamente favorável para travar parte do câmbio; para quem tem custo em dólar a pagar, é o lado caro."
    },
    {
     "tema": "Fundos",
@@ -36,14 +36,14 @@
    },
    {
     "tema": "Curva do milho",
-    "texto": "Na B3, o segundo vencimento do milho paga R$ 5,29/sc a mais que o primeiro, contra R$ 2,47 em média para a época: o mercado remunera bem quem consegue guardar o milho e vender mais à frente."
+    "texto": "Na B3, o segundo vencimento do milho paga R$ 4,75/sc a mais que o primeiro, contra R$ 2,46 em média para a época: o mercado remunera bem quem consegue guardar o milho e vender mais à frente."
    }
   ],
   "novidades": [],
   "sairam": []
  },
  "anterior_do_dia": {
-  "gerado_em": "2026-11-25 17:29",
+  "gerado_em": "2026-11-26 17:13",
   "destaques": [
    {
     "tipo": "basis",
@@ -57,17 +57,17 @@
     "tipo": "serie",
     "id": "carrego_ccm",
     "painel": "/dashboards/spread-milho-b3/",
-    "data": "2026-11-24",
+    "data": "2026-11-25",
     "intensidade": 47.7,
-    "texto": "Carrego do milho B3 (2º menos 1º vencimento): 5,55 R$/sc, percentil 98 para esta época do ano nos últimos 5 anos (média da época 2,47); percentil 97 em 5 anos."
+    "texto": "Carrego do milho B3 (2º menos 1º vencimento): 5,29 R$/sc, percentil 98 para esta época do ano nos últimos 5 anos (média da época 2,47); percentil 96 em 5 anos."
    },
    {
     "tipo": "serie",
     "id": "dolar",
     "painel": "/dashboards/curva-do-dolar/",
-    "data": "2026-11-24",
-    "intensidade": 45.6,
-    "texto": "Dólar (PTAX): 5,8573 R$/US$, percentil 96 em 5 anos; variação de +0,4361 em 4 semanas, movimento tão forte não acontecia desde 07/2022."
+    "data": "2026-11-25",
+    "intensidade": 46.0,
+    "texto": "Dólar (PTAX): 5,8825 R$/US$, percentil 96 em 5 anos; variação de +0,4613 em 4 semanas, movimento tão forte não acontecia desde 07/2022."
    },
    {
     "tipo": "serie",
@@ -102,6 +102,14 @@
     "texto": "Basis de balcão do milho fraco para a época em 1 praça, em R$/sc: Maracaju MS -22,8 (média da época -16,0)."
    },
    {
+    "tipo": "basis",
+    "id": "/dashboards/basis-milho-brasil/",
+    "painel": "/dashboards/basis-milho-brasil/",
+    "data": "2026-11-20",
+    "intensidade": 42.2,
+    "texto": "Basis do milho forte para a época em 1 praça, em R$/sc: Vilhena RO -10,2 (média da época -20,2)."
+   },
+   {
     "tipo": "serie",
     "id": "soja_reais",
     "painel": "/dashboards/termometro-de-venda/",
@@ -124,17 +132,9 @@
    "tipo": "serie",
    "id": "carrego_ccm",
    "painel": "/dashboards/spread-milho-b3/",
-   "data": "2026-11-25",
+   "data": "2026-11-26",
    "intensidade": 47.7,
-   "texto": "Carrego do milho B3 (2º menos 1º vencimento): 5,29 R$/sc, percentil 98 para esta época do ano nos últimos 5 anos (média da época 2,47); percentil 96 em 5 anos."
-  },
-  {
-   "tipo": "serie",
-   "id": "dolar",
-   "painel": "/dashboards/curva-do-dolar/",
-   "data": "2026-11-25",
-   "intensidade": 46.0,
-   "texto": "Dólar (PTAX): 5,8825 R$/US$, percentil 96 em 5 anos; variação de +0,4613 em 4 semanas, movimento tão forte não acontecia desde 07/2022."
+   "texto": "Carrego do milho B3 (2º menos 1º vencimento): 4,75 R$/sc, percentil 98 para esta época do ano nos últimos 5 anos (média da época 2,46); percentil 93 em 5 anos."
   },
   {
    "tipo": "serie",
@@ -183,6 +183,14 @@
    "data": "2026-11-17",
    "intensidade": 42,
    "texto": "Soja Chicago em reais: 156,30 R$/sc, máxima de 52 semanas."
+  },
+  {
+   "tipo": "serie",
+   "id": "dolar",
+   "painel": "/dashboards/curva-do-dolar/",
+   "data": "2026-11-26",
+   "intensidade": 41.7,
+   "texto": "Dólar (PTAX): 5,7446 R$/US$, percentil 92 em 5 anos."
   }
  ],
  "series": [
@@ -363,13 +371,13 @@
    "painel": "/dashboards/curva-do-dolar/",
    "tipo": "preco",
    "casas": 4,
-   "data": "2026-11-25",
-   "valor": 5.8825,
-   "pct_5a": 96.0,
-   "var_1s": -0.0064,
-   "var_4s": 0.4613,
-   "pct_var_4s": 98.4,
-   "var_4s_recorde_desde": "07/2022",
+   "data": "2026-11-26",
+   "valor": 5.7446,
+   "pct_5a": 91.7,
+   "var_1s": -0.1443,
+   "var_4s": 0.3234,
+   "pct_var_4s": 96.8,
+   "var_4s_recorde_desde": "11/2024",
    "max_52s": false,
    "min_52s": false
   },
@@ -380,12 +388,12 @@
    "painel": "/dashboards/milho-b3-x-dolar/",
    "tipo": "preco",
    "casas": 2,
-   "data": "2026-11-25",
-   "valor": 71.36,
-   "pct_5a": 53.5,
-   "var_1s": -0.09,
-   "var_4s": 4.01,
-   "pct_var_4s": 79.0,
+   "data": "2026-11-26",
+   "valor": 70.45,
+   "pct_5a": 49.3,
+   "var_1s": -1.0,
+   "var_4s": 3.1,
+   "pct_var_4s": 74.0,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false
@@ -397,12 +405,12 @@
    "painel": "/dashboards/milho-b3-x-dolar/",
    "tipo": "preco",
    "casas": 2,
-   "data": "2026-11-25",
-   "valor": 12.13,
-   "pct_5a": 27.6,
-   "var_1s": 0.0,
-   "var_4s": -0.29,
-   "pct_var_4s": 36.2,
+   "data": "2026-11-26",
+   "valor": 12.26,
+   "pct_5a": 30.2,
+   "var_1s": 0.13,
+   "var_4s": -0.16,
+   "pct_var_4s": 41.6,
    "var_4s_recorde_desde": "10/2026",
    "max_52s": false,
    "min_52s": false
@@ -414,13 +422,13 @@
    "painel": "/dashboards/milho-b3-x-dolar/",
    "tipo": "spread",
    "casas": 2,
-   "data": "2026-11-25",
-   "valor": 1.74,
-   "pct_5a": 43.6,
-   "var_1s": -0.02,
-   "var_4s": -0.11,
-   "pct_var_4s": 44.3,
-   "var_4s_recorde_desde": "10/2026",
+   "data": "2026-11-26",
+   "valor": 1.88,
+   "pct_5a": 46.5,
+   "var_1s": 0.12,
+   "var_4s": 0.03,
+   "pct_var_4s": 54.2,
+   "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false
   },
@@ -431,17 +439,17 @@
    "painel": "/dashboards/spread-milho-b3/",
    "tipo": "spread",
    "casas": 2,
-   "data": "2026-11-25",
-   "valor": 5.29,
-   "pct_5a": 96.3,
-   "var_1s": -0.25,
-   "var_4s": 1.34,
-   "pct_var_4s": 78.7,
+   "data": "2026-11-26",
+   "valor": 4.75,
+   "pct_5a": 92.9,
+   "var_1s": -0.79,
+   "var_4s": 0.8,
+   "pct_var_4s": 65.4,
    "var_4s_recorde_desde": "09/2026",
    "max_52s": false,
    "min_52s": false,
    "pct_epoca": 97.7,
-   "media_epoca": 2.4705
+   "media_epoca": 2.4564
   },
   {
    "id": "basis_soja_santa_rosa",
@@ -1530,7 +1538,7 @@
    "b": "milho_b3",
    "nome": "dólar e milho B3",
    "data": "2026-11-27",
-   "corr_6m": 0.2,
+   "corr_6m": 0.22,
    "corr_3a": 0.16,
    "quebra_corr": false
   },
