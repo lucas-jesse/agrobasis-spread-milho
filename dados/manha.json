@@ -1,5 +1,5 @@
 {
-  "gerado_em_brt": "2026-11-26 15:25",
+  "gerado_em_brt": "2026-11-27 14:40",
   "fonte_cotacoes": "TradingView (atraso de 10 a 15 min)",
   "cbot": {
     "soja": {
@@ -9,25 +9,25 @@
         {
           "ticker": "CBOT:ZSF2027",
           "descricao": "Soybean Futures (Jan 2027)",
-          "preco": 1244,
-          "ajuste_anterior": 1234,
-          "variacao": 10,
-          "variacao_pct": 0.81,
-          "maxima": 1247.25,
-          "minima": 1220.5,
+          "preco": 1266.75,
+          "ajuste_anterior": 1244.0,
+          "variacao": 22.75,
+          "variacao_pct": 1.83,
+          "maxima": 1273.5,
+          "minima": 1254.5,
           "modo": "delayed_streaming_600",
           "contrato": "ZSF27",
-          "movimento_ontem": 0.0
+          "movimento_ontem": 10.0
         },
         {
           "ticker": "CBOT:ZSH2027",
           "descricao": "Soybean Futures (Mar 2027)",
-          "preco": 1245,
-          "ajuste_anterior": 1237.25,
-          "variacao": 7.75,
-          "variacao_pct": 0.63,
-          "maxima": 1247.75,
-          "minima": 1224,
+          "preco": 1268.5,
+          "ajuste_anterior": 1245.0,
+          "variacao": 23.5,
+          "variacao_pct": 1.89,
+          "maxima": 1274.25,
+          "minima": 1255.25,
           "modo": "delayed_streaming_600",
           "contrato": "ZSH27"
         }
@@ -40,25 +40,25 @@
         {
           "ticker": "CBOT:ZCZ2026",
           "descricao": "Corn Futures (Dec 2026)",
-          "preco": 439.75,
-          "ajuste_anterior": 434.0,
-          "variacao": 5.75,
-          "variacao_pct": 1.32,
-          "maxima": 440.75,
-          "minima": 431.25,
+          "preco": 446.75,
+          "ajuste_anterior": 439.75,
+          "variacao": 7,
+          "variacao_pct": 1.59,
+          "maxima": 451.25,
+          "minima": 441.25,
           "modo": "delayed_streaming_600",
           "contrato": "ZCZ26",
-          "movimento_ontem": 0.0
+          "movimento_ontem": 5.75
         },
         {
           "ticker": "CBOT:ZCH2027",
           "descricao": "Corn Futures (Mar 2027)",
-          "preco": 456.5,
-          "ajuste_anterior": 450.25,
-          "variacao": 6.25,
-          "variacao_pct": 1.39,
-          "maxima": 457,
-          "minima": 447,
+          "preco": 463,
+          "ajuste_anterior": 456.5,
+          "variacao": 6.5,
+          "variacao_pct": 1.42,
+          "maxima": 466.5,
+          "minima": 458.25,
           "modo": "delayed_streaming_600",
           "contrato": "ZCH27"
         }
@@ -71,25 +71,25 @@
         {
           "ticker": "CBOT:ZWZ2026",
           "descricao": "Chicago SRW Wheat Futures (Dec 2026)",
-          "preco": 565.5,
-          "ajuste_anterior": 569.75,
-          "variacao": -4.25,
-          "variacao_pct": -0.75,
-          "maxima": 571,
-          "minima": 558,
+          "preco": 566.75,
+          "ajuste_anterior": 565.5,
+          "variacao": 1.25,
+          "variacao_pct": 0.22,
+          "maxima": 578.5,
+          "minima": 564.25,
           "modo": "delayed_streaming_600",
           "contrato": "ZWZ26",
-          "movimento_ontem": 0.0
+          "movimento_ontem": -4.25
         },
         {
           "ticker": "CBOT:ZWH2027",
           "descricao": "Chicago SRW Wheat Futures (Mar 2027)",
-          "preco": 587.5,
-          "ajuste_anterior": 589.25,
-          "variacao": -1.75,
-          "variacao_pct": -0.3,
-          "maxima": 591,
-          "minima": 577.5,
+          "preco": 590.25,
+          "ajuste_anterior": 587.5,
+          "variacao": 2.75,
+          "variacao_pct": 0.47,
+          "maxima": 601.75,
+          "minima": 586.75,
           "modo": "delayed_streaming_600",
           "contrato": "ZWH27"
         }
@@ -102,25 +102,25 @@
         {
           "ticker": "CBOT:ZMZ2026",
           "descricao": "Soybean Meal Futures (Dec 2026)",
-          "preco": 361.6,
-          "ajuste_anterior": 353.0,
-          "variacao": 8.6,
-          "variacao_pct": 2.44,
-          "maxima": 362.2,
-          "minima": 349.4,
+          "preco": 367.6,
+          "ajuste_anterior": 361.6,
+          "variacao": 6,
+          "variacao_pct": 1.66,
+          "maxima": 371.3,
+          "minima": 364.1,
           "modo": "delayed_streaming_600",
           "contrato": "ZMZ26",
-          "movimento_ontem": 0.0
+          "movimento_ontem": 8.6
         },
         {
           "ticker": "CBOT:ZMF2027",
           "descricao": "Soybean Meal Futures (Jan 2027)",
-          "preco": 358.1,
-          "ajuste_anterior": 351.1,
-          "variacao": 7,
-          "variacao_pct": 1.99,
-          "maxima": 358.5,
-          "minima": 347.8,
+          "preco": 363.6,
+          "ajuste_anterior": 358.1,
+          "variacao": 5.5,
+          "variacao_pct": 1.54,
+          "maxima": 368.2,
+          "minima": 361.1,
           "modo": "delayed_streaming_600",
           "contrato": "ZMF27"
         }
@@ -133,25 +133,25 @@
         {
           "ticker": "CBOT:ZLZ2026",
           "descricao": "Soybean Oil Futures (Dec 2026)",
-          "preco": 58.08,
-          "ajuste_anterior": 58.11,
-          "variacao": -0.03,
-          "variacao_pct": -0.05,
-          "maxima": 58.45,
-          "minima": 57.35,
+          "preco": 58.56,
+          "ajuste_anterior": 58.08,
+          "variacao": 0.48,
+          "variacao_pct": 0.83,
+          "maxima": 59.42,
+          "minima": 57.99,
           "modo": "delayed_streaming_600",
           "contrato": "ZLZ26",
-          "movimento_ontem": 0.0
+          "movimento_ontem": -0.03
         },
         {
           "ticker": "CBOT:ZLF2027",
           "descricao": "Soybean Oil Futures (Jan 2027)",
-          "preco": 58.37,
-          "ajuste_anterior": 58.32,
-          "variacao": 0.05,
-          "variacao_pct": 0.09,
-          "maxima": 58.74,
-          "minima": 57.56,
+          "preco": 59,
+          "ajuste_anterior": 58.37,
+          "variacao": 0.63,
+          "variacao_pct": 1.08,
+          "maxima": 59.83,
+          "minima": 58.42,
           "modo": "delayed_streaming_600",
           "contrato": "ZLF27"
         }
@@ -162,47 +162,47 @@
     "usdbrl": {
       "ticker": "FX_IDC:USDBRL",
       "descricao": "U.S. DOLLAR / BRAZILIAN REAL",
-      "preco": 5.7418,
-      "ajuste_anterior": 5.8208,
-      "variacao": -0.079,
-      "variacao_pct": -1.36,
-      "maxima": 5.8254,
-      "minima": 5.7118,
+      "preco": 5.5422,
+      "ajuste_anterior": 5.6513,
+      "variacao": -0.1091,
+      "variacao_pct": -1.93,
+      "maxima": 5.6525,
+      "minima": 5.4791,
       "modo": "streaming",
       "nome": "Dólar comercial (USD/BRL)"
     },
     "dxy": {
       "ticker": "TVC:DXY",
       "descricao": "U.S. Dollar Currency Index",
-      "preco": 103.775,
-      "ajuste_anterior": 103.696,
-      "variacao": 0.079,
-      "variacao_pct": 0.08,
-      "maxima": 103.84,
-      "minima": 103.625,
+      "preco": 104.015,
+      "ajuste_anterior": 103.777,
+      "variacao": 0.238,
+      "variacao_pct": 0.23,
+      "maxima": 104.049,
+      "minima": 103.639,
       "modo": "streaming",
       "nome": "Índice dólar DXY"
     },
     "brent": {
       "ticker": "ICEEUR:BRN1!",
       "descricao": "Brent Crude Futures",
-      "preco": 91.67,
-      "ajuste_anterior": 90.64,
-      "variacao": 1.03,
-      "variacao_pct": 1.14,
-      "maxima": 92.08,
-      "minima": 89.75,
+      "preco": 90.07,
+      "ajuste_anterior": 91.67,
+      "variacao": -1.6,
+      "variacao_pct": -1.75,
+      "maxima": 93.17,
+      "minima": 89.86,
       "modo": "delayed_streaming_600",
       "nome": "Petróleo Brent (US$/barril)"
     },
     "sp500_fut": {
       "ticker": "CME_MINI:ES1!",
       "descricao": "E-mini S&P 500 Futures",
-      "preco": 7234.5,
+      "preco": 7294.75,
       "ajuste_anterior": 7195.75,
-      "variacao": 38.75,
-      "variacao_pct": 0.54,
-      "maxima": 7256.25,
+      "variacao": 99,
+      "variacao_pct": 1.38,
+      "maxima": 7343,
       "minima": 7187,
       "modo": "delayed_streaming_600",
       "nome": "S&P 500 futuro"
@@ -210,12 +210,12 @@
     "ibov": {
       "ticker": "BMFBOVESPA:IBOV",
       "descricao": "Bovespa Index",
-      "preco": 172661,
-      "ajuste_anterior": 166684.61,
-      "variacao": 5976.39,
-      "variacao_pct": 3.59,
-      "maxima": 174331.96,
-      "minima": 166695.79,
+      "preco": 176348.68,
+      "ajuste_anterior": 176799.84,
+      "variacao": -451.16,
+      "variacao_pct": -0.26,
+      "maxima": 183625.66,
+      "minima": 176272.24,
       "modo": "delayed_streaming_900",
       "nome": "Ibovespa"
     }
@@ -223,16 +223,16 @@
   "bcb": {
     "ptax": [
       {
-        "data": "2026-11-24",
-        "venda": 5.8573
-      },
-      {
         "data": "2026-11-25",
         "venda": 5.8825
       },
       {
         "data": "2026-11-26",
         "venda": 5.7446
+      },
+      {
+        "data": "2026-11-27",
+        "venda": 5.543
       }
     ],
     "selic": {
@@ -241,19 +241,19 @@
     }
   },
   "dolar_futuro_b3": {
-    "atualizado_em": "26/11/2026 00:48",
+    "atualizado_em": "27/11/2026 00:50",
     "contratos": {
       "DOLZ26": {
         "vencimento": "2026-12-01",
-        "brl": 5.8205
+        "brl": 5.7465
       },
       "DOLF27": {
         "vencimento": "2027-01-04",
-        "brl": 5.8535
+        "brl": 5.7795
       },
       "DOLG27": {
         "vencimento": "2027-02-01",
-        "brl": 5.8865
+        "brl": 5.8125
       }
     }
   }
